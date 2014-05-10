@@ -1,0 +1,92 @@
+![Mollie](https://www.mollie.nl/files/Mollie-Logo-Style-Small.png) 
+
+# Mollie API client for Python #
+
+Accepting [iDEAL](https://www.mollie.nl/betaaldiensten/ideal/), [Mister Cash](https://www.mollie.nl/betaaldiensten/mistercash/), [Creditcard](https://www.mollie.nl/betaaldiensten/creditcard/), [Bank transfers](https://www.mollie.nl/betaaldiensten/overboeking/), [PayPal](https://www.mollie.nl/betaaldiensten/paypal/), and [paysafecard](https://www.mollie.nl/betaaldiensten/paysafecard/) online payments without fixed monthly costs or any punishing registration procedures. Just use the Mollie API to receive payments directly on your website.
+
+## Requirements ##
+To use the Mollie API client, the following things are required:
+
++ Get yourself a free [Mollie account](https://www.mollie.nl/aanmelden). No sign up costs.
++ Create a new [Website profile](https://www.mollie.nl/beheer/account/profielen/) to generate API keys (live and test mode) and setup your webhook.
++ Now you're ready to use the Mollie API client in test mode.
++ In order to accept payments in live mode, payment methods must be activated in your account. Follow [a few of steps](https://www.mollie.nl/beheer/diensten), and let us handle the rest.
+
+## Installation ##
+
+By far the easiest way to install the Mollie API client is to install it with [pip](https://pip.pypa.io).
+
+```
+	$ pip install --index-url https://www.mollie.nl --upgrade mollie-api-python
+```
+
+You may also git checkout or [download all the files](https://github.com/mollie/mollie-api-python/archive/master.zip), and include the Mollie API client manually.
+
+## How to receive payments ##
+
+To successfully receive a payment, these steps should be implemented:
+
+1. Use the Mollie API client to create a payment with the requested amount, description and optionally, a payment method. It is important to specify a unique redirect URL where the customer is supposed to return to after the payment is completed.
+
+2. Immediately after the payment is completed, our platform will send an asynchronous request to the configured webhook to allow the payment details to be retrieved, so you know when exactly to start processing the customer's order.
+
+3. The customer returns, and should be satisfied to see that the order was paid and is now being processed.
+
+## Getting started ##
+
+Requiring the Mollie API Client.
+
+```python
+		require "Mollie/API/Client"
+```	
+
+Initializing the Mollie API client, and setting your API key.
+
+```python
+		mollie = Mollie::API::Client.new
+		mollie.setApiKey "test_dHar4XY7LxsDOtmnkVtjNVWXLSlXsM"
+```	
+
+Creating a new payment.
+	
+```python
+		payment = mollie.payments.create \
+			:amount      => 10.00,
+			:description => "My first API payment",
+			:redirectUrl => "https://webshop.example.org/order/12345/"
+```
+	
+Retrieving a payment.
+
+```python
+		payment = mollie.payments.get payment.id
+		
+		if payment.paid?
+			puts "Payment received."
+		end
+```
+
+## Examples ##
+
+Simply run:
+
+```
+	$ cd mollie-api-python
+	$ python examples/app.py
+```
+
+## License ##
+[BSD (Berkeley Software Distribution) License](http://www.opensource.org/licenses/bsd-license.php).
+Copyright (c) 2014, Mollie B.V.
+
+## Support ##
+Contact: [www.mollie.nl](http://www.mollie.nl) — info@mollie.nl — +31 20-612 88 55
+
++ [More information about iDEAL via Mollie](https://www.mollie.nl/betaaldiensten/ideal/)
++ [More information about Creditcard via Mollie](https://www.mollie.nl/betaaldiensten/creditcard/)
++ [More information about Mister Cash via Mollie](https://www.mollie.nl/betaaldiensten/mistercash/)
++ [More information about Bank transfers via Mollie](https://www.mollie.nl/betaaldiensten/overboeking/)
++ [More information about PayPal via Mollie](https://www.mollie.nl/betaaldiensten/paypal/)
++ [More information about paysafecard via Mollie](https://www.mollie.nl/betaaldiensten/paysafecard/)
+
+![Powered By Mollie](https://www.mollie.nl/images/badge-betaling-medium.png)
