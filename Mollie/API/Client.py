@@ -18,15 +18,6 @@ class Client:
     API_ENDPOINT = 'https://api.mollie.nl'
     API_VERSION = 'v1'
 
-    api_endpoint = ''
-    api_version = ''
-    api_key = ''
-    version_strings = []
-    payments = None
-    payment_refunds = None
-    issuers = None
-    methods = None
-
     def __init__(self):
         self.api_endpoint = self.API_ENDPOINT
         self.api_version = self.API_VERSION
@@ -35,6 +26,7 @@ class Client:
         self.payment_refunds = Resource.Refunds(self)
         self.issuers = Resource.Issuers(self)
         self.methods = Resource.Methods(self)
+        self.version_strings = []
         self.addVersionString('Mollie/' + self.CLIENT_VERSION)
         self.addVersionString('Python/' + sys.version.split(' ')[0])
         self.addVersionString('OpenSSL/' + ssl.OPENSSL_VERSION.split(' ')[1])
