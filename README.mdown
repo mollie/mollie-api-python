@@ -2,22 +2,23 @@
 
 # Mollie API client for Python #
 
-Accepting [iDEAL](https://www.mollie.nl/betaaldiensten/ideal/), [Mister Cash](https://www.mollie.nl/betaaldiensten/mistercash/), [Creditcard](https://www.mollie.nl/betaaldiensten/creditcard/), [Bank transfers](https://www.mollie.nl/betaaldiensten/overboeking/), [PayPal](https://www.mollie.nl/betaaldiensten/paypal/), and [paysafecard](https://www.mollie.nl/betaaldiensten/paysafecard/) online payments without fixed monthly costs or any punishing registration procedures. Just use the Mollie API to receive payments directly on your website.
+Accepting [iDEAL](https://www.mollie.nl/betaaldiensten/ideal/), [Mister Cash](https://www.mollie.nl/betaaldiensten/mistercash/), [Creditcard](https://www.mollie.nl/betaaldiensten/creditcard/), [SEPA bank transfers](https://www.mollie.nl/betaaldiensten/overboeking/),  [Bitcoin](https://www.mollie.nl/betaaldiensten/bitcoin/), [PayPal](https://www.mollie.nl/betaaldiensten/paypal/), and [paysafecard](https://www.mollie.nl/betaaldiensten/paysafecard/) online payments without fixed monthly costs or any punishing registration procedures. Just use the Mollie API to receive payments directly on your website.
 
 ## Requirements ##
 To use the Mollie API client, the following things are required:
 
 + Get yourself a free [Mollie account](https://www.mollie.nl/aanmelden). No sign up costs.
-+ Create a new [Website profile](https://www.mollie.nl/beheer/account/profielen/) to generate API keys (live and test mode) and setup your webhook.
++ Create a new [Website profile](https://www.mollie.nl/beheer/account/profielen/) to generate API keys and setup your webhook.
 + Now you're ready to use the Mollie API client in test mode.
 + In order to accept payments in live mode, payment methods must be activated in your account. Follow [a few of steps](https://www.mollie.nl/beheer/diensten), and let us handle the rest.
++ Mollie API client for Python has a dependency on [Requests](http://python-requests.org).
 
 ## Installation ##
 
 By far the easiest way to install the Mollie API client is to install it with [pip](https://pip.pypa.io).
 
 ```
-	$ pip install --index-url https://www.mollie.nl --upgrade mollie-api-python
+  pip install mollie-api-python
 ```
 
 You may also git checkout or [download all the files](https://github.com/mollie/mollie-api-python/archive/master.zip), and include the Mollie API client manually.
@@ -37,42 +38,84 @@ To successfully receive a payment, these steps should be implemented:
 Requiring the Mollie API Client.
 
 ```python
-		require "Mollie/API/Client"
-```	
+    import Mollie
+```    
 
 Initializing the Mollie API client, and setting your API key.
 
 ```python
-		mollie = Mollie::API::Client.new
-		mollie.setApiKey "test_dHar4XY7LxsDOtmnkVtjNVWXLSlXsM"
-```	
+    mollie = Mollie.API.Client()
+    mollie.setApiKey('test_dHar4XY7LxsDOtmnkVtjNVWXLSlXsM')
+```    
 
 Creating a new payment.
-	
+    
 ```python
-		payment = mollie.payments.create \
-			:amount      => 10.00,
-			:description => "My first API payment",
-			:redirectUrl => "https://webshop.example.org/order/12345/"
+    payment = mollie.payments.create({
+        'amount':      10.00,
+        'description': 'My first API payment',
+        'redirectUrl': 'http://webshop.example.org/order/12345'
+    })
 ```
-	
+    
 Retrieving a payment.
 
 ```python
-		payment = mollie.payments.get payment.id
-		
-		if payment.paid?
-			puts "Payment received."
-		end
+    payment = mollie.payments.get(payment['id'])
+    
+    if payment.isPaid():
+        print 'Payment received.'
+```
+
+### Fully integrated iDEAL payments ###
+
+If you want to fully integrate iDEAL payments in your web site, some additional steps are required. First, you need to
+retrieve the list of issuers (banks) that support iDEAL and have your customer pick the issuer he/she wants to use for
+the payment.
+
+Retrieve the list of issuers:
+
+```python
+    issuers = mollie.issuers.all()
+```
+
+_`issuers` will be a list of `Mollie.API.Object.Issuer` objects. Use the attribute `id` of this object in the
+ API call, and the attribute `name` for displaying the issuer to your customer. For a more in-depth example, see [Example 4](https://github.com/mollie/mollie-api-python/blob/master/examples/4-ideal-payment.py)._
+
+Create a payment with the selected issuer:
+
+```python
+	payment = mollie.payments.create({
+		'amount'      : 10.00,
+		'description' : 'My first API payment',
+		'redirectUrl' : 'https://webshop.example.org/order/12345',
+		'method' : Mollie.API.Object.Method.IDEAL,
+		'issuer' : selected_issuer_id,  # e.g. 'ideal_INGBNL2A'
+	})
+```
+
+_The `paymentUrl` attribute of the `payment` object will point directly to the online banking environment of the selected issuer._
+
+### Refunding payments ###
+
+The API also supports refunding payments. Note that there is no confirmation and that all refunds are immediate and
+definitive. Refunds are only supported for iDEAL, credit card and Bank Transfer payments. Other types of payments cannot
+be refunded through our API at the moment.
+
+```python
+	payment = mollie.payments.get(payment['id'])
+	refund = mollie.payments.refund(payment)
 ```
 
 ## Examples ##
 
-Simply run:
+To run the examples you need to install [Flask](http://flask.pocoo.org/). Simply run:
 
 ```
-	$ cd mollie-api-python
-	$ python examples/app.py
+    $ cd mollie-api-python
+    $ pip install Flask 
+    $ pip install requests 
+    $ python examples/app.py
 ```
 
 ## License ##
@@ -86,6 +129,7 @@ Contact: [www.mollie.nl](http://www.mollie.nl) — info@mollie.nl — +31 20-612
 + [More information about Creditcard via Mollie](https://www.mollie.nl/betaaldiensten/creditcard/)
 + [More information about Mister Cash via Mollie](https://www.mollie.nl/betaaldiensten/mistercash/)
 + [More information about Bank transfers via Mollie](https://www.mollie.nl/betaaldiensten/overboeking/)
++ [More information about Bitcoin via Mollie](https://www.mollie.nl/betaaldiensten/bitcoin/)
 + [More information about PayPal via Mollie](https://www.mollie.nl/betaaldiensten/paypal/)
 + [More information about paysafecard via Mollie](https://www.mollie.nl/betaaldiensten/paysafecard/)
 
