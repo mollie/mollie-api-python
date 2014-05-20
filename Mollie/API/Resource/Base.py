@@ -67,7 +67,10 @@ class Base(object):
         return self.rest_delete(resource_id)
 
     def all(self, offset=0, count=DEFAULT_LIMIT):
-        return self.rest_list(locals())
+        return self.rest_list({
+            'offset': offset,
+            'count': count
+        })
 
     def performApiCall(self, http_method, path, data=None, params=None):
         body = self.client.performHttpCall(http_method, path, data, params)
