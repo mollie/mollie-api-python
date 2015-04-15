@@ -1,4 +1,4 @@
-import os
+import platform
 import sys
 import ssl
 import re
@@ -57,7 +57,7 @@ class Client:
             raise Error('You have not set an API key. Please use setApiKey() to set the API key.')
         url = self.api_endpoint + '/' + self.api_version + '/' + path
         user_agent = ' '.join(self.version_strings)
-        uname = ' '.join(os.uname())
+        uname = ' '.join(platform.uname())
         try:
             response = requests.request(
                 http_method, url,
