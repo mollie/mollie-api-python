@@ -40,6 +40,7 @@ def main():
         payment = mollie.payments.create({
             'amount': 10.00,
             'description': 'My first API payment',
+            'webhookUrl':  flask.request.url_root + '2-webhook-verification?order_nr=' + str(order_nr),
             'redirectUrl': flask.request.url_root + '3-return-page?order_nr=' + str(order_nr),
             'metadata': {
                 'order_nr': order_nr
