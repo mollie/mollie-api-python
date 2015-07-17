@@ -9,6 +9,8 @@ class Method(Base):
     BANKTRANSFER = 'banktransfer'
     PAYPAL = 'paypal'
     BITCOIN = 'bitcoin'
+    SOFORT  = 'sofort'
+    BELFIUS = 'belfius'
 
     def getMinimumAmount(self):
         if not self['amount'] or 'minimum' not in self['amount']:

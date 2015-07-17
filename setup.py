@@ -8,6 +8,6 @@ setup(
     description = 'Mollie API client for Python',
     author = 'Mollie B.V.',
     author_email = 'info@mollie.nl',
-    keywords = ['mollie','payment', 'service', 'ideal', 'creditcard', 'mistercash', 'sepa', 'bitcoin', 'paypal', 'paysafecard', 'payments', 'gateway'],
+    keywords = ['mollie', 'payment', 'service', 'ideal', 'creditcard', 'mistercash', 'bancontact', 'sofort', 'sofortbanking', 'sepa', 'bitcoin', 'paypal', 'paysafecard', 'banktransfer', 'belfius', 'belfius direct net', 'refunds', 'payments', 'gateway'],
     url = 'https://github.com/mollie/mollie-api-python'
 )
