@@ -3,14 +3,15 @@ from Base import *
 
 class Method(Base):
     IDEAL = 'ideal'
-    PAYSAFECARD = 'paysafecard'
     CREDITCARD = 'creditcard'
     MISTERCASH = 'mistercash'
+    SOFORT = 'sofort'
     BANKTRANSFER = 'banktransfer'
-    PAYPAL = 'paypal'
+    DIRECTDEBIT = 'directdebit'
     BITCOIN = 'bitcoin'
-    SOFORT  = 'sofort'
+    PAYPAL = 'paypal'
     BELFIUS = 'belfius'
+    PAYSAFECARD = 'paysafecard'
 
     def getMinimumAmount(self):
         if not self['amount'] or 'minimum' not in self['amount']:
