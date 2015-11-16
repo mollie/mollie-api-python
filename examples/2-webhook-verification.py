@@ -1,6 +1,8 @@
 #
 # Example 2 - How to verify Mollie API Payments in a webhook.
 #
+from __future__ import print_function
+
 import sys, os, flask
 from app import database_write
 
@@ -63,4 +65,4 @@ def main():
         return 'API call failed: ' + e.message
 
 if __name__ == '__main__':
-    print main()
+    print(main())

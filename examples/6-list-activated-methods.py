@@ -2,6 +2,8 @@
 #
 #  Example 6 - How to get the currently activated payment methods.
 #
+from __future__ import print_function
+
 import sys, os
 
 #
@@ -41,4 +43,4 @@ def main():
         return 'API call failed: ' + e.message
 
 if __name__ == '__main__':
-    print main()
+    print(main())

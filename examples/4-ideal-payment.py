@@ -2,6 +2,8 @@
 #
 # Example 4 - How to prepare an iDEAL payment with the Mollie API.
 #
+from __future__ import print_function
+
 import sys, os, time, flask
 from app import database_write
 
@@ -88,4 +90,4 @@ def main ():
 
 
 if __name__ == '__main__':
-    print main()
+    print(main())
