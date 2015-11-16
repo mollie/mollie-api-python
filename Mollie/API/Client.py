@@ -6,8 +6,8 @@ import pkg_resources
 
 import requests
 
-import Resource
-from Error import *
+from . import Resource
+from .Error import *
 
 
 class Client:

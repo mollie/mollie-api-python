@@ -1,4 +1,4 @@
-from Base import *
+from .Base import *
 from Mollie.API.Error import *
 from Mollie.API.Object import Payment, Refund
 

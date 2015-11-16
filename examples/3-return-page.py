@@ -4,6 +4,8 @@
 # In this example we retrieve the order stored in the database.
 # Here, it's unnecessary to use the Mollie API Client.
 #
+from __future__ import print_function
+
 import flask
 from app import database_read
 
@@ -21,4 +23,4 @@ def main():
 
 
 if __name__ == '__main__':
-    print main()
+    print(main())
