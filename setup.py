@@ -13,8 +13,11 @@ setup(
               'sofortbanking', 'sepa', 'bitcoin', 'paypal', 'paysafecard', 'podiumcadeaukaart', 'banktransfer',
               'direct debit', 'belfius', 'belfius direct net', 'refunds', 'payments', 'gateway'],
     url='https://github.com/mollie/mollie-api-python',
+    install_requires=[
+        'requests',
+    ],
     classifiers=[
         'Programming Language :: Python',
         'Programming Language :: Python :: 3',
-    ]
+    ],
 )
