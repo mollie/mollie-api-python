@@ -6,7 +6,6 @@ import pkg_resources
 
 import requests
 
-from . import Resource
 from .Error import *
 
 
@@ -19,6 +18,8 @@ class Client:
     API_VERSION = 'v1'
 
     def __init__(self):
+        from . import Resource
+
         self.api_endpoint = self.API_ENDPOINT
         self.api_version = self.API_VERSION
         self.api_key = ''
