@@ -11,7 +11,7 @@ from .Error import *
 
 
 class Client:
-    CLIENT_VERSION = '1.1.0'
+    CLIENT_VERSION = '1.1.1'
     HTTP_GET = 'GET'
     HTTP_POST = 'POST'
     HTTP_DELETE = 'DELETE'
