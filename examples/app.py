@@ -37,11 +37,11 @@ if __name__ == "__main__":
 
 def database_write(order_nr, status):
     order_nr = int(order_nr)
-    database = open(os.path.dirname(__file__) + "/orders/order-%s.txt" % order_nr, 'w')
+    database = open(os.path.dirname(os.path.abspath(__file__)) + "/orders/order-%s.txt" % order_nr, 'w')
     database.write(status)
 
 
 def database_read(order_nr):
     order_nr = int(order_nr)
-    database = open(os.path.dirname(__file__) + "/orders/order-%s.txt" % order_nr, 'r')
+    database = open(os.path.dirname(os.path.abspath(__file__)) + "/orders/order-%s.txt" % order_nr, 'r')
     return database.read()
