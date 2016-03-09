@@ -12,7 +12,7 @@ To use the Mollie API client, the following things are required:
 + Get yourself a free [Mollie account](https://www.mollie.nl/aanmelden). No sign up costs.
 + Create a new [Website profile](https://www.mollie.nl/beheer/account/profielen/) to generate API keys and setup your webhook.
 + Now you're ready to use the Mollie API client in test mode.
-+ In order to accept payments in live mode, payment methods must be activated in your account. Follow [a few of steps](https://www.mollie.nl/beheer/diensten), and let us handle the rest.
++ In order to accept payments in live mode, payment methods must be activated in your account. Follow [a few steps](https://www.mollie.nl/beheer/diensten), and let us handle the rest.
 + Mollie API client for Python has a dependency on [Requests](http://python-requests.org).
 
 ## Installation ##
