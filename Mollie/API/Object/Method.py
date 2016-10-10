@@ -13,6 +13,7 @@ class Method(Base):
     BELFIUS = 'belfius'
     PAYSAFECARD = 'paysafecard'
     PODIUMCADEAUKAART = 'podiumcadeaukaart'
+    KBC = 'kbc'
 
     def getMinimumAmount(self):
         if not self['amount'] or 'minimum' not in self['amount']:
