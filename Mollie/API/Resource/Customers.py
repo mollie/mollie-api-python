@@ -1,10 +1,20 @@
 from .Base import *
+from Mollie.API.Error import *
 from Mollie.API.Object import Customer
 
 
 class Customers(Base):
+    RESOURCE_ID_PREFIX = 'cst_'
+
     def getResourceObject(self, result):
         return Customer(result)
+
+    def get(self, customer_id):
+        if not customer_id or self.RESOURCE_ID_PREFIX not in customer_id:
+            raise Error(
+                'Invalid customer ID: "%s". A customer ID should start with "%s".' % (customer_id, self.RESOURCE_ID_PREFIX)
+            )
+        return super(Customers, self).get(customer_id)
 
     def mandates(self, customer):
         return self.client.customer_mandates.on(customer)
