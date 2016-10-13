@@ -27,6 +27,9 @@ class Client:
         self.payment_refunds = Resource.Refunds(self)
         self.issuers = Resource.Issuers(self)
         self.methods = Resource.Methods(self)
+        self.customers = Resource.Customers(self)
+        self.customer_mandates = Resource.Mandates(self)
+        self.customer_subscriptions = Resource.Subscriptions(self)
         self.version_strings = []
         self.addVersionString('Mollie/' + self.CLIENT_VERSION)
         self.addVersionString('Python/' + sys.version.split(' ')[0])
