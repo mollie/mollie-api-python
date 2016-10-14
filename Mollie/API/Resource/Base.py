@@ -75,9 +75,9 @@ class Base(object):
     def performApiCall(self, http_method, path, data=None, params=None):
         body = self.client.performHttpCall(http_method, path, data, params)
         try:
-            result = body.json()
+            result = body.json() if body.status_code != 204 else {}
         except Exception as e:
-            raise Error('Unable to decode Mollie response: "%s".' % body)
+            raise Error('Unable to decode Mollie response (status code %d): "%s".' % (body.status_code, body.text))
         if 'error' in result:
             error = Error('Error executing API call (%s): %s.' % (result['error']['type'], result['error']['message']))
             if 'field' in result['error']:
