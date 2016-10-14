@@ -17,12 +17,12 @@ class Client:
     API_ENDPOINT = 'https://api.mollie.nl'
     API_VERSION = 'v1'
 
-    def __init__(self):
+    def __init__(self, api_key=None, api_endpoint=None):
         from . import Resource
 
-        self.api_endpoint = self.API_ENDPOINT
+        self.api_endpoint = api_endpoint or Client.API_ENDPOINT
         self.api_version = self.API_VERSION
-        self.api_key = ''
+        self.api_key = self.validateApiKey(api_key) if api_key else None
         self.payments = Resource.Payments(self)
         self.payment_refunds = Resource.Refunds(self)
         self.issuers = Resource.Issuers(self)
@@ -30,6 +30,7 @@ class Client:
         self.customers = Resource.Customers(self)
         self.customer_mandates = Resource.Mandates(self)
         self.customer_subscriptions = Resource.Subscriptions(self)
+        self.customer_payments = Resource.CustomerPayments(self)
         self.version_strings = []
         self.addVersionString('Mollie/' + self.CLIENT_VERSION)
         self.addVersionString('Python/' + sys.version.split(' ')[0])
@@ -41,11 +42,14 @@ class Client:
     def setApiEndpoint(self, api_endpoint):
         self.api_endpoint = api_endpoint.strip().rstrip('/')
 
-    def setApiKey(self, api_key):
+    def validateApiKey(self, api_key):
         api_key = api_key.strip()
         if not re.compile('^(live|test)_\w+$').match(api_key):
             raise Error('Invalid API key: "%s". An API key must start with "test_" or "live_".' % api_key)
-        self.api_key = api_key
+        return api_key
+
+    def setApiKey(self, api_key):
+        self.api_key = self.validateApiKey(api_key)
 
     def addVersionString(self, version_string):
         self.version_strings.append(version_string.replace(r'\s+', '-'))

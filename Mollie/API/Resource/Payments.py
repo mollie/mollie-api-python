@@ -16,9 +16,11 @@ class Payments(Base):
             )
         return super(Payments, self).get(payment_id)
 
-    def refund(self, payment):
-        return self.client.payment_refunds.on(payment).create()
+    def refunds(self, payment):
+        return self.client.payment_refunds.on(payment)
 
+    def refund(self, payment, data=None):
+        return self.refunds(payment).create(data)
 
 class Refunds(Base):
     payment_id = None
@@ -27,8 +29,11 @@ class Refunds(Base):
         return Refund(result)
 
     def getResourceName(self):
-        return 'payments/%i/refunds' % self.payment_id
+        return 'payments/%s/refunds' % self.payment_id
+
+    def withParentId(self, payment_id):
+        self.payment_id = customer_id
+        return self
 
     def on(self, payment):
-        self.payment_id = payment['id']
-        return self
+        return self.withParentId(payment['id'])

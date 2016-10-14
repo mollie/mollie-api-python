@@ -11,6 +11,9 @@ class Subscriptions(Base):
     def getResourceName(self):
         return 'customers/%s/subscriptions' % self.customer_id
 
-    def on(self, customer):
-        self.customer_id = customer['id']
+    def withParentId(self, customer_id):
+        self.customer_id = customer_id
         return self
+
+    def on(self, customer):
+        return self.withParentId(customer['id'])

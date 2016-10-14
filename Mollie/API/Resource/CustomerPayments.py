@@ -1,15 +1,15 @@
 from .Base import *
-from Mollie.API.Object import Mandate
+from Mollie.API.Object import Payment
 
 
-class Mandates(Base):
+class CustomerPayments(Base):
     customer_id = None
 
     def getResourceObject(self, result):
-        return Mandate(result)
+        return Payment(result)
 
     def getResourceName(self):
-        return 'customers/%s/mandates' % self.customer_id
+        return 'customers/%s/payments' % self.customer_id
 
     def withParentId(self, customer_id):
         self.customer_id = customer_id

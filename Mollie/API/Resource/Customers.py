@@ -21,3 +21,6 @@ class Customers(Base):
 
     def subscriptions(self, customer):
         return self.client.customer_subscriptions.on(customer)
+
+    def payments(self, customer):
+        return self.client.customer_payments.on(customer)
