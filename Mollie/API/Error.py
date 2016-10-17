@@ -1,4 +1,4 @@
 class Error(Exception):
     def __init__(self, message=None, field=None):
-        self.message = message
+        Exception.__init__(self, message)
         self.field = field
