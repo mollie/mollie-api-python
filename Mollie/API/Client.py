@@ -9,13 +9,30 @@ import requests
 from .Error import *
 
 
-class Client:
+class Client(object):
     CLIENT_VERSION = '1.1.4'
-    HTTP_GET = 'GET'
-    HTTP_POST = 'POST'
-    HTTP_DELETE = 'DELETE'
-    API_ENDPOINT = 'https://api.mollie.nl'
-    API_VERSION = 'v1'
+    HTTP_GET       = 'GET'
+    HTTP_POST      = 'POST'
+    HTTP_DELETE    = 'DELETE'
+    API_ENDPOINT   = 'https://api.mollie.nl'
+    API_VERSION    = 'v1'
+    UNAME          = ' '.join(platform.uname())
+    USER_AGENT     = ' '.join(vs.replace(r'\s+', '-') for vs in [
+        'Mollie/'  + CLIENT_VERSION,
+        'Python/'  + sys.version.split(' ')[0],
+        'OpenSSL/' + ssl.OPENSSL_VERSION.split(' ')[1],
+    ])
+
+    @staticmethod
+    def validateApiEndpoint(api_endpoint):
+        return api_endpoint.strip().rstrip('/')
+
+    @staticmethod
+    def validateApiKey(api_key):
+        api_key = api_key.strip()
+        if not re.compile(r'^(live|test)_\w+$').match(api_key):
+            raise Error('Invalid API key: "%s". An API key must start with "test_" or "live_".' % api_key)
+        return api_key
 
     def __init__(self, api_key=None, api_endpoint=None):
         from . import Resource
@@ -31,31 +48,15 @@ class Client:
         self.customer_mandates = Resource.Mandates(self)
         self.customer_subscriptions = Resource.Subscriptions(self)
         self.customer_payments = Resource.CustomerPayments(self)
-        self.version_strings = []
-        self.addVersionString('Mollie/' + self.CLIENT_VERSION)
-        self.addVersionString('Python/' + sys.version.split(' ')[0])
-        self.addVersionString('OpenSSL/' + ssl.OPENSSL_VERSION.split(' ')[1])
 
     def getApiEndpoint(self):
         return self.api_endpoint
 
-    def validateApiEndpoint(self, api_endpoint):
-        return api_endpoint.strip().rstrip('/')
-
     def setApiEndpoint(self, api_endpoint):
         self.api_endpoint = self.validateApiEndpoint(api_endpoint)
 
-    def validateApiKey(self, api_key):
-        api_key = api_key.strip()
-        if not re.compile('^(live|test)_\w+$').match(api_key):
-            raise Error('Invalid API key: "%s". An API key must start with "test_" or "live_".' % api_key)
-        return api_key
-
     def setApiKey(self, api_key):
         self.api_key = self.validateApiKey(api_key)
-
-    def addVersionString(self, version_string):
-        self.version_strings.append(version_string.replace(r'\s+', '-'))
 
     def getCACert(self):
         cacert = pkg_resources.resource_filename('Mollie.API', 'cacert.pem')
@@ -66,9 +67,7 @@ class Client:
     def performHttpCall(self, http_method, path, data=None, params=None):
         if not self.api_key:
             raise Error('You have not set an API key. Please use setApiKey() to set the API key.')
-        url = self.api_endpoint + '/' + self.api_version + '/' + path
-        user_agent = ' '.join(self.version_strings)
-        uname = ' '.join(platform.uname())
+        url = '%s/%s/%s' % (self.api_endpoint, self.api_version, path)
         try:
             response = requests.request(
                 http_method, url,
@@ -76,8 +75,8 @@ class Client:
                 headers={
                     'Accept': 'application/json',
                     'Authorization': 'Bearer ' + self.api_key,
-                    'User-Agent': user_agent,
-                    'X-Mollie-Client-Info': uname
+                    'User-Agent': self.USER_AGENT,
+                    'X-Mollie-Client-Info': self.UNAME,
                 },
                 params=params,
                 data=data
