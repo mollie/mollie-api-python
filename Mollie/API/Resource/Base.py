@@ -53,8 +53,8 @@ class Base(object):
             raise Error('Error encoding parameters into JSON: "%s"' % e.message)
         return self.rest_create(data)
 
-    def get(self, resource_id):
-        return self.rest_read(resource_id)
+    def get(self, resource_id, **params):
+        return self.rest_read(resource_id, params)
 
     def update(self, resource_id, data):
         try:
@@ -66,11 +66,8 @@ class Base(object):
     def delete(self, resource_id):
         return self.rest_delete(resource_id)
 
-    def all(self, offset=0, count=DEFAULT_LIMIT):
-        return self.rest_list({
-            'offset': offset,
-            'count': count
-        })
+    def all(self, **params):
+        return self.rest_list(params)
 
     def performApiCall(self, http_method, path, data=None, params=None):
         body = self.client.performHttpCall(http_method, path, data, params)
