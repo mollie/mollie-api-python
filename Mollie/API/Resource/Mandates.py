@@ -1,12 +1,21 @@
 from .Base import *
+from Mollie.API.Error import *
 from Mollie.API.Object import Mandate
 
 
 class Mandates(Base):
+    RESOURCE_ID_PREFIX = 'mdt_'
     customer_id = None
 
     def getResourceObject(self, result):
         return Mandate(result)
+
+    def get(self, mandate_id):
+        if not mandate_id or self.RESOURCE_ID_PREFIX not in mandate_id:
+            raise Error(
+                'Invalid mandate ID: "%s". A mandate ID should start with "%s".' % (mandate_id, self.RESOURCE_ID_PREFIX)
+            )
+        return super(Mandates, self).get(mandate_id)
 
     def getResourceName(self):
         return 'customers/%s/mandates' % self.customer_id
