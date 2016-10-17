@@ -20,7 +20,7 @@ class Client:
     def __init__(self, api_key=None, api_endpoint=None):
         from . import Resource
 
-        self.api_endpoint = api_endpoint or Client.API_ENDPOINT
+        self.api_endpoint = self.validateApiEndpoint(api_endpoint or self.API_ENDPOINT)
         self.api_version = self.API_VERSION
         self.api_key = self.validateApiKey(api_key) if api_key else None
         self.payments = Resource.Payments(self)
@@ -39,8 +39,11 @@ class Client:
     def getApiEndpoint(self):
         return self.api_endpoint
 
+    def validateApiEndpoint(self, api_endpoint):
+        return api_endpoint.strip().rstrip('/')
+
     def setApiEndpoint(self, api_endpoint):
-        self.api_endpoint = api_endpoint.strip().rstrip('/')
+        self.api_endpoint = self.validateApiEndpoint(api_endpoint)
 
     def validateApiKey(self, api_key):
         api_key = api_key.strip()
