@@ -25,7 +25,7 @@ class Payment(Base):
         return self['status'] == self.STATUS_EXPIRED
 
     def isPaid(self):
-        return self['status'] == self.STATUS_PAID
+        return 'paidDatetime' in self and self['paidDatetime']
 
     def isPaidout(self):
         return self['status'] == self.STATUS_PAIDOUT
