@@ -10,7 +10,7 @@ class Customers(Base):
         return Customer(result)
 
     def get(self, customer_id):
-        if not customer_id or self.RESOURCE_ID_PREFIX not in customer_id:
+        if not customer_id or not customer_id.startswith(self.RESOURCE_ID_PREFIX):
             raise Error(
                 'Invalid customer ID: "%s". A customer ID should start with "%s".' % (customer_id, self.RESOURCE_ID_PREFIX)
             )

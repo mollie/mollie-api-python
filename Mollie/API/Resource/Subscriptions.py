@@ -11,7 +11,7 @@ class Subscriptions(Base):
         return Subscription(result)
 
     def get(self, subscription_id):
-        if not subscription_id or self.RESOURCE_ID_PREFIX not in subscription_id:
+        if not subscription_id or not subscription_id.startswith(self.RESOURCE_ID_PREFIX):
             raise Error(
                 'Invalid subscription ID: "%s". A subscription ID should start with "%s".' % (subscription_id, self.RESOURCE_ID_PREFIX)
             )
