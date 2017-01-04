@@ -32,7 +32,7 @@ class Refunds(Base):
         return 'payments/%s/refunds' % self.payment_id
 
     def withParentId(self, payment_id):
-        self.payment_id = customer_id
+        self.payment_id = payment_id
         return self
 
     def on(self, payment):
