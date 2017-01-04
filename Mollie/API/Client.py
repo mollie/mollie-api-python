@@ -23,6 +23,8 @@ class Client:
         self.api_endpoint = self.API_ENDPOINT
         self.api_version = self.API_VERSION
         self.api_key = ''
+        self.customers = Resource.Customers(self)
+        self.customers_payments = Resource.CustomerPayments(self)
         self.payments = Resource.Payments(self)
         self.payment_refunds = Resource.Refunds(self)
         self.issuers = Resource.Issuers(self)
@@ -41,7 +43,8 @@ class Client:
     def setApiKey(self, api_key):
         api_key = api_key.strip()
         if not re.compile('^(live|test)_\w+$').match(api_key):
-            raise Error('Invalid API key: "%s". An API key must start with "test_" or "live_".' % api_key)
+            raise Error(
+                'Invalid API key: "%s". An API key must start with "test_" or "live_".' % api_key)
         self.api_key = api_key
 
     def addVersionString(self, version_string):
@@ -55,7 +58,8 @@ class Client:
 
     def performHttpCall(self, http_method, path, data=None, params=None):
         if not self.api_key:
-            raise Error('You have not set an API key. Please use setApiKey() to set the API key.')
+            raise Error(
+                'You have not set an API key. Please use setApiKey() to set the API key.')
         url = self.api_endpoint + '/' + self.api_version + '/' + path
         user_agent = ' '.join(self.version_strings)
         uname = ' '.join(platform.uname())
