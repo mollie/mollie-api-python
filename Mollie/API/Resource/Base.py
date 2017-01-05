@@ -53,8 +53,8 @@ class Base(object):
             raise Error('Error encoding parameters into JSON: "%s"' % e.message)
         return self.rest_create(data)
 
-    def get(self, resource_id):
-        return self.rest_read(resource_id)
+    def get(self, resource_id, **params):
+        return self.rest_read(resource_id, params)
 
     def update(self, resource_id, data):
         try:
@@ -66,18 +66,15 @@ class Base(object):
     def delete(self, resource_id):
         return self.rest_delete(resource_id)
 
-    def all(self, offset=0, count=DEFAULT_LIMIT):
-        return self.rest_list({
-            'offset': offset,
-            'count': count
-        })
+    def all(self, **params):
+        return self.rest_list(params)
 
     def performApiCall(self, http_method, path, data=None, params=None):
         body = self.client.performHttpCall(http_method, path, data, params)
         try:
-            result = body.json()
+            result = body.json() if body.status_code != 204 else {}
         except Exception as e:
-            raise Error('Unable to decode Mollie response: "%s".' % body)
+            raise Error('Unable to decode Mollie response (status code %d): "%s".' % (body.status_code, body.text))
         if 'error' in result:
             error = Error('Error executing API call (%s): %s.' % (result['error']['type'], result['error']['message']))
             if 'field' in result['error']:
