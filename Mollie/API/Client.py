@@ -10,7 +10,7 @@ from .Error import *
 
 
 class Client(object):
-    CLIENT_VERSION = '1.1.4'
+    CLIENT_VERSION = '1.2.0'
     HTTP_GET       = 'GET'
     HTTP_POST      = 'POST'
     HTTP_DELETE    = 'DELETE'
