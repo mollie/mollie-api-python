@@ -8,7 +8,11 @@ examples = [
     '3-return-page',
     '4-ideal-payment',
     '5-payments-history',
-    '6-list-activated-methods'
+    '6-list-activated-methods',
+    '7-new-customer',
+    '8-list-customers',
+    '9-create-customer-payment',
+    '10-customer-payment-history'
 ]
 
 

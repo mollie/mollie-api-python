@@ -1,6 +1,6 @@
 # coding=utf-8
 #
-# Example 1 - How to prepare a new payment with the Mollie API.
+#  Example 9 - Creating a payment for a customer
 #
 from __future__ import print_function
 
@@ -26,6 +26,26 @@ def main():
         mollie = Mollie.API.Client()
         mollie.setApiKey('test_bt7vvByF6jTcBR4dLuW66eNnHYNIJp')
 
+        body = ''
+
+        customer_id = flask.request.args.get('customer_id')
+
+        # If no customer ID was provided in the URL, we grab the first customer
+        if customer_id is None:
+            customers = mollie.customers.all()
+
+            body += '<p>No customer ID specified. Attempting to retrieve all customers and grabbing the first.</p>'
+
+            if int(customers['totalCount']) == 0:
+                body += '<p>You have no customers. You can create one from the examples.</p>'
+                return body
+
+            for customer in customers:
+                customer_id = customer['id']
+                break
+
+        customer = mollie.customers.get(customer_id)
+
         #
         # Generate a unique order number for this example. It is important to include this unique attribute
         # in the redirectUrl (below) so a proper return page can be shown to the customer.
@@ -33,35 +53,24 @@ def main():
         order_nr = int(time.time())
 
         #
-        # Payment parameters:
-        # amount        Amount in EUROs. This example creates a € 10,- payment.
-        # description   Description of the payment.
-        # redirectUrl   Redirect location. The customer will be redirected there after the payment.
-        # metadata      Custom metadata that is stored with the payment.
+        # See: https://www.mollie.com/nl/docs/reference/customers/create-payment
         #
-        payment = mollie.payments.create({
-            'amount': 10.00,
+        payment = mollie.customer_payments.withParentId(customer_id).create({
+            'amount':      (time.time() % 15) * 3,  # Create some variety in the payment amounts
             'description': 'My first API payment',
             'webhookUrl':  flask.request.url_root + '2-webhook-verification?order_nr=' + str(order_nr),
             'redirectUrl': flask.request.url_root + '3-return-page?order_nr=' + str(order_nr),
-            'metadata': {
+            'metadata':    {
                 'order_nr': order_nr
             }
         })
 
-        #
-        # In this example we store the order with its payment status in a database.
-        #
         database_write(order_nr, payment['status'])
 
-        #
-        # Send the customer off to complete the payment.
-        #
-        return flask.redirect(payment.getPaymentUrl())
+        return '<p>Created payment of %s EUR for %s (%s)<p>' % (payment['amount'], customer['name'], customer['id'])
 
     except Mollie.API.Error as e:
         return 'API call failed: ' + e.message
-
 
 if __name__ == '__main__':
     print(main())

@@ -1,10 +1,10 @@
 # coding=utf-8
 #
-# Example 5 - How to retrieve your payments history.
+# Example 7 - How to create a new customer with the Mollie API.
 #
 from __future__ import print_function
 
-import sys, os
+import sys, os, flask
 
 #
 # Add Mollie library to module path so we can import it.
@@ -26,19 +26,19 @@ def main():
         mollie.setApiKey('test_bt7vvByF6jTcBR4dLuW66eNnHYNIJp')
 
         #
-        # Get the all payments for this API key ordered by newest.
+        # See: https://www.mollie.com/nl/docs/reference/customers/create
         #
-        payments = mollie.payments.all()
+        customer = mollie.customers.create({
+            'name': 'Mr. First Customer',
+            'email': 'first.customer@example.com',
+            'locale': 'nl_NL'
+        })
 
-        body = 'Your API key has %u payments, last %u:<br>' % (payments['totalCount'], payments['count'])
-
-        for payment in payments:
-            body += "&euro; %s, status: '%s'<br>" % (payment['amount'], payment['status'])
-
-        return body
+        return "Created new customer '%s' (%s)" % (customer['name'], customer['email'])
 
     except Mollie.API.Error as e:
         return 'API call failed: ' + e.message
+
 
 if __name__ == '__main__':
     print(main())

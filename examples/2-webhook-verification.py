@@ -20,7 +20,7 @@ def main():
         #
         # Initialize the Mollie API library with your API key.
         #
-        # See: https://www.lib.nl/beheer/account/profielen/
+        # See: https://www.mollie.com/dashboard/settings/profiles
         #
         mollie = Mollie.API.Client()
         mollie.setApiKey('test_bt7vvByF6jTcBR4dLuW66eNnHYNIJp')
