@@ -36,11 +36,12 @@ def main():
         # Payment parameters:
         # amount        Amount in EUROs. This example creates a € 10,- payment.
         # description   Description of the payment.
+        # webhookUrl    Webhook location, used to report when the payment changes state.
         # redirectUrl   Redirect location. The customer will be redirected there after the payment.
         # metadata      Custom metadata that is stored with the payment.
         #
         payment = mollie.payments.create({
-            'amount': 10.00,
+            'amount':      10.00,
             'description': 'My first API payment',
             'webhookUrl':  flask.request.url_root + '2-webhook-verification?order_nr=' + str(order_nr),
             'redirectUrl': flask.request.url_root + '3-return-page?order_nr=' + str(order_nr),
