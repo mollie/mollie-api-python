@@ -20,7 +20,7 @@ To use the Mollie API client, the following things are required:
 By far the easiest way to install the Mollie API client is to install it with [pip](https://pip.pypa.io).
 
 ```
-  pip install mollie-api-python
+$ pip install mollie-api-python
 ```
 
 You may also git checkout or [download all the files](https://github.com/mollie/mollie-api-python/archive/master.zip), and include the Mollie API client manually.
@@ -40,33 +40,34 @@ To successfully receive a payment, these steps should be implemented:
 Requiring the Mollie API Client.
 
 ```python
-    import Mollie
-```    
+import Mollie
+```
 
 Initializing the Mollie API client, and setting your API key.
 
 ```python
-    mollie = Mollie.API.Client()
-    mollie.setApiKey('test_dHar4XY7LxsDOtmnkVtjNVWXLSlXsM')
-```    
+mollie = Mollie.API.Client()
+mollie.setApiKey('test_dHar4XY7LxsDOtmnkVtjNVWXLSlXsM')
+```
 
 Creating a new payment.
-    
+
 ```python
-    payment = mollie.payments.create({
-        'amount':      10.00,
-        'description': 'My first API payment',
-        'redirectUrl': 'http://webshop.example.org/order/12345'
-    })
+payment = mollie.payments.create({
+    'amount':      10.00,
+    'description': 'My first API payment',
+    'redirectUrl': 'https://webshop.example.org/order/12345/',
+    'webhookUrl':  'https://webshop.example.org/mollie-webhook/'
+})
 ```
-    
+
 Retrieving a payment.
 
 ```python
-    payment = mollie.payments.get(payment['id'])
-    
-    if payment.isPaid():
-        print 'Payment received.'
+payment = mollie.payments.get(payment['id'])
+
+if payment.isPaid():
+    print 'Payment received.'
 ```
 
 ### Fully integrated iDEAL payments ###
@@ -78,7 +79,7 @@ the payment.
 Retrieve the list of issuers:
 
 ```python
-    issuers = mollie.issuers.all()
+issuers = mollie.issuers.all()
 ```
 
 _`issuers` will be a list of `Mollie.API.Object.Issuer` objects. Use the attribute `id` of this object in the
@@ -87,13 +88,14 @@ _`issuers` will be a list of `Mollie.API.Object.Issuer` objects. Use the attribu
 Create a payment with the selected issuer:
 
 ```python
-	payment = mollie.payments.create({
-		'amount'      : 10.00,
-		'description' : 'My first API payment',
-		'redirectUrl' : 'https://webshop.example.org/order/12345',
-		'method' : Mollie.API.Object.Method.IDEAL,
-		'issuer' : selected_issuer_id,  # e.g. 'ideal_INGBNL2A'
-	})
+payment = mollie.payments.create({
+    'amount':      10.00,
+    'description': 'My first API payment',
+    'redirectUrl': 'https://webshop.example.org/order/12345/',
+    'webhookUrl':  'https://webshop.example.org/mollie-webhook/',
+    'method':      Mollie.API.Object.Method.IDEAL,
+    'issuer':      selected_issuer_id,  # e.g. 'ideal_INGBNL2A'
+})
 ```
 
 _The `paymentUrl` attribute of the `payment` object will point directly to the online banking environment of the selected issuer._
@@ -105,8 +107,8 @@ definitive. Refunds are only supported for iDEAL, credit card and Bank Transfer 
 be refunded through our API at the moment.
 
 ```python
-	payment = mollie.payments.get(payment['id'])
-	refund = mollie.payments.refund(payment)
+payment = mollie.payments.get(payment['id'])
+refund = mollie.payments.refund(payment)
 ```
 
 ## Examples ##
@@ -114,18 +116,18 @@ be refunded through our API at the moment.
 To run the examples you need to install [Flask](http://flask.pocoo.org/). Simply run:
 
 ```
-    $ cd mollie-api-python
-    $ pip install Flask 
-    $ pip install requests 
-    $ python examples/app.py
+$ cd mollie-api-python
+$ pip install Flask 
+$ pip install requests 
+$ python examples/app.py
 ```
 
 ## License ##
-[BSD (Berkeley Software Distribution) License](http://www.opensource.org/licenses/bsd-license.php).
-Copyright (c) 2014, Mollie B.V.
+[BSD (Berkeley Software Distribution) License](https://opensource.org/licenses/bsd-license.php).
+Copyright (c) 2014-2017, Mollie B.V.
 
 ## Support ##
-Contact: [www.mollie.com](http://www.mollie.com) — info@mollie.com — +31 20-612 88 55
+Contact: [www.mollie.com](https://www.mollie.com) — info@mollie.com — +31 20-612 88 55
 
 + [More information about iDEAL via Mollie](https://www.mollie.com/ideal/)
 + [More information about credit card via Mollie](https://www.mollie.com/creditcard/)
@@ -137,5 +139,3 @@ Contact: [www.mollie.com](http://www.mollie.com) — info@mollie.com — +31 20-
 + [More information about PayPal via Mollie](https://www.mollie.com/paypal/)
 + [More information about Belfius Direct Net via Mollie](https://www.mollie.com/belfiusdirectnet/)
 + [More information about paysafecard via Mollie](https://www.mollie.com/paysafecard/)
-
-![Powered By Mollie](https://www.mollie.nl/images/badge-betaling-medium.png)
