@@ -10,7 +10,7 @@ class Mandates(Base):
     def getResourceObject(self, result):
         return Mandate(result)
 
-    def get(self, mandate_id):
+    def get(self, mandate_id, **params):
         if not mandate_id or not mandate_id.startswith(self.RESOURCE_ID_PREFIX):
             raise Error(
                 'Invalid mandate ID: "%s". A mandate ID should start with "%s".' % (mandate_id, self.RESOURCE_ID_PREFIX)
