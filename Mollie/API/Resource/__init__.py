@@ -7,6 +7,6 @@ from .PaymentChargebacks import *
 from .Issuers import *
 from .Methods import *
 from .Customers import *
-from .Mandates import *
-from .Subscriptions import *
+from .CustomerMandates import *
+from .CustomerSubscriptions import *
 from .CustomerPayments import *

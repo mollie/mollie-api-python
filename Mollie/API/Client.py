@@ -48,8 +48,8 @@ class Client(object):
         self.refunds = Resource.Refunds(self)
         self.chargebacks = Resource.Chargebacks(self)
         self.customers = Resource.Customers(self)
-        self.customer_mandates = Resource.Mandates(self)
-        self.customer_subscriptions = Resource.Subscriptions(self)
+        self.customer_mandates = Resource.CustomerMandates(self)
+        self.customer_subscriptions = Resource.CustomerSubscriptions(self)
         self.customer_payments = Resource.CustomerPayments(self)
 
     def getApiEndpoint(self):

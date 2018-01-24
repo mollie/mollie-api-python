@@ -3,7 +3,7 @@ from Mollie.API.Error import *
 from Mollie.API.Object import Subscription
 
 
-class Subscriptions(Base):
+class CustomerSubscriptions(Base):
     RESOURCE_ID_PREFIX = 'sub_'
     customer_id = None
 
@@ -15,7 +15,7 @@ class Subscriptions(Base):
             raise Error(
                 'Invalid subscription ID: "%s". A subscription ID should start with "%s".' % (subscription_id, self.RESOURCE_ID_PREFIX)
             )
-        return super(Subscriptions, self).get(subscription_id)
+        return super(CustomerSubscriptions, self).get(subscription_id)
 
     def getResourceName(self):
         return 'customers/%s/subscriptions' % self.customer_id

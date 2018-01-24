@@ -3,7 +3,7 @@ from Mollie.API.Error import *
 from Mollie.API.Object import Mandate
 
 
-class Mandates(Base):
+class CustomerMandates(Base):
     RESOURCE_ID_PREFIX = 'mdt_'
     customer_id = None
 
@@ -15,7 +15,7 @@ class Mandates(Base):
             raise Error(
                 'Invalid mandate ID: "%s". A mandate ID should start with "%s".' % (mandate_id, self.RESOURCE_ID_PREFIX)
             )
-        return super(Mandates, self).get(mandate_id)
+        return super(CustomerMandates, self).get(mandate_id)
 
     def getResourceName(self):
         return 'customers/%s/mandates' % self.customer_id
