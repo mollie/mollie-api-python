@@ -43,7 +43,3 @@ class Payment(Base):
         if 'links' not in self:
             return None
         return self['links']['paymentUrl']
-
-
-class Refund(Base):
-    pass

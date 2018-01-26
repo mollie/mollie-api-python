@@ -41,12 +41,15 @@ class Client(object):
         self.api_version = self.API_VERSION
         self.api_key = self.validateApiKey(api_key) if api_key else None
         self.payments = Resource.Payments(self)
-        self.payment_refunds = Resource.Refunds(self)
-        self.issuers = Resource.Issuers(self)
+        self.payment_refunds = Resource.PaymentRefunds(self)
+        self.payment_chargebacks = Resource.PaymentChargebacks(self)
         self.methods = Resource.Methods(self)
+        self.issuers = Resource.Issuers(self)
+        self.refunds = Resource.Refunds(self)
+        self.chargebacks = Resource.Chargebacks(self)
         self.customers = Resource.Customers(self)
-        self.customer_mandates = Resource.Mandates(self)
-        self.customer_subscriptions = Resource.Subscriptions(self)
+        self.customer_mandates = Resource.CustomerMandates(self)
+        self.customer_subscriptions = Resource.CustomerSubscriptions(self)
         self.customer_payments = Resource.CustomerPayments(self)
 
     def getApiEndpoint(self):
@@ -68,6 +71,8 @@ class Client(object):
         if not self.api_key:
             raise Error('You have not set an API key. Please use setApiKey() to set the API key.')
         url = '%s/%s/%s' % (self.api_endpoint, self.api_version, path)
+        data = '{}' if data is None else data
+
         try:
             response = requests.request(
                 http_method, url,

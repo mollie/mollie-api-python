@@ -46,11 +46,12 @@ class Base(object):
         result = self.performApiCall(self.REST_LIST, path, None, params)
         return List(result, self.getResourceObject({}).__class__)
 
-    def create(self, data):
-        try:
-            data = json.dumps(data)
-        except Exception as e:
-            raise Error('Error encoding parameters into JSON: "%s"' % e.message)
+    def create(self, data=None):
+        if data is not None:
+            try:
+                data = json.dumps(data)
+            except Exception as e:
+                raise Error('Error encoding parameters into JSON: "%s"' % e.message)
         return self.rest_create(data)
 
     def get(self, resource_id, **params):

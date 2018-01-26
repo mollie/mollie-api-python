@@ -9,7 +9,7 @@ class Customers(Base):
     def getResourceObject(self, result):
         return Customer(result)
 
-    def get(self, customer_id):
+    def get(self, customer_id, **params):
         if not customer_id or not customer_id.startswith(self.RESOURCE_ID_PREFIX):
             raise Error(
                 'Invalid customer ID: "%s". A customer ID should start with "%s".' % (customer_id, self.RESOURCE_ID_PREFIX)
