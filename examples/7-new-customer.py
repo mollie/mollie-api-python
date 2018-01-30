@@ -37,7 +37,7 @@ def main():
         return "Created new customer '%s' (%s)" % (customer['name'], customer['email'])
 
     except Mollie.API.Error as e:
-        return 'API call failed: ' + e.message
+        return 'API call failed: ' + str(e)
 
 
 if __name__ == '__main__':

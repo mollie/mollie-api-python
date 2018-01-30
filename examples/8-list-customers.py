@@ -72,7 +72,7 @@ def main():
         return body
 
     except Mollie.API.Error as e:
-        return 'API call failed: ' + e.message
+        return 'API call failed: ' + str(e)
 
 if __name__ == '__main__':
     print(main())

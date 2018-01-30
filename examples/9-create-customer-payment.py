@@ -70,7 +70,7 @@ def main():
         return '<p>Created payment of %s EUR for %s (%s)<p>' % (payment['amount'], customer['name'], customer['id'])
 
     except Mollie.API.Error as e:
-        return 'API call failed: ' + e.message
+        return 'API call failed: ' + str(e)
 
 if __name__ == '__main__':
     print(main())

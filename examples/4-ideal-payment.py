@@ -88,7 +88,7 @@ def main ():
             return flask.redirect(payment.getPaymentUrl())
 
     except Mollie.API.Error as e:
-        return 'API call failed: ' + e.message
+        return 'API call failed: ' + str(e)
 
 
 if __name__ == '__main__':
