@@ -1,4 +1,4 @@
-from .Base import *
+from .Base import Base
 from Mollie.API.Object import Issuer
 
 

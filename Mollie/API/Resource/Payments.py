@@ -1,5 +1,5 @@
-from .Base import *
-from Mollie.API.Error import *
+from .Base import Base
+from Mollie.API.Error import Error
 from Mollie.API.Object import Payment
 
 

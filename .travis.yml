@@ -14,7 +14,7 @@ install:
 
 script:
   - nosetests -s -v
-  - pyflakes Mollie/
+  - pyflakes .
 
 deploy:
   provider: pypi

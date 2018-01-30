@@ -1,1 +1,3 @@
-from . import API
+__all__ = ["API"]
+
+import API

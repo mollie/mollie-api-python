@@ -1,4 +1,6 @@
-from .Object import *
-from .Resource import *
-from .Error import *
-from .Client import *
+__all__ = ["Object", "Resource", "Error", "Client"]
+
+import Object
+import Resource
+from .Error import Error
+from .Client import Client

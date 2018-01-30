@@ -1,6 +1,6 @@
-from Mollie.API.Client import *
-from Mollie.API.Error import *
-from Mollie.API.Object import *
+from Mollie.API.Client import Client
+from Mollie.API.Error import Error
+from Mollie.API.Object import List
 
 import json
 
@@ -74,7 +74,7 @@ class Base(object):
         body = self.client.performHttpCall(http_method, path, data, params)
         try:
             result = body.json() if body.status_code != 204 else {}
-        except Exception as e:
+        except Exception:
             raise Error('Unable to decode Mollie response (status code %d): "%s".' % (body.status_code, body.text))
         if 'error' in result:
             error = Error('Error executing API call (%s): %s.' % (result['error']['type'], result['error']['message']))
