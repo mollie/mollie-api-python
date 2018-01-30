@@ -46,7 +46,8 @@ class Base(object):
         result = self.performApiCall(self.REST_LIST, path, None, params)
         return List(result, self.getResourceObject({}).__class__)
 
-    def create(self, data=None):
+    def create(self, data=None, **params):
+        data = self.merge_dictionaries(data, params)
         if data is not None:
             try:
                 data = json.dumps(data)
@@ -57,11 +58,13 @@ class Base(object):
     def get(self, resource_id, **params):
         return self.rest_read(resource_id, params)
 
-    def update(self, resource_id, data):
-        try:
-            data = json.dumps(data)
-        except Exception as e:
-            raise Error('Error encoding parameters into JSON: "%s"' % str(e))
+    def update(self, resource_id, data=None, **params):
+        data = self.merge_dictionaries(data, params)
+        if data is not None:
+            try:
+                data = json.dumps(data)
+            except Exception as e:
+                raise Error('Error encoding parameters into JSON: "%s"' % str(e))
         return self.rest_update(resource_id, data)
 
     def delete(self, resource_id):
@@ -69,6 +72,20 @@ class Base(object):
 
     def all(self, **params):
         return self.rest_list(params)
+
+    @staticmethod
+    def merge_dictionaries(a, b):
+        if a is None and b is None:
+            return None
+        if a is None:
+            return b
+        if b is None:
+            return a
+
+        merged_dict = a.copy()
+        merged_dict.update(b)
+
+        return merged_dict
 
     def performApiCall(self, http_method, path, data=None, params=None):
         body = self.client.performHttpCall(http_method, path, data, params)

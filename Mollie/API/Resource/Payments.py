@@ -22,5 +22,5 @@ class Payments(Base):
     def chargebacks(self, payment):
         return self.client.payment_chargebacks.on(payment)
 
-    def refund(self, payment, data=None):
-        return self.refunds(payment).create(data)
+    def refund(self, payment, data=None, **params):
+        return self.refunds(payment).create(data, **params)
