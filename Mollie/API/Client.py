@@ -6,8 +6,7 @@ import pkg_resources
 
 import requests
 
-import Resource
-from Error import Error
+from .Error import Error
 
 
 class Client(object):
@@ -36,6 +35,8 @@ class Client(object):
         return api_key
 
     def __init__(self, api_key=None, api_endpoint=None):
+        from . import Resource
+
         self.api_endpoint = self.validateApiEndpoint(api_endpoint or self.API_ENDPOINT)
         self.api_version = self.API_VERSION
         self.api_key = self.validateApiKey(api_key) if api_key else None
@@ -86,5 +87,5 @@ class Client(object):
                 data=data
             )
         except Exception as e:
-            raise Error('Unable to communicate with Mollie: %s.' % e.message)
+            raise Error('Unable to communicate with Mollie: %s.' % str(e))
         return response

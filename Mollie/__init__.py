@@ -1,3 +1,3 @@
 __all__ = ["API"]
 
-import API
+from . import API

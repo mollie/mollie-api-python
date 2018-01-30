@@ -51,7 +51,7 @@ class Base(object):
             try:
                 data = json.dumps(data)
             except Exception as e:
-                raise Error('Error encoding parameters into JSON: "%s"' % e.message)
+                raise Error('Error encoding parameters into JSON: "%s"' % str(e))
         return self.rest_create(data)
 
     def get(self, resource_id, **params):
@@ -61,7 +61,7 @@ class Base(object):
         try:
             data = json.dumps(data)
         except Exception as e:
-            raise Error('Error encoding parameters into JSON: "%s"' % e.message)
+            raise Error('Error encoding parameters into JSON: "%s"' % str(e))
         return self.rest_update(resource_id, data)
 
     def delete(self, resource_id):
