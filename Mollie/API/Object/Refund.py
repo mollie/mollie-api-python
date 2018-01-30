@@ -1,4 +1,4 @@
-from .Base import *
+from .Base import Base
 
 
 class Refund(Base):

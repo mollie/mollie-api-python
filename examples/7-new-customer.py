@@ -4,7 +4,7 @@
 #
 from __future__ import print_function
 
-import sys, os, flask
+import sys, os
 
 #
 # Add Mollie library to module path so we can import it.

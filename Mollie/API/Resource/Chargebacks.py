@@ -1,4 +1,5 @@
-from .Base import *
+from .Base import Base
+from Mollie.API.Object import Chargeback
 
 
 class Chargebacks(Base):

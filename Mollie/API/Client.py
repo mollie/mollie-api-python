@@ -6,7 +6,7 @@ import pkg_resources
 
 import requests
 
-from .Error import *
+from .Error import Error
 
 
 class Client(object):
@@ -87,5 +87,5 @@ class Client(object):
                 data=data
             )
         except Exception as e:
-            raise Error('Unable to communicate with Mollie: %s.' % e.message)
+            raise Error('Unable to communicate with Mollie: %s.' % str(e))
         return response
