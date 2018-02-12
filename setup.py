@@ -13,7 +13,7 @@ setup(
               'sofortbanking', 'sepa', 'bitcoin', 'paypal', 'paysafecard', 'podiumcadeaukaart', 'banktransfer',
               'direct debit', 'belfius', 'belfius direct net', 'kbc', 'cbc', 'refunds', 'payments', 'gateway',
               'gift cards', 'intersolve', 'fashioncheque', 'podium cadeaukaart', 'yourgift', 'vvv giftcard',
-              'webshop giftcard', 'nationale entertainment card'],
+              'webshop giftcard', 'nationale entertainment card', 'ing homepay'],
     url='https://github.com/mollie/mollie-api-python',
     install_requires=[
         'requests',

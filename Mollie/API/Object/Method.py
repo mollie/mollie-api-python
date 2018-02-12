@@ -15,6 +15,7 @@ class Method(Base):
     PODIUMCADEAUKAART = 'podiumcadeaukaart'
     KBC = 'kbc'
     GIFTCARD = 'giftcard'
+    INGHOMEPAY = 'inghomepay'
 
     def getMinimumAmount(self):
         if not self['amount'] or 'minimum' not in self['amount']:
