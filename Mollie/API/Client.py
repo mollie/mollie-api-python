@@ -6,14 +6,12 @@ import pkg_resources
 
 import requests
 
-from .Error import Error
+from . import Error
+from . import Resource
 
 
 class Client(object):
     CLIENT_VERSION = '1.2.1'
-    HTTP_GET       = 'GET'
-    HTTP_POST      = 'POST'
-    HTTP_DELETE    = 'DELETE'
     API_ENDPOINT   = 'https://api.mollie.nl'
     API_VERSION    = 'v1'
     UNAME          = ' '.join(platform.uname())
@@ -35,8 +33,6 @@ class Client(object):
         return api_key
 
     def __init__(self, api_key=None, api_endpoint=None):
-        from . import Resource
-
         self.api_endpoint = self.validateApiEndpoint(api_endpoint or self.API_ENDPOINT)
         self.api_version = self.API_VERSION
         self.api_key = self.validateApiKey(api_key) if api_key else None
