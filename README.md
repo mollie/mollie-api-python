@@ -71,6 +71,27 @@ if payment.isPaid():
     print 'Payment received.'
 ```
 
+### How to pass the different parameter types ###
+In the example above, a new payment is created by passing a dictionary of payment data, which corresponds to the `data` parameter of the `mollie.payments.create` method. This data will be used as request body in a POST request to Mollie. In general, the methods for POST requests, which accept request body parameters, have a `data` parameter to provide such request body parameters.
+
+Every keyword argument (other than `data`) passed to a method will be interpreted as a query string parameter. For example, the following method call:
+```python
+payments = mollie.payments.all(count=20)
+```
+Will result in a request with query string `?count=20`. Furthermore, this is an example of a request that only accepts query string parameters. Both can be combined, however, to for example create a payment that includes a QR code object:
+```python
+payment = mollie.payments.create(
+    {
+        'amount': 10.00,
+        'description': 'My first API payment',
+        'redirectUrl': 'https://webshop.example.org/order/12345/',
+        'webhookUrl': 'https://webshop.example.org/mollie-webhook/',
+        'method': Method.IDEAL
+    },
+    include='details.qrCode'
+)
+```
+
 ### Fully integrated iDEAL payments ###
 
 If you want to fully integrate iDEAL payments in your web site, some additional steps are required. First, you need to
