@@ -1,4 +1,5 @@
 import Mollie
 
 def test_bogus():
-    assert True
+    mollie = Mollie.API.Client()
+    assert mollie
