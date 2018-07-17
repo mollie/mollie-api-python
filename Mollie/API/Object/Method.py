@@ -17,6 +17,28 @@ class Method(Base):
     GIFTCARD = 'giftcard'
     INGHOMEPAY = 'inghomepay'
 
+    @property
+    def description(self):
+        return self.getProperty('description')
+
+    @property
+    def id(self):
+        return self.getProperty('id')
+
+    @property
+    def image_size1x(self):
+        images = self.getProperty('image')
+        if 'size1x' not in images:
+            return None
+        return images['size1x']
+
+    @property
+    def image_size2x(self):
+        images = self.getProperty('image')
+        if 'size2x' not in images:
+            return None
+        return images['size2x']
+
     def getMinimumAmount(self):
         if not self['amount'] or 'minimum' not in self['amount']:
             return None
@@ -26,13 +48,3 @@ class Method(Base):
         if not self['amount'] or 'maximum' not in self['amount']:
             return None
         return float(self['amount']['maximum'])
-
-    def getNormalImage(self):
-        if not self['image'] or 'normal' not in self['image']:
-            return None
-        return str(self['image']['normal'])
-
-    def getBiggerImage(self):
-        if not self['image'] or 'bigger' not in self['image']:
-            return None
-        return str(self['image']['bigger'])

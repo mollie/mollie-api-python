@@ -29,12 +29,11 @@ def main():
         # Get the all the activated methods for this API key.
         #
         methods = mollie.methods.all()
-
-        body = 'Your API key has %u activated payment methods:<br>' % int(methods['totalCount'])
+        body = 'Your API key has %u activated payment methods:<br>' % methods.count
 
         for method in methods:
             body += '<div style="line-height:40px; vertical-align:top">'
-            body += '<img src="%s"> %s (%s)' % (method['image']['normal'], method['description'], method['id'])
+            body += '<img src="%s"> %s (%s)' % (method.image_size2x, method.description, method.id)
             body += '</div>'
 
         return body
