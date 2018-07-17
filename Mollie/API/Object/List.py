@@ -6,8 +6,11 @@ class List(Base):
         Base.__init__(self, result)
         self.object_type = object_type
 
+    def getResourceName(self):
+        return self.object_type.__name__.lower() + 's'
+
     def __iter__(self):
-        for item in self['data']:
+        for item in self['_embedded'][self.getResourceName()]:
             yield self.object_type(item)
 
     def getTotalCount(self):
