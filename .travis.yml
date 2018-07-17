@@ -9,8 +9,8 @@ python:
 install:
   - pip install --upgrade pip setuptools
   - pip install pipenv
-  - pipenv install --dev
-
+  - pipenv install --dev -e .
+ 
 script:
   - pipenv run pytest -v
   - pipenv run pyflakes .
