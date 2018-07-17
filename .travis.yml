@@ -12,8 +12,8 @@ install:
   - pipenv install --dev
 
 script:
-  - pytest
-  - pyflakes .
+  - pipenv run pytest -v
+  - pipenv run pyflakes .
 
 #deploy:
 #  provider: pypi
