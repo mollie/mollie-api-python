@@ -28,7 +28,13 @@ def main():
         #
         # Get the all the activated methods for this API key.
         #
-        methods = mollie.methods.all()
+        params = {
+            'amount': {
+                'currency': 'EUR',
+                'value': '100.00',
+            }
+        }
+        methods = mollie.methods.all(**params)
         body = 'Your API key has %u activated payment methods:<br>' % methods.count
 
         for method in methods:
