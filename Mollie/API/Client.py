@@ -11,9 +11,9 @@ from . import Resource
 
 
 class Client(object):
-    CLIENT_VERSION = '1.2.1'
+    CLIENT_VERSION = '2.0.0a0'
     API_ENDPOINT   = 'https://api.mollie.nl'
-    API_VERSION    = 'v1'
+    API_VERSION    = 'v2'
     UNAME          = ' '.join(platform.uname())
     USER_AGENT     = ' '.join(vs.replace(r'\s+', '-') for vs in [
         'Mollie/'  + CLIENT_VERSION,
