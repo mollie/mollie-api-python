@@ -8,8 +8,8 @@ import os
 import sys
 import time
 
-from app import database_write
 import Mollie
+from app import database_write
 
 
 #
@@ -26,8 +26,9 @@ def main():
         #
         # See: https://www.mollie.com/dashboard/settings/profiles
         #
+        api_key = os.environ.get('MOLLIE_API_KEY', 'test_test')
         mollie = Mollie.API.Client()
-        mollie.setApiKey('test_sBJ8CFv4229KpNVjPA8PwMBmQxyNsU')
+        mollie.setApiKey(api_key)
 
         body = ''
 

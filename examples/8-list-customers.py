@@ -34,7 +34,7 @@ def main():
 
         body = '<p>Your API key has %u customers.</p>' % int(customers.count)
 
-        if int(customers['count']) == 0:
+        if int(customers.count) == 0:
             return body
 
         if int(customers['count']) > amount_of_customers_to_retrieve:

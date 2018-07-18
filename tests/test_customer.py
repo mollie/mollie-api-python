@@ -3,7 +3,7 @@ def test_create_customers(client, response):
     customer = client.customers.create({
         'name': 'Customer A',
         'email': 'customer@example.org',
-        'locale': 'nl_NL'
+        'locale': 'nl_NL',
     })
     assert customer.name == 'Customer A'
     assert customer.email == 'customer@example.org'
@@ -12,4 +12,4 @@ def test_create_customers(client, response):
     assert customer.createdAt is not None
     assert customer.metadata is None
     assert customer.locale == 'nl_NL'
-    assert customer.mode is None
+    assert customer.mode == 'test'
