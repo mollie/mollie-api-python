@@ -1,7 +1,3 @@
-import Mollie
-import re
-
-
 def test_create_customers(client, response):
     response.post('https://api.mollie.com/v2/customers', 'create_customer')
     customer = client.customers.create({
