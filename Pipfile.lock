@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "7183fd918d4c2a30ecdd6ff1649eaeaf4477ecc16460f7dfaccdd90f63f0a77f"
+            "sha256": "927fa4204479ab9565aeae22ef672c9ee46f10f4279d7543a338351f2c14e7ff"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -36,6 +36,10 @@
                 "sha256:684a38a6f903c1d71d6d5fac066b58d7768af4de2b832e426ec79c30daa94a16"
             ],
             "version": "==2.7"
+        },
+        "mollie-api-python": {
+            "editable": true,
+            "path": "."
         },
         "requests": {
             "hashes": [

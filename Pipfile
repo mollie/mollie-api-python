@@ -5,6 +5,7 @@ name = "pypi"
 
 [packages]
 requests = "*"
+mollie-api-python = {path = ".", editable = true}
 
 [dev-packages]
 pytest = "*"
