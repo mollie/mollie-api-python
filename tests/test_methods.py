@@ -1,6 +1,6 @@
 
 def test_methods_all(client, response):
-    response.get('https://api.mollie.nl/v2/methods', 'methods_ideal')
+    response.get('https://api.mollie.com/v2/methods', 'methods_ideal')
 
     methods = client.methods.all()
     assert methods.count == 1
