@@ -20,8 +20,6 @@ class Customer(Base):
 
     @property
     def metadata(self):
-        if 'metadata' not in self:
-            return None
         return self.getProperty('metadata')
 
     @property
