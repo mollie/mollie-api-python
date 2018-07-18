@@ -14,7 +14,7 @@ develop:
 	pipenv sync --dev
 
 test: develop
-	pipenv run pytest -v
+	pipenv run pytest
 
 clean:
 	pipenv --rm

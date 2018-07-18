@@ -9,6 +9,7 @@ mollie-api-python = {path = ".", editable = true}
 
 [dev-packages]
 pytest = "*"
+pytest-cov = "*"
 pyflakes = "*"
 responses = "*"
 mock = "*"

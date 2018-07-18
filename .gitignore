@@ -7,3 +7,4 @@
 /mk-ca-bundle.pl
 /.eggs
 /.pytest_cache
+/.coverage
