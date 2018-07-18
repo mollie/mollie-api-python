@@ -33,4 +33,3 @@ class Customer(Base):
     @property
     def createdAt(self):
         return self.getProperty('createdAt')
-
