@@ -11,3 +11,4 @@ mollie-api-python = {path = ".", editable = true}
 pytest = "*"
 pyflakes = "*"
 responses = "*"
+mock = "*"
