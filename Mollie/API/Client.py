@@ -3,6 +3,7 @@ import sys
 import ssl
 import re
 import pkg_resources
+from urllib.parse import urlencode
 
 import requests
 
@@ -69,9 +70,10 @@ class Client(object):
         url = '%s/%s/%s' % (self.api_endpoint, self.api_version, path)
         data = '{}' if data is None else data
 
-        query_string = generate_query_string(params)
-        url += '?' + query_string
-        params = None
+        query_string = generate_querystring(params)
+        if query_string:
+            url += '?' + query_string
+            params = None
 
         try:
             response = requests.request(
@@ -91,12 +93,23 @@ class Client(object):
         return response
 
 
-def generate_query_string(params):
-    """Generate a query string suitable for use in the v2 api."""
-    query_string = ''
-    # TODO
+def generate_querystring(params):
+    """
+    Generate a querystring suitable for use in the v2 api.
 
-    if query_string:
-        return '?' + query_string
+    The Requests library doesn't know how to generate querystrings that encode dictionaries using square brackets:
+    https://api.mollie.com/v2/methods?amount[value]=100.00&amount[currency]=USD
+    """
+    parts = []
+    for param, value in params.items():
+        if not isinstance(value, dict):
+            parts.append(urlencode({param: value}))
+        else:
+            # encode dictionary with square brackets
+            for key, sub_value in value.items():
+                composed = '%s[%s]' % (param, key)
+                parts.append(urlencode({composed: sub_value}))
+    if parts:
+        return '&'.join(parts)
     else:
-        return ''
+        return None
