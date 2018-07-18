@@ -4,16 +4,19 @@
 #
 from __future__ import print_function
 
-import sys, os, time, flask
+import os
+import sys
+import time
+
 from app import database_write
+import Mollie
+
 
 #
 # Add Mollie library to module path so we can import it.
 # This is not necessary if you use pip or easy_install.
 #
 sys.path.append(os.path.abspath(os.path.dirname(__file__) + '/../'))
-
-import Mollie
 
 
 def main():
@@ -24,11 +27,11 @@ def main():
         # See: https://www.mollie.com/dashboard/settings/profiles
         #
         mollie = Mollie.API.Client()
-        mollie.setApiKey('test_bt7vvByF6jTcBR4dLuW66eNnHYNIJp')
+        mollie.setApiKey('test_sBJ8CFv4229KpNVjPA8PwMBmQxyNsU')
 
         body = ''
 
-        customer_id = flask.request.args.get('customer_id')
+        customer_id = 'cst_gUn9RTCkvV'
 
         # If no customer ID was provided in the URL, we grab the first customer
         if customer_id is None:
@@ -41,7 +44,7 @@ def main():
                 return body
 
             for customer in customers:
-                customer_id = customer['id']
+                customer_id = customer.id
                 break
 
         customer = mollie.customers.get(customer_id)
@@ -56,10 +59,10 @@ def main():
         # See: https://www.mollie.com/nl/docs/reference/customers/create-payment
         #
         payment = mollie.customer_payments.withParentId(customer_id).create({
-            'amount':      (time.time() % 15) * 3,  # Create some variety in the payment amounts
+            'amount':      {'currency': 'EUR', 'value': '100.00'},  # Create some variety in the payment amounts
             'description': 'My first API payment',
-            'webhookUrl':  flask.request.url_root + '2-webhook-verification?order_nr=' + str(order_nr),
-            'redirectUrl': flask.request.url_root + '3-return-page?order_nr=' + str(order_nr),
+            'webhookUrl':  'https://webshop.example.org/order/12345/',
+            'redirectUrl': 'https://webshop.example.org/payments/webhook/',
             'metadata':    {
                 'order_nr': order_nr
             }
@@ -67,10 +70,11 @@ def main():
 
         database_write(order_nr, payment['status'])
 
-        return '<p>Created payment of %s EUR for %s (%s)<p>' % (payment['amount'], customer['name'], customer['id'])
+        return '<p>Created payment of %s EUR for %s (%s)<p>' % (payment['amount'], customer.name, customer.id)
 
     except Mollie.API.Error as e:
         return 'API call failed: ' + str(e)
+
 
 if __name__ == '__main__':
     print(main())
