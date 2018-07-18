@@ -11,9 +11,9 @@ from . import Resource
 
 
 class Client(object):
-    CLIENT_VERSION = '1.2.1'
+    CLIENT_VERSION = '2.0.0a0'
     API_ENDPOINT   = 'https://api.mollie.nl'
-    API_VERSION    = 'v1'
+    API_VERSION    = 'v2'
     UNAME          = ' '.join(platform.uname())
     USER_AGENT     = ' '.join(vs.replace(r'\s+', '-') for vs in [
         'Mollie/'  + CLIENT_VERSION,
@@ -69,6 +69,10 @@ class Client(object):
         url = '%s/%s/%s' % (self.api_endpoint, self.api_version, path)
         data = '{}' if data is None else data
 
+        query_string = generate_query_string(params)
+        url += '?' + query_string
+        params = None
+
         try:
             response = requests.request(
                 http_method, url,
@@ -85,3 +89,14 @@ class Client(object):
         except Exception as e:
             raise Error('Unable to communicate with Mollie: %s.' % str(e))
         return response
+
+
+def generate_query_string(params):
+    """Generate a query string suitable for use in the v2 api."""
+    query_string = ''
+    # TODO
+
+    if query_string:
+        return '?' + query_string
+    else:
+        return ''

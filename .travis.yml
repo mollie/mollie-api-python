@@ -9,11 +9,12 @@ python:
 install:
   - pip install --upgrade pip setuptools
   - pip install pipenv
-  - pipenv install --dev -e .
+  - pipenv sync --dev
  
 script:
   - pipenv run pytest -v
   - pipenv run pyflakes .
+  - pipenv check
 
 #deploy:
 #  provider: pypi
