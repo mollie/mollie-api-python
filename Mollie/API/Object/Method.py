@@ -1,4 +1,5 @@
 from .Base import Base
+from .Issuer import Issuer
 
 
 class Method(Base):
@@ -38,6 +39,12 @@ class Method(Base):
         if 'size2x' not in images:
             return None
         return images['size2x']
+
+    @property
+    def issuers(self):
+        issuers = self.getProperty('issuers')
+        if issuers:
+            return [Issuer(x) for x in issuers]
 
     def getMinimumAmount(self):
         if not self['amount'] or 'minimum' not in self['amount']:
