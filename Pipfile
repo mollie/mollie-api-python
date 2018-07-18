@@ -11,6 +11,3 @@ mollie-api-python = {path = ".", editable = true}
 pytest = "*"
 pyflakes = "*"
 responses = "*"
-
-[requires]
-python_version = "3.6"
