@@ -37,7 +37,7 @@ def main():
         if int(customers.count) == 0:
             return body
 
-        if int(customers['count']) > amount_of_customers_to_retrieve:
+        if int(customers.count) > amount_of_customers_to_retrieve:
             body += '<p><b>Note: Only the first %s are shown here.</b></p>' % amount_of_customers_to_retrieve
 
         body += """
