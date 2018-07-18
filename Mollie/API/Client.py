@@ -3,7 +3,11 @@ import sys
 import ssl
 import re
 import pkg_resources
-from urllib.parse import urlencode
+try:
+    from urllib.parse import urlencode
+except ImportError:
+    # support python 2
+    from urllib import urlencode
 
 import requests
 
