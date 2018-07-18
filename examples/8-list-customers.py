@@ -19,8 +19,9 @@ def main():
         #
         # See: https://www.mollie.com/dashboard/settings/profiles
         #
+        api_key = os.environ.get('MOLLIE_API_KEY', 'test_test')
         mollie = Mollie.API.Client()
-        mollie.setApiKey('test_sBJ8CFv4229KpNVjPA8PwMBmQxyNsU')
+        mollie.setApiKey(api_key)
 
         amount_of_customers_to_retrieve = 20
 
@@ -31,7 +32,7 @@ def main():
         #
         customers = mollie.customers.all(offset=0, count=amount_of_customers_to_retrieve)
 
-        body = '<p>Your API key has %u customers.</p>' % int(customers['count'])
+        body = '<p>Your API key has %u customers.</p>' % int(customers.count)
 
         if int(customers['count']) == 0:
             return body
@@ -55,13 +56,13 @@ def main():
 
         for customer in customers:
             body += '<tr>'
-            body += '<td>%s</td>' % customer['id']
-            body += '<td>%s</td>' % customer['name']
-            body += '<td>%s</td>' % customer['email']
+            body += '<td>%s</td>' % customer.id
+            body += '<td>%s</td>' % customer.name
+            body += '<td>%s</td>' % customer.email
             body += '<td><a href="/9-create-customer-payment?customer_id=%s">Create payment for customer</a></td>' % \
-                    customer['id']
+                    customer.id
             body += '<td><a href="/10-customer-payment-history?customer_id=%s">Show payment history</a>' % \
-                    customer['id']
+                    customer.id
             body += '</tr>'
 
         body += "</tbody></table>"

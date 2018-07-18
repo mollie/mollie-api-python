@@ -22,8 +22,9 @@ def main():
         #
         # See: https://www.mollie.com/dashboard/settings/profiles
         #
+        api_key = os.environ.get('MOLLIE_API_KEY', 'test_test')
         mollie = Mollie.API.Client()
-        mollie.setApiKey('test_bt7vvByF6jTcBR4dLuW66eNnHYNIJp')
+        mollie.setApiKey(api_key)
 
         #
         # See: https://www.mollie.com/nl/docs/reference/customers/create
@@ -34,7 +35,7 @@ def main():
             'locale': 'nl_NL'
         })
 
-        return "Created new customer '%s' (%s)" % (customer['name'], customer['email'])
+        return "Created new customer '%s' (%s)" % (customer.name, customer.email)
 
     except Mollie.API.Error as e:
         return 'API call failed: ' + str(e)
