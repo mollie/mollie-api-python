@@ -8,3 +8,13 @@ mk-ca-bundle.pl:
 
 certdata.txt: mk-ca-bundle.pl
 	./mk-ca-bundle.pl
+
+.PHONY: develop
+develop:
+	pipenv sync --dev
+
+test: develop
+	pipenv run pytest
+
+clean:
+	pipenv --rm
