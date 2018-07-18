@@ -12,7 +12,7 @@ from . import Resource
 
 class Client(object):
     CLIENT_VERSION = '2.0.0a0'
-    API_ENDPOINT   = 'https://api.mollie.nl'
+    API_ENDPOINT   = 'https://api.mollie.com'
     API_VERSION    = 'v2'
     UNAME          = ' '.join(platform.uname())
     USER_AGENT     = ' '.join(vs.replace(r'\s+', '-') for vs in [
