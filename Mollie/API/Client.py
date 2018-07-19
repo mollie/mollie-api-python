@@ -74,9 +74,9 @@ class Client(object):
         url = '%s/%s/%s' % (self.api_endpoint, self.api_version, path)
         data = '{}' if data is None else data
 
-        query_string = generate_querystring(params)
-        if query_string:
-            url += '?' + query_string
+        querystring = generate_querystring(params)
+        if querystring:
+            url += '?' + querystring
             params = None
 
         try:
