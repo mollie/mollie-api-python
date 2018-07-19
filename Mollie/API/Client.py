@@ -107,6 +107,8 @@ def generate_querystring(params):
     Note: we use `sorted()` to work around a difference in iteration behaviour between Python 2 and 3.
     This makes the output predictable, and ordering of querystring parameters shouldn't matter.
     """
+    if not params:
+        return
     parts = []
     for param, value in sorted(params.items()):
         if not isinstance(value, dict):
@@ -118,5 +120,3 @@ def generate_querystring(params):
                 parts.append(urlencode({composed: sub_value}))
     if parts:
         return '&'.join(parts)
-    else:
-        return None
