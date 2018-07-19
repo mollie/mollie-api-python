@@ -3,6 +3,11 @@ import sys
 import ssl
 import re
 import pkg_resources
+try:
+    from urllib.parse import urlencode
+except ImportError:
+    # support python 2
+    from urllib import urlencode
 
 import requests
 
@@ -69,9 +74,10 @@ class Client(object):
         url = '%s/%s/%s' % (self.api_endpoint, self.api_version, path)
         data = '{}' if data is None else data
 
-        query_string = generate_query_string(params)
-        url += '?' + query_string
-        params = None
+        querystring = generate_querystring(params)
+        if querystring:
+            url += '?' + querystring
+            params = None
 
         try:
             response = requests.request(
@@ -91,12 +97,26 @@ class Client(object):
         return response
 
 
-def generate_query_string(params):
-    """Generate a query string suitable for use in the v2 api."""
-    query_string = ''
-    # TODO
+def generate_querystring(params):
+    """
+    Generate a querystring suitable for use in the v2 api.
 
-    if query_string:
-        return '?' + query_string
-    else:
-        return ''
+    The Requests library doesn't know how to generate querystrings that encode dictionaries using square brackets:
+    https://api.mollie.com/v2/methods?amount[value]=100.00&amount[currency]=USD
+
+    Note: we use `sorted()` to work around a difference in iteration behaviour between Python 2 and 3.
+    This makes the output predictable, and ordering of querystring parameters shouldn't matter.
+    """
+    if not params:
+        return
+    parts = []
+    for param, value in sorted(params.items()):
+        if not isinstance(value, dict):
+            parts.append(urlencode({param: value}))
+        else:
+            # encode dictionary with square brackets
+            for key, sub_value in sorted(value.items()):
+                composed = '%s[%s]' % (param, key)
+                parts.append(urlencode({composed: sub_value}))
+    if parts:
+        return '&'.join(parts)
