@@ -13,8 +13,13 @@ certdata.txt: mk-ca-bundle.pl
 develop:
 	pipenv sync --dev
 
+.PHONY: test
 test: develop
 	pipenv run pytest
+	pipenv run pyflakes .
+	pipenv run pycodestyle
+	pipenv check
 
+.PHONY: clean
 clean:
 	pipenv --rm

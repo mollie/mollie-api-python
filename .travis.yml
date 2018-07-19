@@ -12,10 +12,7 @@ install:
   - pipenv sync --dev
  
 script:
-  - pipenv run pytest -v
-  - pipenv run pyflakes .
-  - pipenv run pycodestyle
-  - pipenv check
+  - make test
 
 #deploy:
 #  provider: pypi
