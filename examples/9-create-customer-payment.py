@@ -5,18 +5,10 @@
 from __future__ import print_function
 
 import os
-import sys
 import time
 
 import Mollie
 from app import database_write
-
-
-#
-# Add Mollie library to module path so we can import it.
-# This is not necessary if you use pip or easy_install.
-#
-sys.path.append(os.path.abspath(os.path.dirname(__file__) + '/../'))
 
 
 def main():

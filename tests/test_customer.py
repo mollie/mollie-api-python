@@ -1,5 +1,5 @@
 def test_create_customers(client, response):
-    response.post('https://api.mollie.com/v2/customers', 'create_customer')
+    response.post('https://api.mollie.com/v2/customers', 'customer_new')
     customer = client.customers.create({
         'name': 'Customer A',
         'email': 'customer@example.org',
@@ -16,7 +16,7 @@ def test_create_customers(client, response):
 
 
 def test_update_customers(client, response):
-    response.post('https://api.mollie.com/v2/customers/cst_8wmqcHMN4U', 'update_customer')
+    response.post('https://api.mollie.com/v2/customers/cst_8wmqcHMN4U', 'customer_updated')
     updated_customer = client.customers.update('cst_8wmqcHMN4U', {
         'name': 'Updated Customer A',
         'email': 'updated-customer@example.org',
@@ -32,12 +32,12 @@ def test_delete_customers(client, response):
 
 
 def test_customers_all(client, response):
-    response.get('https://api.mollie.com/v2/customers', 'all_customers')
+    response.get('https://api.mollie.com/v2/customers', 'customer_multiple')
     customers = client.customers.all()
     assert customers.count == 3
-    itterated = 0
+    iterated = 0
     for customer in customers:
-        itterated += 1
+        iterated += 1
         assert customer.id is not None
         assert customer.mode is not None
         assert customer.resource is not None
@@ -45,4 +45,4 @@ def test_customers_all(client, response):
         assert customer.email is not None
         assert customer.locale is not None
         assert customer.createdAt is not None
-    assert itterated == 3
+    assert iterated == 3

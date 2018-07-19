@@ -1,19 +1,12 @@
 # coding=utf-8
 #
-# Example 7 - How to create a new customer with the Mollie API.
+# Example 8 - Retrieving all of your customers with offset and count
 #
 from __future__ import print_function
 
 import os
-import sys
 
 import Mollie
-
-#
-# Add Mollie library to module path so we can import it.
-# This is not necessary if you use pip or easy_install.
-#
-sys.path.append(os.path.abspath(os.path.dirname(__file__) + '/../'))
 
 
 def main():

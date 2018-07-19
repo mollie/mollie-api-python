@@ -10,10 +10,6 @@
                 "email": "customer@example.org",
                 "locale": "nl_NL",
                 "metadata": null,
-                "recentlyUsedMethods": [
-                    "creditcard",
-                    "ideal"
-                ],
                 "createdAt": "2018-04-06T13:23:21.0Z",
                 "_links": {
                     "self": {
@@ -34,11 +30,7 @@
                 "email": "customerb@example.org",
                 "locale": "nl_NL",
                 "metadata": null,
-                "recentlyUsedMethods": [
-                    "creditcard",
-                    "ideal"
-                ],
-                "createdAt": "2018-04-06T13:23:21.0Z",
+                "createdAt": "2018-04-06T13:23:22.0Z",
                 "_links": {
                     "self": {
                         "href": "https://api.mollie.com/v2/customers/cst_kEn1PlbGb",
@@ -57,11 +49,7 @@
                 "email": "customerc@example.org",
                 "locale": "nl_NL",
                 "metadata": null,
-                "recentlyUsedMethods": [
-                    "creditcard",
-                    "ideal"
-                ],
-                "createdAt": "2018-04-06T13:23:21.0Z",
+                "createdAt": "2018-04-06T13:23:23.0Z",
                 "_links": {
                     "self": {
                         "href": "https://api.mollie.com/v2/customers/cst_kEn1PlbGc",
