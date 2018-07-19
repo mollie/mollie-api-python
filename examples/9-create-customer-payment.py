@@ -7,6 +7,8 @@ from __future__ import print_function
 import os
 import time
 
+import flask
+
 import Mollie
 from app import database_write
 
@@ -24,7 +26,7 @@ def main():
 
         body = ''
 
-        customer_id = 'cst_gUn9RTCkvV'
+        customer_id = flask.request.args.get('customer_id')
 
         # If no customer ID was provided in the URL, we grab the first customer
         if customer_id is None:
@@ -54,8 +56,8 @@ def main():
         payment = mollie.customer_payments.withParentId(customer_id).create({
             'amount':      {'currency': 'EUR', 'value': '100.00'},  # Create some variety in the payment amounts
             'description': 'My first API payment',
-            'webhookUrl':  'https://webshop.example.org/order/12345/',
-            'redirectUrl': 'https://webshop.example.org/payments/webhook/',
+            'webhookUrl':  flask.request.url_root + '2-webhook-verification?order_nr=' + str(order_nr),
+            'redirectUrl': flask.request.url_root + '3-return-page?order_nr=' + str(order_nr),
             'metadata':    {
                 'order_nr': order_nr
             }
