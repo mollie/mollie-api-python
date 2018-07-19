@@ -1,3 +1,7 @@
+# coding=utf-8
+#
+# Example 7 - How to create a new customer with the Mollie API.
+#
 from __future__ import print_function
 
 import os
