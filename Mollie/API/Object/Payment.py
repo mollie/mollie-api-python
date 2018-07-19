@@ -25,7 +25,7 @@ class Payment(Base):
         return self['status'] == self.STATUS_EXPIRED
 
     def isPaid(self):
-        return 'paidDatetime' in self and len(self['paidDatetime']) > 0
+        return 'paidAt' in self and len(self['paidAt']) > 0
 
     def isPaidout(self):
         return self['status'] == self.STATUS_PAIDOUT
@@ -40,6 +40,6 @@ class Payment(Base):
         return self['status'] == self.STATUS_CHARGED_BACK
 
     def getPaymentUrl(self):
-        if 'links' not in self:
+        if '_links' not in self:
             return None
-        return self['links']['paymentUrl']
+        return self['_links']['paymentUrl']

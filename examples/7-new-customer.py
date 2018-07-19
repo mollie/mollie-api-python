@@ -4,13 +4,7 @@
 #
 from __future__ import print_function
 
-import sys, os
-
-#
-# Add Mollie library to module path so we can import it.
-# This is not necessary if you use pip or easy_install.
-#
-sys.path.append(os.path.abspath(os.path.dirname(__file__) + '/../'))
+import os
 
 import Mollie
 
@@ -22,8 +16,9 @@ def main():
         #
         # See: https://www.mollie.com/dashboard/settings/profiles
         #
+        api_key = os.environ.get('MOLLIE_API_KEY', 'test_test')
         mollie = Mollie.API.Client()
-        mollie.setApiKey('test_bt7vvByF6jTcBR4dLuW66eNnHYNIJp')
+        mollie.setApiKey(api_key)
 
         #
         # See: https://www.mollie.com/nl/docs/reference/customers/create
@@ -34,7 +29,7 @@ def main():
             'locale': 'nl_NL'
         })
 
-        return "Created new customer '%s' (%s)" % (customer['name'], customer['email'])
+        return "Created new customer '%s' (%s)" % (customer.name, customer.email)
 
     except Mollie.API.Error as e:
         return 'API call failed: ' + str(e)

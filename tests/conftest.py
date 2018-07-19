@@ -25,10 +25,16 @@ class ImprovedRequestsMock(responses.RequestsMock):
         self.add(responses.GET, url, body=body, status=status)
 
     def post(self, url, filename, status=200):
-        """Setup a mock response for a GET request."""
+        """Setup a mock response for a POST request."""
         file = os.path.join(os.path.dirname(__file__), 'responses', '%s.json' % filename)
         body = open(file).read()
         self.add(responses.POST, url, body=body, status=status)
+
+    def delete(self, url, filename, status=204):
+        """Setup a mock response for a DELETE request."""
+        file = os.path.join(os.path.dirname(__file__), 'responses', '%s.json' % filename)
+        body = open(file).read()
+        self.add(responses.DELETE, url, body=body, status=status)
 
 
 @pytest.fixture
