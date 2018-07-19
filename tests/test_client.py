@@ -6,9 +6,10 @@ from Mollie.API.Client import generate_querystring
 @pytest.mark.parametrize('params, querystring', [
     ({}, None),
     ({'locale': 'nl_NL'}, 'locale=nl_NL'),
-    ({'amount': {'value': '100.00', 'currency': 'USD'}}, 'amount%5Bvalue%5D=100.00&amount%5Bcurrency%5D=USD')
+    ({'locale': 'nl_NL', 'hoeba': 'kek'}, 'hoeba=kek&locale=nl_NL'),
+    ({'amount': {'value': '100.00', 'currency': 'USD'}}, 'amount%5Bcurrency%5D=USD&amount%5Bvalue%5D=100.00')
 ])
-def test_generate_query_string(params, querystring):
+def test_generate_querystring(params, querystring):
     """Verify that we can generate querystring that are correctly quoted."""
     result = generate_querystring(params)
     assert result == querystring
