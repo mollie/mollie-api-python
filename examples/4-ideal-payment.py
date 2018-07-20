@@ -9,7 +9,7 @@ import time
 
 import flask
 
-import Mollie
+import mollie
 from app import database_write
 
 
@@ -21,8 +21,8 @@ def main ():
         # See: https://www.mollie.com/dashboard/settings/profiles
         #
         api_key = os.environ.get('MOLLIE_API_KEY', 'test_test')
-        mollie = Mollie.API.Client()
-        mollie.setApiKey(api_key)
+        mollie_client = mollie.api.Client()
+        mollie.set_api_key(api_key)
 
 
         #
@@ -31,8 +31,8 @@ def main ():
         if 'issuer' not in flask.request.form:
             body = '<form method="post">Select your bank: <select name="issuer">'
 
-            for issuer in mollie.issuers.all():
-                if issuer['method'] == Mollie.API.Object.Method.IDEAL:
+            for issuer in mollie_client.issuers.all():
+                if issuer['method'] == mollie_client.api.object.Method.IDEAL:
                     body += '<option value="%s">%s</option>' % (issuer['id'], issuer['name'])
 
             body += '<option value="">or select later</option>'
@@ -64,7 +64,7 @@ def main ():
             # method        Payment method "ideal".
             # issuer        The customer's bank. If empty the customer can select it later.
             #
-            payment = mollie.payments.create({
+            payment = mollie_client.payments.create({
                 'amount':      10.00,
                 'description': 'My first API payment',
                 'webhookUrl':  flask.request.url_root + '2-webhook-verification?order_nr=' + str(order_nr),
@@ -84,9 +84,9 @@ def main ():
             #
             # Send the customer off to complete the payment.
             #
-            return flask.redirect(payment.getPaymentUrl())
+            return flask.redirect(payment.checkout_url)
 
-    except Mollie.API.Error as e:
+    except mollie.api.error as e:
         return 'API call failed: ' + str(e)
 
 

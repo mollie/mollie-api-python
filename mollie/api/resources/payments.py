@@ -1,12 +1,12 @@
-from .Base import Base
-from Mollie.API.Error import Error
-from Mollie.API.Object import Payment
+from .base import Base
+from mollie.api.error import Error
+from mollie.api.objects import Payment
 
 
 class Payments(Base):
     RESOURCE_ID_PREFIX = 'tr_'
 
-    def getResourceObject(self, result):
+    def get_resource_object(self, result):
         return Payment(result)
 
     def get(self, payment_id, **params):

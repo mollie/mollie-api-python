@@ -7,7 +7,7 @@ from __future__ import print_function
 import os
 
 
-import Mollie
+import mollie
 
 
 def main():
@@ -18,8 +18,8 @@ def main():
         # See: https://www.mollie.com/dashboard/settings/profiles
         #
         api_key = os.environ.get('MOLLIE_API_KEY', 'test_test')
-        mollie = Mollie.API.Client()
-        mollie.setApiKey(api_key)
+        mollie_client = mollie.api.Client()
+        mollie_client.set_api_key(api_key)
 
         #
         # Get the all the activated methods for this API key.
@@ -30,7 +30,7 @@ def main():
                 'value': '100.00',
             }
         }
-        methods = mollie.methods.all(**params)
+        methods = mollie_client.methods.all(**params)
         body = 'Your API key has %u activated payment methods:<br>' % methods.count
 
         for method in methods:
@@ -40,7 +40,7 @@ def main():
 
         return body
 
-    except Mollie.API.Error as e:
+    except mollie.api.error as e:
         return 'API call failed: ' + str(e)
 
 

@@ -9,7 +9,7 @@ import time
 
 import flask
 
-import Mollie
+import mollie
 from app import database_write
 
 
@@ -21,8 +21,8 @@ def main():
         # See: https://www.mollie.com/dashboard/settings/profiles
         #
         api_key = os.environ.get('MOLLIE_API_KEY', 'test_test')
-        mollie = Mollie.API.Client()
-        mollie.setApiKey(api_key)
+        mollie_client = mollie.api.Client()
+        mollie_client.set_api_key(api_key)
 
         body = ''
 
@@ -30,7 +30,7 @@ def main():
 
         # If no customer ID was provided in the URL, we grab the first customer
         if customer_id is None:
-            customers = mollie.customers.all()
+            customers = mollie_client.customers.all()
 
             body += '<p>No customer ID specified. Attempting to retrieve all customers and grabbing the first.</p>'
 
@@ -42,7 +42,7 @@ def main():
                 customer_id = customer.id
                 break
 
-        customer = mollie.customers.get(customer_id)
+        customer = mollie_client.customers.get(customer_id)
 
         #
         # Generate a unique order number for this example. It is important to include this unique attribute
@@ -53,7 +53,7 @@ def main():
         #
         # See: https://www.mollie.com/nl/docs/reference/customers/create-payment
         #
-        payment = mollie.customer_payments.withParentId(customer_id).create({
+        payment = mollie_client.customer_payments.with_parent_id(customer_id).create({
             'amount':      {'currency': 'EUR', 'value': '100.00'},  # Create some variety in the payment amounts
             'description': 'My first API payment',
             'webhookUrl':  flask.request.url_root + '2-webhook-verification?order_nr=' + str(order_nr),
@@ -67,7 +67,7 @@ def main():
 
         return '<p>Created payment of %s EUR for %s (%s)<p>' % (payment['amount'], customer.name, customer.id)
 
-    except Mollie.API.Error as e:
+    except mollie.api.error as e:
         return 'API call failed: ' + str(e)
 
 

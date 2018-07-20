@@ -1,7 +1,7 @@
 import os
 
 import pytest
-import Mollie
+import mollie
 import responses
 
 
@@ -10,8 +10,8 @@ def client():
     """Setup a Mollie API client object."""
     api_key = os.environ.get('MOLLIE_API_KEY', 'test_test')
 
-    client = Mollie.API.Client()
-    client.setApiKey(api_key)
+    client = mollie.api.Client()
+    client.set_api_key(api_key)
     return client
 
 
@@ -35,6 +35,7 @@ class ImprovedRequestsMock(responses.RequestsMock):
 
     def _get_body(self, filename):
         """Read the response fixture file and return it."""
+        # TODO refactor
         file = os.path.join(os.path.dirname(__file__), 'responses', '%s.json' % filename)
         return open(file).read()
 

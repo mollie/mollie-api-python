@@ -8,7 +8,7 @@ import os
 
 import flask
 
-import Mollie
+import mollie
 
 
 def main():
@@ -19,8 +19,8 @@ def main():
         # See: https://www.mollie.com/dashboard/settings/profiles
         #
         api_key = os.environ.get('MOLLIE_API_KEY', 'test_test')
-        mollie = Mollie.API.Client()
-        mollie.setApiKey(api_key)
+        mollie_client = mollie.api.Client()
+        mollie_client.set_api_key(api_key)
 
         body = ''
 
@@ -28,7 +28,7 @@ def main():
 
         # If no customer ID was provided in the URL, we grab the first customer
         if customer_id is None:
-            customers = mollie.customers.all()
+            customers = mollie_client.customers.all()
 
             body += '<p>No customer ID specified. Attempting to retrieve all customers and grabbing the first.</p>'
 
@@ -40,7 +40,7 @@ def main():
                 customer_id = customer['id']
                 break
 
-        customer = mollie.customers.get(customer_id)
+        customer = mollie_client.customers.get(customer_id)
 
         amount_of_payments_to_retrieve = 20
 
@@ -49,7 +49,7 @@ def main():
         #
         # See: https://www.mollie.com/nl/docs/reference/customers/list-payments
         #
-        payments = mollie.customer_payments.withParentId(customer_id).all(offset=0, count=amount_of_payments_to_retrieve)
+        payments = mollie_client.customer_payments.with_parent_id(customer_id).all(offset=0, count=amount_of_payments_to_retrieve)
 
         body += '<p>Customer "%s" has %s payments</p>' % (customer['id'], payments['totalCount'])
 
@@ -61,7 +61,7 @@ def main():
 
         return body
 
-    except Mollie.API.Error as e:
+    except mollie.api.error as e:
         return 'API call failed: ' + str(e)
 
 

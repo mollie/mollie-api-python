@@ -12,7 +12,7 @@ except ImportError:
 import requests
 
 from . import Error
-from . import Resource
+from . import resources
 
 
 class Client(object):
@@ -27,48 +27,48 @@ class Client(object):
     ])
 
     @staticmethod
-    def validateApiEndpoint(api_endpoint):
+    def validate_api_endpoint(api_endpoint):
         return api_endpoint.strip().rstrip('/')
 
     @staticmethod
-    def validateApiKey(api_key):
+    def validate_api_key(api_key):
         api_key = api_key.strip()
         if not re.compile(r'^(live|test)_\w+$').match(api_key):
             raise Error('Invalid API key: "%s". An API key must start with "test_" or "live_".' % api_key)
         return api_key
 
     def __init__(self, api_key=None, api_endpoint=None):
-        self.api_endpoint = self.validateApiEndpoint(api_endpoint or self.API_ENDPOINT)
+        self.api_endpoint = self.validate_api_endpoint(api_endpoint or self.API_ENDPOINT)
         self.api_version = self.API_VERSION
-        self.api_key = self.validateApiKey(api_key) if api_key else None
-        self.payments = Resource.Payments(self)
-        self.payment_refunds = Resource.PaymentRefunds(self)
-        self.payment_chargebacks = Resource.PaymentChargebacks(self)
-        self.methods = Resource.Methods(self)
-        self.issuers = Resource.Issuers(self)
-        self.refunds = Resource.Refunds(self)
-        self.chargebacks = Resource.Chargebacks(self)
-        self.customers = Resource.Customers(self)
-        self.customer_mandates = Resource.CustomerMandates(self)
-        self.customer_subscriptions = Resource.CustomerSubscriptions(self)
-        self.customer_payments = Resource.CustomerPayments(self)
+        self.api_key = self.validate_api_key(api_key) if api_key else None
+        self.payments = resources.Payments(self)
+        self.payment_refunds = resources.PaymentRefunds(self)
+        self.payment_chargebacks = resources.PaymentChargebacks(self)
+        self.methods = resources.Methods(self)
+        self.issuers = resources.Issuers(self)
+        self.refunds = resources.Refunds(self)
+        self.chargebacks = resources.Chargebacks(self)
+        self.customers = resources.Customers(self)
+        self.customer_mandates = resources.CustomerMandates(self)
+        self.customer_subscriptions = resources.CustomerSubscriptions(self)
+        self.customer_payments = resources.CustomerPayments(self)
 
-    def getApiEndpoint(self):
+    def get_api_endpoint(self):
         return self.api_endpoint
 
-    def setApiEndpoint(self, api_endpoint):
-        self.api_endpoint = self.validateApiEndpoint(api_endpoint)
+    def set_api_endpoint(self, api_endpoint):
+        self.api_endpoint = self.validate_api_endpoint(api_endpoint)
 
-    def setApiKey(self, api_key):
-        self.api_key = self.validateApiKey(api_key)
+    def set_api_key(self, api_key):
+        self.api_key = self.validate_api_key(api_key)
 
-    def getCACert(self):
-        cacert = pkg_resources.resource_filename('Mollie.API', 'cacert.pem')
+    def get_cacert(self):
+        cacert = pkg_resources.resource_filename('mollie.api', 'cacert.pem')
         if not cacert or len(cacert) < 1:
             raise Error('Unable to load cacert.pem')
         return cacert
 
-    def performHttpCall(self, http_method, path, data=None, params=None):
+    def perform_http_call(self, http_method, path, data=None, params=None):
         if not self.api_key:
             raise Error('You have not set an API key. Please use setApiKey() to set the API key.')
         url = '%s/%s/%s' % (self.api_endpoint, self.api_version, path)
@@ -82,7 +82,7 @@ class Client(object):
         try:
             response = requests.request(
                 http_method, url,
-                verify=self.getCACert(),
+                verify=self.get_cacert(),
                 headers={
                     'Accept': 'application/json',
                     'Authorization': 'Bearer ' + self.api_key,

@@ -1,7 +1,7 @@
 import json
 
-from Mollie.API import Error
-from Mollie.API.Object import List
+from mollie.api import Error
+from mollie.api.objects import List
 
 
 class Base(object):
@@ -15,35 +15,35 @@ class Base(object):
     def __init__(self, client):
         self.client = client
 
-    def getResourceObject(self, result):
+    def get_resource_object(self, result):
         raise NotImplementedError()
 
-    def getResourceName(self):
+    def get_resource_name(self):
         return self.__class__.__name__.lower()
 
     def rest_create(self, data, params=None):
-        path = self.getResourceName()
-        result = self.performApiCall(self.REST_CREATE, path, data, params)
-        return self.getResourceObject(result)
+        path = self.get_resource_name()
+        result = self.perform_api_call(self.REST_CREATE, path, data, params)
+        return self.get_resource_object(result)
 
     def rest_read(self, resource_id, params=None):
-        path = self.getResourceName() + '/' + str(resource_id)
-        result = self.performApiCall(self.REST_READ, path, params=params)
-        return self.getResourceObject(result)
+        path = self.get_resource_name() + '/' + str(resource_id)
+        result = self.perform_api_call(self.REST_READ, path, params=params)
+        return self.get_resource_object(result)
 
     def rest_update(self, resource_id, data, params=None):
-        path = self.getResourceName() + '/' + str(resource_id)
-        result = self.performApiCall(self.REST_UPDATE, path, data, params)
-        return self.getResourceObject(result)
+        path = self.get_resource_name() + '/' + str(resource_id)
+        result = self.perform_api_call(self.REST_UPDATE, path, data, params)
+        return self.get_resource_object(result)
 
     def rest_delete(self, resource_id, params=None):
-        path = self.getResourceName() + '/' + str(resource_id)
-        return self.performApiCall(self.REST_DELETE, path, params=params)
+        path = self.get_resource_name() + '/' + str(resource_id)
+        return self.perform_api_call(self.REST_DELETE, path, params=params)
 
     def rest_list(self, params=None):
-        path = self.getResourceName()
-        result = self.performApiCall(self.REST_LIST, path, params=params)
-        return List(result, self.getResourceObject({}).__class__)
+        path = self.get_resource_name()
+        result = self.perform_api_call(self.REST_LIST, path, params=params)
+        return List(result, self.get_resource_object({}).__class__)
 
     def create(self, data=None, **params):
         if data is not None:
@@ -70,8 +70,8 @@ class Base(object):
     def all(self, **params):
         return self.rest_list(params)
 
-    def performApiCall(self, http_method, path, data=None, params=None):
-        body = self.client.performHttpCall(http_method, path, data, params)
+    def perform_api_call(self, http_method, path, data=None, params=None):
+        body = self.client.perform_http_call(http_method, path, data, params)
         try:
             result = body.json() if body.status_code != 204 else {}
         except Exception:

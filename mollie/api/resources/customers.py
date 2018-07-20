@@ -1,12 +1,12 @@
-from .Base import Base
-from Mollie.API.Error import Error
-from Mollie.API.Object import Customer
+from .base import Base
+from mollie.api.error import Error
+from mollie.api.objects import Customer
 
 
 class Customers(Base):
     RESOURCE_ID_PREFIX = 'cst_'
 
-    def getResourceObject(self, result):
+    def get_resource_object(self, result):
         return Customer(result)
 
     def get(self, customer_id, **params):

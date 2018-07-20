@@ -9,7 +9,7 @@ import time
 
 import flask
 
-import Mollie
+import mollie
 from app import database_write
 
 
@@ -21,8 +21,8 @@ def main():
         # See: https://www.mollie.com/dashboard/settings/profiles
         #
         api_key = os.environ.get('MOLLIE_API_KEY', 'test_test')
-        mollie = Mollie.API.Client()
-        mollie.setApiKey(api_key)
+        mollie_client = mollie.api.Client()
+        mollie_client.set_api_key(api_key)
 
         #
         # Generate a unique order number for this example. It is important to include this unique attribute
@@ -38,7 +38,7 @@ def main():
         # redirectUrl   Redirect location. The customer will be redirected there after the payment.
         # metadata      Custom metadata that is stored with the payment.
         #
-        payment = mollie.payments.create({
+        payment = mollie_client.payments.create({
             'amount':      10.00,
             'description': 'My first API payment',
             'webhookUrl':  flask.request.url_root + '2-webhook-verification?order_nr=' + str(order_nr),
@@ -56,9 +56,9 @@ def main():
         #
         # Send the customer off to complete the payment.
         #
-        return flask.redirect(payment.getPaymentUrl())
+        return flask.redirect(payment.checkout_url)
 
-    except Mollie.API.Error as e:
+    except mollie.api.Error as e:
         return 'API call failed: ' + str(e)
 
 

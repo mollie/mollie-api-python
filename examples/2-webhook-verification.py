@@ -7,7 +7,7 @@ import os
 
 import flask
 
-import Mollie
+import mollie
 from app import database_write
 
 
@@ -19,8 +19,8 @@ def main():
         # See: https://www.mollie.com/dashboard/settings/profiles
         #
         api_key = os.environ.get('MOLLIE_API_KEY', 'test_test')
-        mollie = Mollie.API.Client()
-        mollie.setApiKey(api_key)
+        mollie_client = mollie.api.Client()
+        mollie_client.set_api_key(api_key)
 
         #
         # Retrieve the payment's current state.
@@ -29,7 +29,7 @@ def main():
             flask.abort(404, 'Unknown payment id')
 
         payment_id = flask.request.form['id']
-        payment = mollie.payments.get(payment_id)
+        payment = mollie_client.payments.get(payment_id)
         order_nr = payment['metadata']['order_nr']
 
         #
@@ -37,17 +37,17 @@ def main():
         #
         database_write(order_nr, payment['status'])
 
-        if payment.isPaid():
+        if payment.is_paid():
             #
             # At this point you'd probably want to start the process of delivering the product to the customer.
             #
             return 'Paid'
-        elif payment.isPending():
+        elif payment.is_pending():
             #
             # The payment has started but is not complete yet.
             #
             return 'Pending'
-        elif payment.isOpen():
+        elif payment.is_open:
             #
             # The payment has not started yet. Wait for it.
             #
@@ -58,7 +58,7 @@ def main():
             #
             return 'Cancelled'
 
-    except Mollie.API.Error as e:
+    except mollie.api.error as e:
         return 'API call failed: ' + str(e)
 
 

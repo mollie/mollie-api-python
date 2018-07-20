@@ -1,4 +1,4 @@
-from .Base import Base
+from .base import Base
 
 
 class Subscription(Base):
@@ -8,17 +8,17 @@ class Subscription(Base):
     STATUS_SUSPENDED = 'suspended' # Active, but mandate became invalid.
     STATUS_COMPLETED = 'completed'
 
-    def isActive(self):
+    def is_active(self):
         return self['status'] == self.STATUS_ACTIVE
 
-    def isPending(self):
+    def is_pending(self):
         return self['status'] == self.STATUS_PENDING
 
-    def isCancelled(self):
+    def is_cancelled(self):
         return self['status'] == self.STATUS_CANCELLED
 
-    def isSuspended(self):
+    def is_suspended(self):
         return self['status'] == self.STATUS_SUSPENDED
 
-    def isCompleted(self):
+    def is_completed(self):
         return self['status'] == self.STATUS_COMPLETED
