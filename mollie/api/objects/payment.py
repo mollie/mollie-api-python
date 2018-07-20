@@ -39,11 +39,17 @@ class Payment(Base):
 
     @property
     def has_refunds(self):
-        return len(self['_links']['refunds']) > 0
+        try:
+            return len(self['_links']['refunds']) > 0
+        except KeyError:
+            return False
 
     @property
     def has_chargebacks(self):
-        return len(self._get_property('chargebacks')) > 0
+        try:
+            return len(self._get_property('chargebacks')) > 0
+        except KeyError:
+            return False
 
     @property
     def has_sequence_type_first(self):
@@ -55,9 +61,10 @@ class Payment(Base):
 
     @property
     def checkout_url(self):
-        if 'checkout' not in self['_links']:
+        try:
+            return self['_links']['checkout']['href']
+        except KeyError:
             return None
-        return self['_links']['checkout']['href']
 
     @property
     def resource(self):
@@ -159,22 +166,26 @@ class Payment(Base):
 
     @property
     def customer_url(self):
-        if 'customer' not in self['_links']:
+        try:
+            return self['_links']['customer']['href']
+        except KeyError:
             return None
-        return self['_links']['customer']['href']
 
     @property
     def can_be_refunded(self):
-        return self._get_property('amountRemaining') is not None
+        try:
+            return self._get_property('amountRemaining') is not None
+        except KeyError:
+            False
 
     @property
     def get_amount_refunded(self):
         if self._get_property('amountRefunded'):
-            return float(self._get_property('amountRefunded')['value'])
+            return float(self._get_property('amountRefunded'))
         return 0.0
 
     @property
     def get_amount_remaining(self):
         if self.can_be_refunded:
-            return float(self._get_property('amountRemaining')['value'])
+            return float(self._get_property('amountRemaining'))
         return 0.0

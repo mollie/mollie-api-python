@@ -36,7 +36,8 @@ def test_payments_all(client, response):
         assert payment.order_id is not None
         assert payment.checkout_url is not None
         assert payment.can_be_refunded in BOOLEANS
-
+        assert payment.has_refunds in BOOLEANS
+        assert payment.has_chargebacks in BOOLEANS
     assert iterated == 3
 
 
@@ -60,7 +61,7 @@ def test_create_payment(client, response):
     assert payment.expires_at is not None
     assert payment.profile_id is not None
     assert payment.method == 'ideal'
-    assert payment.metadata['order_id'] == '12345'
+    assert payment.order_id == '12345'
     assert payment.sequence_type == 'oneoff'
     assert payment.profile_id == 'pfl_QkEhN94Ba'
     assert payment.is_open in BOOLEANS
