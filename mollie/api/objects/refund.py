@@ -7,14 +7,14 @@ class Refund(Base):
     STATUS_PROCESSING = 'processing'
     STATUS_REFUNDED   = 'refunded'
 
-    def isQueued(self):
+    def is_queued(self):
         return self['status'] == self.STATUS_QUEUED
 
-    def isPending(self):
+    def is_pending(self):
         return self['status'] == self.STATUS_PENDING
 
-    def isProcessing(self):
+    def is_processing(self):
         return self['status'] == self.STATUS_PROCESSING
 
-    def isRefunded(self):
+    def is_refunded(self):
         return self['status'] == self.STATUS_REFUNDED

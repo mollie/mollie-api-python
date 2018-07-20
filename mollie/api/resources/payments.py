@@ -6,7 +6,7 @@ from mollie.api.objects import Payment
 class Payments(Base):
     RESOURCE_ID_PREFIX = 'tr_'
 
-    def getResourceObject(self, result):
+    def get_resource_object(self, result):
         return Payment(result)
 
     def get(self, payment_id, **params):

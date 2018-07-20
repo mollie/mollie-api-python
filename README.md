@@ -48,7 +48,7 @@ Initializing the Mollie API client, and setting your API key.
 
 ```python
 mollie = Mollie.API.Client()
-mollie.setApiKey('test_dHar4XY7LxsDOtmnkVtjNVWXLSlXsM')
+mollie.set_api_key('test_dHar4XY7LxsDOtmnkVtjNVWXLSlXsM')
 ```
 
 Creating a new payment.
@@ -67,7 +67,7 @@ Retrieving a payment.
 ```python
 payment = mollie.payments.get(payment['id'])
 
-if payment.isPaid():
+if payment.is_paid():
     print 'Payment received.'
 ```
 

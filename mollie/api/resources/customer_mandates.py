@@ -7,7 +7,7 @@ class CustomerMandates(Base):
     RESOURCE_ID_PREFIX = 'mdt_'
     customer_id = None
 
-    def getResourceObject(self, result):
+    def get_resource_object(self, result):
         return Mandate(result)
 
     def get(self, mandate_id, **params):
@@ -17,12 +17,12 @@ class CustomerMandates(Base):
             )
         return super(CustomerMandates, self).get(mandate_id)
 
-    def getResourceName(self):
+    def get_resource_name(self):
         return 'customers/%s/mandates' % self.customer_id
 
-    def withParentId(self, customer_id):
+    def with_parent_id(self, customer_id):
         self.customer_id = customer_id
         return self
 
     def on(self, customer):
-        return self.withParentId(customer['id'])
+        return self.with_parent_id(customer['id'])

@@ -3,5 +3,5 @@ from mollie.api.objects import Refund
 
 
 class Refunds(Base):
-    def getResourceObject(self, result):
+    def get_resource_object(self, result):
         return Refund(result)

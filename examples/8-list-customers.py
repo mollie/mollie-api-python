@@ -18,7 +18,7 @@ def main():
         #
         api_key = os.environ.get('MOLLIE_API_KEY', 'test_test')
         mollie_client = mollie.api.Client()
-        mollie_client.setApiKey(api_key)
+        mollie_client.set_api_key(api_key)
 
         amount_of_customers_to_retrieve = 20
 

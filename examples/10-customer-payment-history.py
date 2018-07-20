@@ -20,7 +20,7 @@ def main():
         #
         api_key = os.environ.get('MOLLIE_API_KEY', 'test_test')
         mollie_client = mollie.api.Client()
-        mollie_client.setApiKey(api_key)
+        mollie_client.set_api_key(api_key)
 
         body = ''
 
@@ -49,7 +49,7 @@ def main():
         #
         # See: https://www.mollie.com/nl/docs/reference/customers/list-payments
         #
-        payments = mollie_client.customer_payments.withParentId(customer_id).all(offset=0, count=amount_of_payments_to_retrieve)
+        payments = mollie_client.customer_payments.with_parent_id(customer_id).all(offset=0, count=amount_of_payments_to_retrieve)
 
         body += '<p>Customer "%s" has %s payments</p>' % (customer['id'], payments['totalCount'])
 

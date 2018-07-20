@@ -22,7 +22,7 @@ def main ():
         #
         api_key = os.environ.get('MOLLIE_API_KEY', 'test_test')
         mollie_client = mollie.api.Client()
-        mollie.setApiKey(api_key)
+        mollie.set_api_key(api_key)
 
 
         #

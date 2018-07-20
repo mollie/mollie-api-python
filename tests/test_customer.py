@@ -9,7 +9,7 @@ def test_create_customers(client, response):
     assert customer.email == 'customer@example.org'
     assert customer.id is not None
     assert customer.resource == 'customer'
-    assert customer.createdAt is not None
+    assert customer.created_at is not None
     assert customer.metadata is None
     assert customer.locale == 'nl_NL'
     assert customer.mode == 'test'
@@ -44,5 +44,5 @@ def test_customers_all(client, response):
         assert customer.name is not None
         assert customer.email is not None
         assert customer.locale is not None
-        assert customer.createdAt is not None
+        assert customer.created_at is not None
     assert iterated == 3

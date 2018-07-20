@@ -18,7 +18,7 @@ def main():
         #
         api_key = os.environ.get('MOLLIE_API_KEY', 'test_test')
         mollie_client = mollie.api.Client()
-        mollie_client.setApiKey(api_key)
+        mollie_client.set_api_key(api_key)
 
         #
         # Get the all payments for this API key ordered by newest.

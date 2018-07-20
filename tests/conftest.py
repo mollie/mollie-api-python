@@ -11,7 +11,7 @@ def client():
     api_key = os.environ.get('MOLLIE_API_KEY', 'test_test')
 
     client = mollie.api.Client()
-    client.setApiKey(api_key)
+    client.set_api_key(api_key)
     return client
 
 
@@ -35,6 +35,7 @@ class ImprovedRequestsMock(responses.RequestsMock):
 
     def _get_body(self, filename):
         """Read the response fixture file and return it."""
+        # TODO refactor
         file = os.path.join(os.path.dirname(__file__), 'responses', '%s.json' % filename)
         return open(file).read()
 

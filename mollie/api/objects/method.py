@@ -20,38 +20,40 @@ class Method(Base):
 
     @property
     def description(self):
-        return self.getProperty('description')
+        return self._get_property('description')
 
     @property
     def id(self):
-        return self.getProperty('id')
+        return self._get_property('id')
 
     @property
     def image_size1x(self):
-        images = self.getProperty('image')
+        images = self._get_property('image')
         if 'size1x' not in images:
             return None
         return images['size1x']
 
     @property
     def image_size2x(self):
-        images = self.getProperty('image')
+        images = self._get_property('image')
         if 'size2x' not in images:
             return None
         return images['size2x']
 
     @property
     def issuers(self):
-        issuers = self.getProperty('issuers')
+        issuers = self._get_property('issuers')
         if issuers:
             return [Issuer(x) for x in issuers]
 
     def getMinimumAmount(self):
+        # TODO check for obsoletion
         if not self['amount'] or 'minimum' not in self['amount']:
             return None
         return float(self['amount']['minimum'])
 
     def getMaximumAmount(self):
+        # TODO check for obsoletion
         if not self['amount'] or 'maximum' not in self['amount']:
             return None
         return float(self['amount']['maximum'])

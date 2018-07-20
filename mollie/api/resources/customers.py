@@ -6,7 +6,7 @@ from mollie.api.objects import Customer
 class Customers(Base):
     RESOURCE_ID_PREFIX = 'cst_'
 
-    def getResourceObject(self, result):
+    def get_resource_object(self, result):
         return Customer(result)
 
     def get(self, customer_id, **params):

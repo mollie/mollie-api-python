@@ -22,7 +22,7 @@ def main():
         #
         api_key = os.environ.get('MOLLIE_API_KEY', 'test_test')
         mollie_client = mollie.api.Client()
-        mollie_client.setApiKey(api_key)
+        mollie_client.set_api_key(api_key)
 
         body = ''
 
@@ -53,7 +53,7 @@ def main():
         #
         # See: https://www.mollie.com/nl/docs/reference/customers/create-payment
         #
-        payment = mollie_client.customer_payments.withParentId(customer_id).create({
+        payment = mollie_client.customer_payments.with_parent_id(customer_id).create({
             'amount':      {'currency': 'EUR', 'value': '100.00'},  # Create some variety in the payment amounts
             'description': 'My first API payment',
             'webhookUrl':  flask.request.url_root + '2-webhook-verification?order_nr=' + str(order_nr),

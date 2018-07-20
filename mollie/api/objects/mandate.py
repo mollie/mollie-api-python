@@ -6,11 +6,11 @@ class Mandate(Base):
     STATUS_VALID   = 'valid'
     STATUS_INVALID = 'invalid'
 
-    def isPending(self):
+    def is_pending(self):
         return self['status'] == self.STATUS_PENDING
 
-    def isValid(self):
+    def is_valid(self):
         return self['status'] == self.STATUS_VALID
 
-    def isInvalid(self):
+    def is_invalid(self):
         return self['status'] == self.STATUS_INVALID

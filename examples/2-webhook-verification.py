@@ -20,7 +20,7 @@ def main():
         #
         api_key = os.environ.get('MOLLIE_API_KEY', 'test_test')
         mollie_client = mollie.api.Client()
-        mollie_client.setApiKey(api_key)
+        mollie_client.set_api_key(api_key)
 
         #
         # Retrieve the payment's current state.
@@ -37,17 +37,17 @@ def main():
         #
         database_write(order_nr, payment['status'])
 
-        if payment.isPaid():
+        if payment.is_paid():
             #
             # At this point you'd probably want to start the process of delivering the product to the customer.
             #
             return 'Paid'
-        elif payment.isPending():
+        elif payment.is_pending():
             #
             # The payment has started but is not complete yet.
             #
             return 'Pending'
-        elif payment.isOpen():
+        elif payment.is_open:
             #
             # The payment has not started yet. Wait for it.
             #
