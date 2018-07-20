@@ -38,8 +38,12 @@ class Payment(Base):
         return self._get_property('status') == self.STATUS_FAILED
 
     @property
+    def _links(self):
+        return self._get_property('_links')
+
+    @property
     def has_refunds(self):
-        return len(self['_links']['refunds']) > 0
+        return len(self._links['refunds']) > 0
 
     @property
     def has_chargebacks(self):
@@ -55,9 +59,9 @@ class Payment(Base):
 
     @property
     def checkout_url(self):
-        if '_links' not in self:
+        if 'checkout' not in self._links:
             return None
-        return self['_links']['checkout']
+        return self._links['checkout']['href']
 
     @property
     def resource(self):
@@ -85,14 +89,10 @@ class Payment(Base):
 
     @property
     def paid_at(self):
-        if 'paidAt' not in self:
-            return None
         return self._get_property('paidAt')
 
     @property
     def canceled_at(self):
-        if 'canceledAt' not in self:
-            return None
         return self._get_property('canceledAt')
 
     @property
@@ -146,3 +146,40 @@ class Payment(Base):
     @property
     def method(self):
         return self._get_property('method')
+
+    @property
+    def value(self):
+        return self.amount['value']
+
+    @property
+    def currency(self):
+        return self.amount['currency']
+
+    @property
+    def order_id(self):
+        if 'order_id' not in self.metadata:
+            return None
+        return self.metadata['order_id']
+
+    @property
+    def customer_url(self):
+        if 'customer' not in self._links:
+            return None
+        return self._links['customer']['href']
+
+    @property
+    def can_be_refunded(self):
+        return self._get_property('amountRemaining') is not None
+
+    @property
+    def get_amount_refunded(self):
+        if self._get_property('amountRefunded'):
+            return float(self._get_property('amountRefunded')['value'])
+        return 0.0
+
+    @property
+    def get_amount_remaining(self):
+        if self.can_be_refunded:
+            return float(self._get_property('amountRemaining')['value'])
+        return 0.0
+
