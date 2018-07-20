@@ -84,7 +84,7 @@ def main ():
             #
             # Send the customer off to complete the payment.
             #
-            return flask.redirect(payment.getPaymentUrl())
+            return flask.redirect(payment.checkout_url)
 
     except mollie.api.error as e:
         return 'API call failed: ' + str(e)
