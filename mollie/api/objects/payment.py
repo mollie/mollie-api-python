@@ -38,12 +38,8 @@ class Payment(Base):
         return self._get_property('status') == self.STATUS_FAILED
 
     @property
-    def _links(self):
-        return self._get_property('_links')
-
-    @property
     def has_refunds(self):
-        return len(self._links['refunds']) > 0
+        return len(self['_links']['refunds']) > 0
 
     @property
     def has_chargebacks(self):
@@ -59,9 +55,9 @@ class Payment(Base):
 
     @property
     def checkout_url(self):
-        if 'checkout' not in self._links:
+        if 'checkout' not in self['_links']:
             return None
-        return self._links['checkout']['href']
+        return self['_links']['checkout']['href']
 
     @property
     def resource(self):
@@ -163,9 +159,9 @@ class Payment(Base):
 
     @property
     def customer_url(self):
-        if 'customer' not in self._links:
+        if 'customer' not in self['_links']:
             return None
-        return self._links['customer']['href']
+        return self['_links']['customer']['href']
 
     @property
     def can_be_refunded(self):
