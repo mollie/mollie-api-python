@@ -1,5 +1,5 @@
-from .Base import Base
-from Mollie.API.Object import Refund
+from .base import Base
+from mollie.api.objects import Refund
 
 
 class Refunds(Base):

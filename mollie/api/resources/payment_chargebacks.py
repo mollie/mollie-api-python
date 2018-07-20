@@ -1,11 +1,11 @@
-from Mollie.API.Resource import Refunds
+from mollie.api.resources import Chargebacks
 
 
-class PaymentRefunds(Refunds):
+class PaymentChargebacks(Chargebacks):
     payment_id = None
 
     def getResourceName(self):
-        return 'payments/%s/refunds' % self.payment_id
+        return 'payments/%s/chargebacks' % self.payment_id
 
     def withParentId(self, payment_id):
         self.payment_id = payment_id

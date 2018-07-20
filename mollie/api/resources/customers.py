@@ -1,6 +1,6 @@
-from .Base import Base
-from Mollie.API.Error import Error
-from Mollie.API.Object import Customer
+from .base import Base
+from mollie.api.error import Error
+from mollie.api.objects import Customer
 
 
 class Customers(Base):

@@ -1,7 +1,7 @@
 import os
 
 import pytest
-import Mollie
+import mollie
 import responses
 
 
@@ -10,7 +10,7 @@ def client():
     """Setup a Mollie API client object."""
     api_key = os.environ.get('MOLLIE_API_KEY', 'test_test')
 
-    client = Mollie.API.Client()
+    client = mollie.api.Client()
     client.setApiKey(api_key)
     return client
 

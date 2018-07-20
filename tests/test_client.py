@@ -1,6 +1,6 @@
 import pytest
 
-from Mollie.API.Client import generate_querystring
+from mollie.api.client import generate_querystring
 
 
 @pytest.mark.parametrize('params, querystring', [

@@ -1,4 +1,4 @@
-from .Base import Base
+from .base import Base
 
 
 class Mandate(Base):

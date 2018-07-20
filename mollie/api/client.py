@@ -12,7 +12,7 @@ except ImportError:
 import requests
 
 from . import Error
-from . import Resource
+from . import resources
 
 
 class Client(object):
@@ -41,17 +41,17 @@ class Client(object):
         self.api_endpoint = self.validateApiEndpoint(api_endpoint or self.API_ENDPOINT)
         self.api_version = self.API_VERSION
         self.api_key = self.validateApiKey(api_key) if api_key else None
-        self.payments = Resource.Payments(self)
-        self.payment_refunds = Resource.PaymentRefunds(self)
-        self.payment_chargebacks = Resource.PaymentChargebacks(self)
-        self.methods = Resource.Methods(self)
-        self.issuers = Resource.Issuers(self)
-        self.refunds = Resource.Refunds(self)
-        self.chargebacks = Resource.Chargebacks(self)
-        self.customers = Resource.Customers(self)
-        self.customer_mandates = Resource.CustomerMandates(self)
-        self.customer_subscriptions = Resource.CustomerSubscriptions(self)
-        self.customer_payments = Resource.CustomerPayments(self)
+        self.payments = resources.Payments(self)
+        self.payment_refunds = resources.PaymentRefunds(self)
+        self.payment_chargebacks = resources.PaymentChargebacks(self)
+        self.methods = resources.Methods(self)
+        self.issuers = resources.Issuers(self)
+        self.refunds = resources.Refunds(self)
+        self.chargebacks = resources.Chargebacks(self)
+        self.customers = resources.Customers(self)
+        self.customer_mandates = resources.CustomerMandates(self)
+        self.customer_subscriptions = resources.CustomerSubscriptions(self)
+        self.customer_payments = resources.CustomerPayments(self)
 
     def getApiEndpoint(self):
         return self.api_endpoint
@@ -63,7 +63,7 @@ class Client(object):
         self.api_key = self.validateApiKey(api_key)
 
     def getCACert(self):
-        cacert = pkg_resources.resource_filename('Mollie.API', 'cacert.pem')
+        cacert = pkg_resources.resource_filename('mollie.api', 'cacert.pem')
         if not cacert or len(cacert) < 1:
             raise Error('Unable to load cacert.pem')
         return cacert

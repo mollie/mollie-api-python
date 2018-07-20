@@ -6,7 +6,7 @@ from __future__ import print_function
 
 import os
 
-import Mollie
+import mollie
 
 
 def main():
@@ -17,8 +17,8 @@ def main():
         # See: https://www.mollie.com/dashboard/settings/profiles
         #
         api_key = os.environ.get('MOLLIE_API_KEY', 'test_test')
-        mollie = Mollie.API.Client()
-        mollie.setApiKey(api_key)
+        mollie_client = mollie.api.Client()
+        mollie_client.setApiKey(api_key)
 
         amount_of_customers_to_retrieve = 20
 
@@ -27,7 +27,7 @@ def main():
         #
         # See: https://www.mollie.com/nl/docs/reference/customers/list
         #
-        customers = mollie.customers.all(offset=0, count=amount_of_customers_to_retrieve)
+        customers = mollie_client.customers.all(offset=0, count=amount_of_customers_to_retrieve)
 
         body = '<p>Your API key has %u customers.</p>' % int(customers.count)
 
@@ -66,7 +66,7 @@ def main():
 
         return body
 
-    except Mollie.API.Error as e:
+    except mollie.api.error as e:
         return 'API call failed: ' + str(e)
 
 

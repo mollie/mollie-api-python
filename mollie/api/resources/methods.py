@@ -1,5 +1,5 @@
-from .Base import Base
-from Mollie.API.Object import Method
+from .base import Base
+from mollie.api.objects import Method
 
 
 class Methods(Base):

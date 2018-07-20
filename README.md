@@ -104,7 +104,7 @@ Retrieve the list of issuers:
 issuers = mollie.issuers.all()
 ```
 
-_`issuers` will be a list of `Mollie.API.Object.Issuer` objects. Use the attribute `id` of this object in the
+_`issuers` will be a list of `mollie.api.object.Issuer` objects. Use the attribute `id` of this object in the
  API call, and the attribute `name` for displaying the issuer to your customer. For a more in-depth example, see [Example 4](https://github.com/mollie/mollie-api-python/blob/master/examples/4-ideal-payment.py)._
 
 Create a payment with the selected issuer:
@@ -115,7 +115,7 @@ payment = mollie.payments.create({
     'description': 'My first API payment',
     'redirectUrl': 'https://webshop.example.org/order/12345/',
     'webhookUrl':  'https://webshop.example.org/mollie-webhook/',
-    'method':      Mollie.API.Object.Method.IDEAL,
+    'method':      mollie.api.object.Method.IDEAL,
     'issuer':      selected_issuer_id,  # e.g. 'ideal_INGBNL2A'
 })
 ```

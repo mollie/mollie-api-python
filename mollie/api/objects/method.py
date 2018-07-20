@@ -1,5 +1,5 @@
-from .Base import Base
-from .Issuer import Issuer
+from .base import Base
+from .issuer import Issuer
 
 
 class Method(Base):
