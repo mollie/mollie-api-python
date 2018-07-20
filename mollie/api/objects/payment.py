@@ -176,7 +176,7 @@ class Payment(Base):
         try:
             return self._get_property('amountRemaining') is not None
         except KeyError:
-            False
+            return False
 
     @property
     def get_amount_refunded(self):
