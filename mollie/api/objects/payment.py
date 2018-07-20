@@ -182,4 +182,3 @@ class Payment(Base):
         if self.can_be_refunded:
             return float(self._get_property('amountRemaining')['value'])
         return 0.0
-
