@@ -8,7 +8,9 @@ class CustomerSubscriptions(Base):
     customer_id = None
 
     def get_resource_object(self, result):
-        return Subscription(result)
+        subscription = Subscription(result)
+        subscription._resource = self
+        return subscription
 
     def get(self, subscription_id, **params):
         if not subscription_id or not subscription_id.startswith(self.RESOURCE_ID_PREFIX):
@@ -25,4 +27,4 @@ class CustomerSubscriptions(Base):
         return self
 
     def on(self, customer):
-        return self.with_parent_id(customer['id'])
+        return self.with_parent_id(customer.id)
