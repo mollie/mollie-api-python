@@ -25,4 +25,4 @@ class CustomerMandates(Base):
         return self
 
     def on(self, customer):
-        return self.with_parent_id(customer['id'])
+        return self.with_parent_id(customer.id)
