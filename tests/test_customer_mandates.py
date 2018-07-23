@@ -60,3 +60,16 @@ def test_get_customer_mandate_by_customer(client, response):
 
     mandate = client.customer_mandates.on(customer).get(MANDATE_ID)
     assert mandate.id == MANDATE_ID
+
+
+def test_customer_mandate_get_related_customer(client, response):
+    """Retrieve a related customer object from a mandate."""
+    response.get(
+        'https://api.mollie.com/v2/customers/%s/mandates/%s' % (CUSTOMER_ID, MANDATE_ID),
+        'customer_mandates_get',
+    )
+    response.get('https://api.mollie.com/v2/customers/%s' % CUSTOMER_ID, 'customer_new')
+
+    mandate = client.customer_mandates.with_parent_id(CUSTOMER_ID).get(MANDATE_ID)
+    assert mandate.customer.__class__.__name__ == 'Customer'
+    assert mandate.customer.id == CUSTOMER_ID

@@ -1,4 +1,5 @@
 from .base import Base
+from .customer import Customer
 
 
 class Mandate(Base):
@@ -46,3 +47,13 @@ class Mandate(Base):
 
     def is_invalid(self):
         return self.status == self.STATUS_INVALID
+
+    @property
+    def customer(self):
+        """Return customer object from the links attribute."""
+        try:
+            url = self['_links']['customer']['href']
+        except KeyError:
+            return None
+        resp = self._resource.perform_api_call(self._resource.REST_READ, url)
+        return Customer(resp)
