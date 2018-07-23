@@ -73,3 +73,18 @@ def test_customer_mandate_get_related_customer(client, response):
     mandate = client.customer_mandates.with_parent_id(CUSTOMER_ID).get(MANDATE_ID)
     assert mandate.customer.__class__.__name__ == 'Customer'
     assert mandate.customer.id == CUSTOMER_ID
+
+
+def test_customer_mandates_create_mandate(client, response):
+    """Create a new customer mandate."""
+    response.post('https://api.mollie.com/v2/customers/cst_8wmqcHMN4U/mandates', 'customer_mandates_get')
+    data = {
+        'method': 'directdebit',
+        'consumerName': 'John Doe',
+        'consumerAccount': 'NL55INGB0000000000',
+        'consumerBic': 'INGBNL2A',
+        'signatureDate': '2018-05-07',
+        'mandateReference': 'YOUR-COMPANY-MD1380',
+    }
+    mandate = client.customer_mandates.with_parent_id(CUSTOMER_ID).create(data=data)
+    assert mandate.id == MANDATE_ID
