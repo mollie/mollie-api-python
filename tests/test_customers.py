@@ -1,10 +1,5 @@
-CUSTOMER_ID = 'cst_8wmqcHMN4U'
-
-
-def test_create_customer(client, response):
-    """Create a new customer."""
+def test_create_customers(client, response):
     response.post('https://api.mollie.com/v2/customers', 'customer_new')
-
     customer = client.customers.create({
         'name': 'Customer A',
         'email': 'customer@example.org',
@@ -20,10 +15,9 @@ def test_create_customer(client, response):
     assert customer.mode == 'test'
 
 
-def test_update_customer(client, response):
-    response.post('https://api.mollie.com/v2/customers/%s' % CUSTOMER_ID, 'customer_updated')
-
-    updated_customer = client.customers.update(CUSTOMER_ID, {
+def test_update_customers(client, response):
+    response.post('https://api.mollie.com/v2/customers/cst_8wmqcHMN4U', 'customer_updated')
+    updated_customer = client.customers.update('cst_8wmqcHMN4U', {
         'name': 'Updated Customer A',
         'email': 'updated-customer@example.org',
     })
@@ -32,15 +26,13 @@ def test_update_customer(client, response):
 
 
 def test_delete_customers(client, response):
-    response.delete('https://api.mollie.com/v2/customers/%s' % CUSTOMER_ID, 'empty')
-
+    response.delete('https://api.mollie.com/v2/customers/cst_8wmqcHMN4U', 'empty')
     deleted_customer = client.customers.delete('cst_8wmqcHMN4U')
     assert deleted_customer == {}
 
 
 def test_customers_all(client, response):
     response.get('https://api.mollie.com/v2/customers', 'customer_multiple')
-
     customers = client.customers.all()
     assert customers.count == 3
     iterated = 0
@@ -54,18 +46,3 @@ def test_customers_all(client, response):
         assert customer.locale is not None
         assert customer.created_at is not None
     assert iterated == 3
-
-
-def test_customer_get_mandates(client, response):
-    """Retrieve related mandates for a customer."""
-    response.get('https://api.mollie.com/v2/customers/%s' % CUSTOMER_ID, 'customer_updated')
-    response.get('https://api.mollie.com/v2/customers/%s/mandates' % CUSTOMER_ID, 'customer_mandates_multiple')
-
-    customer = client.customers.get(CUSTOMER_ID)
-    mandates = customer.mandates
-    assert mandates.__class__.__name__ == 'List'
-    iterated = 0
-    for mandate in mandates:
-        assert mandate.__class__.__name__ == 'Mandate'
-        iterated += 1
-    assert iterated == mandates.count

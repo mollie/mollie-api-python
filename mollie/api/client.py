@@ -71,7 +71,10 @@ class Client(object):
     def perform_http_call(self, http_method, path, data=None, params=None):
         if not self.api_key:
             raise Error('You have not set an API key. Please use setApiKey() to set the API key.')
-        url = '%s/%s/%s' % (self.api_endpoint, self.api_version, path)
+        if path.startswith('%s/%s' % (self.api_endpoint, self.api_version)):
+            url = path
+        else:
+            url = '%s/%s/%s' % (self.api_endpoint, self.api_version, path)
         data = '{}' if data is None else data
 
         querystring = generate_querystring(params)

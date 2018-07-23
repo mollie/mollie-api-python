@@ -1,4 +1,5 @@
 from .base import Base
+from .list import List
 
 
 class Customer(Base):
@@ -33,3 +34,14 @@ class Customer(Base):
     @property
     def created_at(self):
         return self._get_property('createdAt')
+
+    @property
+    def mandates(self):
+        """Return the mandate list referenced in the _links."""
+        from .mandate import Mandate  # work around circular import
+        try:
+            url = self['_links']['mandates']['href']
+        except KeyError:
+            return None
+        resp = self._resource.perform_api_call(self._resource.REST_READ, url)
+        return List(resp, Mandate)
