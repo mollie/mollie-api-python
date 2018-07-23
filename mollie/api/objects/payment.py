@@ -149,14 +149,6 @@ class Payment(Base):
         return self._get_property('method')
 
     @property
-    def value(self):
-        return self.amount['value']
-
-    @property
-    def currency(self):
-        return self.amount['currency']
-
-    @property
     def customer_url(self):
         try:
             return self['_links']['customer']['href']

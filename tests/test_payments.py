@@ -19,9 +19,8 @@ def test_payments_all(client, response):
         assert payment.id is not None
         assert payment.mode == "test"
         assert payment.created_at is not None
-        assert payment.amount is not None
-        assert payment.value is not None
-        assert payment.currency is not None
+        assert payment.amount['currency'] is not None
+        assert payment.amount['value'] is not None
         assert payment.description is not None
         assert payment.method is not None
         assert payment.status is not None
