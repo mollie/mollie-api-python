@@ -28,6 +28,8 @@ class List(Base):
         except IndexError:
             raise StopIteration
 
+    next = __next__  # support python2 iterator interface
+
     @property
     def count(self):
         if 'count' not in self:
