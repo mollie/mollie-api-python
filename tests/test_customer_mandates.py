@@ -3,7 +3,7 @@ MANDATE_ID = 'mdt_h3gAaD5zP'
 
 
 def test_customer_mandates_all(client, response):
-    """Retreive a list of mandates."""
+    """Retrieve a list of mandates."""
     response.get('https://api.mollie.com/v2/customers/%s/mandates' % CUSTOMER_ID, 'customer_mandates_multiple')
     mandates = client.customer_mandates.with_parent_id(CUSTOMER_ID).all()
     assert mandates.__class__.__name__ == 'List'
