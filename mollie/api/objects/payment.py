@@ -164,9 +164,10 @@ class Payment(Base):
 
     @property
     def get_amount_refunded(self):
-        if self._get_property('amountRefunded'):
+        try:
             return float(self._get_property('amountRefunded'))
-        return 0.0
+        except KeyError:
+            return 0.0
 
     @property
     def get_amount_remaining(self):

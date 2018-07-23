@@ -54,7 +54,7 @@ def main():
         # See: https://www.mollie.com/nl/docs/reference/customers/create-payment
         #
         payment = mollie_client.customer_payments.with_parent_id(customer_id).create({
-            'amount': {'currency': 'EUR', 'value': '100.00'},  # Create some variety in the payment amounts
+            'amount': {'currency': 'EUR', 'value': '100.00'},
             'description': 'My first API payment',
             'webhookUrl': flask.request.url_root + '2-webhook-verification',
             'redirectUrl': flask.request.url_root + '3-return-page?order_nr=' + str(order_id),
