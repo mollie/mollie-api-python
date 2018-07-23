@@ -14,10 +14,8 @@ def test_methods_all(client, response):
         iterated += 1
         assert method.id is not None
         iterated_method_ids.append(method.id)
-        assert method.description is not None
-        assert method.image_size1x is not None
-    assert iterated == 11
-    assert len(set(iterated_method_ids)) == 11, 'Unexpected number of unique methods'
+    assert iterated == methods.count
+    assert len(set(iterated_method_ids)) == methods.count, 'Unexpected number of unique methods'
 
 
 def test_method_get(client, response):
@@ -27,6 +25,9 @@ def test_method_get(client, response):
     method = client.methods.get('ideal')
     assert method.__class__.__name__ == 'Method'
     assert method.id == 'ideal'
+    assert method.description == 'iDEAL'
+    assert method.image_size1x == 'https://www.mollie.com/images/payscreen/methods/ideal.png'
+    assert method.image_size2x == 'https://www.mollie.com/images/payscreen/methods/ideal%402x.png'
 
 
 def test_method_get_with_includes(client, response):
