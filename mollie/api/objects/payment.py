@@ -157,12 +157,6 @@ class Payment(Base):
         return self.amount['currency']
 
     @property
-    def order_id(self):
-        if 'order_id' not in self.metadata:
-            return None
-        return self.metadata['order_id']
-
-    @property
     def customer_url(self):
         try:
             return self['_links']['customer']['href']

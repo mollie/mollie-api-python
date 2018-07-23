@@ -25,15 +25,16 @@ def main():
         #
         payments = mollie_client.payments.all()
 
-        body = 'Your API key has %u payments, last %u:<br>' % (payments['totalCount'], payments['count'])
+        body = 'Your API key has %u payments<br>' % payments.count
 
         for payment in payments:
-            body += "&euro; %s, status: '%s'<br>" % (payment['amount'], payment['status'])
+            body += "%s %s, status: '%s'<br>" % (payment.value, payment.currency, payment.status)
 
         return body
 
     except mollie.api.error as e:
         return 'API call failed: ' + str(e)
+
 
 if __name__ == '__main__':
     print(main())

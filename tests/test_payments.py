@@ -33,7 +33,7 @@ def test_payments_all(client, response):
         assert payment.webhook_url is not None
         assert payment.settlement_amount['value'] is not None
         assert payment.settlement_amount['currency'] is not None
-        assert payment.order_id is not None
+        assert payment.metadata['order_id'] is not None
         assert payment.checkout_url is not None
         assert payment.can_be_refunded in BOOLEANS
         assert payment.has_refunds in BOOLEANS
@@ -61,7 +61,7 @@ def test_create_payment(client, response):
     assert payment.expires_at is not None
     assert payment.profile_id is not None
     assert payment.method == 'ideal'
-    assert payment.order_id == '12345'
+    assert payment.metadata['order_id'] == '12345'
     assert payment.sequence_type == 'oneoff'
     assert payment.profile_id == 'pfl_QkEhN94Ba'
     assert payment.is_open in BOOLEANS

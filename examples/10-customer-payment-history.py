@@ -32,12 +32,12 @@ def main():
 
             body += '<p>No customer ID specified. Attempting to retrieve all customers and grabbing the first.</p>'
 
-            if int(customers['totalCount']) == 0:
+            if int(customers.count) == 0:
                 body += '<p>You have no customers. You can create one from the examples.</p>'
                 return body
 
             for customer in customers:
-                customer_id = customer['id']
+                customer_id = customer.id
                 break
 
         customer = mollie_client.customers.get(customer_id)
@@ -49,15 +49,19 @@ def main():
         #
         # See: https://www.mollie.com/nl/docs/reference/customers/list-payments
         #
-        payments = mollie_client.customer_payments.with_parent_id(customer_id).all(offset=0, count=amount_of_payments_to_retrieve)
+        params = {
+            'from': 0,
+            'count': amount_of_payments_to_retrieve,
+        }
+        payments = mollie_client.customer_payments.with_parent_id(customer_id).all(**params)
 
-        body += '<p>Customer "%s" has %s payments</p>' % (customer['id'], payments['totalCount'])
+        body += '<p>Customer "%s" has %s payments</p>' % (customer.id, payments.count)
 
-        if int(payments['totalCount']) > amount_of_payments_to_retrieve:
+        if int(payments.count) > amount_of_payments_to_retrieve:
             body += '<p><b>Note: Only showing first %s payments</b></p>' % amount_of_payments_to_retrieve
 
         for payment in payments:
-            body += "<p>Payment %s (%s) EUR</p>" % (payment['id'], payment['amount'])
+            body += "<p>Payment %s (%s) %s</p>" % (payment.id, payment.value, payment.currency)
 
         return body
 
