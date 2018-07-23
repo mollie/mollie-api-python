@@ -31,7 +31,8 @@ class Payment(Base):
 
     @property
     def is_paid(self):
-        return 'paidAt' in self and len(self['paidAt']) > 0
+        return self._get_property('paidAt') is not None
+
 
     @property
     def is_failed(self):
@@ -40,16 +41,13 @@ class Payment(Base):
     @property
     def has_refunds(self):
         try:
-            return len(self['_links']['refunds']) > 0
+            return self['_links']['refunds'] is not None
         except KeyError:
             return False
 
     @property
     def has_chargebacks(self):
-        try:
-            return len(self._get_property('chargebacks')) > 0
-        except KeyError:
-            return False
+        return self._get_property('hasChargebacks') is not None
 
     @property
     def has_sequence_type_first(self):
