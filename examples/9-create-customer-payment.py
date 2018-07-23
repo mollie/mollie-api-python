@@ -57,7 +57,7 @@ def main():
             'amount': {'currency': 'EUR', 'value': '100.00'},
             'description': 'My first API payment',
             'webhookUrl': flask.request.url_root + '2-webhook-verification',
-            'redirectUrl': flask.request.url_root + '3-return-page?order_nr=' + str(order_id),
+            'redirectUrl': flask.request.url_root + '3-return-page?order_id=' + str(order_id),
             'metadata': {
                 'order_id': order_id
             }
