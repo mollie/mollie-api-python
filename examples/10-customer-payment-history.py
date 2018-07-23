@@ -61,7 +61,7 @@ def main():
             body += '<p><b>Note: Only showing first %s payments</b></p>' % amount_of_payments_to_retrieve
 
         for payment in payments:
-            body += "<p>Payment %s (%s) %s</p>" % (payment.id, payment.value, payment.currency)
+            body += "<p>Payment %s (%s) %s</p>" % (payment.id, payment.amount['value'], payment.amount['currency'])
 
         return body
 

@@ -34,7 +34,7 @@ def main():
 
             body += '<p>No customer ID specified. Attempting to retrieve all customers and grabbing the first.</p>'
 
-            if int(customers['totalCount']) == 0:
+            if int(customers.count) == 0:
                 body += '<p>You have no customers. You can create one from the examples.</p>'
                 return body
 
@@ -63,7 +63,7 @@ def main():
             }
         })
 
-        database_write(order_id, payment['status'])
+        database_write(order_id, payment.status)
 
         return '<p>Created payment of %s %s for %s (%s)<p>' % (
             payment.value, payment.currency, customer.name, customer.id)

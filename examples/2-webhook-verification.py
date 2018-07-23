@@ -30,7 +30,7 @@ def main():
 
         payment_id = flask.request.form['id']
         payment = mollie_client.payments.get(payment_id)
-        order_id = payment.order_id
+        order_id = payment.metadata['order_id']
 
         #
         # Update the order in the database.

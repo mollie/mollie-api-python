@@ -28,7 +28,7 @@ def main():
         body = 'Your API key has %u payments<br>' % payments.count
 
         for payment in payments:
-            body += "%s %s, status: '%s'<br>" % (payment.value, payment.currency, payment.status)
+            body += "%s %s, status: '%s'<br>" % (payment.amount['value'], payment.amount['currency'], payment.status)
 
         return body
 
