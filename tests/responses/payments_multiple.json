@@ -13,7 +13,7 @@
         "description": "My first iDEAL API payment",
         "method": "ideal",
         "metadata": {
-          "order_nr": 1531993786
+          "order_id": 1531993786
         },
         "status": "open",
         "isCancelable": false,
@@ -49,7 +49,7 @@
         "description": "My first iDEAL API payment",
         "method": "ideal",
         "metadata": {
-          "order_nr": 1531993773
+          "order_id": 1531993773
         },
         "status": "open",
         "isCancelable": false,
@@ -85,7 +85,7 @@
         "description": "My first iDEAL API payment",
         "method": "ideal",
         "metadata": {
-          "order_nr": 1531993778
+          "order_id": 1531993778
         },
         "status": "open",
         "isCancelable": false,

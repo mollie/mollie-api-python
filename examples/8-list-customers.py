@@ -21,13 +21,17 @@ def main():
         mollie_client.set_api_key(api_key)
 
         amount_of_customers_to_retrieve = 20
+        params = {
+            'from': 0,
+            'count': amount_of_customers_to_retrieve,
+        }
 
         #
         # Get the latest 20 customers
         #
         # See: https://www.mollie.com/nl/docs/reference/customers/list
         #
-        customers = mollie_client.customers.all(offset=0, count=amount_of_customers_to_retrieve)
+        customers = mollie_client.customers.all(**params)
 
         body = '<p>Your API key has %u customers.</p>' % int(customers.count)
 

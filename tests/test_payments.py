@@ -19,11 +19,10 @@ def test_payments_all(client, response):
         assert payment.id is not None
         assert payment.mode == "test"
         assert payment.created_at is not None
-        assert payment.amount['value'] is not None
         assert payment.amount['currency'] is not None
+        assert payment.amount['value'] is not None
         assert payment.description is not None
         assert payment.method is not None
-        assert payment.metadata['order_nr'] is not None
         assert payment.status is not None
         assert payment.is_cancelable in BOOLEANS
         assert payment.expires_at is not None
@@ -33,7 +32,11 @@ def test_payments_all(client, response):
         assert payment.webhook_url is not None
         assert payment.settlement_amount['value'] is not None
         assert payment.settlement_amount['currency'] is not None
-
+        assert payment.metadata['order_id'] is not None
+        assert payment.checkout_url is not None
+        assert payment.can_be_refunded in BOOLEANS
+        assert payment.has_refunds in BOOLEANS
+        assert payment.has_chargebacks in BOOLEANS
     assert iterated == 3
 
 

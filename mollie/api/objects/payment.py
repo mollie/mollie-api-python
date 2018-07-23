@@ -31,7 +31,8 @@ class Payment(Base):
 
     @property
     def is_paid(self):
-        return 'paidAt' in self and len(self['paidAt']) > 0
+        return self._get_property('paidAt') is not None
+
 
     @property
     def is_failed(self):
@@ -39,11 +40,14 @@ class Payment(Base):
 
     @property
     def has_refunds(self):
-        return len(self['_links']['refunds']) > 0
+        try:
+            return self['_links']['refunds'] is not None
+        except KeyError:
+            return False
 
     @property
     def has_chargebacks(self):
-        return len(self._get_property('chargebacks')) > 0
+        return self._get_property('hasChargebacks') is not None
 
     @property
     def has_sequence_type_first(self):
@@ -55,9 +59,10 @@ class Payment(Base):
 
     @property
     def checkout_url(self):
-        if '_links' not in self:
+        try:
+            return self['_links']['checkout']['href']
+        except KeyError:
             return None
-        return self['_links']['checkout']
 
     @property
     def resource(self):
@@ -85,14 +90,10 @@ class Payment(Base):
 
     @property
     def paid_at(self):
-        if 'paidAt' not in self:
-            return None
         return self._get_property('paidAt')
 
     @property
     def canceled_at(self):
-        if 'canceledAt' not in self:
-            return None
         return self._get_property('canceledAt')
 
     @property
@@ -146,3 +147,30 @@ class Payment(Base):
     @property
     def method(self):
         return self._get_property('method')
+
+    @property
+    def customer_url(self):
+        try:
+            return self['_links']['customer']['href']
+        except KeyError:
+            return None
+
+    @property
+    def can_be_refunded(self):
+        try:
+            return self._get_property('amountRemaining') is not None
+        except KeyError:
+            return False
+
+    @property
+    def get_amount_refunded(self):
+        try:
+            return float(self._get_property('amountRefunded'))
+        except KeyError:
+            return 0.0
+
+    @property
+    def get_amount_remaining(self):
+        if self.can_be_refunded:
+            return float(self._get_property('amountRemaining'))
+        return 0.0

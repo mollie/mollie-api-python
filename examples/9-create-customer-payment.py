@@ -34,7 +34,7 @@ def main():
 
             body += '<p>No customer ID specified. Attempting to retrieve all customers and grabbing the first.</p>'
 
-            if int(customers['totalCount']) == 0:
+            if int(customers.count) == 0:
                 body += '<p>You have no customers. You can create one from the examples.</p>'
                 return body
 
@@ -48,24 +48,25 @@ def main():
         # Generate a unique order number for this example. It is important to include this unique attribute
         # in the redirectUrl (below) so a proper return page can be shown to the customer.
         #
-        order_nr = int(time.time())
+        order_id = int(time.time())
 
         #
         # See: https://www.mollie.com/nl/docs/reference/customers/create-payment
         #
         payment = mollie_client.customer_payments.with_parent_id(customer_id).create({
-            'amount':      {'currency': 'EUR', 'value': '100.00'},  # Create some variety in the payment amounts
+            'amount': {'currency': 'EUR', 'value': '100.00'},
             'description': 'My first API payment',
-            'webhookUrl':  flask.request.url_root + '2-webhook-verification?order_nr=' + str(order_nr),
-            'redirectUrl': flask.request.url_root + '3-return-page?order_nr=' + str(order_nr),
-            'metadata':    {
-                'order_nr': order_nr
+            'webhookUrl': flask.request.url_root + '2-webhook-verification',
+            'redirectUrl': flask.request.url_root + '3-return-page?order_id=' + str(order_id),
+            'metadata': {
+                'order_id': order_id
             }
         })
 
-        database_write(order_nr, payment['status'])
+        database_write(order_id, payment.status)
 
-        return '<p>Created payment of %s EUR for %s (%s)<p>' % (payment['amount'], customer.name, customer.id)
+        return '<p>Created payment of %s %s for %s (%s)<p>' % (
+            payment.value, payment.currency, customer.name, customer.id)
 
     except mollie.api.error as e:
         return 'API call failed: ' + str(e)

@@ -30,19 +30,19 @@ def main():
 
         payment_id = flask.request.form['id']
         payment = mollie_client.payments.get(payment_id)
-        order_nr = payment['metadata']['order_nr']
+        order_id = payment.metadata['order_id']
 
         #
         # Update the order in the database.
         #
-        database_write(order_nr, payment['status'])
+        database_write(order_id, payment.status)
 
-        if payment.is_paid():
+        if payment.is_paid:
             #
             # At this point you'd probably want to start the process of delivering the product to the customer.
             #
             return 'Paid'
-        elif payment.is_pending():
+        elif payment.is_pending:
             #
             # The payment has started but is not complete yet.
             #

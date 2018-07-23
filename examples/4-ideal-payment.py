@@ -32,8 +32,8 @@ def main ():
             body = '<form method="post">Select your bank: <select name="issuer">'
 
             for issuer in mollie_client.issuers.all():
-                if issuer['method'] == mollie_client.api.object.Method.IDEAL:
-                    body += '<option value="%s">%s</option>' % (issuer['id'], issuer['name'])
+                if issuer.method == mollie_client.api.object.Method.IDEAL:
+                    body += '<option value="%s">%s</option>' % (issuer.id, issuer.name)
 
             body += '<option value="">or select later</option>'
             body += '</select><button>OK</button></form>'
@@ -52,11 +52,11 @@ def main ():
             # Generate a unique order number for this example. It is important to include this unique attribute
             # in the redirectUrl (below) so a proper return page can be shown to the customer.
             #
-            order_nr = int(time.time())
+            order_id = int(time.time())
 
             #
             # Payment parameters:
-            # amount        Amount in EUROs. This example creates a € 10,- payment.
+            # amount        Currency and value. This example creates a € 10,- payment.
             # description   Description of the payment.
             # webhookUrl    Webhook location, used to report when the payment changes state.
             # redirectUrl   Redirect location. The customer will be redirected there after the payment.
@@ -65,12 +65,12 @@ def main ():
             # issuer        The customer's bank. If empty the customer can select it later.
             #
             payment = mollie_client.payments.create({
-                'amount':      10.00,
+                'amount': {'currency': 'EUR', 'value': '10.00'},
                 'description': 'My first API payment',
-                'webhookUrl':  flask.request.url_root + '2-webhook-verification?order_nr=' + str(order_nr),
-                'redirectUrl': flask.request.url_root + '3-return-page?order_nr=' + str(order_nr),
+                'webhookUrl': flask.request.url_root + '2-webhook-verification',
+                'redirectUrl': flask.request.url_root + '3-return-page?order_id=' + str(order_id),
                 'metadata': {
-                    'order_nr': order_nr
+                    'order_nr': order_id
                 },
                 'method': 'ideal',
                 'issuer': issuer_id
@@ -79,7 +79,7 @@ def main ():
             #
             # In this example we store the order with its payment status in a database.
             #
-            database_write(order_nr, payment['status'])
+            database_write(order_id, payment.status)
 
             #
             # Send the customer off to complete the payment.
