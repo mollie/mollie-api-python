@@ -24,7 +24,7 @@ def test_get_customer_mandate_by_id(client, response):
     """Retrieve a single mandate by ID."""
     response.get(
         'https://api.mollie.com/v2/customers/%s/mandates/%s' % (CUSTOMER_ID, MANDATE_ID),
-        'customer_mandates_get',
+        'customer_mandate_get',
     )
 
     mandate = client.customer_mandates.with_parent_id(CUSTOMER_ID).get(MANDATE_ID)
@@ -51,7 +51,7 @@ def test_get_customer_mandate_by_customer(client, response):
     response.get('https://api.mollie.com/v2/customers/%s/mandates' % CUSTOMER_ID, 'customer_mandates_multiple')
     response.get(
         'https://api.mollie.com/v2/customers/%s/mandates/%s' % (CUSTOMER_ID, MANDATE_ID),
-        'customer_mandates_get',
+        'customer_mandate_get',
     )
     customer = client.customers.get(CUSTOMER_ID)
 
@@ -66,7 +66,7 @@ def test_customer_mandate_get_related_customer(client, response):
     """Retrieve a related customer object from a mandate."""
     response.get(
         'https://api.mollie.com/v2/customers/%s/mandates/%s' % (CUSTOMER_ID, MANDATE_ID),
-        'customer_mandates_get',
+        'customer_mandate_get',
     )
     response.get('https://api.mollie.com/v2/customers/%s' % CUSTOMER_ID, 'customer_new')
 
@@ -77,7 +77,8 @@ def test_customer_mandate_get_related_customer(client, response):
 
 def test_customer_mandates_create_mandate(client, response):
     """Create a new customer mandate."""
-    response.post('https://api.mollie.com/v2/customers/cst_8wmqcHMN4U/mandates', 'customer_mandates_get')
+    response.post('https://api.mollie.com/v2/customers/%s/mandates' % CUSTOMER_ID, 'customer_mandate_get')
+
     data = {
         'method': 'directdebit',
         'consumerName': 'John Doe',
@@ -87,4 +88,22 @@ def test_customer_mandates_create_mandate(client, response):
         'mandateReference': 'YOUR-COMPANY-MD1380',
     }
     mandate = client.customer_mandates.with_parent_id(CUSTOMER_ID).create(data=data)
+    assert mandate.id == MANDATE_ID
+
+
+def test_update_customer_mandate(client, response):
+    response.post(
+        'https://api.mollie.com/v2/customers/%s/mandates/%s' % (CUSTOMER_ID, MANDATE_ID),
+        'customer_mandate_updated'
+    )
+
+    data = {
+        'method': 'directdebit',
+        'consumerName': 'John Doe',
+        'consumerAccount': 'NL09ASNB0000000000',
+        'consumerBic': 'ASNBNL21',
+        'signatureDate': '2018-05-07',
+        'mandateReference': 'OTHER-COMPANY-12345',
+    }
+    mandate = client.customer_mandates.with_parent_id(CUSTOMER_ID).update(MANDATE_ID, data=data)
     assert mandate.id == MANDATE_ID
