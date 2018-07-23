@@ -6,11 +6,11 @@ class List(Base):
         Base.__init__(self, result)
         self.object_type = object_type
 
-    def get_resource_name(self):
+    def get_object_name(self):
         return self.object_type.__name__.lower() + 's'
 
     def __iter__(self):
-        for item in self['_embedded'][self.get_resource_name()]:
+        for item in self['_embedded'][self.get_object_name()]:
             yield self.object_type(item)
 
     @property
