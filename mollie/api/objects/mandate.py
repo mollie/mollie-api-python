@@ -1,5 +1,4 @@
 from .base import Base
-from .customer import Customer
 
 
 class Mandate(Base):
@@ -50,7 +49,8 @@ class Mandate(Base):
 
     @property
     def customer(self):
-        """Return customer object from the links attribute."""
+        """Return the customer referenced in the _links."""
+        from .customer import Customer  # work around circular imports
         try:
             url = self['_links']['customer']['href']
         except KeyError:
