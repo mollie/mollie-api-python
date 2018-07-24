@@ -29,6 +29,10 @@
       "href": "https://www.mollie.com/payscreen/select-method/7UhSN1zuXS",
       "type": "text/html"
     },
+    "chargeback": {
+      "href": "https://api.mollie.com/v2/payments/tr_7UhSN1zuXS/chargebacks/",
+      "type": "text/html"
+    },
     "documentation": {
       "href": "https://docs.mollie.com/reference/v2/payments-api/create-payment",
       "type": "text/html"

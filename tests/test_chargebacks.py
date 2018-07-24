@@ -1,0 +1,57 @@
+PAYMENT_ID = 'tr_7UhSN1zuXS'
+CHARGEBACK_ID = 'chb_n9z0tp'
+
+
+def test_get_chargeback_by_payment(client, response):
+    response.get('https://api.mollie.com/v2/payments/%s/chargebacks' % PAYMENT_ID, 'chargeback_list')
+    response.get('https://api.mollie.com/v2/payments/%s' % PAYMENT_ID, 'payments_create')
+
+    payment = client.payments.get(PAYMENT_ID)
+    chargebacks = client.payments.chargebacks(payment).all()
+    assert chargebacks.count == 1
+    assert chargebacks.__class__.__name__ == 'List'
+
+    iterated = 0
+    iterated_chargeback_ids = []
+    for chargeback in chargebacks:
+        assert chargeback.id is not None
+        assert chargeback.__class__.__name__ == 'Chargeback'
+        iterated += 1
+        iterated_chargeback_ids.append(chargeback.id)
+    assert iterated == chargebacks.count
+    assert len(set(iterated_chargeback_ids)) == chargebacks.count
+
+
+def test_get_single_chargeback(client, response):
+    response.get('https://api.mollie.com/v2/payments/%s/chargebacks/%s' % (PAYMENT_ID, CHARGEBACK_ID),
+                 'chargeback_single')
+    response.get('https://api.mollie.com/v2/payments/%s' % PAYMENT_ID, 'payments_create')
+
+    payment = client.payments.get(PAYMENT_ID)
+    chargeback = client.payments.chargebacks(payment).get(CHARGEBACK_ID)
+    assert chargeback.id == CHARGEBACK_ID
+    assert chargeback.amount['currency'] == 'USD'
+    assert chargeback.amount['value'] == '43.38'
+    assert chargeback.settlement_amount['currency'] == 'EUR'
+    assert chargeback.settlement_amount['value'] == '-35.07'
+    assert chargeback.created_at == '2018-03-14T17:00:52.0Z'
+    assert chargeback.reversed_at == '2018-03-14T17:00:55.0Z'
+    assert chargeback.payment_id == PAYMENT_ID
+
+
+def test_get_all_chargebacks(client, response):
+    response.get('https://api.mollie.com/v2/chargebacks', 'chargeback_list')
+
+    chargebacks = client.chargebacks.all()
+    assert chargebacks.count == 1
+    assert chargebacks.__class__.__name__ == 'List'
+
+    iterated = 0
+    iterated_chargeback_ids = []
+    for chargeback in chargebacks:
+        assert chargeback.id is not None
+        assert chargeback.__class__.__name__ == 'Chargeback'
+        iterated += 1
+        iterated_chargeback_ids.append(chargeback.id)
+    assert iterated == chargebacks.count
+    assert len(set(iterated_chargeback_ids)) == chargebacks.count
