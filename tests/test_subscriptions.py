@@ -1,0 +1,102 @@
+CUSTOMER_ID = 'cst_kEn1PlbGa'
+SUBSCRIPTION_ID = 'sub_rVKGtNd6s3'
+
+
+def test_customer_subscriptions_all(client, response):
+    """Retrieve a list of subscriptions"""
+    response.get('https://api.mollie.com/v2/customers/%s/subscriptions' % CUSTOMER_ID, 'subscription_all')
+    
+    subscriptions = client.customer_subscriptions.with_parent_id(CUSTOMER_ID).all()
+    assert subscriptions.__class__.__name__ == 'List'
+    assert subscriptions.count == 3
+    iterated = 0
+    iterated_subscription_ids = []
+    for subscription in subscriptions:
+        assert subscription.__class__.__name__ == 'Subscription'
+        iterated += 1
+        assert subscription.id is not None
+        iterated_subscription_ids.append(subscription.id)
+    assert iterated == subscriptions.count
+    assert len(set(iterated_subscription_ids)) == subscriptions.count
+
+
+def test_get_customer_subscription_by_id(client, response):
+    """Retrieve a single subscription by ID """
+    response.get('https://api.mollie.com/v2/customers/%s/subscriptions/%s' % (CUSTOMER_ID, SUBSCRIPTION_ID),
+                 'subscription_single')
+
+    subscription = client.customer_subscriptions.with_parent_id(CUSTOMER_ID).get(SUBSCRIPTION_ID)
+    assert subscription.resource == 'subscription'
+    assert subscription.id == SUBSCRIPTION_ID
+    assert subscription.mode == 'live'
+    assert subscription.created_at == '2016-06-01T12:23:34+00:00'
+    assert subscription.is_active is True
+    assert subscription.is_suspended is False
+    assert subscription.is_pending is False
+    assert subscription.is_completed is False
+    assert subscription.is_canceled is False
+    assert subscription.amount['value'] == '25.00'
+    assert subscription.amount['currency'] == 'EUR'
+    assert subscription.times == 4
+    assert subscription.interval == '3 months'
+    assert subscription.description == 'Quarterly payment'
+    assert subscription.method == 'ideal'
+    assert subscription.webhook_url == 'https://webshop.example.org/payments/webhook'
+
+
+def test_get_all_subscription_by_customer_object(client, response):
+    response.get('https://api.mollie.com/v2/customers/%s/subscriptions' % CUSTOMER_ID,
+                 'subscription_all')
+    response.get('https://api.mollie.com/v2/customers/%s' % CUSTOMER_ID, 'customer_single')
+
+    customer = client.customers.get(CUSTOMER_ID)
+    subscriptions = customer.subscriptions
+    assert subscriptions.__class__.__name__ == 'List'
+    iterated = 0
+    for subscription in subscriptions:
+        assert subscription.__class__.__name__ == "Subscription"
+        iterated += 1
+    assert iterated == subscriptions.count
+
+
+def test_customer_subscription_get_related_customer(client, response):
+    """Retrieve a related customer object from a subscription"""
+    response.get('https://api.mollie.com/v2/customers/%s/subscriptions/%s' % (CUSTOMER_ID, SUBSCRIPTION_ID),
+                 'subscription_single')
+    response.get('https://api.mollie.com/v2/customers/%s' % CUSTOMER_ID, 'customer_single')
+
+    subscription = client.customer_subscriptions.with_parent_id(CUSTOMER_ID).get(SUBSCRIPTION_ID)
+    assert subscription.customer.__class__.__name__ == 'Customer'
+    assert subscription.customer.id == CUSTOMER_ID
+
+
+# def test_cancel_customer_subscription(client, response):
+#     """Cancel a subscription by customer ID and subscription ID"""
+#     response.delete('https://api.mollie.com/v2/customers/%s/subscriptions/%s' % (CUSTOMER_ID, SUBSCRIPTION_ID),
+#                     'subscription_canceled', 200)
+#     subscription = client.customer.cancel_subscription(SUBSCRIPTION_ID)
+#     assert subscription.status == 'canceled'
+#     assert subscription.canceledAt == '2018-08-01T11:04:21+00:00'
+
+# def test_create_customer_subscription(client, response):
+#     """create a subscription with customer object"""
+#     response.get('https://api.mollie.com/v2/customers/%s' % CUSTOMER_ID, 'customer_single')
+#     response.post('https://api.mollie.com/v2/customers/%s/subscriptions' % CUSTOMER_ID, 'subscription_single')
+#     customer = client.customers.get(CUSTOMER_ID)
+#     subscription = customer.create_subscription(
+#         {
+#             'amount': {'currency': 'EUR', 'value': '25.00'},
+#             'times': 4,
+#             'interval': '3 months',
+#             'description': 'Quarterly payment',
+#             'webhookUrl': 'https://webshop.example.org/subscriptions/webhook'
+#         }
+#     )
+#
+#
+#
+# def test_get_customer_subscription_by_customer(client, response):
+#     """Retrieve a single subscription by customer object"""
+#     response.get('https://api.mollie.com/v2/customers/%s/subscriptions/%s' % (CUSTOMER_ID, SUBSCRIPTION_ID),
+#                  'subscription_single')
+#     subscription = client.customer.get_subscription(SUBSCRIPTION_ID)

@@ -69,3 +69,5 @@ def test_create_payment(client, response):
     assert payment.is_expired in BOOLEANS
     assert payment.is_paid in BOOLEANS
     assert payment.is_failed in BOOLEANS
+
+# TODO: get payments by customer id and payment id
