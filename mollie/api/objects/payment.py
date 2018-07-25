@@ -159,9 +159,10 @@ class Payment(Base):
 
     @property
     def get_amount_remaining(self):
-        if self.can_be_refunded:
+        try:
             return float(self._get_property('amountRemaining'))
-        return 0.0
+         except TypeError:
+            return 0.0
 
     @property
     def chargebacks(self):
@@ -182,4 +183,3 @@ class Payment(Base):
             return None
         resp = self._resource.perform_api_call(self._resource.REST_READ, url)
         return List(resp, Refund)
-

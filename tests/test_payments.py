@@ -51,18 +51,18 @@ def test_get_single_payment(client, response):
     assert payment.metadata['order_id'] == '12345'
     assert payment.sequence_type == 'oneoff'
     assert payment.profile_id == 'pfl_QkEhN94Ba'
-    assert payment.is_open is True
-    assert payment.is_pending is False
-    assert payment.is_canceled is False
-    assert payment.is_cancelable is False
-    assert payment.is_expired is False
-    assert payment.is_paid is False
-    assert payment.is_failed is False
-    assert payment.has_refunds is False
-    assert payment.has_chargebacks is False
-    assert payment.has_sequence_type_first is False
-    assert payment.can_be_refunded is False
-    assert payment.has_sequence_type_recurring is False
+    assert payment.is_open() is True
+    assert payment.is_pending() is False
+    assert payment.is_canceled() is False
+    assert payment.is_cancelable() is False
+    assert payment.is_expired() is False
+    assert payment.is_paid() is False
+    assert payment.is_failed() is False
+    assert payment.has_refunds() is False
+    assert payment.has_chargebacks() is False
+    assert payment.has_sequence_type_first() is False
+    assert payment.can_be_refunded() is False
+    assert payment.has_sequence_type_recurring() is False
     assert payment.checkout_url == 'https://www.mollie.com/payscreen/select-method/7UhSN1zuXS'
     assert payment.resource == 'payment'
     assert payment.id == PAYMENT_ID
@@ -96,6 +96,6 @@ def test_cancel_payment(client, response):
     response.delete('https://api.mollie.com/v2/payments/%s' % PAYMENT_ID, 'payments_canceled', 200)
 
     canceled_payment = client.payments.delete(PAYMENT_ID)
-    assert canceled_payment.is_canceled is True
+    assert canceled_payment.is_canceled() is True
     assert canceled_payment.canceled_at == '2018-03-20T09:28:37+00:00'
     assert canceled_payment.id == PAYMENT_ID
