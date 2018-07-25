@@ -1,3 +1,6 @@
+from mollie.api.objects.customer import Customer
+from mollie.api.objects.list import List
+from mollie.api.objects.mandate import Mandate
 CUSTOMER_ID = 'cst_8wmqcHMN4U'
 MANDATE_ID = 'mdt_h3gAaD5zP'
 
@@ -6,13 +9,13 @@ def test_customer_mandates_all(client, response):
     """Retrieve a list of mandates."""
     response.get('https://api.mollie.com/v2/customers/%s/mandates' % CUSTOMER_ID, 'customer_mandates_multiple')
     mandates = client.customer_mandates.with_parent_id(CUSTOMER_ID).all()
-    assert mandates.__class__.__name__ == 'List'
+    assert isinstance(mandates, List)
     assert mandates.count == 1
 
     iterated = 0
     iterated_mandate_ids = []
     for mandate in mandates:
-        assert mandate.__class__.__name__ == 'Mandate'
+        assert isinstance(mandate, Mandate)
         iterated += 1
         assert mandate.id is not None
         iterated_mandate_ids.append(mandate.id)
@@ -71,7 +74,7 @@ def test_customer_mandate_get_related_customer(client, response):
     response.get('https://api.mollie.com/v2/customers/%s' % CUSTOMER_ID, 'customer_new')
 
     mandate = client.customer_mandates.with_parent_id(CUSTOMER_ID).get(MANDATE_ID)
-    assert mandate.customer.__class__.__name__ == 'Customer'
+    assert isinstance(mandate.customer, Customer)
     assert mandate.customer.id == CUSTOMER_ID
 
 
