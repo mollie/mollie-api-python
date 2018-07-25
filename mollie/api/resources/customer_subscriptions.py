@@ -15,9 +15,20 @@ class CustomerSubscriptions(Base):
     def get(self, subscription_id, **params):
         if not subscription_id or not subscription_id.startswith(self.RESOURCE_ID_PREFIX):
             raise Error(
-                'Invalid subscription ID: "%s". A subscription ID should start with "%s".' % (subscription_id, self.RESOURCE_ID_PREFIX)
+                'Invalid subscription ID: "%s". A subscription ID should start with "%s".' % (
+                subscription_id, self.RESOURCE_ID_PREFIX)
             )
         return super(CustomerSubscriptions, self).get(subscription_id)
+
+    def delete(self, subscription_id):
+        """Override the delete function of base.py so it returns a response"""
+        if not subscription_id or not subscription_id.startswith(self.RESOURCE_ID_PREFIX):
+            raise Error(
+                'Invalid subscription ID: "%s". A subscription ID should start with "%s".' % (
+                    subscription_id, self.RESOURCE_ID_PREFIX)
+            )
+        result = super(CustomerSubscriptions, self).delete(subscription_id)
+        return self.get_resource_object(result)
 
     def get_resource_name(self):
         return 'customers/%s/subscriptions' % self.customer_id

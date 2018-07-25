@@ -35,18 +35,6 @@ class Customer(Base):
     def created_at(self):
         return self._get_property('createdAt')
 
-    def create_subscription(self, data, **options):
-        # TODO: add client to create subscriptions
-        pass
-
-    def get_subscription(self, subscription_id):
-        # TODO: add client to get subscriptions
-        pass
-
-    def cancel_subscription(self, subscription_id):
-        # TODO: add client to cancel subscriptions
-        pass
-
     @property
     def subscriptions(self):
         """Return subscription object from the links attribute"""

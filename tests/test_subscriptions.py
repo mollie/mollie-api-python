@@ -5,7 +5,7 @@ SUBSCRIPTION_ID = 'sub_rVKGtNd6s3'
 def test_customer_subscriptions_all(client, response):
     """Retrieve a list of subscriptions"""
     response.get('https://api.mollie.com/v2/customers/%s/subscriptions' % CUSTOMER_ID, 'subscription_all')
-    
+
     subscriptions = client.customer_subscriptions.with_parent_id(CUSTOMER_ID).all()
     assert subscriptions.__class__.__name__ == 'List'
     assert subscriptions.count == 3
@@ -70,33 +70,42 @@ def test_customer_subscription_get_related_customer(client, response):
     assert subscription.customer.id == CUSTOMER_ID
 
 
-# def test_cancel_customer_subscription(client, response):
-#     """Cancel a subscription by customer ID and subscription ID"""
-#     response.delete('https://api.mollie.com/v2/customers/%s/subscriptions/%s' % (CUSTOMER_ID, SUBSCRIPTION_ID),
-#                     'subscription_canceled', 200)
-#     subscription = client.customer.cancel_subscription(SUBSCRIPTION_ID)
-#     assert subscription.status == 'canceled'
-#     assert subscription.canceledAt == '2018-08-01T11:04:21+00:00'
+def test_cancel_customer_subscription(client, response):
+    """Cancel a subscription by customer ID and subscription ID"""
+    response.delete('https://api.mollie.com/v2/customers/%s/subscriptions/%s' % (CUSTOMER_ID, SUBSCRIPTION_ID),
+                    'subscription_canceled', 200)
+    response.get('https://api.mollie.com/v2/customers/%s' % CUSTOMER_ID, 'customer_single')
 
-# def test_create_customer_subscription(client, response):
-#     """create a subscription with customer object"""
-#     response.get('https://api.mollie.com/v2/customers/%s' % CUSTOMER_ID, 'customer_single')
-#     response.post('https://api.mollie.com/v2/customers/%s/subscriptions' % CUSTOMER_ID, 'subscription_single')
-#     customer = client.customers.get(CUSTOMER_ID)
-#     subscription = customer.create_subscription(
-#         {
-#             'amount': {'currency': 'EUR', 'value': '25.00'},
-#             'times': 4,
-#             'interval': '3 months',
-#             'description': 'Quarterly payment',
-#             'webhookUrl': 'https://webshop.example.org/subscriptions/webhook'
-#         }
-#     )
-#
-#
-#
-# def test_get_customer_subscription_by_customer(client, response):
-#     """Retrieve a single subscription by customer object"""
-#     response.get('https://api.mollie.com/v2/customers/%s/subscriptions/%s' % (CUSTOMER_ID, SUBSCRIPTION_ID),
-#                  'subscription_single')
-#     subscription = client.customer.get_subscription(SUBSCRIPTION_ID)
+    subscription = client.customer_subscriptions.with_parent_id(CUSTOMER_ID).delete(SUBSCRIPTION_ID)
+    assert subscription.status == 'canceled'
+    assert subscription.canceled_at == '2018-08-01T11:04:21+00:00'
+    assert subscription.customer.__class__.__name__ == 'Customer'
+
+
+def test_create_customer_subscription(client, response):
+    """create a subscription with customer object"""
+    response.post('https://api.mollie.com/v2/customers/%s/subscriptions' % CUSTOMER_ID, 'subscription_single')
+    data = {
+        'amount': {'currency': 'EUR', 'value': '25.00'},
+        'times': 4,
+        'interval': '3 months',
+        'description': 'Quarterly payment',
+        'webhookUrl': 'https://webshop.example.org/subscriptions/webhook'
+    }
+    subscription = client.customer_subscriptions.with_parent_id(CUSTOMER_ID).create(data=data)
+    assert subscription.id == SUBSCRIPTION_ID
+
+
+def test_update_customer_subscription(client, response):
+    response.patch('https://api.mollie.com/v2/customers/%s/subscriptions/%s' % (CUSTOMER_ID, SUBSCRIPTION_ID),
+                   'subscription_updated')
+
+    data = {
+        'amount': {'currency': 'USD', 'value': '30.00'},
+        'times': 42,
+        'startDate': '2018-12-12',
+        'description': 'Updated subscription',
+        'webhookUrl': 'https://webshop.example.org/subscriptions/webhook'
+    }
+    subscription = client.customer_subscriptions.with_parent_id(CUSTOMER_ID).update(SUBSCRIPTION_ID, data)
+    assert subscription.id == SUBSCRIPTION_ID
