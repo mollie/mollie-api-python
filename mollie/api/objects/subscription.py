@@ -13,23 +13,18 @@ class Subscription(Base):
     def status(self):
         return self._get_property('status')
 
-    @property
     def is_active(self):
         return self.status == self.STATUS_ACTIVE
 
-    @property
     def is_pending(self):
         return self.status == self.STATUS_PENDING
 
-    @property
     def is_canceled(self):
         return self.status == self.STATUS_CANCELED
 
-    @property
     def is_suspended(self):
         return self.status == self.STATUS_SUSPENDED
 
-    @property
     def is_completed(self):
         return self.status == self.STATUS_COMPLETED
 

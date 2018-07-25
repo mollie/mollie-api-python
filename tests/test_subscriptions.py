@@ -1,3 +1,6 @@
+from mollie.api.objects.list import List
+from mollie.api.objects.subscription import Subscription
+from mollie.api.objects.customer import Customer
 CUSTOMER_ID = 'cst_kEn1PlbGa'
 SUBSCRIPTION_ID = 'sub_rVKGtNd6s3'
 
@@ -7,12 +10,12 @@ def test_customer_subscriptions_all(client, response):
     response.get('https://api.mollie.com/v2/customers/%s/subscriptions' % CUSTOMER_ID, 'subscription_all')
 
     subscriptions = client.customer_subscriptions.with_parent_id(CUSTOMER_ID).all()
-    assert subscriptions.__class__.__name__ == 'List'
+    assert isinstance(subscriptions, List)
     assert subscriptions.count == 3
     iterated = 0
     iterated_subscription_ids = []
     for subscription in subscriptions:
-        assert subscription.__class__.__name__ == 'Subscription'
+        assert isinstance(subscription, Subscription)
         iterated += 1
         assert subscription.id is not None
         iterated_subscription_ids.append(subscription.id)
@@ -30,11 +33,11 @@ def test_get_customer_subscription_by_id(client, response):
     assert subscription.id == SUBSCRIPTION_ID
     assert subscription.mode == 'live'
     assert subscription.created_at == '2016-06-01T12:23:34+00:00'
-    assert subscription.is_active is True
-    assert subscription.is_suspended is False
-    assert subscription.is_pending is False
-    assert subscription.is_completed is False
-    assert subscription.is_canceled is False
+    assert subscription.is_active() is True
+    assert subscription.is_suspended() is False
+    assert subscription.is_pending() is False
+    assert subscription.is_completed() is False
+    assert subscription.is_canceled() is False
     assert subscription.amount['value'] == '25.00'
     assert subscription.amount['currency'] == 'EUR'
     assert subscription.times == 4
@@ -66,7 +69,7 @@ def test_customer_subscription_get_related_customer(client, response):
     response.get('https://api.mollie.com/v2/customers/%s' % CUSTOMER_ID, 'customer_single')
 
     subscription = client.customer_subscriptions.with_parent_id(CUSTOMER_ID).get(SUBSCRIPTION_ID)
-    assert subscription.customer.__class__.__name__ == 'Customer'
+    assert isinstance(subscription.customer, Customer)
     assert subscription.customer.id == CUSTOMER_ID
 
 
@@ -74,12 +77,10 @@ def test_cancel_customer_subscription(client, response):
     """Cancel a subscription by customer ID and subscription ID"""
     response.delete('https://api.mollie.com/v2/customers/%s/subscriptions/%s' % (CUSTOMER_ID, SUBSCRIPTION_ID),
                     'subscription_canceled', 200)
-    response.get('https://api.mollie.com/v2/customers/%s' % CUSTOMER_ID, 'customer_single')
 
     subscription = client.customer_subscriptions.with_parent_id(CUSTOMER_ID).delete(SUBSCRIPTION_ID)
     assert subscription.status == 'canceled'
     assert subscription.canceled_at == '2018-08-01T11:04:21+00:00'
-    assert subscription.customer.__class__.__name__ == 'Customer'
 
 
 def test_create_customer_subscription(client, response):
