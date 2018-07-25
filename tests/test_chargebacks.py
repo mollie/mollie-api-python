@@ -1,3 +1,5 @@
+from mollie.api.objects.chargeback import Chargeback
+from mollie.api.objects.list import List
 PAYMENT_ID = 'tr_7UhSN1zuXS'
 CHARGEBACK_ID = 'chb_n9z0tp'
 
@@ -9,13 +11,13 @@ def test_get_chargeback_by_payment(client, response):
     payment = client.payments.get(PAYMENT_ID)
     chargebacks = client.payments.chargebacks(payment).all()
     assert chargebacks.count == 1
-    assert chargebacks.__class__.__name__ == 'List'
+    assert isinstance(chargebacks, List)
 
     iterated = 0
     iterated_chargeback_ids = []
     for chargeback in chargebacks:
         assert chargeback.id is not None
-        assert chargeback.__class__.__name__ == 'Chargeback'
+        assert isinstance(chargeback, Chargeback)
         iterated += 1
         iterated_chargeback_ids.append(chargeback.id)
     assert iterated == chargebacks.count
@@ -29,6 +31,7 @@ def test_get_single_chargeback(client, response):
 
     payment = client.payments.get(PAYMENT_ID)
     chargeback = client.payments.chargebacks(payment).get(CHARGEBACK_ID)
+    assert isinstance(chargeback, Chargeback)
     assert chargeback.id == CHARGEBACK_ID
     assert chargeback.amount['currency'] == 'USD'
     assert chargeback.amount['value'] == '43.38'
@@ -44,13 +47,13 @@ def test_get_all_chargebacks(client, response):
 
     chargebacks = client.chargebacks.all()
     assert chargebacks.count == 1
-    assert chargebacks.__class__.__name__ == 'List'
+    assert isinstance(chargebacks, List)
 
     iterated = 0
     iterated_chargeback_ids = []
     for chargeback in chargebacks:
         assert chargeback.id is not None
-        assert chargeback.__class__.__name__ == 'Chargeback'
+        assert isinstance(chargeback, Chargeback)
         iterated += 1
         iterated_chargeback_ids.append(chargeback.id)
     assert iterated == chargebacks.count
