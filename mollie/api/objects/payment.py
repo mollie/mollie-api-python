@@ -14,47 +14,36 @@ class Payment(Base):
     SEQUENCETYPE_FIRST = 'first'
     SEQUENCETYPE_RECURRING = 'recurring'
 
-    @property
     def is_open(self):
         return self._get_property('status') == self.STATUS_OPEN
 
-    @property
     def is_pending(self):
         return self._get_property('status') == self.STATUS_PENDING
 
-    @property
     def is_canceled(self):
         return self._get_property('status') == self.STATUS_CANCELED
 
-    @property
     def is_expired(self):
         return self._get_property('status') == self.STATUS_EXPIRED
 
-    @property
     def is_paid(self):
         return self._get_property('paidAt') is not None
 
-
-    @property
     def is_failed(self):
         return self._get_property('status') == self.STATUS_FAILED
 
-    @property
     def has_refunds(self):
         try:
             return self['_links']['refunds'] is not None
         except KeyError:
             return False
 
-    @property
     def has_chargebacks(self):
         return self._get_property('hasChargebacks') is not None
 
-    @property
     def has_sequence_type_first(self):
         return self._get_property('sequenceType') == self.SEQUENCETYPE_FIRST
 
-    @property
     def has_sequence_type_recurring(self):
         return self._get_property('sequenceType') == self.SEQUENCETYPE_RECURRING
 
@@ -85,7 +74,6 @@ class Payment(Base):
     def status(self):
         return self._get_property('status')
 
-    @property
     def is_cancelable(self):
         return self['isCancelable']
 
@@ -156,7 +144,6 @@ class Payment(Base):
         except KeyError:
             return None
 
-    @property
     def can_be_refunded(self):
         try:
             return self._get_property('amountRemaining') is not None

@@ -1,7 +1,6 @@
 from mollie.api.objects.list import List
 from mollie.api.objects.refund import Refund
-
-BOOLEANS = [True, False]
+from mollie.api.objects.payment import Payment
 PAYMENT_ID = 'tr_7UhSN1zuXS'
 REFUND_ID = 're_4qqhO89gsT'
 
@@ -10,13 +9,13 @@ def test_payments_all(client, response):
     response.get('https://api.mollie.com/v2/payments', 'payments_multiple')
 
     payments = client.payments.all()
-    assert payments.__class__.__name__ == 'List'
+    assert isinstance(payments, List)
     assert payments.count == 3
     iterated = 0
     iterated_payment_ids = []
     for payment in payments:
         iterated += 1
-        assert payment.__class__.__name__ == 'Payment'
+        assert isinstance(payment, Payment)
         assert payment.id is not None
         iterated_payment_ids.append(payment.id)
     assert iterated == payments.count
