@@ -1,3 +1,5 @@
+from mollie.api.objects.list import List
+from mollie.api.objects.refund import Refund
 PAYMENT_ID = 'tr_7UhSN1zuXS'
 REFUND_ID = 're_4qqhO89gsT'
 
@@ -7,12 +9,12 @@ def test_list_all_refunds(client, response):
     response.get('https://api.mollie.com/v2/refunds', 'refunds_multiple')
     refunds = client.refunds.all()
     assert refunds.count == 1
-    assert refunds.__class__.__name__ == 'List'
+    assert isinstance(refunds, List)
 
     iterated = 0
     iterated_refund_ids = []
     for refund in refunds:
-        assert refund.__class__.__name__ == 'Refund'
+        assert isinstance(refund, Refund)
         iterated += 1
         assert refund.id is not None
         iterated_refund_ids.append(refund.id)
@@ -27,12 +29,12 @@ def test_list_all_refunds_of_payment(client, response):
     payment = client.payments.get(PAYMENT_ID)
     refunds = client.payments.refunds(payment).all()
     assert refunds.count == 1
-    assert refunds.__class__.__name__ == 'List'
+    assert isinstance(refunds, List)
 
     iterated = 0
     iterated_refund_ids = []
     for refund in refunds:
-        assert refund.__class__.__name__ == 'Refund'
+        assert isinstance(refund, Refund)
         iterated += 1
         assert refund.id is not None
         iterated_refund_ids.append(refund.id)
@@ -70,7 +72,7 @@ def test_create_refund(client, response):
     }
     refund = client.payments.refund(payment, data)
     assert refund.id == REFUND_ID
-    assert refund.__class__.__name__ == 'Refund'
+    assert isinstance(refund, Refund)
 
 
 def test_cancel_refund(client, response):
@@ -83,4 +85,4 @@ def test_cancel_refund(client, response):
     refund = client.payments.refunds(payment).get(REFUND_ID)
     canceled_refund = refund.cancel()
     assert canceled_refund == {}
-    assert canceled_refund.__class__.__name__ == 'Refund'
+    assert isinstance(refund, Refund)

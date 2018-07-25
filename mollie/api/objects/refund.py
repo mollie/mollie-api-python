@@ -7,21 +7,17 @@ class Refund(Base):
     STATUS_PROCESSING = 'processing'
     STATUS_REFUNDED = 'refunded'
 
-    @property
     def is_queued(self):
-        return self['status'] == self.STATUS_QUEUED
+        return self.status == self.STATUS_QUEUED
 
-    @property
     def is_pending(self):
-        return self['status'] == self.STATUS_PENDING
+        return self.status == self.STATUS_PENDING
 
-    @property
     def is_processing(self):
-        return self['status'] == self.STATUS_PROCESSING
+        return self.status == self.STATUS_PROCESSING
 
-    @property
     def is_refunded(self):
-        return self['status'] == self.STATUS_REFUNDED
+        return self.status == self.STATUS_REFUNDED
 
     @property
     def resource(self):
