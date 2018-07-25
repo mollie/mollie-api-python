@@ -21,7 +21,7 @@ def test_create_customer(client, response):
 
 
 def test_update_customer(client, response):
-    response.post('https://api.mollie.com/v2/customers/%s' % CUSTOMER_ID, 'customer_updated')
+    response.patch('https://api.mollie.com/v2/customers/%s' % CUSTOMER_ID, 'customer_updated')
 
     updated_customer = client.customers.update(CUSTOMER_ID, {
         'name': 'Updated Customer A',

@@ -92,7 +92,7 @@ def test_customer_mandates_create_mandate(client, response):
 
 
 def test_update_customer_mandate(client, response):
-    response.post(
+    response.patch(
         'https://api.mollie.com/v2/customers/%s/mandates/%s' % (CUSTOMER_ID, MANDATE_ID),
         'customer_mandate_updated'
     )

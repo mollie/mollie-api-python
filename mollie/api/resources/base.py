@@ -6,7 +6,7 @@ from mollie.api.objects import List
 
 class Base(object):
     REST_CREATE = 'POST'
-    REST_UPDATE = 'POST'
+    REST_UPDATE = 'PATCH'
     REST_READ = 'GET'
     REST_LIST = 'GET'
     REST_DELETE = 'DELETE'
