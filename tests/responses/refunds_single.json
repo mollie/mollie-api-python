@@ -1,30 +1,30 @@
 {
-    "resource": "refund",
-    "id": "re_4qqhO89gsT",
-    "amount": {
-        "currency": "EUR",
-        "value": "5.95"
+  "resource": "refund",
+  "id": "re_4qqhO89gsT",
+  "amount": {
+    "currency": "EUR",
+    "value": "5.95"
+  },
+  "settlementAmount": {
+    "value": "10.00",
+    "currency": "EUR"
+  },
+  "status": "pending",
+  "createdAt": "2018-03-14T17:09:02.0Z",
+  "description": "Order",
+  "paymentId": "tr_7UhSN1zuXS",
+  "_links": {
+    "self": {
+      "href": "https://api.mollie.com/v2/payments/tr_7UhSN1zuXS/refunds/re_4qqhO89gsT",
+      "type": "application/hal+json"
     },
-    "settlementAmount": {
-        "value": "10.00",
-        "currency": "EUR"
+    "payment": {
+      "href": "https://api.mollie.com/v2/payments/tr_7UhSN1zuXS",
+      "type": "application/hal+json"
     },
-    "status": "pending",
-    "createdAt": "2018-03-14T17:09:02.0Z",
-    "description": "Order",
-    "paymentId": "tr_7UhSN1zuXS",
-    "_links": {
-        "self": {
-            "href": "https://api.mollie.com/v2/payments/tr_7UhSN1zuXS/refunds/re_4qqhO89gsT",
-            "type": "application/hal+json"
-        },
-        "payment": {
-            "href": "https://api.mollie.com/v2/payments/tr_7UhSN1zuXS",
-            "type": "application/hal+json"
-        },
-        "documentation": {
-            "href": "https://docs.mollie.com/reference/v2/refunds-api/get-refund",
-            "type": "text/html"
-        }
+    "documentation": {
+      "href": "https://docs.mollie.com/reference/v2/refunds-api/get-refund",
+      "type": "text/html"
     }
+  }
 }
