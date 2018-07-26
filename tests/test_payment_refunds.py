@@ -7,6 +7,7 @@ REFUND_ID = 're_4qqhO89gsT'
 def test_get_refund(client, response):
     """Retrieve a specific refund of a payment"""
     response.get('https://api.mollie.com/v2/payments/%s/refunds/%s' % (PAYMENT_ID, REFUND_ID), 'refunds_single')
+
     refund = client.payment_refunds.with_parent_id(PAYMENT_ID).get(REFUND_ID)
     assert refund.resource == 'refund'
     assert refund.id == REFUND_ID
@@ -23,6 +24,7 @@ def test_get_refund(client, response):
 def test_create_refund(client, response):
     """Create a payment refund of a payment"""
     response.post('https://api.mollie.com/v2/payments/%s/refunds' % PAYMENT_ID, 'refunds_single')
+    
     data = {
         'amount': {'value': '5.95', 'currency': 'EUR'}
     }
