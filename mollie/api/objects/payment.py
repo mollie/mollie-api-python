@@ -161,7 +161,7 @@ class Payment(Base):
     def get_amount_remaining(self):
         try:
             return float(self._get_property('amountRemaining'))
-         except TypeError:
+        except TypeError:
             return 0.0
 
     @property

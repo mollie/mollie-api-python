@@ -1,8 +1,10 @@
+from mollie.api.objects.chargeback import Chargeback
 from mollie.api.objects.list import List
 from mollie.api.objects.refund import Refund
 from mollie.api.objects.payment import Payment
 PAYMENT_ID = 'tr_7UhSN1zuXS'
 REFUND_ID = 're_4qqhO89gsT'
+CHARGEBACK_ID = 'chb_n9z0tp'
 
 
 def test_payments_all(client, response):
@@ -99,3 +101,18 @@ def test_cancel_payment(client, response):
     assert canceled_payment.is_canceled() is True
     assert canceled_payment.canceled_at == '2018-03-20T09:28:37+00:00'
     assert canceled_payment.id == PAYMENT_ID
+
+
+def test_get_chargebacks(client, response):
+    response.get('https://api.mollie.com/v2/payments/%s' % PAYMENT_ID, 'payments_create')
+    response.get('https://api.mollie.com/v2/payments/%s/chargebacks' % PAYMENT_ID, 'chargeback_list')
+
+    payment = client.payments.get(PAYMENT_ID)
+    chargebacks = payment.chargebacks
+
+    assert isinstance(chargebacks, List)
+    iterated = 0
+    for chargeback in chargebacks:
+        assert isinstance(chargeback, Chargeback)
+        iterated += 1
+    assert iterated == chargebacks.count
