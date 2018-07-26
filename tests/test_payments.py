@@ -41,8 +41,7 @@ def test_get_single_payment(client, response):
     response.get('https://api.mollie.com/v2/payments/%s' % PAYMENT_ID, 'payments_create')
     payment = client.payments.get(PAYMENT_ID)
 
-    assert payment.amount['value'] == '10.00'
-    assert payment.amount['currency'] == 'EUR'
+    assert payment.amount == {'value': '10.00', 'currency': 'EUR'}
     assert payment.description == 'Order #12345'
     assert payment.redirect_url == 'https://webshop.example.org/order/12345/'
     assert payment.webhook_url == 'https://webshop.example.org/payments/webhook/'
@@ -50,7 +49,7 @@ def test_get_single_payment(client, response):
     assert payment.expires_at == '2018-03-20T09:28:37+00:00'
     assert payment.profile_id == 'pfl_QkEhN94Ba'
     assert payment.method == 'ideal'
-    assert payment.metadata['order_id'] == '12345'
+    assert payment.metadata == {'order_id': '12345'}
     assert payment.sequence_type == 'oneoff'
     assert payment.profile_id == 'pfl_QkEhN94Ba'
     assert payment.is_open() is True
