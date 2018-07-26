@@ -38,10 +38,6 @@ class Payment(Base):
         except KeyError:
             return False
 
-    @property
-    def has_chargebacks(self):
-        return self._get_property('hasChargebacks') is not None
-
     def has_sequence_type_first(self):
         return self._get_property('sequenceType') == self.SEQUENCETYPE_FIRST
 
