@@ -17,7 +17,7 @@ def test_customer_mandates_all(client, response):
         assert mandate.id is not None
         iterated_mandate_ids.append(mandate.id)
     assert iterated == mandates.count, 'Unexpected amount of mandates retrieved'
-    assert len(set(iterated_mandate_ids)) == mandates.count, 'Expected unique mandate ids retrieved'
+    assert len(set(iterated_mandate_ids)) == mandates.count, 'Unexpected unique mandate ids retrieved'
 
 
 def test_get_customer_mandate_by_id(client, response):

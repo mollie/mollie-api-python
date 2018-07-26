@@ -18,8 +18,8 @@ def test_payments_all(client, response):
         assert isinstance(payment, Payment)
         assert payment.id is not None
         iterated_payment_ids.append(payment.id)
-    assert iterated == payments.count
-    assert len(set(iterated_payment_ids)) == payments.count
+    assert iterated == payments.count, 'Unexpected amount of payments retrieved'
+    assert len(set(iterated_payment_ids)) == payments.count, 'Unexpected unique payment ids retrieved'
 
 
 def test_create_payment(client, response):
