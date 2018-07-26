@@ -7,7 +7,7 @@ REFUND_ID = 're_4qqhO89gsT'
 CHARGEBACK_ID = 'chb_n9z0tp'
 
 
-def test_payments_all(client, response):
+def test_get_all_payments(client, response):
     response.get('https://api.mollie.com/v2/payments', 'payments_multiple')
 
     payments = client.payments.all()
@@ -59,7 +59,7 @@ def test_get_single_payment(client, response):
     assert payment.is_expired() is False
     assert payment.is_paid() is False
     assert payment.is_failed() is False
-    assert payment.has_refunds() is False
+    assert payment.has_refunds() is True
     assert payment.has_chargebacks() is False
     assert payment.has_sequence_type_first() is False
     assert payment.can_be_refunded() is False
@@ -94,6 +94,7 @@ def test_get_all_related_refunds_of_payment(client, response):
 
 
 def test_cancel_payment(client, response):
+    """Cancel existing payment"""
     response.delete('https://api.mollie.com/v2/payments/%s' % PAYMENT_ID, 'payments_canceled', 200)
 
     canceled_payment = client.payments.delete(PAYMENT_ID)
@@ -102,7 +103,8 @@ def test_cancel_payment(client, response):
     assert canceled_payment.id == PAYMENT_ID
 
 
-def test_get_chargebacks(client, response):
+def test_get_related_chargebacks(client, response):
+    """Get chargebacks related to payment id"""
     response.get('https://api.mollie.com/v2/payments/%s' % PAYMENT_ID, 'payments_create')
     response.get('https://api.mollie.com/v2/payments/%s/chargebacks' % PAYMENT_ID, 'chargeback_list')
 
