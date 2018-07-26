@@ -50,7 +50,7 @@ class Subscription(Base):
 
     @property
     def times(self):
-        return self._get_property('times')
+        return int(self._get_property('times'))
 
     @property
     def interval(self):

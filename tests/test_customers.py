@@ -1,3 +1,5 @@
+from mollie.api.objects.list import List
+from mollie.api.objects.subscription import Subscription
 CUSTOMER_ID = 'cst_8wmqcHMN4U'
 
 
@@ -69,3 +71,19 @@ def test_customer_get_mandates(client, response):
         assert mandate.__class__.__name__ == 'Mandate'
         iterated += 1
     assert iterated == mandates.count
+
+
+def test_get_all_subscription_from_customer_object(client, response):
+    response.get('https://api.mollie.com/v2/customers/%s/subscriptions' % CUSTOMER_ID,
+                 'subscription_all')
+    response.get('https://api.mollie.com/v2/customers/%s' % CUSTOMER_ID, 'customer_single')
+
+    customer = client.customers.get(CUSTOMER_ID)
+    subscriptions = customer.subscriptions
+    assert isinstance(subscriptions, List)
+
+    iterated = 0
+    for subscription in subscriptions:
+        assert isinstance(subscription, Subscription)
+        iterated += 1
+    assert iterated == subscriptions.count, 'Unexpected amount of subscriptions retrieved'

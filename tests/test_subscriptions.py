@@ -1,7 +1,8 @@
 from mollie.api.objects.list import List
 from mollie.api.objects.subscription import Subscription
 from mollie.api.objects.customer import Customer
-CUSTOMER_ID = 'cst_kEn1PlbGa'
+
+CUSTOMER_ID = 'cst_8wmqcHMN4U'
 SUBSCRIPTION_ID = 'sub_rVKGtNd6s3'
 
 
@@ -20,7 +21,8 @@ def test_customer_subscriptions_all(client, response):
         assert subscription.id is not None
         iterated_subscription_ids.append(subscription.id)
     assert iterated == subscriptions.count, 'Unexpected amount of subscriptions retrieved'
-    assert len(set(iterated_subscription_ids)) == subscriptions.count, 'Expected unique subscription ids retrieved'
+    assert len(
+        set(iterated_subscription_ids)) == subscriptions.count, 'Unexpected amount of unique subscription ids retrieved'
 
 
 def test_get_customer_subscription_by_id(client, response):
@@ -47,13 +49,13 @@ def test_get_customer_subscription_by_id(client, response):
     assert subscription.webhook_url == 'https://webshop.example.org/payments/webhook'
 
 
-def test_get_all_subscription_by_customer_object(client, response):
+def test_get_all_customer_subscriptions_from_customer_object(client, response):
     response.get('https://api.mollie.com/v2/customers/%s/subscriptions' % CUSTOMER_ID,
                  'subscription_all')
     response.get('https://api.mollie.com/v2/customers/%s' % CUSTOMER_ID, 'customer_single')
 
     customer = client.customers.get(CUSTOMER_ID)
-    subscriptions = customer.subscriptions
+    subscriptions = client.customer_subscriptions.on(customer).all()
     assert isinstance(subscriptions, List)
 
     iterated = 0
@@ -61,6 +63,17 @@ def test_get_all_subscription_by_customer_object(client, response):
         assert isinstance(subscription, Subscription)
         iterated += 1
     assert iterated == subscriptions.count, 'Unexpected amount of subscriptions retrieved'
+
+
+def test_get_one_customer_subscription_from_customer_object(client, response):
+    response.get('https://api.mollie.com/v2/customers/%s/subscriptions/%s' % (CUSTOMER_ID, SUBSCRIPTION_ID),
+                 'subscription_single')
+    response.get('https://api.mollie.com/v2/customers/%s' % CUSTOMER_ID, 'customer_single')
+
+    customer = client.customers.get(CUSTOMER_ID)
+    subscription = client.customer_subscriptions.on(customer).get(SUBSCRIPTION_ID)
+    assert subscription.customer.id == CUSTOMER_ID
+    assert isinstance(subscription, Subscription)
 
 
 def test_customer_subscription_get_related_customer(client, response):

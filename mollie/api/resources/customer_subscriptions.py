@@ -21,7 +21,11 @@ class CustomerSubscriptions(Base):
         return super(CustomerSubscriptions, self).get(subscription_id)
 
     def delete(self, subscription_id):
-        """Override the delete function of base.py so it returns a response"""
+        """Cancel subscription and return the subscription object.
+
+        Deleting a subscription causes the subscription status to changed to 'canceled'.
+        The updated subscription object is returned.
+        """
         if not subscription_id or not subscription_id.startswith(self.RESOURCE_ID_PREFIX):
             raise Error(
                 'Invalid subscription ID: "%s". A subscription ID should start with "%s".' % (
