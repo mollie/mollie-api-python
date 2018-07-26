@@ -19,8 +19,8 @@ def test_get_chargeback_by_payment(client, response):
         assert isinstance(chargeback, Chargeback)
         iterated += 1
         iterated_chargeback_ids.append(chargeback.id)
-    assert iterated == chargebacks.count
-    assert len(set(iterated_chargeback_ids)) == chargebacks.count
+    assert iterated == chargebacks.count, 'Unexpected amount of chargebacks retrieved'
+    assert len(set(iterated_chargeback_ids)) == chargebacks.count, 'Expected unique chargeback ids retrieved'
 
 
 def test_get_single_chargeback(client, response):
@@ -53,5 +53,5 @@ def test_get_all_chargebacks(client, response):
         assert isinstance(chargeback, Chargeback)
         iterated += 1
         iterated_chargeback_ids.append(chargeback.id)
-    assert iterated == chargebacks.count
-    assert len(set(iterated_chargeback_ids)) == chargebacks.count
+    assert iterated == chargebacks.count, 'Unexpected amount of chargebacks retrieved'
+    assert len(set(iterated_chargeback_ids)) == chargebacks.count, 'Expected unique chargeback ids retrieved'
