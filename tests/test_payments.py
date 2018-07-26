@@ -69,13 +69,13 @@ def test_get_single_payment(client, response):
     assert payment.is_open() is True
     assert payment.is_pending() is False
     assert payment.is_canceled() is False
-    assert payment.is_cancelable() is False
+    assert payment.is_cancelable is False
     assert payment.is_expired() is False
     assert payment.is_paid() is False
     assert payment.is_failed() is False
     assert payment.has_refunds() is True
     assert payment.has_sequence_type_first() is False
-    assert payment.can_be_refunded() is False
+    assert payment.can_be_refunded is False
     assert payment.has_sequence_type_recurring() is False
     assert payment.checkout_url == 'https://www.mollie.com/payscreen/select-method/7UhSN1zuXS'
     assert payment.resource == 'payment'
