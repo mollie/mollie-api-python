@@ -5,7 +5,8 @@ PAYMENT_ID = 'tr_7UhSN1zuXS'
 CHARGEBACK_ID = 'chb_n9z0tp'
 
 
-def test_get_chargeback_by_payment(client, response):
+def test_get_payment_chargeback_by_payment_id(client, response):
+    """Get chargebacks relevant to payment by payment id"""
     response.get('https://api.mollie.com/v2/payments/%s/chargebacks' % PAYMENT_ID, 'chargeback_list')
 
     chargebacks = client.payment_chargebacks.with_parent_id(PAYMENT_ID).all()
@@ -24,7 +25,8 @@ def test_get_chargeback_by_payment(client, response):
         set(iterated_chargeback_ids)) == chargebacks.count, 'Unexpected amount of unique chargeback ids retrieved'
 
 
-def test_get_single_chargeback(client, response):
+def test_get_single_payment_chargeback(client, response):
+    """Get a single chargeback relevant to payment by payment id"""
     response.get('https://api.mollie.com/v2/payments/%s/chargebacks/%s' % (PAYMENT_ID, CHARGEBACK_ID),
                  'chargeback_single')
 
@@ -40,26 +42,8 @@ def test_get_single_chargeback(client, response):
     assert chargeback.payment_id == PAYMENT_ID
 
 
-def test_get_all_chargebacks(client, response):
-    response.get('https://api.mollie.com/v2/chargebacks', 'chargeback_list')
-
-    chargebacks = client.chargebacks.all()
-    assert chargebacks.count == 1
-    assert isinstance(chargebacks, List)
-
-    iterated = 0
-    iterated_chargeback_ids = []
-    for chargeback in chargebacks:
-        assert isinstance(chargeback, Chargeback)
-        assert chargeback.id is not None
-        iterated += 1
-        iterated_chargeback_ids.append(chargeback.id)
-    assert iterated == chargebacks.count, 'Unexpected amount of chargebacks retrieved'
-    assert len(
-        set(iterated_chargeback_ids)) == chargebacks.count, 'Unexpected amount of unique chargeback ids retrieved'
-
-
-def test_get_all_chargebacks_by_payment_object(client, response):
+def test_get_all_payment_chargebacks_by_payment_object(client, response):
+    """Get all chargebacks relevant to payment object"""
     response.get('https://api.mollie.com/v2/payments/%s/chargebacks' % PAYMENT_ID, 'chargeback_list')
     response.get('https://api.mollie.com/v2/payments/%s' % PAYMENT_ID, 'payments_create')
 
@@ -80,7 +64,8 @@ def test_get_all_chargebacks_by_payment_object(client, response):
         set(iterated_chargeback_ids)) == chargebacks.count, 'Unexpected amount of unique chargeback ids retrieved'
 
 
-def test_get_one_chargeback_by_payment_object(client, response):
+def test_get_single_payment_chargeback_by_payment_object(client, response):
+    """Get a single chargeback relevant to payment object"""
     response.get('https://api.mollie.com/v2/payments/%s/chargebacks/%s' % (PAYMENT_ID, CHARGEBACK_ID),
                  'chargeback_single')
     response.get('https://api.mollie.com/v2/payments/%s' % PAYMENT_ID, 'payments_create')
