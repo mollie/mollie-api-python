@@ -18,8 +18,8 @@ def test_list_all_refunds(client, response):
         iterated += 1
         assert refund.id is not None
         iterated_refund_ids.append(refund.id)
-    assert iterated == refunds.count
-    assert len(set(iterated_refund_ids)) == refunds.count
+    assert iterated == refunds.count, 'Unexpected amount of refunds retrieved'
+    assert len(set(iterated_refund_ids)) == refunds.count, 'Unexpected unique refund ids retrieved'
 
 
 def test_list_all_refunds_of_payment(client, response):
@@ -38,8 +38,8 @@ def test_list_all_refunds_of_payment(client, response):
         iterated += 1
         assert refund.id is not None
         iterated_refund_ids.append(refund.id)
-    assert iterated == refunds.count
-    assert len(set(iterated_refund_ids)) == refunds.count
+    assert iterated == refunds.count, 'Unexpected amount of refunds retrieved'
+    assert len(set(iterated_refund_ids)) == refunds.count, 'Expected unique refund ids retrieved'
 
 
 def test_get_refund(client, response):
