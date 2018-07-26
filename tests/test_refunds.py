@@ -71,10 +71,7 @@ def test_create_refund(client, response):
 
 def test_cancel_refund(client, response):
     """Cancel a refund of a payment"""
-    response.get('https://api.mollie.com/v2/payments/%s/refunds/%s' % (PAYMENT_ID, REFUND_ID), 'refunds_single')
     response.delete('https://api.mollie.com/v2/payments/%s/refunds/%s' % (PAYMENT_ID, REFUND_ID), 'empty')
 
-    refund = client.payment_refunds.with_parent_id(PAYMENT_ID).get(REFUND_ID)
-    canceled_refund = refund.cancel()
+    canceled_refund = client.payment_refunds.with_parent_id(PAYMENT_ID).delete(REFUND_ID)
     assert canceled_refund == {}
-    assert isinstance(refund, Refund)

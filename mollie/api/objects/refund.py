@@ -50,11 +50,3 @@ class Refund(Base):
     @property
     def payment_id(self):
         return self._get_property('paymentId')
-
-    def cancel(self):
-        try:
-            url = self['_links']['self']['href']
-        except KeyError:
-            return None
-        resp = self._resource.perform_api_call(self._resource.REST_DELETE, url)
-        return Refund(resp)
