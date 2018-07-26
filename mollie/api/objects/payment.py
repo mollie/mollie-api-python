@@ -14,47 +14,33 @@ class Payment(Base):
     SEQUENCETYPE_FIRST = 'first'
     SEQUENCETYPE_RECURRING = 'recurring'
 
-    @property
     def is_open(self):
         return self._get_property('status') == self.STATUS_OPEN
 
-    @property
     def is_pending(self):
         return self._get_property('status') == self.STATUS_PENDING
 
-    @property
     def is_canceled(self):
         return self._get_property('status') == self.STATUS_CANCELED
 
-    @property
     def is_expired(self):
         return self._get_property('status') == self.STATUS_EXPIRED
 
-    @property
     def is_paid(self):
         return self._get_property('paidAt') is not None
 
-
-    @property
     def is_failed(self):
         return self._get_property('status') == self.STATUS_FAILED
 
-    @property
     def has_refunds(self):
         try:
             return self['_links']['refunds'] is not None
         except KeyError:
             return False
 
-    @property
-    def has_chargebacks(self):
-        return self._get_property('hasChargebacks') is not None
-
-    @property
     def has_sequence_type_first(self):
         return self._get_property('sequenceType') == self.SEQUENCETYPE_FIRST
 
-    @property
     def has_sequence_type_recurring(self):
         return self._get_property('sequenceType') == self.SEQUENCETYPE_RECURRING
 
@@ -87,7 +73,7 @@ class Payment(Base):
 
     @property
     def is_cancelable(self):
-        return self['isCancelable']
+        return self._get_property('isCancelable')
 
     @property
     def paid_at(self):
@@ -167,24 +153,15 @@ class Payment(Base):
     def get_amount_refunded(self):
         try:
             return float(self._get_property('amountRefunded'))
-        except KeyError:
+        except TypeError:
             return 0.0
 
     @property
     def get_amount_remaining(self):
-        if self.can_be_refunded:
-            return float(self._get_property('amountRemaining'))
-        return 0.0
-
-    @property
-    def chargebacks(self):
-        from .chargeback import Chargeback
         try:
-            url = self['_links']['chargebacks']['href']
-        except KeyError:
-            return None
-        resp = self._resource.perform_api_call(self._resource.REST_READ, url)
-        return List(resp, Chargeback)
+            return float(self._get_property('amountRemaining'))
+        except TypeError:
+            return 0.0
 
     @property
     def refunds(self):
@@ -196,3 +173,12 @@ class Payment(Base):
         resp = self._resource.perform_api_call(self._resource.REST_READ, url)
         return List(resp, Refund)
 
+    @property
+    def chargebacks(self):
+        from .chargeback import Chargeback
+        try:
+            url = self['_links']['chargebacks']['href']
+        except KeyError:
+            return None
+        resp = self._resource.perform_api_call(self._resource.REST_READ, url)
+        return List(resp, Chargeback)
