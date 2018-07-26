@@ -1,3 +1,4 @@
+from mollie.api.objects.list import List
 from mollie.api.objects.refund import Refund
 
 PAYMENT_ID = 'tr_7UhSN1zuXS'
@@ -24,13 +25,43 @@ def test_get_refund(client, response):
 def test_create_refund(client, response):
     """Create a payment refund of a payment"""
     response.post('https://api.mollie.com/v2/payments/%s/refunds' % PAYMENT_ID, 'refunds_single')
-    
+
     data = {
         'amount': {'value': '5.95', 'currency': 'EUR'}
     }
     refund = client.payment_refunds.with_parent_id(PAYMENT_ID).create(data)
     assert refund.id == REFUND_ID
     assert isinstance(refund, Refund)
+
+
+def test_get_single_refund_on_payment_object(client, response):
+    """Create a payment refund of a payment"""
+    response.get('https://api.mollie.com/v2/payments/%s' % PAYMENT_ID, 'payments_create')
+    response.get('https://api.mollie.com/v2/payments/%s/refunds/%s' % (PAYMENT_ID, REFUND_ID), 'refunds_single')
+    payment = client.payments.get(PAYMENT_ID)
+    refund = client.payment_refunds.on(payment).get(REFUND_ID)
+    assert refund.id == REFUND_ID
+    assert isinstance(refund, Refund)
+
+
+def test_get_all_refunds_on_payment_object(client, response):
+    """Create all payment refunds of a payment"""
+    response.get('https://api.mollie.com/v2/payments/%s' % PAYMENT_ID, 'payments_create')
+    response.get('https://api.mollie.com/v2/payments/%s/refunds' % PAYMENT_ID, 'refunds_multiple')
+    payment = client.payments.get(PAYMENT_ID)
+    refunds = client.payment_refunds.on(payment).all()
+    assert refunds.count == 1
+    assert isinstance(refunds, List)
+
+    iterated = 0
+    iterated_refund_ids = []
+    for refund in refunds:
+        assert isinstance(refund, Refund)
+        assert refund.id is not None
+        iterated += 1
+        iterated_refund_ids.append(refund.id)
+    assert iterated == refunds.count, 'Unexpected amount of refunds retrieved'
+    assert len(set(iterated_refund_ids)) == refunds.count, 'Unexpected amount of unique refund ids retrieved'
 
 
 def test_cancel_refund(client, response):
