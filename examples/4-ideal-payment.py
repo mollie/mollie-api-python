@@ -13,7 +13,7 @@ import mollie
 from app import database_write
 
 
-def main ():
+def main():
     try:
         #
         # Initialize the Mollie API library with your API key.
@@ -23,7 +23,6 @@ def main ():
         api_key = os.environ.get('MOLLIE_API_KEY', 'test_test')
         mollie_client = mollie.api.Client()
         mollie.set_api_key(api_key)
-
 
         #
         # First, let the customer pick the bank in a simple HTML form. This step is actually optional.
