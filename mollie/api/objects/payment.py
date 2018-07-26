@@ -185,3 +185,14 @@ class Payment(Base):
             return None
         resp = self._resource.perform_api_call(self._resource.REST_READ, url)
         return List(resp, Chargeback)
+
+    @property
+    def refunds(self):
+        from .refund import Refund
+        try:
+            url = self['_links']['refunds']['href']
+        except KeyError:
+            return None
+        resp = self._resource.perform_api_call(self._resource.REST_READ, url)
+        return List(resp, Refund)
+

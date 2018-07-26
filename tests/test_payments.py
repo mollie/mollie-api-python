@@ -1,4 +1,9 @@
+from mollie.api.objects.list import List
+from mollie.api.objects.refund import Refund
+
 BOOLEANS = [True, False]
+PAYMENT_ID = 'tr_7UhSN1zuXS'
+REFUND_ID = 're_4qqhO89gsT'
 
 
 def test_payments_all(client, response):
@@ -70,4 +75,22 @@ def test_create_payment(client, response):
     assert payment.is_paid in BOOLEANS
     assert payment.is_failed in BOOLEANS
 
-# TODO: get payments by customer id and payment id
+
+def test_get_all_related_refunds_of_payment(client, response):
+    """Retrieve a list of all refunds related to a payment"""
+    response.get('https://api.mollie.com/v2/payments/%s' % PAYMENT_ID, 'payments_create')
+    response.get('https://api.mollie.com/v2/payments/%s/refunds/%s' % (PAYMENT_ID, REFUND_ID), 'refunds_multiple')
+    payment = client.payments.get(PAYMENT_ID)
+    refunds = payment.refunds
+    assert refunds.count == 1
+    assert isinstance(refunds, List)
+
+    iterated = 0
+    iterated_refund_ids = []
+    for refund in refunds:
+        assert isinstance(refund, Refund)
+        iterated += 1
+        assert refund.id is not None
+        iterated_refund_ids.append(refund.id)
+    assert iterated == refunds.count, 'Unexpected amount of refunds retrieved'
+    assert len(set(iterated_refund_ids)) == refunds.count, 'Expected unique refund ids retrieved'

@@ -12,4 +12,4 @@ class PaymentRefunds(Refunds):
         return self
 
     def on(self, payment):
-        return self.with_parent_id(payment['id'])
+        return self.with_parent_id(payment.id)
