@@ -18,8 +18,5 @@ class Payments(Base):
             )
         return super(Payments, self).get(payment_id)
 
-    def refunds(self, payment):
-        return self.client.payment_refunds.on(payment)
-
     def refund(self, payment, data=None, **params):
         return self.refunds(payment).create(data, **params)
