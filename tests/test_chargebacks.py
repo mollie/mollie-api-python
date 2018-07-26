@@ -6,7 +6,6 @@ CHARGEBACK_ID = 'chb_n9z0tp'
 
 def test_get_chargeback_by_payment(client, response):
     response.get('https://api.mollie.com/v2/payments/%s/chargebacks' % PAYMENT_ID, 'chargeback_list')
-    # response.get('https://api.mollie.com/v2/payments/%s' % PAYMENT_ID, 'payments_create')
 
     chargebacks = client.payment_chargebacks.with_parent_id(PAYMENT_ID).all()
     assert chargebacks.count == 1
@@ -20,7 +19,7 @@ def test_get_chargeback_by_payment(client, response):
         iterated += 1
         iterated_chargeback_ids.append(chargeback.id)
     assert iterated == chargebacks.count, 'Unexpected amount of chargebacks retrieved'
-    assert len(set(iterated_chargeback_ids)) == chargebacks.count, 'Expected unique chargeback ids retrieved'
+    assert len(set(iterated_chargeback_ids)) == chargebacks.count, 'Unexpected unique chargeback ids retrieved'
 
 
 def test_get_single_chargeback(client, response):
@@ -54,4 +53,4 @@ def test_get_all_chargebacks(client, response):
         iterated += 1
         iterated_chargeback_ids.append(chargeback.id)
     assert iterated == chargebacks.count, 'Unexpected amount of chargebacks retrieved'
-    assert len(set(iterated_chargeback_ids)) == chargebacks.count, 'Expected unique chargeback ids retrieved'
+    assert len(set(iterated_chargeback_ids)) == chargebacks.count, 'Unexpected unique chargeback ids retrieved'
