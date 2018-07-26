@@ -12,12 +12,12 @@ class List(Base):
         return self.object_type.__name__.lower() + 's'
 
     def __iter__(self):
-        """Implement iterator logic."""
+        """Implement iterator interface."""
         self.current = None
         return self
 
     def __next__(self):
-        """Implement iterator logic."""
+        """Implement iterator interface."""
         if self.current is None:
             self.current = 0
         else:
