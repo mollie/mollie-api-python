@@ -76,7 +76,7 @@ def test_create_payment(client, response):
     assert payment.is_failed in BOOLEANS
 
 
-def test_list_all_refunds_of_payment(client, response):
+def test_get_all_related_refunds_of_payment(client, response):
     """Retrieve a list of all refunds related to a payment"""
     response.get('https://api.mollie.com/v2/payments/%s' % PAYMENT_ID, 'payments_create')
     response.get('https://api.mollie.com/v2/payments/%s/refunds/%s' % (PAYMENT_ID, REFUND_ID), 'refunds_multiple')
