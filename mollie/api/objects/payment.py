@@ -1,4 +1,5 @@
 from .base import Base
+from .list import List
 
 
 class Payment(Base):
@@ -174,3 +175,13 @@ class Payment(Base):
         if self.can_be_refunded:
             return float(self._get_property('amountRemaining'))
         return 0.0
+
+    @property
+    def chargebacks(self):
+        from .chargeback import Chargeback
+        try:
+            url = self['_links']['chargebacks']['href']
+        except KeyError:
+            return None
+        resp = self._resource.perform_api_call(self._resource.REST_READ, url)
+        return List(resp, Chargeback)

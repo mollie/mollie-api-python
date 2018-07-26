@@ -6,10 +6,9 @@ CHARGEBACK_ID = 'chb_n9z0tp'
 
 def test_get_chargeback_by_payment(client, response):
     response.get('https://api.mollie.com/v2/payments/%s/chargebacks' % PAYMENT_ID, 'chargeback_list')
-    response.get('https://api.mollie.com/v2/payments/%s' % PAYMENT_ID, 'payments_create')
+    # response.get('https://api.mollie.com/v2/payments/%s' % PAYMENT_ID, 'payments_create')
 
-    payment = client.payments.get(PAYMENT_ID)
-    chargebacks = client.payments.chargebacks(payment).all()
+    chargebacks = client.payment_chargebacks.with_parent_id(PAYMENT_ID).all()
     assert chargebacks.count == 1
     assert isinstance(chargebacks, List)
 
@@ -27,10 +26,8 @@ def test_get_chargeback_by_payment(client, response):
 def test_get_single_chargeback(client, response):
     response.get('https://api.mollie.com/v2/payments/%s/chargebacks/%s' % (PAYMENT_ID, CHARGEBACK_ID),
                  'chargeback_single')
-    response.get('https://api.mollie.com/v2/payments/%s' % PAYMENT_ID, 'payments_create')
 
-    payment = client.payments.get(PAYMENT_ID)
-    chargeback = client.payments.chargebacks(payment).get(CHARGEBACK_ID)
+    chargeback = client.payment_chargebacks.with_parent_id(PAYMENT_ID).get(CHARGEBACK_ID)
     assert isinstance(chargeback, Chargeback)
     assert chargeback.id == CHARGEBACK_ID
     assert chargeback.amount['currency'] == 'USD'
