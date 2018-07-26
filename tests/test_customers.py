@@ -66,7 +66,7 @@ def test_customer_get(client, response):
     assert customer.name == 'Customer A'
     assert customer.email == 'customer@example.org'
     assert customer.created_at == '2018-04-06T13:10:19.0Z'
-    assert customer.metadata['orderId'] == '12345'
+    assert customer.metadata == {'orderId': '12345'}
     assert customer.locale == 'nl_NL'
     assert customer.mode == 'test'
 
