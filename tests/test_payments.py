@@ -9,6 +9,7 @@ CHARGEBACK_ID = 'chb_n9z0tp'
 
 
 def test_get_all_payments(client, response):
+    """Retrieve all existing payments"""
     response.get('https://api.mollie.com/v2/payments', 'payments_multiple')
 
     payments = client.payments.all()
@@ -66,6 +67,14 @@ def test_get_single_payment(client, response):
     assert payment.metadata == {'order_id': '12345'}
     assert payment.sequence_type == 'oneoff'
     assert payment.profile_id == 'pfl_QkEhN94Ba'
+    assert payment.can_be_refunded is False
+    assert payment.checkout_url == 'https://www.mollie.com/payscreen/select-method/7UhSN1zuXS'
+    assert payment.resource == 'payment'
+    assert payment.id == PAYMENT_ID
+    assert payment.mode == 'test'
+    assert payment.status == 'open'
+    assert payment.get_amount_refunded == 0.0
+    assert payment.get_amount_remaining == 0.0
     assert payment.is_open() is True
     assert payment.is_pending() is False
     assert payment.is_canceled() is False
@@ -75,15 +84,7 @@ def test_get_single_payment(client, response):
     assert payment.is_failed() is False
     assert payment.has_refunds() is True
     assert payment.has_sequence_type_first() is False
-    assert payment.can_be_refunded is False
     assert payment.has_sequence_type_recurring() is False
-    assert payment.checkout_url == 'https://www.mollie.com/payscreen/select-method/7UhSN1zuXS'
-    assert payment.resource == 'payment'
-    assert payment.id == PAYMENT_ID
-    assert payment.mode == 'test'
-    assert payment.status == 'open'
-    assert payment.get_amount_refunded == 0.0
-    assert payment.get_amount_remaining == 0.0
 
 
 def test_get_all_related_refunds_of_payment(client, response):
