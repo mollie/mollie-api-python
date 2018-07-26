@@ -1,6 +1,8 @@
+from mollie.api.objects.customer import Customer
 from mollie.api.objects.list import List
 from mollie.api.objects.mandate import Mandate
 from mollie.api.objects.subscription import Subscription
+
 CUSTOMER_ID = 'cst_8wmqcHMN4U'
 
 
@@ -13,14 +15,8 @@ def test_create_customer(client, response):
         'email': 'customer@example.org',
         'locale': 'nl_NL',
     })
-    assert customer.name == 'Customer A'
-    assert customer.email == 'customer@example.org'
-    assert customer.id is not None
-    assert customer.resource == 'customer'
-    assert customer.created_at is not None
-    assert customer.metadata is None
-    assert customer.locale == 'nl_NL'
-    assert customer.mode == 'test'
+    assert isinstance(customer, Customer)
+    assert customer.id == CUSTOMER_ID
 
 
 def test_update_customer(client, response):
@@ -57,14 +53,24 @@ def test_customers_all(client, response):
         iterated += 1
         assert customer.id is not None
         iterated_customer_ids.append(customer.id)
-     assert iterated == customer.count, 'Unexpected amount of customer retrieved'
-     assert len(set(iterated_customer_ids)) == customers.count, 'Unexpected amount of unique customer ids retrieved'
+    assert iterated == customers.count, 'Unexpected amount of customer retrieved'
+    assert len(set(iterated_customer_ids)) == customers.count, 'Unexpected amount of unique customer ids retrieved'
 
 
 def test_customer_get(client, response):
     """Retrieve a single customer."""
-    pass    
-    
+    response.get('https://api.mollie.com/v2/customers/%s' % CUSTOMER_ID, 'customer_new')
+    customer = client.customers.get(CUSTOMER_ID)
+    assert isinstance(customer, Customer)
+    assert customer.id == CUSTOMER_ID
+    assert customer.name == 'Customer A'
+    assert customer.email == 'customer@example.org'
+    assert customer.created_at == '2018-04-06T13:10:19.0Z'
+    assert customer.metadata['orderId'] == '12345'
+    assert customer.locale == 'nl_NL'
+    assert customer.mode == 'test'
+
+
 def test_customer_get_related_mandates(client, response):
     """Retrieve related mandates for a customer."""
     response.get('https://api.mollie.com/v2/customers/%s' % CUSTOMER_ID, 'customer_updated')
