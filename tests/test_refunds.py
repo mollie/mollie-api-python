@@ -24,10 +24,10 @@ def test_list_all_refunds(client, response):
 
 def test_list_all_refunds_of_payment(client, response):
     """Retrieve a list of all refunds of a payment"""
-    response.get('https://api.mollie.com/v2/payments/%s/refunds' % PAYMENT_ID, 'refunds_multiple')
     response.get('https://api.mollie.com/v2/payments/%s' % PAYMENT_ID, 'payments_create')
+    response.get('https://api.mollie.com/v2/payments/%s/refunds/%s' % (PAYMENT_ID, REFUND_ID), 'refunds_multiple')
     payment = client.payments.get(PAYMENT_ID)
-    refunds = client.payments.refunds(payment).all()
+    refunds = payment.refunds
     assert refunds.count == 1
     assert isinstance(refunds, List)
 
@@ -45,10 +45,7 @@ def test_list_all_refunds_of_payment(client, response):
 def test_get_refund(client, response):
     """Retrieve a specific refund of a payment"""
     response.get('https://api.mollie.com/v2/payments/%s/refunds/%s' % (PAYMENT_ID, REFUND_ID), 'refunds_single')
-    response.get('https://api.mollie.com/v2/payments/%s' % PAYMENT_ID, 'payments_create')
-
-    payment = client.payments.get(PAYMENT_ID)
-    refund = client.payments.refunds(payment).get(REFUND_ID)
+    refund = client.payment_refunds.with_parent_id(PAYMENT_ID).get(REFUND_ID)
     assert refund.resource == 'refund'
     assert refund.id == REFUND_ID
     assert refund.amount['currency'] == 'EUR'
@@ -64,13 +61,10 @@ def test_get_refund(client, response):
 def test_create_refund(client, response):
     """Create a refund of a payment"""
     response.post('https://api.mollie.com/v2/payments/%s/refunds' % PAYMENT_ID, 'refunds_single')
-    response.get('https://api.mollie.com/v2/payments/%s' % PAYMENT_ID, 'payments_create')
-
-    payment = client.payments.get(PAYMENT_ID)
     data = {
         'amount': {'value': '5.95', 'currency': 'EUR'}
     }
-    refund = client.payments.refund(payment, data)
+    refund = client.payment_refunds.with_parent_id(PAYMENT_ID).create(data)
     assert refund.id == REFUND_ID
     assert isinstance(refund, Refund)
 
@@ -78,11 +72,9 @@ def test_create_refund(client, response):
 def test_cancel_refund(client, response):
     """Cancel a refund of a payment"""
     response.get('https://api.mollie.com/v2/payments/%s/refunds/%s' % (PAYMENT_ID, REFUND_ID), 'refunds_single')
-    response.get('https://api.mollie.com/v2/payments/%s' % PAYMENT_ID, 'payments_create')
     response.delete('https://api.mollie.com/v2/payments/%s/refunds/%s' % (PAYMENT_ID, REFUND_ID), 'empty')
 
-    payment = client.payments.get(PAYMENT_ID)
-    refund = client.payments.refunds(payment).get(REFUND_ID)
+    refund = client.payment_refunds.with_parent_id(PAYMENT_ID).get(REFUND_ID)
     canceled_refund = refund.cancel()
     assert canceled_refund == {}
     assert isinstance(refund, Refund)

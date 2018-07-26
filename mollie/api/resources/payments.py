@@ -17,6 +17,3 @@ class Payments(Base):
                 'Invalid payment ID: "%s". A payment ID should start with "%s".' % (payment_id, self.RESOURCE_ID_PREFIX)
             )
         return super(Payments, self).get(payment_id)
-
-    def refund(self, payment, data=None, **params):
-        return self.refunds(payment).create(data, **params)
