@@ -19,7 +19,11 @@ class Payments(Base):
         return super(Payments, self).get(payment_id)
 
     def delete(self, resource_id):
-        """Override the delete function of base.py so it returns a response"""
+        """Cancel payment and return the payment object.
+
+        Deleting a payment causes the payment status to change to canceled.
+        The updated payment object is returned.
+        """
         if not resource_id or not resource_id.startswith(self.RESOURCE_ID_PREFIX):
             raise Error(
                 'Invalid payment ID: "%s". A payment ID should start with "%s".' % (

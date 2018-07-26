@@ -38,6 +38,7 @@ class Payment(Base):
         except KeyError:
             return False
 
+    @property
     def has_chargebacks(self):
         return self._get_property('hasChargebacks') is not None
 
@@ -74,8 +75,9 @@ class Payment(Base):
     def status(self):
         return self._get_property('status')
 
+    @property
     def is_cancelable(self):
-        return self['isCancelable']
+        return self._get_property('isCancelable')
 
     @property
     def paid_at(self):
@@ -144,6 +146,7 @@ class Payment(Base):
         except KeyError:
             return None
 
+    @property
     def can_be_refunded(self):
         try:
             return self._get_property('amountRemaining') is not None
@@ -163,16 +166,6 @@ class Payment(Base):
             return float(self._get_property('amountRemaining'))
         except TypeError:
             return 0.0
-
-    @property
-    def chargebacks(self):
-        from .chargeback import Chargeback
-        try:
-            url = self['_links']['chargebacks']['href']
-        except KeyError:
-            return None
-        resp = self._resource.perform_api_call(self._resource.REST_READ, url)
-        return List(resp, Chargeback)
 
     @property
     def refunds(self):
