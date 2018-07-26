@@ -33,6 +33,11 @@ class ImprovedRequestsMock(responses.RequestsMock):
         body = self._get_body(filename)
         self.add(responses.DELETE, url, body=body, status=status)
 
+    def patch(self, url, filename, status=200):
+        """Setup a mock response for a PATCH request."""
+        body = self._get_body(filename)
+        self.add(responses.PATCH, url, body=body, status=status)
+
     def _get_body(self, filename):
         """Read the response fixture file and return it."""
         # TODO refactor

@@ -36,6 +36,17 @@ class Customer(Base):
         return self._get_property('createdAt')
 
     @property
+    def subscriptions(self):
+        """Return subscription object from the links attribute"""
+        from .subscription import Subscription
+        try:
+            url = self['_links']['subscriptions']['href']
+        except KeyError:
+            return None
+        resp = self._resource.perform_api_call(self._resource.REST_READ, url)
+        return List(resp, Subscription)
+
+    @property
     def mandates(self):
         """Return the mandate list referenced in the _links."""
         from .mandate import Mandate  # work around circular import

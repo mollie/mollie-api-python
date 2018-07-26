@@ -5,7 +5,9 @@
     "name": "Customer A",
     "email": "customer@example.org",
     "locale": "nl_NL",
-    "metadata": null,
+    "metadata": {
+        "orderId": "12345"
+    },
     "createdAt": "2018-04-06T13:10:19.0Z",
     "_links": {
         "self": {
