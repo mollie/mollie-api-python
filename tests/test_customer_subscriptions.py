@@ -49,7 +49,8 @@ def test_get_customer_subscription_by_id(client, response):
     assert subscription.webhook_url == 'https://webshop.example.org/payments/webhook'
 
 
-def test_get_all_customer_subscriptions_from_customer_object(client, response):
+def test_get_all_customer_subscriptions_by_customer_object(client, response):
+    """Retrieve all subscriptions related to customer"""
     response.get('https://api.mollie.com/v2/customers/%s/subscriptions' % CUSTOMER_ID,
                  'subscription_all')
     response.get('https://api.mollie.com/v2/customers/%s' % CUSTOMER_ID, 'customer_single')
@@ -65,7 +66,8 @@ def test_get_all_customer_subscriptions_from_customer_object(client, response):
     assert iterated == subscriptions.count, 'Unexpected amount of subscriptions retrieved'
 
 
-def test_get_one_customer_subscription_from_customer_object(client, response):
+def test_get_one_customer_subscription_by_customer_object(client, response):
+    """Retrieve specific subscription related to customer"""
     response.get('https://api.mollie.com/v2/customers/%s/subscriptions/%s' % (CUSTOMER_ID, SUBSCRIPTION_ID),
                  'subscription_single')
     response.get('https://api.mollie.com/v2/customers/%s' % CUSTOMER_ID, 'customer_single')
@@ -112,6 +114,7 @@ def test_create_customer_subscription(client, response):
 
 
 def test_update_customer_subscription(client, response):
+    """Update existing subscription of a customer"""
     response.patch('https://api.mollie.com/v2/customers/%s/subscriptions/%s' % (CUSTOMER_ID, SUBSCRIPTION_ID),
                    'subscription_updated')
 

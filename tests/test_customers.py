@@ -1,4 +1,5 @@
 from mollie.api.objects.list import List
+from mollie.api.objects.mandate import Mandate
 from mollie.api.objects.subscription import Subscription
 CUSTOMER_ID = 'cst_8wmqcHMN4U'
 
@@ -23,6 +24,7 @@ def test_create_customer(client, response):
 
 
 def test_update_customer(client, response):
+    """Update an existing customer"""
     response.patch('https://api.mollie.com/v2/customers/%s' % CUSTOMER_ID, 'customer_updated')
 
     updated_customer = client.customers.update(CUSTOMER_ID, {
@@ -34,6 +36,7 @@ def test_update_customer(client, response):
 
 
 def test_delete_customers(client, response):
+    """Delete a customer"""
     response.delete('https://api.mollie.com/v2/customers/%s' % CUSTOMER_ID, 'empty')
 
     deleted_customer = client.customers.delete('cst_8wmqcHMN4U')
@@ -41,6 +44,7 @@ def test_delete_customers(client, response):
 
 
 def test_customers_all(client, response):
+    """Retrieve a list of all existing customers"""
     response.get('https://api.mollie.com/v2/customers', 'customer_multiple')
 
     customers = client.customers.all()
@@ -65,15 +69,16 @@ def test_customer_get_mandates(client, response):
 
     customer = client.customers.get(CUSTOMER_ID)
     mandates = customer.mandates
-    assert mandates.__class__.__name__ == 'List'
+    assert isinstance(mandates, List)
     iterated = 0
     for mandate in mandates:
-        assert mandate.__class__.__name__ == 'Mandate'
+        assert isinstance(mandate, Mandate)
         iterated += 1
     assert iterated == mandates.count
 
 
-def test_get_all_subscription_from_customer_object(client, response):
+def test_get_all_subscription_by_customer_object(client, response):
+    """Retrieve all subscriptions related to customer"""
     response.get('https://api.mollie.com/v2/customers/%s/subscriptions' % CUSTOMER_ID,
                  'subscription_all')
     response.get('https://api.mollie.com/v2/customers/%s' % CUSTOMER_ID, 'customer_single')
