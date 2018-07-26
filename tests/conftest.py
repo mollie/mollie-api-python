@@ -34,7 +34,7 @@ class ImprovedRequestsMock(responses.RequestsMock):
         self.add(responses.DELETE, url, body=body, status=status)
 
     def patch(self, url, filename, status=200):
-        """Setup a mock response for a PATCB request."""
+        """Setup a mock response for a PATCH request."""
         body = self._get_body(filename)
         self.add(responses.PATCH, url, body=body, status=status)
 
