@@ -19,8 +19,8 @@ def test_customer_subscriptions_all(client, response):
         iterated += 1
         assert subscription.id is not None
         iterated_subscription_ids.append(subscription.id)
-    assert iterated == subscriptions.count
-    assert len(set(iterated_subscription_ids)) == subscriptions.count
+    assert iterated == subscriptions.count, 'Unexpected amount of subscriptions retrieved'
+    assert len(set(iterated_subscription_ids)) == subscriptions.count, 'Expected unique subscription ids retrieved'
 
 
 def test_get_customer_subscription_by_id(client, response):
@@ -54,12 +54,13 @@ def test_get_all_subscription_by_customer_object(client, response):
 
     customer = client.customers.get(CUSTOMER_ID)
     subscriptions = customer.subscriptions
-    assert subscriptions.__class__.__name__ == 'List'
+    assert isinstance(subscriptions, List)
+
     iterated = 0
     for subscription in subscriptions:
-        assert subscription.__class__.__name__ == "Subscription"
+        assert isinstance(subscription, Subscription)
         iterated += 1
-    assert iterated == subscriptions.count
+    assert iterated == subscriptions.count, 'Unexpected amount of subscriptions retrieved'
 
 
 def test_customer_subscription_get_related_customer(client, response):
