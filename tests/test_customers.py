@@ -48,20 +48,23 @@ def test_customers_all(client, response):
     response.get('https://api.mollie.com/v2/customers', 'customer_multiple')
 
     customers = client.customers.all()
+    assert isinstance(customers, List)
     assert customers.count == 3
     iterated = 0
+    iterated_customer_ids = []
     for customer in customers:
+        assert isinstance(customer, Customer)
         iterated += 1
         assert customer.id is not None
-        assert customer.mode is not None
-        assert customer.resource is not None
-        assert customer.name is not None
-        assert customer.email is not None
-        assert customer.locale is not None
-        assert customer.created_at is not None
-    assert iterated == 3
+        iterated_customer_ids.append(customer.id)
+     assert iterated == customer.count, 'Unexpected amount of customer retrieved'
+     assert len(set(iterated_customer_ids)) == customers.count, 'Unexpected amount of unique customer ids retrieved'
 
 
+def test_customer_get(client, response):
+    """Retrieve a single customer."""
+    pass    
+    
 def test_customer_get_related_mandates(client, response):
     """Retrieve related mandates for a customer."""
     response.get('https://api.mollie.com/v2/customers/%s' % CUSTOMER_ID, 'customer_updated')
