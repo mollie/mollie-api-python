@@ -62,7 +62,7 @@ def test_customers_all(client, response):
     assert iterated == 3
 
 
-def test_customer_get_mandates(client, response):
+def test_customer_get_related_mandates(client, response):
     """Retrieve related mandates for a customer."""
     response.get('https://api.mollie.com/v2/customers/%s' % CUSTOMER_ID, 'customer_updated')
     response.get('https://api.mollie.com/v2/customers/%s/mandates' % CUSTOMER_ID, 'customer_mandates_multiple')
@@ -77,8 +77,8 @@ def test_customer_get_mandates(client, response):
     assert iterated == mandates.count
 
 
-def test_get_all_subscription_by_customer_object(client, response):
-    """Retrieve all subscriptions related to customer"""
+def test_customer_get_related_subscriptions(client, response):
+    """Retrieve related subscriptions for a customer"""
     response.get('https://api.mollie.com/v2/customers/%s/subscriptions' % CUSTOMER_ID,
                  'subscription_all')
     response.get('https://api.mollie.com/v2/customers/%s' % CUSTOMER_ID, 'customer_single')
