@@ -41,7 +41,7 @@ def test_delete_customers(client, response):
 
 def test_customers_all(client, response):
     """Retrieve a list of all existing customers"""
-    response.get('https://api.mollie.com/v2/customers', 'customer_multiple')
+    response.get('https://api.mollie.com/v2/customers', 'customers_multiple')
 
     customers = client.customers.all()
     assert isinstance(customers, List)
