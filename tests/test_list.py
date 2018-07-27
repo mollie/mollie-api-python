@@ -5,7 +5,7 @@ from mollie.api.objects.method import Method
 
 
 def test_list_iterator_behaviour(client, response):
-    """Verify the behaviour of the List object in iterator curcumstances."""
+    """Verify the behaviour of the List object in iterator circumstances."""
     response.get('https://api.mollie.com/v2/methods', 'methods_multiple')
 
     methods = client.methods.all()
@@ -62,3 +62,6 @@ def test_list_multiple_api_calls(client, response):
     # now reverse the behaviour
     while customers.has_previous():
         customers = customers.get_previous()
+        all_customers_count -= customers.count
+
+    assert all_customers_count == 5
