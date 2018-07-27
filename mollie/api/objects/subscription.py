@@ -85,4 +85,3 @@ class Subscription(Base):
             return None
         resp = self._resource.perform_api_call(self._resource.REST_READ, url)
         return Customer(resp)
-

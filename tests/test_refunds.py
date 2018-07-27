@@ -18,5 +18,3 @@ def test_list_all_refunds(client, response):
         iterated_refund_ids.append(refund.id)
     assert iterated == refunds.count, 'Unexpected amount of refunds retrieved'
     assert len(set(iterated_refund_ids)) == refunds.count, 'Unexpected unique refund ids retrieved'
-
-
