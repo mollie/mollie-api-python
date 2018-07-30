@@ -28,18 +28,3 @@ def test_method_get(client, response):
     assert method.description == 'iDEAL'
     assert method.image_size1x == 'https://www.mollie.com/images/payscreen/methods/ideal.png'
     assert method.image_size2x == 'https://www.mollie.com/images/payscreen/methods/ideal%402x.png'
-
-
-def test_method_get_with_includes(client, response):
-    """Retrieve a single payment method with includes."""
-    response.get('https://api.mollie.com/v2/methods/ideal', 'method_get_ideal_with_includes')
-
-    method = client.methods.get('ideal', include='issuers')
-    assert len(method.issuers) == 11
-    iterated_issuer_ids = []
-    for issuer in method.issuers:
-        # TODO adapt code below when we refactor Issuer
-        assert issuer['id'] is not None
-        iterated_issuer_ids.append(issuer['id'])
-
-    assert len(set(iterated_issuer_ids)) == 11, 'Unexpected number of unique issuers'
