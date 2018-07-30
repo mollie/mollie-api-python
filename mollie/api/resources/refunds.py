@@ -1,5 +1,5 @@
 from .base import Base
-from mollie.api.error import Error
+from mollie.api.error import IdentifierValidationError
 from mollie.api.objects import Refund
 
 
@@ -14,7 +14,7 @@ class Refunds(Base):
 
     def get(self, refund_id, **params):
         if not refund_id or not refund_id.startswith(self.RESOURCE_ID_PREFIX):
-            raise Error(
+            raise IdentifierValidationError(
                 'Invalid refund ID: "%s". A refund ID should start with "%s".' % (refund_id, self.RESOURCE_ID_PREFIX)
             )
         return super(Refunds, self).get(refund_id)

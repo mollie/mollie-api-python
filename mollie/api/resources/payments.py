@@ -1,5 +1,5 @@
 from .base import Base
-from mollie.api.error import Error
+from mollie.api.error import IdentifierValidationError
 from mollie.api.objects import Payment
 
 
@@ -13,7 +13,7 @@ class Payments(Base):
 
     def get(self, payment_id, **params):
         if not payment_id or not payment_id.startswith(self.RESOURCE_ID_PREFIX):
-            raise Error(
+            raise IdentifierValidationError(
                 'Invalid payment ID: "%s". A payment ID should start with "%s".' % (
                     payment_id, self.RESOURCE_ID_PREFIX)
             )
@@ -26,7 +26,7 @@ class Payments(Base):
         The updated payment object is returned.
         """
         if not resource_id or not resource_id.startswith(self.RESOURCE_ID_PREFIX):
-            raise Error(
+            raise IdentifierValidationError(
                 'Invalid payment ID: "%s". A payment ID should start with "%s".' % (
                     resource_id, self.RESOURCE_ID_PREFIX))
         result = super(Payments, self).delete(resource_id)

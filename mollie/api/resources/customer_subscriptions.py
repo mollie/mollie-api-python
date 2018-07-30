@@ -1,5 +1,5 @@
 from .base import Base
-from mollie.api.error import Error
+from mollie.api.error import IdentifierValidationError
 from mollie.api.objects import Subscription
 
 
@@ -14,7 +14,7 @@ class CustomerSubscriptions(Base):
 
     def get(self, subscription_id, **params):
         if not subscription_id or not subscription_id.startswith(self.RESOURCE_ID_PREFIX):
-            raise Error(
+            raise IdentifierValidationError(
                 'Invalid subscription ID: "%s". A subscription ID should start with "%s".' % (
                     subscription_id, self.RESOURCE_ID_PREFIX)
             )
@@ -27,7 +27,7 @@ class CustomerSubscriptions(Base):
         The updated subscription object is returned.
         """
         if not subscription_id or not subscription_id.startswith(self.RESOURCE_ID_PREFIX):
-            raise Error(
+            raise IdentifierValidationError(
                 'Invalid subscription ID: "%s". A subscription ID should start with "%s".' % (
                     subscription_id, self.RESOURCE_ID_PREFIX)
             )
