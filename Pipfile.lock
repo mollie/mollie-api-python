@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "354a8b4fd38a5f495daa5e60f47f2eabfc6777873b9c0dc2ac0654a0dd1a711a"
+            "sha256": "a5135105496acb8a03be4bc33fa955ea7ba0be79ed3b0990370a594cb0f414d7"
         },
         "pipfile-spec": 6,
         "requires": {},
@@ -38,6 +38,14 @@
         "mollie-api-python": {
             "editable": true,
             "path": "."
+        },
+        "pycodestyle": {
+            "hashes": [
+                "sha256:cbc619d09254895b0d12c2c691e237b2e91e9b2ecf5e84c26b35400f93dcfb83",
+                "sha256:cbfca99bd594a10f674d0cd97a3d802a1fdef635d4361e1a2658de47ed261e3a"
+            ],
+            "index": "pypi",
+            "version": "==2.4.0"
         },
         "requests": {
             "hashes": [

@@ -21,8 +21,8 @@ def test_customer_subscriptions_all(client, response):
         assert subscription.id is not None
         iterated_subscription_ids.append(subscription.id)
     assert iterated == subscriptions.count, 'Unexpected amount of subscriptions retrieved'
-    assert len(
-        set(iterated_subscription_ids)) == subscriptions.count, 'Unexpected amount of unique subscription ids retrieved'
+    assert len(set(iterated_subscription_ids)) == subscriptions.count, \
+        'Unexpected amount of unique subscription ids retrieved'
 
 
 def test_get_customer_subscription_by_id(client, response):

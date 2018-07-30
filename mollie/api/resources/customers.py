@@ -14,7 +14,8 @@ class Customers(Base):
     def get(self, customer_id, **params):
         if not customer_id or not customer_id.startswith(self.RESOURCE_ID_PREFIX):
             raise Error(
-                'Invalid customer ID: "%s". A customer ID should start with "%s".' % (customer_id, self.RESOURCE_ID_PREFIX)
+                'Invalid customer ID: "%s". A customer ID should start with "%s".' % (
+                    customer_id, self.RESOURCE_ID_PREFIX)
             )
         return super(Customers, self).get(customer_id)
 

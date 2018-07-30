@@ -23,4 +23,3 @@ def test_get_all_chargebacks(client, response):
     assert iterated == chargebacks.count, 'Unexpected amount of chargebacks retrieved'
     assert len(
         set(iterated_chargeback_ids)) == chargebacks.count, 'Unexpected amount of unique chargeback ids retrieved'
-

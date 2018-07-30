@@ -16,7 +16,7 @@ class CustomerSubscriptions(Base):
         if not subscription_id or not subscription_id.startswith(self.RESOURCE_ID_PREFIX):
             raise Error(
                 'Invalid subscription ID: "%s". A subscription ID should start with "%s".' % (
-                subscription_id, self.RESOURCE_ID_PREFIX)
+                    subscription_id, self.RESOURCE_ID_PREFIX)
             )
         return super(CustomerSubscriptions, self).get(subscription_id)
 
