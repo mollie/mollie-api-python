@@ -1,0 +1,182 @@
+{
+  "_embedded": {
+    "methods": [
+      {
+        "resource": "method",
+        "id": "ideal",
+        "description": "iDEAL",
+        "image": {
+          "size1x": "https://www.mollie.com/images/payscreen/methods/ideal.png",
+          "size2x": "https://www.mollie.com/images/payscreen/methods/ideal%402x.png"
+        },
+        "_links": {
+          "self": {
+            "href": "https://api.mollie.com/v2/methods/ideal",
+            "type": "application/hal+json"
+          }
+        }
+      },
+      {
+        "resource": "method",
+        "id": "creditcard",
+        "description": "Credit card",
+        "image": {
+          "size1x": "https://www.mollie.com/images/payscreen/methods/creditcard.png",
+          "size2x": "https://www.mollie.com/images/payscreen/methods/creditcard%402x.png"
+        },
+        "_links": {
+          "self": {
+            "href": "https://api.mollie.com/v2/methods/creditcard",
+            "type": "application/hal+json"
+          }
+        }
+      },
+      {
+        "resource": "method",
+        "id": "paypal",
+        "description": "PayPal",
+        "image": {
+          "size1x": "https://www.mollie.com/images/payscreen/methods/paypal.png",
+          "size2x": "https://www.mollie.com/images/payscreen/methods/paypal%402x.png"
+        },
+        "_links": {
+          "self": {
+            "href": "https://api.mollie.com/v2/methods/paypal",
+            "type": "application/hal+json"
+          }
+        }
+      },
+      {
+        "resource": "method",
+        "id": "bancontact",
+        "description": "Bancontact",
+        "image": {
+          "size1x": "https://www.mollie.com/images/payscreen/methods/mistercash.png",
+          "size2x": "https://www.mollie.com/images/payscreen/methods/mistercash%402x.png"
+        },
+        "_links": {
+          "self": {
+            "href": "https://api.mollie.com/v2/methods/mistercash",
+            "type": "application/hal+json"
+          }
+        }
+      },
+      {
+        "resource": "method",
+        "id": "banktransfer",
+        "description": "Bank transfer",
+        "image": {
+          "size1x": "https://www.mollie.com/images/payscreen/methods/banktransfer.png",
+          "size2x": "https://www.mollie.com/images/payscreen/methods/banktransfer%402x.png"
+        },
+        "_links": {
+          "self": {
+            "href": "https://api.mollie.com/v2/methods/banktransfer",
+            "type": "application/hal+json"
+          }
+        }
+      },
+      {
+        "resource": "method",
+        "id": "sofort",
+        "description": "SOFORT Banking",
+        "image": {
+          "size1x": "https://www.mollie.com/images/payscreen/methods/sofort.png",
+          "size2x": "https://www.mollie.com/images/payscreen/methods/sofort%402x.png"
+        },
+        "_links": {
+          "self": {
+            "href": "https://api.mollie.com/v2/methods/sofort",
+            "type": "application/hal+json"
+          }
+        }
+      },
+      {
+        "resource": "method",
+        "id": "kbc",
+        "description": "KBC/CBC Payment Button",
+        "image": {
+          "size1x": "https://www.mollie.com/images/payscreen/methods/kbc.png",
+          "size2x": "https://www.mollie.com/images/payscreen/methods/kbc%402x.png"
+        },
+        "_links": {
+          "self": {
+            "href": "https://api.mollie.com/v2/methods/kbc",
+            "type": "application/hal+json"
+          }
+        }
+      },
+      {
+        "resource": "method",
+        "id": "belfius",
+        "description": "Belfius Pay Button",
+        "image": {
+          "size1x": "https://www.mollie.com/images/payscreen/methods/belfius.png",
+          "size2x": "https://www.mollie.com/images/payscreen/methods/belfius%402x.png"
+        },
+        "_links": {
+          "self": {
+            "href": "https://api.mollie.com/v2/methods/belfius",
+            "type": "application/hal+json"
+          }
+        }
+      },
+      {
+        "resource": "method",
+        "id": "inghomepay",
+        "description": "ING Home 'Pay",
+        "image": {
+          "size1x": "https://www.mollie.com/images/payscreen/methods/inghomepay.png",
+          "size2x": "https://www.mollie.com/images/payscreen/methods/inghomepay%402x.png"
+        },
+        "_links": {
+          "self": {
+            "href": "https://api.mollie.com/v2/methods/inghomepay",
+            "type": "application/hal+json"
+          }
+        }
+      },
+      {
+        "resource": "method",
+        "id": "bitcoin",
+        "description": "Bitcoin",
+        "image": {
+          "size1x": "https://www.mollie.com/images/payscreen/methods/bitcoin.png",
+          "size2x": "https://www.mollie.com/images/payscreen/methods/bitcoin%402x.png"
+        },
+        "_links": {
+          "self": {
+            "href": "https://api.mollie.com/v2/methods/bitcoin",
+            "type": "application/hal+json"
+          }
+        }
+      },
+      {
+        "resource": "method",
+        "id": "giftcard",
+        "description": "Gift cards",
+        "image": {
+          "size1x": "https://www.mollie.com/images/payscreen/methods/giftcard.png",
+          "size2x": "https://www.mollie.com/images/payscreen/methods/giftcard%402x.png"
+        },
+        "_links": {
+          "self": {
+            "href": "https://api.mollie.com/v2/methods/giftcard",
+            "type": "application/hal+json"
+          }
+        }
+      }
+    ]
+  },
+  "count": 11,
+  "_links": {
+    "documentation": {
+      "href": "https://docs.mollie.com/reference/v2/methods-api/list-methods",
+      "type": "text/html"
+    },
+    "self": {
+      "href": "https://api.mollie.com/v2/methods",
+      "type": "application/hal+json"
+    }
+  }
+}

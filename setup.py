@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='mollie-api-python',
-    version='1.4.1',
+    version='2.0.0a0',
     license='BSD',
     packages=find_packages(),
     include_package_data=True,
@@ -22,4 +22,7 @@ setup(
         'Programming Language :: Python',
         'Programming Language :: Python :: 3',
     ],
+    setup_requires=["pytest-runner", ],
+    tests_require=["pytest", ],
+
 )

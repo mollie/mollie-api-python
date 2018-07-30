@@ -1,4 +1,5 @@
 import os
+
 import flask
 
 app = flask.Flask(__name__)
@@ -29,6 +30,7 @@ def run_example(example=None):
     if example not in examples:
         flask.abort(404, 'Example does not exist')
     return __import__(example).main()
+
 
 if __name__ == "__main__":
     app.debug = True

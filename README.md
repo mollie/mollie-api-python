@@ -41,20 +41,20 @@ To successfully receive a payment, these steps should be implemented:
 Requiring the Mollie API Client.
 
 ```python
-import Mollie
+import mollie
 ```
 
 Initializing the Mollie API client, and setting your API key.
 
 ```python
-mollie = Mollie.API.Client()
-mollie.setApiKey('test_dHar4XY7LxsDOtmnkVtjNVWXLSlXsM')
+mollie_client = mollie.api.Client()
+mollie_client.set_api_key('test_dHar4XY7LxsDOtmnkVtjNVWXLSlXsM')
 ```
 
 Creating a new payment.
 
 ```python
-payment = mollie.payments.create({
+payment = mollie_client.payments.create({
     'amount':      10.00,
     'description': 'My first API payment',
     'redirectUrl': 'https://webshop.example.org/order/12345/',
@@ -65,10 +65,10 @@ payment = mollie.payments.create({
 Retrieving a payment.
 
 ```python
-payment = mollie.payments.get(payment['id'])
+payment = mollie_client.payments.get(payment['id'])
 
-if payment.isPaid():
-    print 'Payment received.'
+if payment.is_paid():
+    print('Payment received.')
 ```
 
 ### How to pass the different parameter types ###
@@ -76,11 +76,11 @@ In the example above, a new payment is created by passing a dictionary of paymen
 
 Every keyword argument (other than `data`) passed to a method will be interpreted as a query string parameter. For example, the following method call:
 ```python
-payments = mollie.payments.all(count=20)
+payments = mollie_client.payments.all(count=20)
 ```
 Will result in a request with query string `?count=20`. Furthermore, this is an example of a request that only accepts query string parameters. Both can be combined, however, to for example create a payment that includes a QR code object:
 ```python
-payment = mollie.payments.create(
+payment = mollie_client.payments.create(
     {
         'amount': 10.00,
         'description': 'My first API payment',
@@ -101,26 +101,26 @@ the payment.
 Retrieve the list of issuers:
 
 ```python
-issuers = mollie.issuers.all()
+issuers = mollie_client.issuers.all()
 ```
 
-_`issuers` will be a list of `Mollie.API.Object.Issuer` objects. Use the attribute `id` of this object in the
+_`issuers` will be a list of `mollie.api.objects.Issuer` objects. Use the attribute `id` of this object in the
  API call, and the attribute `name` for displaying the issuer to your customer. For a more in-depth example, see [Example 4](https://github.com/mollie/mollie-api-python/blob/master/examples/4-ideal-payment.py)._
 
 Create a payment with the selected issuer:
 
 ```python
-payment = mollie.payments.create({
+payment = mollie_client.payments.create({
     'amount':      10.00,
     'description': 'My first API payment',
     'redirectUrl': 'https://webshop.example.org/order/12345/',
     'webhookUrl':  'https://webshop.example.org/mollie-webhook/',
-    'method':      Mollie.API.Object.Method.IDEAL,
+    'method':      mollie.api.objects.Method.IDEAL,
     'issuer':      selected_issuer_id,  # e.g. 'ideal_INGBNL2A'
 })
 ```
 
-_The `paymentUrl` attribute of the `payment` object will point directly to the online banking environment of the selected issuer._
+_The `payment_url` attribute of the `payment` object will point directly to the online banking environment of the selected issuer._
 
 ### Refunding payments ###
 
@@ -129,8 +129,8 @@ definitive. Refunds are only supported for iDEAL, credit card and Bank Transfer 
 be refunded through our API at the moment.
 
 ```python
-payment = mollie.payments.get(payment['id'])
-refund = mollie.payments.refund(payment)
+payment = mollie_client.payments.get(payment['id'])
+refund = mollie_client.payments.refund(payment)
 ```
 
 ## Examples ##

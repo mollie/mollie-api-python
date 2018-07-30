@@ -1,0 +1,32 @@
+{
+  "resource": "customer",
+  "id": "cst_8wmqcHMN4U",
+  "mode": "test",
+  "name": "Customer A",
+  "email": "customer@example.org",
+  "locale": "nl_NL",
+  "metadata": null,
+  "createdAt": "2018-04-06T13:23:21.0Z",
+  "_links": {
+    "self": {
+      "href": "https://api.mollie.com/v2/customers/cst_8wmqcHMN4U",
+      "type": "application/hal+json"
+    },
+    "mandates": {
+      "href": "https://api.mollie.com/v2/customers/cst_8wmqcHMN4U/mandates",
+      "type": "application/hal+json"
+    },
+    "subscriptions": {
+      "href": "https://api.mollie.com/v2/customers/cst_8wmqcHMN4U/subscriptions",
+      "type": "application/hal+json"
+    },
+    "payments": {
+      "href": "https://api.mollie.com/v2/customers/cst_8wmqcHMN4U/payments",
+      "type": "application/hal+json"
+    },
+    "documentation": {
+      "href": "https://docs.mollie.com/reference/v2/customers-api/get-customer",
+      "type": "text/html"
+    }
+  }
+}

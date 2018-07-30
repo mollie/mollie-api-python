@@ -4,15 +4,10 @@
 #
 from __future__ import print_function
 
-import sys, os
+import os
 
-#
-# Add Mollie library to module path so we can import it.
-# This is not necessary if you use pip or easy_install.
-#
-sys.path.append(os.path.abspath(os.path.dirname(__file__) + '/../'))
 
-import Mollie
+import mollie
 
 
 def main():
@@ -22,25 +17,32 @@ def main():
         #
         # See: https://www.mollie.com/dashboard/settings/profiles
         #
-        mollie = Mollie.API.Client()
-        mollie.setApiKey('test_bt7vvByF6jTcBR4dLuW66eNnHYNIJp')
+        api_key = os.environ.get('MOLLIE_API_KEY', 'test_test')
+        mollie_client = mollie.api.Client()
+        mollie_client.set_api_key(api_key)
 
         #
         # Get the all the activated methods for this API key.
         #
-        methods = mollie.methods.all()
-
-        body = 'Your API key has %u activated payment methods:<br>' % int(methods['totalCount'])
+        params = {
+            'amount': {
+                'currency': 'EUR',
+                'value': '100.00',
+            }
+        }
+        methods = mollie_client.methods.all(**params)
+        body = 'Your API key has %u activated payment methods:<br>' % methods.count
 
         for method in methods:
             body += '<div style="line-height:40px; vertical-align:top">'
-            body += '<img src="%s"> %s (%s)' % (method['image']['normal'], method['description'], method['id'])
+            body += '<img src="%s"> %s (%s)' % (method.image_size2x, method.description, method.id)
             body += '</div>'
 
         return body
 
-    except Mollie.API.Error as e:
+    except mollie.api.error as e:
         return 'API call failed: ' + str(e)
+
 
 if __name__ == '__main__':
     print(main())
