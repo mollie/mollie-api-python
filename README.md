@@ -130,7 +130,7 @@ payment = mollie_client.payments.create({
 ```
 _After creation, the `settlementAmount` will contain the EUR amount that will be settled on your account._
 
-### Fully integrated iDeal payments ###
+### Fully integrated iDEAL payments ###
 
 If you want to fully integrate iDEAL payments in your web site, some additional steps are required. 
 First, you need to retrieve the list of issuers (banks) that support iDEAL and have your customer pick the issuer 
