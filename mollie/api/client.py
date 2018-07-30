@@ -23,7 +23,7 @@ except ImportError:
 
 import requests
 
-from mollie.api.error import Error
+from mollie.api.error import RequestError, RequestSetupError
 
 
 class Client(object):
@@ -45,7 +45,7 @@ class Client(object):
     def validate_api_key(api_key):
         api_key = api_key.strip()
         if not re.compile(r'^(live|test)_\w+$').match(api_key):
-            raise Error('Invalid API key: "%s". An API key must start with "test_" or "live_".' % api_key)
+            raise RequestSetupError('Invalid API key: "%s". An API key must start with "test_" or "live_".' % api_key)
         return api_key
 
     def __init__(self, api_key=None, api_endpoint=None):
@@ -75,12 +75,12 @@ class Client(object):
     def get_cacert(self):
         cacert = pkg_resources.resource_filename('mollie.api', 'cacert.pem')
         if not cacert or len(cacert) < 1:
-            raise Error('Unable to load cacert.pem')
+            raise RequestSetupError('Unable to load cacert.pem')
         return cacert
 
     def perform_http_call(self, http_method, path, data=None, params=None):
         if not self.api_key:
-            raise Error('You have not set an API key. Please use setApiKey() to set the API key.')
+            raise RequestSetupError('You have not set an API key. Please use set_api_key() to set the API key.')
         if path.startswith('%s/%s' % (self.api_endpoint, self.api_version)):
             url = path
         else:
@@ -92,10 +92,11 @@ class Client(object):
             url += '?' + querystring
             params = None
 
+        cacert = self.get_cacert()
         try:
             response = requests.request(
                 http_method, url,
-                verify=self.get_cacert(),
+                verify=cacert,
                 headers={
                     'Accept': 'application/json',
                     'Authorization': 'Bearer ' + self.api_key,
@@ -105,8 +106,8 @@ class Client(object):
                 params=params,
                 data=data
             )
-        except Exception as e:
-            raise Error('Unable to communicate with Mollie: %s.' % str(e))
+        except Exception as err:
+            raise RequestError('Unable to communicate with Mollie: %s' % err)
         return response
 
 
