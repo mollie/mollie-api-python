@@ -123,3 +123,55 @@ def test_client_get_payment_related_invalid_id(client, endpoint, errorstr):
     with pytest.raises(IdentifierValidationError) as excinfo:
         getattr(client, endpoint).with_parent_id('tr_12345').get('invalid')
     assert excinfo.match(errorstr)
+
+
+def test_client_invalid_json_response(client, response):
+    """An invalid json response should raise an error."""
+    response.get('https://api.mollie.com/v2/customers', 'invalid_json')
+    with pytest.raises(ResponseHandlingError) as excinfo:
+        client.customers.all()
+    assert excinfo.match(r'Unable to decode Mollie API response \(status code: 200\)')
+
+
+def test_client_response_contains_error_status(client, response):
+    """An error response from the API should raise an error."""
+    response.get('https://api.mollie.com/v2/customers/cst_doesnotexist', 'customer_doesnotexist', status=404)
+    with pytest.raises(ResponseError) as excinfo:
+        client.customers.get('cst_doesnotexist')
+    assert excinfo.match('No customer exists with token cst_doesnotexist.')
+
+
+def test_client_response_404_but_no_payload(response):
+    """
+    An error response from the API should raise an error.
+
+    When the response returns an error, but no valid error data is available in the response,
+    we should still raise an error. The API v1 formatted error in the test is missing the required 'status' field.
+    """
+    response.get('https://api.mollie.com/v3/customers', 'v1_api_error', status=404)
+    client = Client()
+    client.api_version = 'v3'
+    client.set_api_key('test_JcMdyzfCayKDW6EHgzf364trVTQhyN')
+
+    with pytest.raises(ResponseHandlingError) as excinfo:
+        client.customers.all()
+    assert excinfo.match('Invalid API version')
+
+
+def test_client_error_including_field_response(client, response):
+    """An error response containing a 'field' value should be reflected in the raised error."""
+    response.post('https://api.mollie.com/v2/payments', 'payment_rejected', status=422)
+    params = {
+        'amount': {
+            'value': '10000000.00',
+            'currency': 'EUR',
+        },
+        'method': 'ideal',
+        'description': 'My order',
+        'redirectUrl': 'https://webshop.example.org/order/12345/',
+        'webhookUrl': 'https://webshop.example.org/payments/webhook/',
+    }
+    with pytest.raises(ResponseError) as excinfo:
+        client.payments.create(**params)
+    assert excinfo.match('The amount is higher than the maximum')
+    assert excinfo.value.field == 'amount'

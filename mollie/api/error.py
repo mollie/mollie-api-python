@@ -1,9 +1,8 @@
 class Error(Exception):
     """Base exception."""
 
-    def __init__(self, message=None, field=None):
+    def __init__(self, message):
         Exception.__init__(self, message)
-        self.field = field
 
 
 class RequestError(Error):
@@ -34,9 +33,11 @@ class ResponseError(Error):
     """Errors reported by the API."""
 
     status = None
+    field = None
 
-    def __init__(self, resp=None, field=None):
-        import ipdb; ipdb.set_trace()  # noqa
+    def __init__(self, resp=None):
         message = resp['detail']
-        super(ResponseError, self).__init__(message, field)
-        self.status = resp['status_code']
+        super(ResponseError, self).__init__(message)
+        self.status = resp['status']
+        if 'field' in resp:
+            self.field = resp['field']
