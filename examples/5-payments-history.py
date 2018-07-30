@@ -4,15 +4,9 @@
 #
 from __future__ import print_function
 
-import sys, os
+import os
 
-#
-# Add Mollie library to module path so we can import it.
-# This is not necessary if you use pip or easy_install.
-#
-sys.path.append(os.path.abspath(os.path.dirname(__file__) + '/../'))
-
-import Mollie
+import mollie
 
 
 def main():
@@ -22,23 +16,25 @@ def main():
         #
         # See: https://www.mollie.com/dashboard/settings/profiles
         #
-        mollie = Mollie.API.Client()
-        mollie.setApiKey('test_bt7vvByF6jTcBR4dLuW66eNnHYNIJp')
+        api_key = os.environ.get('MOLLIE_API_KEY', 'test_test')
+        mollie_client = mollie.api.client.Client()
+        mollie_client.set_api_key(api_key)
 
         #
         # Get the all payments for this API key ordered by newest.
         #
-        payments = mollie.payments.all()
+        payments = mollie_client.payments.all()
 
-        body = 'Your API key has %u payments, last %u:<br>' % (payments['totalCount'], payments['count'])
+        body = 'Your API key has %u payments<br>' % payments.count
 
         for payment in payments:
-            body += "&euro; %s, status: '%s'<br>" % (payment['amount'], payment['status'])
+            body += "%s %s, status: '%s'<br>" % (payment.amount['value'], payment.amount['currency'], payment.status)
 
         return body
 
-    except Mollie.API.Error as e:
+    except mollie.api.error as e:
         return 'API call failed: ' + str(e)
+
 
 if __name__ == '__main__':
     print(main())

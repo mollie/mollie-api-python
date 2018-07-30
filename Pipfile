@@ -1,21 +1,17 @@
 [[source]]
-
 url = "https://pypi.python.org/simple"
 verify_ssl = true
 name = "pypi"
 
-
 [packages]
-
 requests = "*"
-
+mollie-api-python = {path = ".", editable = true}
+pycodestyle = "*"
 
 [dev-packages]
-
-nose = "*"
+pytest = "*"
+pytest-cov = "*"
 pyflakes = "*"
-
-
-[requires]
-
-python_version = "2.7"
+responses = "*"
+mock = "*"
+ipdb = "*"

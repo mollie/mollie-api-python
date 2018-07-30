@@ -1,0 +1,120 @@
+{
+  "_links": {
+    "documentation": {
+      "href": "https://docs.mollie.com/reference/v2/methods-api/get-method",
+      "type": "text/html"
+    },
+    "self": {
+      "href": "https://api.mollie.com/v2/methods/ideal?include=issuers",
+      "type": "application/hal+json"
+    }
+  },
+  "description": "iDEAL",
+  "id": "ideal",
+  "image": {
+    "size1x": "https://www.mollie.com/images/payscreen/methods/ideal.png",
+    "size2x": "https://www.mollie.com/images/payscreen/methods/ideal%402x.png"
+  },
+  "issuers": [
+    {
+      "id": "ideal_ABNANL2A",
+      "image": {
+        "size1x": "https://www.mollie.com/images/checkout/v2/ideal-issuer-icons/ABNANL2A.png",
+        "size2x": "https://www.mollie.com/images/checkout/v2/ideal-issuer-icons/ABNANL2A.png"
+      },
+      "name": "ABN AMRO",
+      "resource": "issuer"
+    },
+    {
+      "id": "ideal_ASNBNL21",
+      "image": {
+        "size1x": "https://www.mollie.com/images/checkout/v2/ideal-issuer-icons/ASNBNL21.png",
+        "size2x": "https://www.mollie.com/images/checkout/v2/ideal-issuer-icons/ASNBNL21.png"
+      },
+      "name": "ASN Bank",
+      "resource": "issuer"
+    },
+    {
+      "id": "ideal_BUNQNL2A",
+      "image": {
+        "size1x": "https://www.mollie.com/images/checkout/v2/ideal-issuer-icons/BUNQNL2A.png",
+        "size2x": "https://www.mollie.com/images/checkout/v2/ideal-issuer-icons/BUNQNL2A.png"
+      },
+      "name": "bunq",
+      "resource": "issuer"
+    },
+    {
+      "id": "ideal_INGBNL2A",
+      "image": {
+        "size1x": "https://www.mollie.com/images/checkout/v2/ideal-issuer-icons/INGBNL2A.png",
+        "size2x": "https://www.mollie.com/images/checkout/v2/ideal-issuer-icons/INGBNL2A.png"
+      },
+      "name": "ING",
+      "resource": "issuer"
+    },
+    {
+      "id": "ideal_KNABNL2H",
+      "image": {
+        "size1x": "https://www.mollie.com/images/checkout/v2/ideal-issuer-icons/KNABNL2H.png",
+        "size2x": "https://www.mollie.com/images/checkout/v2/ideal-issuer-icons/KNABNL2H.png"
+      },
+      "name": "Knab",
+      "resource": "issuer"
+    },
+    {
+      "id": "ideal_MOYONL21",
+      "image": {
+        "size1x": "https://www.mollie.com/images/checkout/v2/ideal-issuer-icons/MOYONL21.png",
+        "size2x": "https://www.mollie.com/images/checkout/v2/ideal-issuer-icons/MOYONL21.png"
+      },
+      "name": "Moneyou",
+      "resource": "issuer"
+    },
+    {
+      "id": "ideal_RABONL2U",
+      "image": {
+        "size1x": "https://www.mollie.com/images/checkout/v2/ideal-issuer-icons/RABONL2U.png",
+        "size2x": "https://www.mollie.com/images/checkout/v2/ideal-issuer-icons/RABONL2U.png"
+      },
+      "name": "Rabobank",
+      "resource": "issuer"
+    },
+    {
+      "id": "ideal_RBRBNL21",
+      "image": {
+        "size1x": "https://www.mollie.com/images/checkout/v2/ideal-issuer-icons/RBRBNL21.png",
+        "size2x": "https://www.mollie.com/images/checkout/v2/ideal-issuer-icons/RBRBNL21.png"
+      },
+      "name": "RegioBank",
+      "resource": "issuer"
+    },
+    {
+      "id": "ideal_SNSBNL2A",
+      "image": {
+        "size1x": "https://www.mollie.com/images/checkout/v2/ideal-issuer-icons/SNSBNL2A.png",
+        "size2x": "https://www.mollie.com/images/checkout/v2/ideal-issuer-icons/SNSBNL2A.png"
+      },
+      "name": "SNS Bank",
+      "resource": "issuer"
+    },
+    {
+      "id": "ideal_TRIONL2U",
+      "image": {
+        "size1x": "https://www.mollie.com/images/checkout/v2/ideal-issuer-icons/TRIONL2U.png",
+        "size2x": "https://www.mollie.com/images/checkout/v2/ideal-issuer-icons/TRIONL2U.png"
+      },
+      "name": "Triodos Bank",
+      "resource": "issuer"
+    },
+    {
+      "id": "ideal_FVLBNL22",
+      "image": {
+        "size1x": "https://www.mollie.com/images/checkout/v2/ideal-issuer-icons/FVLBNL22.png",
+        "size2x": "https://www.mollie.com/images/checkout/v2/ideal-issuer-icons/FVLBNL22.png"
+      },
+      "name": "van Lanschot",
+      "resource": "issuer"
+    }
+  ],
+  "resource": "method"
+}

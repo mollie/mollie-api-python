@@ -4,27 +4,25 @@
 #
 from __future__ import print_function
 
-import sys, os, time, flask
+import os
+import time
+
+import flask
+
+import mollie
 from app import database_write
 
-#
-# Add Mollie library to module path so we can import it.
-# This is not necessary if you use pip or easy_install.
-#
-sys.path.append(os.path.abspath(os.path.dirname(__file__) + '/../'))
 
-import Mollie
-
-
-def main ():
+def main():
     try:
         #
         # Initialize the Mollie API library with your API key.
         #
         # See: https://www.mollie.com/dashboard/settings/profiles
         #
-        mollie = Mollie.API.Client()
-        mollie.setApiKey('test_bt7vvByF6jTcBR4dLuW66eNnHYNIJp')
+        api_key = os.environ.get('MOLLIE_API_KEY', 'test_test')
+        mollie_client = mollie.api.client.Client()
+        mollie.set_api_key(api_key)
 
         #
         # First, let the customer pick the bank in a simple HTML form. This step is actually optional.
@@ -32,9 +30,9 @@ def main ():
         if 'issuer' not in flask.request.form:
             body = '<form method="post">Select your bank: <select name="issuer">'
 
-            for issuer in mollie.issuers.all():
-                if issuer['method'] == Mollie.API.Object.Method.IDEAL:
-                    body += '<option value="%s">%s</option>' % (issuer['id'], issuer['name'])
+            for issuer in mollie_client.issuers.all():
+                if issuer.method == mollie_client.api.object.Method.IDEAL:
+                    body += '<option value="%s">%s</option>' % (issuer.id, issuer.name)
 
             body += '<option value="">or select later</option>'
             body += '</select><button>OK</button></form>'
@@ -53,11 +51,11 @@ def main ():
             # Generate a unique order number for this example. It is important to include this unique attribute
             # in the redirectUrl (below) so a proper return page can be shown to the customer.
             #
-            order_nr = int(time.time())
+            order_id = int(time.time())
 
             #
             # Payment parameters:
-            # amount        Amount in EUROs. This example creates a € 10,- payment.
+            # amount        Currency and value. This example creates a € 10,- payment.
             # description   Description of the payment.
             # webhookUrl    Webhook location, used to report when the payment changes state.
             # redirectUrl   Redirect location. The customer will be redirected there after the payment.
@@ -65,13 +63,13 @@ def main ():
             # method        Payment method "ideal".
             # issuer        The customer's bank. If empty the customer can select it later.
             #
-            payment = mollie.payments.create({
-                'amount':      10.00,
+            payment = mollie_client.payments.create({
+                'amount': {'currency': 'EUR', 'value': '10.00'},
                 'description': 'My first API payment',
-                'webhookUrl':  flask.request.url_root + '2-webhook-verification?order_nr=' + str(order_nr),
-                'redirectUrl': flask.request.url_root + '3-return-page?order_nr=' + str(order_nr),
+                'webhookUrl': flask.request.url_root + '2-webhook-verification',
+                'redirectUrl': flask.request.url_root + '3-return-page?order_id=' + str(order_id),
                 'metadata': {
-                    'order_nr': order_nr
+                    'order_nr': order_id
                 },
                 'method': 'ideal',
                 'issuer': issuer_id
@@ -80,14 +78,14 @@ def main ():
             #
             # In this example we store the order with its payment status in a database.
             #
-            database_write(order_nr, payment['status'])
+            database_write(order_id, payment.status)
 
             #
             # Send the customer off to complete the payment.
             #
-            return flask.redirect(payment.getPaymentUrl())
+            return flask.redirect(payment.checkout_url)
 
-    except Mollie.API.Error as e:
+    except mollie.api.error as e:
         return 'API call failed: ' + str(e)
 
 
