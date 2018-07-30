@@ -1,5 +1,6 @@
 from .base import Base
 from .issuer import Issuer
+from .list import List
 
 
 class Method(Base):
@@ -17,6 +18,9 @@ class Method(Base):
     KBC = 'kbc'
     GIFTCARD = 'giftcard'
     INGHOMEPAY = 'inghomepay'
+    BANCONTACT = 'bancontact'
+    EPS = 'eps'
+    GIROPAY = 'giropay'
 
     @property
     def description(self):
@@ -28,32 +32,43 @@ class Method(Base):
 
     @property
     def image_size1x(self):
-        images = self._get_property('image')
-        if 'size1x' not in images:
+        try:
+            images = self._get_property('image')
+            return images['size1x']
+        except KeyError:
             return None
-        return images['size1x']
 
     @property
     def image_size2x(self):
-        images = self._get_property('image')
-        if 'size2x' not in images:
+        try:
+            images = self._get_property('image')
+            return images['size2x']
+        except KeyError:
             return None
-        return images['size2x']
 
     @property
     def issuers(self):
-        issuers = self._get_property('issuers')
-        if issuers:
-            return [Issuer(x) for x in issuers]
+        """Return the issuer list"""
+        try:
+            issuers = self._get_property('issuers')
+            result = {
+                '_embedded': {
+                    'issuers': issuers,
+                }}
+            return List(result, Issuer)
+        except KeyError:
+            return None
 
     def getMinimumAmount(self):
         # TODO check for obsoletion
-        if not self['amount'] or 'minimum' not in self['amount']:
+        try:
+            return float(self['amount']['minimum'])
+        except KeyError:
             return None
-        return float(self['amount']['minimum'])
 
     def getMaximumAmount(self):
         # TODO check for obsoletion
-        if not self['amount'] or 'maximum' not in self['amount']:
+        try:
+            return float(self['amount']['maximum'])
+        except KeyError:
             return None
-        return float(self['amount']['maximum'])

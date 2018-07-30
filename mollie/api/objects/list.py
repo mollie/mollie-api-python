@@ -8,6 +8,13 @@ class List(Base):
         Base.__init__(self, result)
         self.object_type = object_type
 
+    def __len__(self):
+        """Return the count field. If it doesn't exist: count the amount of fields in the object map"""
+        try:
+            return int(self['count'])
+        except KeyError:
+            return len(self['_embedded'][self.get_object_name()])
+
     def get_object_name(self):
         return self.object_type.__name__.lower() + 's'
 
