@@ -1,4 +1,4 @@
-from mollie.api.resources import Refunds
+from mollie.api.resources.refunds import Refunds
 
 
 class PaymentRefunds(Refunds):

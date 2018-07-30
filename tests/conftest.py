@@ -10,7 +10,7 @@ def client():
     """Setup a Mollie API client object."""
     api_key = os.environ.get('MOLLIE_API_KEY', 'test_test')
 
-    client = mollie.api.Client()
+    client = mollie.api.client.Client()
     client.set_api_key(api_key)
     return client
 

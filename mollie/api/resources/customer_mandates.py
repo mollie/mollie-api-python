@@ -1,6 +1,6 @@
 from .base import Base
 from mollie.api.error import Error
-from mollie.api.objects import Mandate
+from mollie.api.objects.mandate import Mandate
 
 
 class CustomerMandates(Base):

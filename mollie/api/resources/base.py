@@ -1,7 +1,7 @@
 import json
 
-from mollie.api import Error
-from mollie.api.objects import List
+from mollie.api.error import Error
+from mollie.api.objects.list import List
 
 
 class Base(object):
