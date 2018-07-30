@@ -1,6 +1,7 @@
 from mollie.api.objects.customer import Customer
 from mollie.api.objects.list import List
 from mollie.api.objects.mandate import Mandate
+
 CUSTOMER_ID = 'cst_8wmqcHMN4U'
 MANDATE_ID = 'mdt_h3gAaD5zP'
 
