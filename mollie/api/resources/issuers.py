@@ -1,5 +1,5 @@
 from .base import Base
-from mollie.api.objects import Issuer
+from mollie.api.objects.issuer import Issuer
 
 
 class Issuers(Base):

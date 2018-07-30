@@ -1,6 +1,6 @@
 from .base import Base
 from mollie.api.error import Error
-from mollie.api.objects import Refund
+from mollie.api.objects.refund import Refund
 
 
 class Refunds(Base):

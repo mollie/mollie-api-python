@@ -3,6 +3,19 @@ import sys
 import ssl
 import re
 import pkg_resources
+
+from mollie.api.resources.chargebacks import Chargebacks
+from mollie.api.resources.customer_mandates import CustomerMandates
+from mollie.api.resources.customer_payments import CustomerPayments
+from mollie.api.resources.customer_subscriptions import CustomerSubscriptions
+from mollie.api.resources.customers import Customers
+from mollie.api.resources.issuers import Issuers
+from mollie.api.resources.methods import Methods
+from mollie.api.resources.payment_chargebacks import PaymentChargebacks
+from mollie.api.resources.payment_refunds import PaymentRefunds
+from mollie.api.resources.payments import Payments
+from mollie.api.resources.refunds import Refunds
+
 try:
     from urllib.parse import urlencode
 except ImportError:
@@ -11,8 +24,7 @@ except ImportError:
 
 import requests
 
-from . import Error
-from . import resources
+from mollie.api.error import Error
 
 
 class Client(object):
@@ -41,17 +53,17 @@ class Client(object):
         self.api_endpoint = self.validate_api_endpoint(api_endpoint or self.API_ENDPOINT)
         self.api_version = self.API_VERSION
         self.api_key = self.validate_api_key(api_key) if api_key else None
-        self.payments = resources.Payments(self)
-        self.payment_refunds = resources.PaymentRefunds(self)
-        self.payment_chargebacks = resources.PaymentChargebacks(self)
-        self.methods = resources.Methods(self)
-        self.issuers = resources.Issuers(self)
-        self.refunds = resources.Refunds(self)
-        self.chargebacks = resources.Chargebacks(self)
-        self.customers = resources.Customers(self)
-        self.customer_mandates = resources.CustomerMandates(self)
-        self.customer_subscriptions = resources.CustomerSubscriptions(self)
-        self.customer_payments = resources.CustomerPayments(self)
+        self.payments = Payments(self)
+        self.payment_refunds = PaymentRefunds(self)
+        self.payment_chargebacks = PaymentChargebacks(self)
+        self.methods = Methods(self)
+        self.issuers = Issuers(self)
+        self.refunds = Refunds(self)
+        self.chargebacks = Chargebacks(self)
+        self.customers = Customers(self)
+        self.customer_mandates = CustomerMandates(self)
+        self.customer_subscriptions = CustomerSubscriptions(self)
+        self.customer_payments = CustomerPayments(self)
 
     def get_api_endpoint(self):
         return self.api_endpoint

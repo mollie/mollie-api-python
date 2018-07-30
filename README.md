@@ -47,7 +47,7 @@ import mollie
 Initializing the Mollie API client, and setting your API key.
 
 ```python
-mollie_client = mollie.api.Client()
+mollie_client = mollie.api.client.Client()
 mollie_client.set_api_key('test_dHar4XY7LxsDOtmnkVtjNVWXLSlXsM')
 ```
 

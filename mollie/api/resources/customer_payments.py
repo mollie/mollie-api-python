@@ -1,4 +1,4 @@
-from mollie.api.resources import Payments
+from mollie.api.resources.payments import Payments
 
 
 class CustomerPayments(Payments):
