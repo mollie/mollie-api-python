@@ -29,11 +29,8 @@ def main():
         #
         if 'issuer' not in flask.request.form:
             body = '<form method="post">Select your bank: <select name="issuer">'
-
-            for issuer in mollie_client.issuers.all():
-                if issuer.method == mollie_client.api.object.Method.IDEAL:
-                    body += '<option value="%s">%s</option>' % (issuer.id, issuer.name)
-
+            for issuer in mollie_client.methods.get('ideal', include='issuers').issuers:
+                body += '<option value="%s">%s</option>' % (issuer.id, issuer.name)
             body += '<option value="">or select later</option>'
             body += '</select><button>OK</button></form>'
             return body
