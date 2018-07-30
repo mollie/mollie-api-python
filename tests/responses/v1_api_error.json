@@ -1,0 +1,9 @@
+{
+  "error": {
+    "links": {
+      "currentVersion": "https://api.mollie.com/v1/"
+    },
+    "message": "Invalid API version",
+    "type": "request"
+  }
+}
