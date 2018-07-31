@@ -52,16 +52,16 @@ class Client(object):
         self.api_endpoint = self.validate_api_endpoint(api_endpoint or self.API_ENDPOINT)
         self.api_version = self.API_VERSION
         self.api_key = self.validate_api_key(api_key) if api_key else None
-        self.payments = resources.Payments(self)
-        self.payment_refunds = resources.PaymentRefunds(self)
-        self.payment_chargebacks = resources.PaymentChargebacks(self)
-        self.methods = resources.Methods(self)
-        self.refunds = resources.Refunds(self)
-        self.chargebacks = resources.Chargebacks(self)
-        self.customers = resources.Customers(self)
-        self.customer_mandates = resources.CustomerMandates(self)
-        self.customer_subscriptions = resources.CustomerSubscriptions(self)
-        self.customer_payments = resources.CustomerPayments(self)
+        self.payments = Payments(self)
+        self.payment_refunds = PaymentRefunds(self)
+        self.payment_chargebacks = PaymentChargebacks(self)
+        self.methods = Methods(self)
+        self.refunds = Refunds(self)
+        self.chargebacks = Chargebacks(self)
+        self.customers = Customers(self)
+        self.customer_mandates = CustomerMandates(self)
+        self.customer_subscriptions = CustomerSubscriptions(self)
+        self.customer_payments = CustomerPayments(self)
 
     def get_api_endpoint(self):
         return self.api_endpoint
