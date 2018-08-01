@@ -6,7 +6,8 @@ from __future__ import print_function
 
 import os
 
-import mollie
+from mollie.api.client import Client
+from mollie.api.error import Error
 
 
 def main():
@@ -17,13 +18,12 @@ def main():
         # See: https://www.mollie.com/dashboard/settings/profiles
         #
         api_key = os.environ.get('MOLLIE_API_KEY', 'test_test')
-        mollie_client = mollie.api.client.Client()
+        mollie_client = Client()
         mollie_client.set_api_key(api_key)
 
         amount_of_customers_to_retrieve = 20
         params = {
-            'from': 0,
-            'count': amount_of_customers_to_retrieve,
+            'limit': amount_of_customers_to_retrieve,
         }
 
         #
@@ -70,8 +70,8 @@ def main():
 
         return body
 
-    except mollie.api.error as e:
-        return 'API call failed: ' + str(e)
+    except Error as err:
+        return 'API call failed: %s' % err
 
 
 if __name__ == '__main__':

@@ -9,8 +9,9 @@ import time
 
 import flask
 
-import mollie
 from app import database_write
+from mollie.api.client import Client
+from mollie.api.error import Error
 
 
 def main():
@@ -21,7 +22,7 @@ def main():
         # See: https://www.mollie.com/dashboard/settings/profiles
         #
         api_key = os.environ.get('MOLLIE_API_KEY', 'test_test')
-        mollie_client = mollie.api.client.Client()
+        mollie_client = Client()
         mollie_client.set_api_key(api_key)
 
         #
@@ -39,12 +40,12 @@ def main():
         # metadata      Custom metadata that is stored with the payment.
         #
         payment = mollie_client.payments.create({
-            'amount': {'currency': 'EUR', 'value': '10.00'},
+            'amount': {'currency': 'EUR', 'value': '120.00'},
             'description': 'My first API payment',
-            'webhookUrl': flask.request.url_root + '2-webhook-verification',
-            'redirectUrl': flask.request.url_root + '3-return-page?order_id=' + str(order_id),
+            'webhookUrl': flask.request.url_root + '2-webhook_verification',
+            'redirectUrl': flask.request.url_root + '3-return-page?order_id=%s' % str(order_id),
             'metadata': {
-                'order_nr': order_id
+                'order_id': order_id
             }
         })
 
@@ -58,8 +59,8 @@ def main():
         #
         return flask.redirect(payment.checkout_url)
 
-    except mollie.api.Error as e:
-        return 'API call failed: ' + str(e)
+    except Error as err:
+        return 'API call failed: %s' % err
 
 
 if __name__ == '__main__':

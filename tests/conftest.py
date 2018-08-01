@@ -1,8 +1,9 @@
 import os
 
 import pytest
-import mollie
 import responses
+
+from mollie.api.client import Client
 
 
 @pytest.fixture(scope='session')
@@ -10,7 +11,7 @@ def client():
     """Setup a Mollie API client object."""
     api_key = os.environ.get('MOLLIE_API_KEY', 'test_test')
 
-    client = mollie.api.client.Client()
+    client = Client()
     client.set_api_key(api_key)
     return client
 

@@ -7,8 +7,9 @@ import os
 
 import flask
 
-import mollie
 from app import database_write
+from mollie.api.client import Client
+from mollie.api.error import Error
 
 
 def main():
@@ -19,7 +20,7 @@ def main():
         # See: https://www.mollie.com/dashboard/settings/profiles
         #
         api_key = os.environ.get('MOLLIE_API_KEY', 'test_test')
-        mollie_client = mollie.api.client.Client()
+        mollie_client = Client()
         mollie_client.set_api_key(api_key)
 
         #
@@ -37,17 +38,17 @@ def main():
         #
         database_write(order_id, payment.status)
 
-        if payment.is_paid:
+        if payment.is_paid():
             #
             # At this point you'd probably want to start the process of delivering the product to the customer.
             #
             return 'Paid'
-        elif payment.is_pending:
+        elif payment.is_pending():
             #
             # The payment has started but is not complete yet.
             #
             return 'Pending'
-        elif payment.is_open:
+        elif payment.is_open():
             #
             # The payment has not started yet. Wait for it.
             #
@@ -58,8 +59,8 @@ def main():
             #
             return 'Cancelled'
 
-    except mollie.api.error as e:
-        return 'API call failed: ' + str(e)
+    except Error as err:
+        return 'API call failed: %s' % err
 
 
 if __name__ == '__main__':
