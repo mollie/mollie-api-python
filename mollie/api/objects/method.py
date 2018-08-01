@@ -54,7 +54,9 @@ class Method(Base):
             result = {
                 '_embedded': {
                     'issuers': issuers,
-                }}
+                },
+                'count': len(issuers),
+            }
             return List(result, Issuer)
         except KeyError:
             return None
