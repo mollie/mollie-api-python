@@ -18,12 +18,3 @@ class Customers(Base):
                     customer_id, self.RESOURCE_ID_PREFIX)
             )
         return super(Customers, self).get(customer_id)
-
-    def mandates(self, customer):
-        return self.client.customer_mandates.on(customer)
-
-    def subscriptions(self, customer):
-        return self.client.customer_subscriptions.on(customer)
-
-    def payments(self, customer):
-        return self.client.customer_payments.on(customer)

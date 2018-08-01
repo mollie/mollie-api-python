@@ -35,7 +35,7 @@ def test_create_refund(client, response):
 
 
 def test_get_single_refund_on_payment_object(client, response):
-    """Create a payment refund of a payment"""
+    """Retrieve a payment refund of a payment"""
     response.get('https://api.mollie.com/v2/payments/%s' % PAYMENT_ID, 'payments_create')
     response.get('https://api.mollie.com/v2/payments/%s/refunds/%s' % (PAYMENT_ID, REFUND_ID), 'refunds_single')
     payment = client.payments.get(PAYMENT_ID)
@@ -45,7 +45,7 @@ def test_get_single_refund_on_payment_object(client, response):
 
 
 def test_get_all_refunds_on_payment_object(client, response):
-    """Create all payment refunds of a payment"""
+    """Retrieve all payment refunds of a payment"""
     response.get('https://api.mollie.com/v2/payments/%s' % PAYMENT_ID, 'payments_create')
     response.get('https://api.mollie.com/v2/payments/%s/refunds' % PAYMENT_ID, 'refunds_multiple')
     payment = client.payments.get(PAYMENT_ID)

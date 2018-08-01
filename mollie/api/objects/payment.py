@@ -136,6 +136,10 @@ class Payment(Base):
         return self._get_property('method')
 
     @property
+    def customer_id(self):
+        return self._get_property('customerId')
+
+    @property
     def customer_url(self):
         try:
             return self['_links']['customer']['href']

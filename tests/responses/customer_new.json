@@ -14,6 +14,10 @@
       "href": "https://api.mollie.com/v2/customers/cst_8wmqcHMN4U",
       "type": "application/hal+json"
     },
+    "payments": {
+      "href": "https://api.mollie.com/v2/customers/cst_8wmqcHMN4U/payments",
+      "type": "application/hal+json"
+    },
     "documentation": {
       "href": "https://docs.mollie.com/reference/v2/customers-api/create-customer",
       "type": "text/html"
