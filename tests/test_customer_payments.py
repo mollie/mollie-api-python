@@ -22,7 +22,7 @@ def test_get_all_customer_payments(client, response):
     assert len(set(iterated_payment_ids)) == payments.count, 'Unexpected unique payment ids retrieved'
 
 
-def test_create_customer_payments(client, response):
+def test_create_customer_payment(client, response):
     """Create a customer payment"""
     response.post('https://api.mollie.com/v2/customers/%s/payments' % CUSTOMER_ID, 'payments_create')
 
