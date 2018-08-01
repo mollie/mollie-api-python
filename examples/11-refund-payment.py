@@ -37,8 +37,8 @@ def main():
         break
 
     payment = mollie_client.payments.get(payment_id)
-    if payment.can_be_refunded and payment.get_amount_remaining['currency'] == 'EUR' \
-            and payment.get_amount_remaining >= 2.0:
+    if payment.can_be_refunded and payment.amount_remaining['currency'] == 'EUR' \
+            and float(payment.amount_remaining['value']) >= 2.0:
         data = {
             'amount': {'value': '2.00', 'currency': 'EUR'}
         }
