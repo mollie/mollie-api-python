@@ -59,7 +59,7 @@ class Customer(Base):
 
     @property
     def payments(self):
-        """Return the mandate list referenced in the _links."""
+        """Return the payment list referenced in the _links."""
         from .payment import Payment  # work around circular import
         try:
             url = self['_links']['payments']['href']
