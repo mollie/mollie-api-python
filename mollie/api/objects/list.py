@@ -29,7 +29,7 @@ class List(Base):
         try:
             item = self['_embedded'][self.get_object_name()][self.current]
             return self.object_type(item)
-        except IndexError and KeyError:
+        except (IndexError, KeyError):
             raise StopIteration
 
     next = __next__  # support python2 iterator interface
