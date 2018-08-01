@@ -73,8 +73,8 @@ def test_get_single_payment(client, response):
     assert payment.id == PAYMENT_ID
     assert payment.mode == 'test'
     assert payment.status == 'open'
-    assert payment.amount_refunded == '0.0'
-    assert payment.amount_remaining == '0.0'
+    assert payment.amount_refunded is None
+    assert payment.amount_remaining is None
     assert payment.is_open() is True
     assert payment.is_pending() is False
     assert payment.is_canceled() is False
