@@ -57,8 +57,8 @@ def main():
         payment = mollie_client.customer_payments.with_parent_id(customer_id).create({
             'amount': {'currency': 'EUR', 'value': '100.00'},
             'description': 'My first API payment',
-            'webhookUrl': flask.request.url_root + '2-webhook-verification',
-            'redirectUrl': flask.request.url_root + '3-return-page?order_id=' + str(order_id),
+            'webhookUrl': 'http://webshop.example.org/webhook',
+            'redirectUrl': flask.request.url_root + '3-return-page?order_id=%s' % str(order_id),
             'metadata': {
                 'order_id': order_id
             }
@@ -69,8 +69,8 @@ def main():
         return '<p>Created payment of %s %s for %s (%s)<p>' % (
             payment.value, payment.currency, customer.name, customer.id)
 
-    except Error as e:
-        return 'API call failed: ' + str(e)
+    except Error as err:
+        return 'API call failed: %s' % err
 
 
 if __name__ == '__main__':

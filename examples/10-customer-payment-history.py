@@ -66,7 +66,7 @@ def main():
         return body
 
     except Error as err:
-        return 'API call failed: ' + str(err)
+        return 'API call failed: %s' % err
 
 
 if __name__ == '__main__':

@@ -65,7 +65,7 @@ def main():
             'amount': {'currency': 'EUR', 'value': '10.00'},
             'description': 'My first API payment',
             'webhookUrl': 'http://webshop.example.org/webhook',
-            'redirectUrl': flask.request.url_root + '3-return-page?order_id=' + str(order_id),
+            'redirectUrl': flask.request.url_root + '3-return-page?order_id=%s' % str(order_id),
             'metadata': {
                 'order_nr': order_id
             },
@@ -84,7 +84,7 @@ def main():
         return flask.redirect(payment.checkout_url)
 
     except Error as err:
-        return 'API call failed: ' + str(err)
+        return 'API call failed: %s' % err
 
 
 if __name__ == '__main__':
