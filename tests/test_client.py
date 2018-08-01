@@ -4,7 +4,8 @@ import pkg_resources
 import pytest
 
 from mollie.api.client import Client, generate_querystring
-from mollie.api.error import *  # noqa
+from mollie.api.error import RequestError, RequestSetupError, IdentifierValidationError, ResponseHandlingError, \
+    ResponseError
 
 
 @pytest.mark.parametrize('params, querystring', [
