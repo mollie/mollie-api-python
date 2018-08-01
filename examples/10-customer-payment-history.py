@@ -27,7 +27,6 @@ def main():
 
         customer_id = flask.request.args.get('customer_id')
 
-
         # If no customer ID was provided in the URL, we grab the first customer
         if customer_id is None:
             customers = mollie_client.customers.all()
@@ -52,7 +51,6 @@ def main():
         # See: https://www.mollie.com/nl/docs/reference/customers/list-payments
         #
         params = {
-            'from': 0,
             'limit': amount_of_payments_to_retrieve,
         }
         payments = mollie_client.customer_payments.with_parent_id(customer_id).all(**params)

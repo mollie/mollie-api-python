@@ -23,8 +23,7 @@ def main():
 
         amount_of_customers_to_retrieve = 20
         params = {
-            'from': 0,
-            'count': amount_of_customers_to_retrieve,
+            'limit': amount_of_customers_to_retrieve,
         }
 
         #
@@ -32,6 +31,8 @@ def main():
         #
         # See: https://www.mollie.com/nl/docs/reference/customers/list
         #
+        import ipdb
+        ipdb.set_trace()
         customers = mollie_client.customers.all(**params)
 
         body = '<p>Your API key has %u customers.</p>' % int(customers.count)
