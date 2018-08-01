@@ -1,7 +1,7 @@
 
 def test_methods_all(client, response):
     """Retrieve a list of available payment methods."""
-    response.get('https://api.mollie.com/v2/methods', 'methods_multiple')
+    response.get('https://api.mollie.com/v2/methods', 'methods_list')
 
     methods = client.methods.all()
     assert methods.__class__.__name__ == 'List'

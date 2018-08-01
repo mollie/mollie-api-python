@@ -20,7 +20,7 @@ def test_client_querystring(client, response):
     response.add(
         response.GET,
         'https://api.mollie.com/v2/methods?amount[currency]=USD&amount[value]=100.00',
-        body=response._get_body('methods_multiple'),
+        body=response._get_body('methods_list'),
         match_querystring=True
     )
 

@@ -8,7 +8,7 @@ MANDATE_ID = 'mdt_h3gAaD5zP'
 
 def test_customer_mandates_all(client, response):
     """Retrieve a list of mandates."""
-    response.get('https://api.mollie.com/v2/customers/%s/mandates' % CUSTOMER_ID, 'customer_mandates_multiple')
+    response.get('https://api.mollie.com/v2/customers/%s/mandates' % CUSTOMER_ID, 'customer_mandates_list')
     mandates = client.customer_mandates.with_parent_id(CUSTOMER_ID).all()
     assert isinstance(mandates, List)
     assert mandates.count == 1
@@ -28,7 +28,7 @@ def test_get_customer_mandate_by_id(client, response):
     """Retrieve a single mandate by ID."""
     response.get(
         'https://api.mollie.com/v2/customers/%s/mandates/%s' % (CUSTOMER_ID, MANDATE_ID),
-        'customer_mandate_get',
+        'customer_mandate_single',
     )
 
     mandate = client.customer_mandates.with_parent_id(CUSTOMER_ID).get(MANDATE_ID)
@@ -52,10 +52,10 @@ def test_get_customer_mandate_by_id(client, response):
 def test_get_customer_mandate_by_customer(client, response):
     """Retrieve a customer by customer object, ensure request is correct."""
     response.get('https://api.mollie.com/v2/customers/%s' % CUSTOMER_ID, 'customer_new')
-    response.get('https://api.mollie.com/v2/customers/%s/mandates' % CUSTOMER_ID, 'customer_mandates_multiple')
+    response.get('https://api.mollie.com/v2/customers/%s/mandates' % CUSTOMER_ID, 'customer_mandates_list')
     response.get(
         'https://api.mollie.com/v2/customers/%s/mandates/%s' % (CUSTOMER_ID, MANDATE_ID),
-        'customer_mandate_get',
+        'customer_mandate_single',
     )
     customer = client.customers.get(CUSTOMER_ID)
 
@@ -70,7 +70,7 @@ def test_customer_mandate_get_related_customer(client, response):
     """Retrieve a related customer object from a mandate."""
     response.get(
         'https://api.mollie.com/v2/customers/%s/mandates/%s' % (CUSTOMER_ID, MANDATE_ID),
-        'customer_mandate_get',
+        'customer_mandate_single',
     )
     response.get('https://api.mollie.com/v2/customers/%s' % CUSTOMER_ID, 'customer_new')
 
@@ -81,7 +81,7 @@ def test_customer_mandate_get_related_customer(client, response):
 
 def test_customer_mandates_create_mandate(client, response):
     """Create a new customer mandate."""
-    response.post('https://api.mollie.com/v2/customers/%s/mandates' % CUSTOMER_ID, 'customer_mandate_get')
+    response.post('https://api.mollie.com/v2/customers/%s/mandates' % CUSTOMER_ID, 'customer_mandate_single')
 
     data = {
         'method': 'directdebit',

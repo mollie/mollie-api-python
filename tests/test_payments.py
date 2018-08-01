@@ -10,7 +10,7 @@ CHARGEBACK_ID = 'chb_n9z0tp'
 
 def test_get_all_payments(client, response):
     """Retrieve all existing payments"""
-    response.get('https://api.mollie.com/v2/payments', 'payments_multiple')
+    response.get('https://api.mollie.com/v2/payments', 'payments_list')
 
     payments = client.payments.all()
     assert isinstance(payments, List)
@@ -28,7 +28,7 @@ def test_get_all_payments(client, response):
 
 def test_create_payment(client, response):
     """Create a new payment"""
-    response.post('https://api.mollie.com/v2/payments', 'payments_create')
+    response.post('https://api.mollie.com/v2/payments', 'payment_single')
 
     payment = client.payments.create(
         {
@@ -43,7 +43,7 @@ def test_create_payment(client, response):
 
 def test_cancel_payment(client, response):
     """Cancel existing payment"""
-    response.delete('https://api.mollie.com/v2/payments/%s' % PAYMENT_ID, 'payments_canceled', 200)
+    response.delete('https://api.mollie.com/v2/payments/%s' % PAYMENT_ID, 'payment_canceled', 200)
 
     canceled_payment = client.payments.delete(PAYMENT_ID)
     assert canceled_payment.is_canceled() is True
@@ -53,7 +53,7 @@ def test_cancel_payment(client, response):
 
 def test_get_single_payment(client, response):
     """Retrieve a single payment by payment id"""
-    response.get('https://api.mollie.com/v2/payments/%s' % PAYMENT_ID, 'payments_create')
+    response.get('https://api.mollie.com/v2/payments/%s' % PAYMENT_ID, 'payment_single')
 
     payment = client.payments.get(PAYMENT_ID)
     assert payment.amount == {'value': '10.00', 'currency': 'EUR'}
@@ -89,8 +89,8 @@ def test_get_single_payment(client, response):
 
 def test_get_all_related_refunds_of_payment(client, response):
     """Retrieve a list of all refunds related to a payment"""
-    response.get('https://api.mollie.com/v2/payments/%s' % PAYMENT_ID, 'payments_create')
-    response.get('https://api.mollie.com/v2/payments/%s/refunds/%s' % (PAYMENT_ID, REFUND_ID), 'refunds_multiple')
+    response.get('https://api.mollie.com/v2/payments/%s' % PAYMENT_ID, 'payment_single')
+    response.get('https://api.mollie.com/v2/payments/%s/refunds/%s' % (PAYMENT_ID, REFUND_ID), 'refunds_list')
 
     payment = client.payments.get(PAYMENT_ID)
     refunds = payment.refunds
@@ -110,8 +110,8 @@ def test_get_all_related_refunds_of_payment(client, response):
 
 def test_get_related_chargebacks(client, response):
     """Get chargebacks related to payment id"""
-    response.get('https://api.mollie.com/v2/payments/%s' % PAYMENT_ID, 'payments_create')
-    response.get('https://api.mollie.com/v2/payments/%s/chargebacks' % PAYMENT_ID, 'chargeback_list')
+    response.get('https://api.mollie.com/v2/payments/%s' % PAYMENT_ID, 'payment_single')
+    response.get('https://api.mollie.com/v2/payments/%s/chargebacks' % PAYMENT_ID, 'chargebacks_list')
 
     payment = client.payments.get(PAYMENT_ID)
     chargebacks = payment.chargebacks

@@ -6,7 +6,7 @@ from mollie.api.objects.method import Method
 
 def test_list_iterator_behaviour(client, response):
     """Verify the behaviour of the List object in iterator circumstances."""
-    response.get('https://api.mollie.com/v2/methods', 'methods_multiple')
+    response.get('https://api.mollie.com/v2/methods', 'methods_list')
 
     methods = client.methods.all()
     assert isinstance(methods, List)
