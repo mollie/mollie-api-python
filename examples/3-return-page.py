@@ -8,7 +8,7 @@ from __future__ import print_function
 
 import flask
 
-from app import database_read
+from .app import database_read
 
 
 def main():

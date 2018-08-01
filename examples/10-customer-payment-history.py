@@ -8,7 +8,8 @@ import os
 
 import flask
 
-import mollie
+from mollie.api.client import Client
+from mollie.api.error import Error
 
 
 def main():
@@ -19,12 +20,13 @@ def main():
         # See: https://www.mollie.com/dashboard/settings/profiles
         #
         api_key = os.environ.get('MOLLIE_API_KEY', 'test_test')
-        mollie_client = mollie.api.client.Client()
+        mollie_client = Client()
         mollie_client.set_api_key(api_key)
 
         body = ''
 
         customer_id = flask.request.args.get('customer_id')
+
 
         # If no customer ID was provided in the URL, we grab the first customer
         if customer_id is None:
@@ -51,9 +53,12 @@ def main():
         #
         params = {
             'from': 0,
-            'count': amount_of_payments_to_retrieve,
+            'limit': amount_of_payments_to_retrieve,
         }
         payments = mollie_client.customer_payments.with_parent_id(customer_id).all(**params)
+
+        import ipdb
+        ipdb.set_trace()
 
         body += '<p>Customer "%s" has %s payments</p>' % (customer.id, payments.count)
 
@@ -65,7 +70,7 @@ def main():
 
         return body
 
-    except mollie.api.error as e:
+    except Error as e:
         return 'API call failed: ' + str(e)
 
 
