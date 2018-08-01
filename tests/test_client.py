@@ -1,3 +1,5 @@
+from datetime import datetime
+
 import pkg_resources
 import pytest
 
@@ -76,7 +78,7 @@ def test_client_generic_request_error(response):
 
 def test_client_invalid_create_data(client):
     """Invalid data for a create command should raise an error."""
-    data = b"bytes cannot be serialized to json"
+    data = datetime.now()
     with pytest.raises(RequestSetupError) as excinfo:
         client.customers.create(data=data)
     assert excinfo.match('Error encoding parameters into JSON')
@@ -84,7 +86,7 @@ def test_client_invalid_create_data(client):
 
 def test_client_invalid_update_data(client):
     """Invalid data for a create command should raise an error."""
-    data = b"bytes cannot be serialized to json"
+    data = datetime.now()
     with pytest.raises(RequestSetupError) as excinfo:
         client.customers.update('cst_12345', data=data)
     assert excinfo.match('Error encoding parameters into JSON')
