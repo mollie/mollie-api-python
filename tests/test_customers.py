@@ -1,6 +1,7 @@
 from mollie.api.objects.customer import Customer
 from mollie.api.objects.list import List
 from mollie.api.objects.mandate import Mandate
+from mollie.api.objects.payment import Payment
 from mollie.api.objects.subscription import Subscription
 
 CUSTOMER_ID = 'cst_8wmqcHMN4U'
@@ -101,3 +102,23 @@ def test_customer_get_related_subscriptions(client, response):
         assert isinstance(subscription, Subscription)
         iterated += 1
     assert iterated == subscriptions.count, 'Unexpected amount of subscriptions retrieved'
+
+
+def test_customer_get_related_payments(client, response):
+    """Retrieve related payments for a customer"""
+    response.get('https://api.mollie.com/v2/customers/%s' % CUSTOMER_ID, 'customer_new')
+    response.get('https://api.mollie.com/v2/customers/%s/payments' % CUSTOMER_ID, 'customer_payments_multiple')
+
+    customer = client.customers.get(CUSTOMER_ID)
+    payments = customer.payments
+    assert isinstance(payments, List)
+    assert payments.count == 1
+    iterated = 0
+    iterated_payment_ids = []
+    for payment in payments:
+        iterated += 1
+        assert isinstance(payment, Payment)
+        assert payment.id is not None
+        iterated_payment_ids.append(payment.id)
+    assert iterated == payments.count, 'Unexpected amount of payments retrieved'
+    assert len(set(iterated_payment_ids)) == payments.count, 'Unexpected unique payment ids retrieved'

@@ -56,3 +56,14 @@ class Customer(Base):
             return None
         resp = self._resource.perform_api_call(self._resource.REST_READ, url)
         return List(resp, Mandate)
+
+    @property
+    def payments(self):
+        """Return the mandate list referenced in the _links."""
+        from .payment import Payment  # work around circular import
+        try:
+            url = self['_links']['payments']['href']
+        except KeyError:
+            return None
+        resp = self._resource.perform_api_call(self._resource.REST_READ, url)
+        return List(resp, Payment)
