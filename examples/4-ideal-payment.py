@@ -44,8 +44,7 @@ def main():
 
             if flask.request.form['issuer']:
                 issuer_id = str(flask.request.form['issuer'])
-        import ipdb
-        ipdb.set_trace()
+
         #
         # Generate a unique order number for this example. It is important to include this unique attribute
         # in the redirectUrl (below) so a proper return page can be shown to the customer.
@@ -84,8 +83,8 @@ def main():
         #
         return flask.redirect(payment.checkout_url)
 
-    except Error as e:
-        return 'API call failed: ' + str(e)
+    except Error as err:
+        return 'API call failed: ' + str(err)
 
 
 if __name__ == '__main__':

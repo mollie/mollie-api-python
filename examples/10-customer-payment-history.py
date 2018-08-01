@@ -55,9 +55,6 @@ def main():
         }
         payments = mollie_client.customer_payments.with_parent_id(customer_id).all(**params)
 
-        import ipdb
-        ipdb.set_trace()
-
         body += '<p>Customer "%s" has %s payments</p>' % (customer.id, payments.count)
 
         if int(payments.count) > amount_of_payments_to_retrieve:
@@ -68,8 +65,8 @@ def main():
 
         return body
 
-    except Error as e:
-        return 'API call failed: ' + str(e)
+    except Error as err:
+        return 'API call failed: ' + str(err)
 
 
 if __name__ == '__main__':

@@ -31,8 +31,6 @@ def main():
         #
         # See: https://www.mollie.com/nl/docs/reference/customers/list
         #
-        import ipdb
-        ipdb.set_trace()
         customers = mollie_client.customers.all(**params)
 
         body = '<p>Your API key has %u customers.</p>' % int(customers.count)

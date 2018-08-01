@@ -59,8 +59,8 @@ def main():
             #
             return 'Cancelled'
 
-    except Error as e:
-        return 'API call failed: ' + str(e)
+    except Error as err:
+        return 'API call failed: ' + str(err)
 
 
 if __name__ == '__main__':

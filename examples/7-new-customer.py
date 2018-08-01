@@ -32,8 +32,8 @@ def main():
 
         return "Created new customer '%s' (%s)" % (customer.name, customer.email)
 
-    except Error as e:
-        return 'API call failed: ' + str(e)
+    except Error as err:
+        return 'API call failed: ' + str(err)
 
 
 if __name__ == '__main__':

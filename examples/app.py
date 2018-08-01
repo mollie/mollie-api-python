@@ -14,7 +14,7 @@ examples = [
     '8-list-customers',
     '9-create-customer-payment',
     '10-customer-payment-history',
-    '11-refund-payment'
+    '11-refund-payment',
 ]
 
 
