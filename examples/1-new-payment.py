@@ -40,12 +40,12 @@ def main():
         # metadata      Custom metadata that is stored with the payment.
         #
         payment = mollie_client.payments.create({
-            'amount': {'currency': 'EUR', 'value': '10.00'},
+            'amount': {'currency': 'EUR', 'value': '120.00'},
             'description': 'My first API payment',
-            'webhookUrl': 'http://webshop.example.org/webhook',
+            'webhookUrl': flask.request.url_root + '2-webhook_verification',
             'redirectUrl': flask.request.url_root + '3-return-page?order_id=%s' % str(order_id),
             'metadata': {
-                'order_nr': order_id
+                'order_id': order_id
             }
         })
 
