@@ -22,22 +22,22 @@ To use the Mollie API client, the following things are required:
 By far the easiest way to install the Mollie API client is to install it with [pip](https://pip.pypa.io).
 
 ```
-$ cd mollie-api-python
 $ pip install mollie-api-python
 ```
 You may also git checkout or [download all the files](https://github.com/mollie/mollie-api-python/archive/master.zip), and include the Mollie API client manually.
 
-Create and activate a Python >= 2.7 virtual environment.
+Create and activate a Python >= 2.7 virtual environment (inside a git checkout or downloaded archive).
 
 ```
+$ cd mollie-api-python
 $ python -m virtualenv env
 $ source env/bin/activate
 ```
 
-Install the requirements.
+Install the requirements, then install Mollie itself.
 ```
-$ pip install Flask
-$ pip install requests
+$ pip install flask
+$ pip install -e .
 ```
 
 Run the examples.
@@ -59,14 +59,14 @@ Find our full documentation online on [docs.mollie.com](https://docs.mollie.com)
 
 ## Getting started ##
 
-Requiring the Mollie API Client
+Importing the Mollie API Client
 ```python
-import mollie
+from mollie.api.client import Client
 ``` 
 Initializing the Mollie API client, and setting your API key
 
 ```python
-mollie_client = mollie.api.client.Client()
+mollie_client = Client()
 mollie_client.set_api_key('test_dHar4XY7LxsDOtmnkVtjNVWXLSlXsM')
 ``` 
 
@@ -114,7 +114,7 @@ There we can use the `id` from our POST parameters to check te status and act up
 
 
 ## Multicurrency ##
-Since the 2.0 version of the client non-EUR payments for your customers is now supported.
+Since the 2.0 version of the API (supported by version 2.0.0 of the client) non-EUR payments for your customers is now supported.
 A full list of available currencies can be found [in our documentation](https://docs.mollie.com/guides/multicurrency).
 
 ```python
@@ -128,7 +128,7 @@ payment = mollie_client.payments.create({
     'webhookUrl': 'https://webshop.example.org/mollie-webhook/',
 })
 ```
-_After creation, the `settlementAmount` will contain the EUR amount that will be settled on your account._
+_After the customer completes the payment, the `payment.settlement_amount` will contain the amount + currency that will be settled on your account._
 
 ### Fully integrated iDEAL payments ###
 
@@ -142,7 +142,7 @@ Retrieve the iDEAL method and include the issuers
 method = mollie_client.methods.get(mollie.api.objects.Method.IDEAL, include='issuers')
 ```
 
-_`method.issuers` will be a list of objects. Use the property `id` of this object in the
+_`method.issuers` will be a list of Issuer objects. Use the property `id` of this object in the
  API call, and the property `name` for displaying the issuer to your customer. For a more in-depth example, see [Example 4 - iDEAL payment](https://github.com/mollie/mollie-api-python/blob/master/examples/04-ideal-payment.py)._
 
 ```python
@@ -155,12 +155,10 @@ payment = mollie_client.payments.create({
     'redirectUrl': 'https://webshop.example.org/order/12345/',
     'webhookUrl': 'https://webshop.example.org/mollie-webhook/',
     'method': mollie.api.objects.Method.IDEAL,
-    'issuer': selectedIssuerId, # e.g. "ideal_INGBNL2A"
+    'issuer': selectedIssuerId,  # e.g. "ideal_INGBNL2A"
 })
 ```
-
-_The `_links` property of the `payment` object will contain an object `checkout` with a `href` property, which is a URL that points directly to the online banking environment of the selected issuer.
-A short way of retrieving this URL can be achieved by using the `payment.checkout_url`._
+The `payment.checkout_url` is a URL that points directly to the online banking environment of the selected issuer.
 
 ### Refunding payments ###
 
@@ -172,7 +170,7 @@ ING Home'Pay and bank transfer payments. Other types of payments cannot be refun
 payment = mollie_client.payment.get(payment.id)
 
 # Refund € 2 of this payment
-refund = payment.refund({
+refund = mollie_client.refunds.on(payment).create({
     'amount': {
         'currency': 'EUR',
         'value': '2.00'
@@ -191,7 +189,7 @@ Want to help us make our API client even better? We take [pull requests](https:/
 
 ## License ##
 [BSD (Berkeley Software Distribution) License](https://opensource.org/licenses/bsd-license.php).
-Copyright (c) 2013-2018, Mollie B.V.
+Copyright (c) 2014-2018, Mollie B.V.
 
 ## Support ##
 Contact: [www.mollie.com](https://www.mollie.com) — info@mollie.com — +31 20 820 20 70
