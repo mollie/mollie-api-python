@@ -152,15 +152,15 @@ class Payment(Base):
     @property
     def get_amount_refunded(self):
         try:
-            return self._get_property('amountRefunded')
-        except TypeError:
+            return self['amountRefunded']
+        except KeyError:
             return '0.0'
 
     @property
     def get_amount_remaining(self):
         try:
-            return self._get_property('amountRemaining')
-        except TypeError:
+            return self['amountRemaining']
+        except KeyError:
             return '0.0'
 
     @property
