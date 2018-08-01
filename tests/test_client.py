@@ -4,8 +4,16 @@ import pkg_resources
 import pytest
 
 from mollie.api.client import Client, generate_querystring
-from mollie.api.error import RequestError, RequestSetupError, IdentifierValidationError, ResponseHandlingError, \
-    ResponseError
+from mollie.api.error import (
+    RequestError,
+    RequestSetupError,
+    IdentifierValidationError,
+    ResponseHandlingError,
+    ResponseError,
+    NotFoundError,
+    UnauthorizedError,
+    UnprocessableEntityError,
+)
 
 
 @pytest.mark.parametrize('params, querystring', [
@@ -136,12 +144,18 @@ def test_client_invalid_json_response(client, response):
     assert excinfo.match(r'Unable to decode Mollie API response \(status code: 200\)')
 
 
-def test_client_response_contains_error_status(client, response):
-    """An error response from the API should raise an error."""
-    response.get('https://api.mollie.com/v2/customers/cst_doesnotexist', 'customer_doesnotexist', status=404)
-    with pytest.raises(ResponseError) as excinfo:
+@pytest.mark.parametrize('resp_payload, resp_status, exception, errormsg', [
+    ('error_unauthorized', 401, UnauthorizedError, 'Missing authentication, or failed to authenticate'),
+    ('customer_doesnotexist', 404, NotFoundError, 'No customer exists with token cst_doesnotexist.'),
+    ('payment_rejected', 422, UnprocessableEntityError, 'The amount is higher than the maximum'),
+])
+def test_client_received_error_response(client, response, resp_payload, resp_status, exception, errormsg):
+    """An error response from the API should raise a matching error."""
+    response.get('https://api.mollie.com/v2/customers/cst_doesnotexist', resp_payload, status=resp_status)
+    with pytest.raises(exception) as excinfo:
         client.customers.get('cst_doesnotexist')
-    assert excinfo.match('No customer exists with token cst_doesnotexist.')
+    assert excinfo.match(errormsg)
+    assert excinfo.value.status == resp_status
 
 
 def test_client_response_404_but_no_payload(response):
@@ -174,7 +188,7 @@ def test_client_error_including_field_response(client, response):
         'redirectUrl': 'https://webshop.example.org/order/12345/',
         'webhookUrl': 'https://webshop.example.org/payments/webhook/',
     }
-    with pytest.raises(ResponseError) as excinfo:
+    with pytest.raises(UnprocessableEntityError) as excinfo:
         client.payments.create(**params)
     assert excinfo.match('The amount is higher than the maximum')
     assert excinfo.value.field == 'amount'

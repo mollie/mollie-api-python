@@ -41,3 +41,44 @@ class ResponseError(Error):
         self.status = resp['status']
         if 'field' in resp:
             self.field = resp['field']
+
+    @staticmethod
+    def factory(resp):
+        """
+        Return a ResponseError subclass based on the API payload.
+
+        All error are documented: https://docs.mollie.com/guides/handling-errors#all-possible-status-codes
+        More exceptions should be added here when appropriate, and when useful examples of API errors are available.
+        """
+        status = resp['status']
+        if status == 401:
+            return UnauthorizedError(resp)
+        elif status == 404:
+            return NotFoundError(resp)
+        elif status == 422:
+            return UnprocessableEntityError(resp)
+        else:
+            # generic fallback
+            return ResponseError(resp)
+
+
+class UnauthorizedError(ResponseError):
+    """Your request wasn't executed due to failed authentication. Check your API key."""
+
+    pass
+
+
+class NotFoundError(ResponseError):
+    """The object referenced by your API request does not exist."""
+
+    pass
+
+
+class UnprocessableEntityError(ResponseError):
+    """
+    We could not process your request due to another reason than the ones listed above.
+
+    The response usually contains a field property to indicate which field is causing the issue.
+    """
+
+    pass

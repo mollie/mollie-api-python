@@ -79,7 +79,8 @@ class Base(object):
                 resp.status_code, resp.text))
         if resp.status_code < 200 or resp.status_code > 299:
             if 'status' in result and (result['status'] < 200 or result['status'] > 299):
-                raise ResponseError(result)
+                # the factory will return the appropriate ResponseError subclass based on the result
+                raise ResponseError.factory(result)
             else:
                 raise ResponseHandlingError(
                     'Received HTTP error from Mollie API, but no status in payload (status code: %d): %s' % (
