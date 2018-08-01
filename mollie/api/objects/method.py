@@ -60,17 +60,3 @@ class Method(Base):
             return List(result, Issuer)
         except KeyError:
             return None
-
-    def getMinimumAmount(self):
-        # TODO check for obsoletion
-        try:
-            return float(self['amount']['minimum'])
-        except KeyError:
-            return None
-
-    def getMaximumAmount(self):
-        # TODO check for obsoletion
-        try:
-            return float(self['amount']['maximum'])
-        except KeyError:
-            return None
