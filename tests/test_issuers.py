@@ -17,13 +17,9 @@ def test_get_issuers(client, response):
     assert iterated == len(issuers), 'Unexpected amount of issuers retrieved'
     assert len(set(iterated_issuer_ids)) == len(issuers), 'Unexpected number of unique issuers'
 
-    iterated = 0
-    for issuer in issuers:
-        if iterated == 1:
-            break
-        assert issuer.image_size1x == 'https://www.mollie.com/images/checkout/v2/ideal-issuer-icons/ABNANL2A.png'
-        assert issuer.image_size2x == 'https://www.mollie.com/images/checkout/v2/ideal-issuer-icons/ABNANL2A.png'
-        assert issuer.name == 'ABN AMRO'
-        assert issuer.resource == 'issuer'
-        assert issuer.id == 'ideal_ABNANL2A'
-        iterated += 1
+    # check the last issuer
+    assert issuer.image_size1x == 'https://www.mollie.com/images/checkout/v2/ideal-issuer-icons/FVLBNL22.png'
+    assert issuer.image_size2x == 'https://www.mollie.com/images/checkout/v2/ideal-issuer-icons/FVLBNL22.png'
+    assert issuer.name == 'van Lanschot'
+    assert issuer.resource == 'issuer'
+    assert issuer.id == 'ideal_FVLBNL22'
