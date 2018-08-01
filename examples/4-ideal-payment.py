@@ -9,9 +9,9 @@ import time
 
 import flask
 
+from .app import database_write
 from mollie.api.client import Client
 from mollie.api.error import Error
-from app import database_write
 
 
 def main():
