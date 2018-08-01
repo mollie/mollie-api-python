@@ -9,7 +9,6 @@ from mollie.api.resources.customer_mandates import CustomerMandates
 from mollie.api.resources.customer_payments import CustomerPayments
 from mollie.api.resources.customer_subscriptions import CustomerSubscriptions
 from mollie.api.resources.customers import Customers
-from mollie.api.resources.issuers import Issuers
 from mollie.api.resources.methods import Methods
 from mollie.api.resources.payment_chargebacks import PaymentChargebacks
 from mollie.api.resources.payment_refunds import PaymentRefunds
@@ -57,7 +56,6 @@ class Client(object):
         self.payment_refunds = PaymentRefunds(self)
         self.payment_chargebacks = PaymentChargebacks(self)
         self.methods = Methods(self)
-        self.issuers = Issuers(self)
         self.refunds = Refunds(self)
         self.chargebacks = Chargebacks(self)
         self.customers = Customers(self)

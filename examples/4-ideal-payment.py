@@ -9,8 +9,9 @@ import time
 
 import flask
 
-import mollie
-from app import database_write
+from .app import database_write
+from mollie.api.client import Client
+from mollie.api.error import Error
 
 
 def main():
@@ -21,19 +22,16 @@ def main():
         # See: https://www.mollie.com/dashboard/settings/profiles
         #
         api_key = os.environ.get('MOLLIE_API_KEY', 'test_test')
-        mollie_client = mollie.api.client.Client()
-        mollie.set_api_key(api_key)
+        mollie_client = Client()
+        mollie_client.set_api_key(api_key)
 
         #
         # First, let the customer pick the bank in a simple HTML form. This step is actually optional.
         #
         if 'issuer' not in flask.request.form:
             body = '<form method="post">Select your bank: <select name="issuer">'
-
-            for issuer in mollie_client.issuers.all():
-                if issuer.method == mollie_client.api.object.Method.IDEAL:
-                    body += '<option value="%s">%s</option>' % (issuer.id, issuer.name)
-
+            for issuer in mollie_client.methods.get('ideal', include='issuers').issuers:
+                body += '<option value="%s">%s</option>' % (issuer.id, issuer.name)
             body += '<option value="">or select later</option>'
             body += '</select><button>OK</button></form>'
             return body
@@ -85,7 +83,7 @@ def main():
             #
             return flask.redirect(payment.checkout_url)
 
-    except mollie.api.error as e:
+    except Error as e:
         return 'API call failed: ' + str(e)
 
 

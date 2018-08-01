@@ -8,6 +8,10 @@ class List(Base):
         Base.__init__(self, result)
         self.object_type = object_type
 
+    def __len__(self):
+        """Return the count field."""
+        return int(self['count'])
+
     def get_object_name(self):
         return self.object_type.__name__.lower() + 's'
 

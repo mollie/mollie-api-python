@@ -53,7 +53,7 @@ def test_customers_all(client, response):
         iterated += 1
         assert customer.id is not None
         iterated_customer_ids.append(customer.id)
-    assert iterated == customers.count, 'Unexpected amount of customer retrieved'
+    assert iterated == customers.count, 'Unexpected amount of customers retrieved'
     assert len(set(iterated_customer_ids)) == customers.count, 'Unexpected amount of unique customer ids retrieved'
 
 
