@@ -9,7 +9,8 @@ import time
 
 import flask
 
-import mollie
+from mollie.api.client import Client
+from mollie.api.error import Error
 from app import database_write
 
 
@@ -21,8 +22,8 @@ def main():
         # See: https://www.mollie.com/dashboard/settings/profiles
         #
         api_key = os.environ.get('MOLLIE_API_KEY', 'test_test')
-        mollie_client = mollie.api.client.Client()
-        mollie.set_api_key(api_key)
+        mollie_client = Client()
+        mollie_client.set_api_key(api_key)
 
         #
         # First, let the customer pick the bank in a simple HTML form. This step is actually optional.
@@ -82,7 +83,7 @@ def main():
             #
             return flask.redirect(payment.checkout_url)
 
-    except mollie.api.error as e:
+    except Error as e:
         return 'API call failed: ' + str(e)
 
 
