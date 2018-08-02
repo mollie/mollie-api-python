@@ -8,7 +8,7 @@ SUBSCRIPTION_ID = 'sub_rVKGtNd6s3'
 
 def test_customer_subscriptions_all(client, response):
     """Retrieve a list of subscriptions"""
-    response.get('https://api.mollie.com/v2/customers/%s/subscriptions' % CUSTOMER_ID, 'subscription_all')
+    response.get('https://api.mollie.com/v2/customers/%s/subscriptions' % CUSTOMER_ID, 'subscriptions_list')
 
     subscriptions = client.customer_subscriptions.with_parent_id(CUSTOMER_ID).all()
     assert isinstance(subscriptions, List)
@@ -52,7 +52,7 @@ def test_get_customer_subscription_by_id(client, response):
 def test_get_all_customer_subscriptions_by_customer_object(client, response):
     """Retrieve all subscriptions related to customer"""
     response.get('https://api.mollie.com/v2/customers/%s/subscriptions' % CUSTOMER_ID,
-                 'subscription_all')
+                 'subscriptions_list')
     response.get('https://api.mollie.com/v2/customers/%s' % CUSTOMER_ID, 'customer_single')
 
     customer = client.customers.get(CUSTOMER_ID)

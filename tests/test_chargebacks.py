@@ -7,7 +7,7 @@ CHARGEBACK_ID = 'chb_n9z0tp'
 
 def test_get_all_chargebacks(client, response):
     """Get all chargebacks"""
-    response.get('https://api.mollie.com/v2/chargebacks', 'chargeback_list')
+    response.get('https://api.mollie.com/v2/chargebacks', 'chargebacks_list')
 
     chargebacks = client.chargebacks.all()
     assert chargebacks.count == 1

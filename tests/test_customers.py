@@ -42,7 +42,7 @@ def test_delete_customers(client, response):
 
 def test_customers_all(client, response):
     """Retrieve a list of all existing customers"""
-    response.get('https://api.mollie.com/v2/customers', 'customers_multiple')
+    response.get('https://api.mollie.com/v2/customers', 'customers_list')
 
     customers = client.customers.all()
     assert isinstance(customers, List)
@@ -75,7 +75,7 @@ def test_customer_get(client, response):
 def test_customer_get_related_mandates(client, response):
     """Retrieve related mandates for a customer."""
     response.get('https://api.mollie.com/v2/customers/%s' % CUSTOMER_ID, 'customer_updated')
-    response.get('https://api.mollie.com/v2/customers/%s/mandates' % CUSTOMER_ID, 'customer_mandates_multiple')
+    response.get('https://api.mollie.com/v2/customers/%s/mandates' % CUSTOMER_ID, 'customer_mandates_list')
 
     customer = client.customers.get(CUSTOMER_ID)
     mandates = customer.mandates
@@ -90,7 +90,7 @@ def test_customer_get_related_mandates(client, response):
 def test_customer_get_related_subscriptions(client, response):
     """Retrieve related subscriptions for a customer"""
     response.get('https://api.mollie.com/v2/customers/%s/subscriptions' % CUSTOMER_ID,
-                 'subscription_all')
+                 'subscriptions_list')
     response.get('https://api.mollie.com/v2/customers/%s' % CUSTOMER_ID, 'customer_single')
 
     customer = client.customers.get(CUSTOMER_ID)

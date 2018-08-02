@@ -24,7 +24,7 @@ def test_get_all_customer_payments(client, response):
 
 def test_create_customer_payment(client, response):
     """Create a customer payment"""
-    response.post('https://api.mollie.com/v2/customers/%s/payments' % CUSTOMER_ID, 'payments_create')
+    response.post('https://api.mollie.com/v2/customers/%s/payments' % CUSTOMER_ID, 'payment_single')
 
     payment = client.customer_payments.with_parent_id(CUSTOMER_ID).create(
         {
