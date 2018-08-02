@@ -1,7 +1,6 @@
+from ..error import IdentifierError
+from ..objects.chargeback import Chargeback
 from .base import Base
-
-from mollie.api.error import IdentifierError
-from mollie.api.objects.chargeback import Chargeback
 
 
 class Chargebacks(Base):

@@ -1,7 +1,6 @@
+from ..error import IdentifierError
+from ..objects.payment import Payment
 from .base import Base
-
-from mollie.api.error import IdentifierError
-from mollie.api.objects.payment import Payment
 
 
 class Payments(Base):

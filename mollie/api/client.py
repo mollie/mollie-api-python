@@ -1,29 +1,28 @@
 import platform
-import sys
-import ssl
 import re
-import pkg_resources
+import ssl
+import sys
 
-from mollie.api.resources.chargebacks import Chargebacks
-from mollie.api.resources.customer_mandates import CustomerMandates
-from mollie.api.resources.customer_payments import CustomerPayments
-from mollie.api.resources.customer_subscriptions import CustomerSubscriptions
-from mollie.api.resources.customers import Customers
-from mollie.api.resources.methods import Methods
-from mollie.api.resources.payment_chargebacks import PaymentChargebacks
-from mollie.api.resources.payment_refunds import PaymentRefunds
-from mollie.api.resources.payments import Payments
-from mollie.api.resources.refunds import Refunds
+import pkg_resources
+import requests
+
+from .error import RequestError, RequestSetupError
+from .resources.chargebacks import Chargebacks
+from .resources.customer_mandates import CustomerMandates
+from .resources.customer_payments import CustomerPayments
+from .resources.customer_subscriptions import CustomerSubscriptions
+from .resources.customers import Customers
+from .resources.methods import Methods
+from .resources.payment_chargebacks import PaymentChargebacks
+from .resources.payment_refunds import PaymentRefunds
+from .resources.payments import Payments
+from .resources.refunds import Refunds
 
 try:
     from urllib.parse import urlencode
 except ImportError:
     # support python 2
     from urllib import urlencode
-
-import requests
-
-from mollie.api.error import RequestError, RequestSetupError
 
 
 class Client(object):

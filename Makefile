@@ -18,8 +18,10 @@ test: develop
 	pipenv run pytest
 	pipenv run pyflakes .
 	pipenv run pycodestyle
+	pipenv run isort --recursive --check-only
 	pipenv check
 
 .PHONY: clean
 clean:
-	pipenv --rm
+	pipenv --rm || true
+	rm -f -r dist/ .eggs/ env/ mk-ca-bundle.pl mollie_api_python.egg-info .pytest_cache

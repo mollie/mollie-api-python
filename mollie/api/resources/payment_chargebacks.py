@@ -1,4 +1,4 @@
-from mollie.api.resources.chargebacks import Chargebacks
+from .chargebacks import Chargebacks
 
 
 class PaymentChargebacks(Chargebacks):

@@ -6,7 +6,6 @@ name = "pypi"
 [packages]
 requests = "*"
 mollie-api-python = {path = ".", editable = true}
-pycodestyle = "*"
 
 [dev-packages]
 pytest = "*"
@@ -14,4 +13,7 @@ pytest-cov = "*"
 pyflakes = "*"
 responses = "*"
 mock = "*"
-ipdb = "*"
+pycodestyle = "*"
+isort = "*"
+# locked due to: https://github.com/pypa/pipenv/issues/1586
+futures = "==3.1.1"

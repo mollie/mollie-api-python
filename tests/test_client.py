@@ -5,13 +5,13 @@ import pytest
 
 from mollie.api.client import Client, generate_querystring
 from mollie.api.error import (
+    IdentifierError,
+    NotFoundError,
     RequestError,
     RequestSetupError,
-    IdentifierError,
     ResponseHandlingError,
-    NotFoundError,
     UnauthorizedError,
-    UnprocessableEntityError,
+    UnprocessableEntityError
 )
 
 
@@ -167,7 +167,7 @@ def test_client_response_404_but_no_payload(response):
     response.get('https://api.mollie.com/v3/customers', 'v1_api_error', status=404)
     client = Client()
     client.api_version = 'v3'
-    client.set_api_key('test_JcMdyzfCayKDW6EHgzf364trVTQhyN')
+    client.set_api_key('test_test')
 
     with pytest.raises(ResponseHandlingError) as excinfo:
         client.customers.all()
