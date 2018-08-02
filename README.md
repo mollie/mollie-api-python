@@ -42,6 +42,7 @@ $ pip install -e .
 
 Run the examples.
 ```
+export MOLLIE_API_KEY=test_YourApiKey
 $ python examples/app.py
 ```
 
