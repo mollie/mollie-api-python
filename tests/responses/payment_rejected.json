@@ -1,0 +1,12 @@
+{
+  "detail": "The amount is higher than the maximum",
+  "field": "amount",
+  "status": 422,
+  "title": "Unprocessable Entity",
+  "_links": {
+    "documentation": {
+      "href": "https://docs.mollie.com/errors",
+      "type": "text/html"
+    }
+  }
+}

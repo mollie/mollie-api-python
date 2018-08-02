@@ -1,0 +1,11 @@
+{
+  "_links": {
+    "documentation": {
+      "href": "https://docs.mollie.com/guides/authentication",
+      "type": "text/html"
+    }
+  },
+  "detail": "Missing authentication, or failed to authenticate",
+  "status": 401,
+  "title": "Unauthorized Request"
+}

@@ -1,6 +1,6 @@
 import json
 
-from mollie.api.error import Error
+from mollie.api.error import RequestSetupError, ResponseError, ResponseHandlingError
 from mollie.api.objects.list import List
 
 
@@ -50,7 +50,7 @@ class Base(object):
             try:
                 data = json.dumps(data)
             except Exception as e:
-                raise Error('Error encoding parameters into JSON: "%s"' % str(e))
+                raise RequestSetupError('Error encoding parameters into JSON: "%s"' % str(e))
         return self.rest_create(data, params)
 
     def get(self, resource_id, **params):
@@ -61,7 +61,7 @@ class Base(object):
             try:
                 data = json.dumps(data)
             except Exception as e:
-                raise Error('Error encoding parameters into JSON: "%s"' % str(e))
+                raise RequestSetupError('Error encoding parameters into JSON: "%s"' % str(e))
         return self.rest_update(resource_id, data, params)
 
     def delete(self, resource_id):
@@ -71,14 +71,18 @@ class Base(object):
         return self.rest_list(params)
 
     def perform_api_call(self, http_method, path, data=None, params=None):
-        body = self.client.perform_http_call(http_method, path, data, params)
+        resp = self.client.perform_http_call(http_method, path, data, params)
         try:
-            result = body.json() if body.status_code != 204 else {}
+            result = resp.json() if resp.status_code != 204 else {}
         except Exception:
-            raise Error('Unable to decode Mollie response (status code %d): "%s".' % (body.status_code, body.text))
-        if 'error' in result:
-            error = Error('Error executing API call (%s): %s.' % (result['error']['type'], result['error']['message']))
-            if 'field' in result['error']:
-                error.field = result['error']['field']
-            raise error
+            raise ResponseHandlingError('Unable to decode Mollie API response (status code: %d): %s' % (
+                resp.status_code, resp.text))
+        if resp.status_code < 200 or resp.status_code > 299:
+            if 'status' in result and (result['status'] < 200 or result['status'] > 299):
+                # the factory will return the appropriate ResponseError subclass based on the result
+                raise ResponseError.factory(result)
+            else:
+                raise ResponseHandlingError(
+                    'Received HTTP error from Mollie API, but no status in payload (status code: %d): %s' % (
+                        resp.status_code, resp.text))
         return result
