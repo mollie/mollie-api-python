@@ -23,4 +23,5 @@ test: develop
 
 .PHONY: clean
 clean:
-	pipenv --rm
+	pipenv --rm || true
+	rm -f -r dist/ .eggs/ env/ mk-ca-bundle.pl mollie_api_python.egg-info .pytest_cache
