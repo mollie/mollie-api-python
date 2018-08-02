@@ -18,6 +18,7 @@ test: develop
 	pipenv run pytest
 	pipenv run pyflakes .
 	pipenv run pycodestyle
+	pipenv run isort --recursive --check-only
 	pipenv check
 
 .PHONY: clean
