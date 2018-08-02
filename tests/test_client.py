@@ -7,9 +7,8 @@ from mollie.api.client import Client, generate_querystring
 from mollie.api.error import (
     RequestError,
     RequestSetupError,
-    IdentifierValidationError,
+    IdentifierError,
     ResponseHandlingError,
-    ResponseError,
     NotFoundError,
     UnauthorizedError,
     UnprocessableEntityError,
@@ -108,7 +107,7 @@ def test_client_invalid_update_data(client):
 ])
 def test_client_get_invalid_id(client, endpoint, errorstr):
     """An invalid formatted object ID should raise an error."""
-    with pytest.raises(IdentifierValidationError) as excinfo:
+    with pytest.raises(IdentifierError) as excinfo:
         getattr(client, endpoint).get('invalid')
     assert excinfo.match(errorstr)
 
@@ -120,7 +119,7 @@ def test_client_get_invalid_id(client, endpoint, errorstr):
 ])
 def test_client_get_customer_related_invalid_id(client, endpoint, errorstr):
     """An invalid formatted object ID should raise an error."""
-    with pytest.raises(IdentifierValidationError) as excinfo:
+    with pytest.raises(IdentifierError) as excinfo:
         getattr(client, endpoint).with_parent_id('cst_12345').get('invalid')
     assert excinfo.match(errorstr)
 
@@ -131,7 +130,7 @@ def test_client_get_customer_related_invalid_id(client, endpoint, errorstr):
 ])
 def test_client_get_payment_related_invalid_id(client, endpoint, errorstr):
     """An invalid formatted object ID should raise an error."""
-    with pytest.raises(IdentifierValidationError) as excinfo:
+    with pytest.raises(IdentifierError) as excinfo:
         getattr(client, endpoint).with_parent_id('tr_12345').get('invalid')
     assert excinfo.match(errorstr)
 

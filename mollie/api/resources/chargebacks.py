@@ -1,6 +1,6 @@
 from .base import Base
 
-from mollie.api.error import IdentifierValidationError
+from mollie.api.error import IdentifierError
 from mollie.api.objects.chargeback import Chargeback
 
 
@@ -13,7 +13,7 @@ class Chargebacks(Base):
     def get(self, chargeback_id, **params):
         """Verify the chargeback ID and retrieve the chargeback from the API."""
         if not chargeback_id or not chargeback_id.startswith(self.RESOURCE_ID_PREFIX):
-            raise IdentifierValidationError(
+            raise IdentifierError(
                 'Invalid chargeback ID: "%s". A chargeback ID should start with "%s".' % (
                     chargeback_id, self.RESOURCE_ID_PREFIX)
             )

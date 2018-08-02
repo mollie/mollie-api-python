@@ -1,6 +1,6 @@
 from .base import Base
 
-from mollie.api.error import IdentifierValidationError
+from mollie.api.error import IdentifierError
 from mollie.api.objects.customer import Customer
 
 
@@ -14,7 +14,7 @@ class Customers(Base):
 
     def get(self, customer_id, **params):
         if not customer_id or not customer_id.startswith(self.RESOURCE_ID_PREFIX):
-            raise IdentifierValidationError(
+            raise IdentifierError(
                 'Invalid customer ID: "%s". A customer ID should start with "%s".' % (
                     customer_id, self.RESOURCE_ID_PREFIX)
             )

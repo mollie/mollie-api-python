@@ -1,6 +1,6 @@
 from .base import Base
 
-from mollie.api.error import IdentifierValidationError
+from mollie.api.error import IdentifierError
 from mollie.api.objects.mandate import Mandate
 
 
@@ -15,7 +15,7 @@ class CustomerMandates(Base):
 
     def get(self, mandate_id, **params):
         if not mandate_id or not mandate_id.startswith(self.RESOURCE_ID_PREFIX):
-            raise IdentifierValidationError(
+            raise IdentifierError(
                 'Invalid mandate ID: "%s". A mandate ID should start with "%s".' % (
                     mandate_id, self.RESOURCE_ID_PREFIX)
             )

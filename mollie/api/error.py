@@ -17,8 +17,8 @@ class RequestSetupError(RequestError):
     pass
 
 
-class IdentifierValidationError(RequestSetupError):
-    """Errors related to invalid identifiers for objects that will be requested from the API."""
+class IdentifierError(RequestSetupError):
+    """Errors related to invalid resource identifiers that will be requested from the API."""
 
     pass
 
@@ -47,7 +47,7 @@ class ResponseError(Error):
         """
         Return a ResponseError subclass based on the API payload.
 
-        All error are documented: https://docs.mollie.com/guides/handling-errors#all-possible-status-codes
+        All errors are documented: https://docs.mollie.com/guides/handling-errors#all-possible-status-codes
         More exceptions should be added here when appropriate, and when useful examples of API errors are available.
         """
         status = resp['status']
