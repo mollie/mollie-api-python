@@ -15,4 +15,5 @@ responses = "*"
 mock = "*"
 pycodestyle = "*"
 isort = "*"
+# locked due to: https://github.com/pypa/pipenv/issues/1586
 futures = "==3.1.1"
