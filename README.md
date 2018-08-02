@@ -178,7 +178,7 @@ refund = mollie_client.refunds.on(payment).create({
 })
 ```
 
-For a working example, see [Example 7 - Refund payment](https://github.com/mollie/mollie-api-python/blob/master/examples/07-refund-payment.py).
+For a working example, see [Example 11 - Refund payment](https://github.com/mollie/mollie-api-python/blob/master/examples/11-refund-payment.py).
 
 ## API documentation ##
 If you wish to learn more about our API, please visit the [Mollie Developer Portal](https://www.mollie.com/en/developers). API Documentation is available in English.
