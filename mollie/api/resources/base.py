@@ -1,7 +1,7 @@
 import json
 
-from mollie.api.error import RequestSetupError, ResponseError, ResponseHandlingError
-from mollie.api.objects.list import List
+from ..error import RequestSetupError, ResponseError, ResponseHandlingError
+from ..objects.list import List
 
 
 class Base(object):

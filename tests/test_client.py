@@ -5,13 +5,13 @@ import pytest
 
 from mollie.api.client import Client, generate_querystring
 from mollie.api.error import (
+    IdentifierError,
+    NotFoundError,
     RequestError,
     RequestSetupError,
-    IdentifierError,
     ResponseHandlingError,
-    NotFoundError,
     UnauthorizedError,
-    UnprocessableEntityError,
+    UnprocessableEntityError
 )
 
 

@@ -1,7 +1,7 @@
 from mollie.api.objects.chargeback import Chargeback
 from mollie.api.objects.list import List
-from mollie.api.objects.refund import Refund
 from mollie.api.objects.payment import Payment
+from mollie.api.objects.refund import Refund
 
 PAYMENT_ID = 'tr_7UhSN1zuXS'
 REFUND_ID = 're_4qqhO89gsT'

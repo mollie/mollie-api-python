@@ -1,6 +1,6 @@
+from mollie.api.objects.customer import Customer
 from mollie.api.objects.list import List
 from mollie.api.objects.subscription import Subscription
-from mollie.api.objects.customer import Customer
 
 CUSTOMER_ID = 'cst_8wmqcHMN4U'
 SUBSCRIPTION_ID = 'sub_rVKGtNd6s3'
