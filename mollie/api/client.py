@@ -121,7 +121,7 @@ def generate_querystring(params):
     This makes the output predictable, and ordering of querystring parameters shouldn't matter.
     """
     if not params:
-        return
+        return None
     parts = []
     for param, value in sorted(params.items()):
         if not isinstance(value, dict):
