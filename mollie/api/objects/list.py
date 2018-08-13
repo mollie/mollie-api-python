@@ -39,8 +39,3 @@ class List(Base):
         if 'count' not in self:
             return None
         return int(self['count'])
-
-    def get_offset(self):
-        if 'offset' not in self:
-            return None
-        return self['offset']
