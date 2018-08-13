@@ -1,12 +1,9 @@
 from mollie.api.objects.chargeback import Chargeback
 from mollie.api.objects.list import List
 
-PAYMENT_ID = 'tr_7UhSN1zuXS'
-CHARGEBACK_ID = 'chb_n9z0tp'
-
 
 def test_get_all_chargebacks(client, response):
-    """Get all chargebacks"""
+    """Get all chargebacks."""
     response.get('https://api.mollie.com/v2/chargebacks', 'chargebacks_list')
 
     chargebacks = client.chargebacks.all()
