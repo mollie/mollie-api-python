@@ -27,7 +27,7 @@ def main():
 
         payments = mollie_client.payments.all()
 
-        body += '<p>Attempting to retrieve all payments and grabbing the first.</p>'
+        body += '<p>Attempting to retrieve the first page of payments and grabbing the first.</p>'
 
         if int(payments.count) == 0:
             body += '<p>You have no payments. You can create one from the examples.</p>'
