@@ -91,6 +91,8 @@ After storing the payment id you can send the customer to the checkout using the
 
 For a payment create example, see [Example 1 - New Payment](https://github.com/mollie/mollie-api-python/blob/master/examples/01-new-payment.py).
 
+In general, request body parameters for an API endpoint should be added to a dictionary and provided as the first argument (or `data` keyword argument). Query string parameters can be provided as keyword arguments.
+
 ## Retrieving payments ##
 We can use the `payment.id` to retrieve a payment and check if the payment `isPaid`.
 
