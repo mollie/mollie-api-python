@@ -14,11 +14,11 @@ install:
 script:
   - make test
 
-#deploy:
-#  provider: pypi
-#  user: "MolopsDeploy"
-#  password:
-#    secure: "tX5VvpXIj7Afm9slPgCeSwelTxRnWPGfQcglTw92PoHlYeVbgiesEaH2uxIVS3cDeHWTHY4JsT/P2Juu6kZzga+Cb8thUND4JRYeUd1vizJblbeb5hgBRlQ8W/7x6k3j+Eh0I62HW7VDIiyM4uEBhigai4eJyuCK73pFmRmNfxw="
-#  on:
-#    tags: true
-#    python: "3.6"
+deploy:
+ provider: pypi
+ user: "MolopsDeploy"
+ password:
+   secure: "tX5VvpXIj7Afm9slPgCeSwelTxRnWPGfQcglTw92PoHlYeVbgiesEaH2uxIVS3cDeHWTHY4JsT/P2Juu6kZzga+Cb8thUND4JRYeUd1vizJblbeb5hgBRlQ8W/7x6k3j+Eh0I62HW7VDIiyM4uEBhigai4eJyuCK73pFmRmNfxw="
+ on:
+   tags: true
+   python: "3.6"
