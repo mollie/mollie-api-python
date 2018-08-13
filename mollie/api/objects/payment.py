@@ -140,13 +140,6 @@ class Payment(Base):
         return self._get_property('customerId')
 
     @property
-    def customer_url(self):
-        try:
-            return self['_links']['customer']['href']
-        except KeyError:
-            return None
-
-    @property
     def can_be_refunded(self):
         try:
             return self._get_property('amountRemaining') is not None
@@ -180,3 +173,13 @@ class Payment(Base):
             return None
         resp = self._resource.perform_api_call(self._resource.REST_READ, url)
         return List(resp, Chargeback)
+
+    @property
+    def customer(self):
+        from .customer import Customer
+        try:
+            url = self['_links']['customer']['href']
+        except KeyError:
+            return None
+        resp = self._resource.perform_api_call(self._resource.REST_READ, url)
+        return Customer(resp)

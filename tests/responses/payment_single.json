@@ -38,6 +38,10 @@
       "href": "https://api.mollie.com/v2/payments/tr_7UhSN1zuXS/refunds/re_4qqhO89gsT",
       "type": "application/json"
     },
+    "customer": {
+      "href": "https://api.mollie.com/v2/customers/cst_8wmqcHMN4U",
+      "type": "application/json"
+    },
     "documentation": {
       "href": "https://docs.mollie.com/reference/v2/payments-api/create-payment",
       "type": "text/html"
