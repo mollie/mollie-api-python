@@ -11,6 +11,7 @@ Accepting [iDEAL](https://www.mollie.com/en/payments/ideal/), [Bancontact/Mister
 To use the Mollie API client, the following things are required:
 
 + Get yourself a free [Mollie account](https://www.mollie.com/signup). No sign up costs.
++ Create a new [Website profile](https://www.mollie.com/dashboard/settings/profiles) to generate API keys and setup your webhook.
 + Now you're ready to use the Mollie API client in test mode.
 + Follow [a few steps](https://www.mollie.com/dashboard/?modal=onboarding) to enable payment methods in live mode, and let us handle the rest.
 + Python >= 2.7
