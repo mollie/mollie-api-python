@@ -33,15 +33,14 @@ def main():
         if customer_id is None:
             customers = mollie_client.customers.all()
 
-            body += '<p>No customer ID specified. Attempting to retrieve all customers and grabbing the first.</p>'
+            body += '<p>No customer ID specified. Attempting to retrieve the first page of '
+            body += 'customers and grabbing the first.</p>'
 
             if int(customers.count) == 0:
                 body += '<p>You have no customers. You can create one from the examples.</p>'
                 return body
 
-            for customer in customers:
-                customer_id = customer.id
-                break
+            customer_id = next(customers).id
 
         customer = mollie_client.customers.get(customer_id)
 

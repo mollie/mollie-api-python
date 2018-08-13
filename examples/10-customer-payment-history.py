@@ -55,10 +55,7 @@ def main():
         }
         payments = mollie_client.customer_payments.with_parent_id(customer_id).all(**params)
 
-        body += '<p>Customer "%s" has %s payments</p>' % (customer.id, payments.count)
-
-        if int(payments.count) > amount_of_payments_to_retrieve:
-            body += '<p><b>Note: Only showing first %s payments</b></p>' % amount_of_payments_to_retrieve
+        body += '<p>Showing the last %s payments for customer "%s"</p>' % (payments.count, customer.id)
 
         for payment in payments:
             body += "<p>Payment %s (%s) %s</p>" % (payment.id, payment.amount['value'], payment.amount['currency'])

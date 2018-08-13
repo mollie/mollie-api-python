@@ -22,11 +22,11 @@ def main():
         mollie_client.set_api_key(api_key)
 
         #
-        # Get the all payments for this API key ordered by newest.
+        # Get the first page of payments for this API key ordered by newest.
         #
         payments = mollie_client.payments.all()
 
-        body = 'Your API key has %u payments<br>' % payments.count
+        body = 'Showing the first page of payments for this API key<br>'
 
         for payment in payments:
             body += "%s %s, status: '%s'<br>" % (payment.amount['value'], payment.amount['currency'], payment.status)
