@@ -18,10 +18,3 @@ class Refunds(Base):
                 'Invalid refund ID: "%s". A refund ID should start with "%s".' % (refund_id, self.RESOURCE_ID_PREFIX)
             )
         return super(Refunds, self).get(refund_id, **params)
-
-    def with_parent_id(self, payment_id):
-        self.payment_id = payment_id
-        return self
-
-    def on(self, payment_id):
-        return self.with_parent_id(payment_id)
