@@ -48,15 +48,12 @@ class Method(Base):
 
     @property
     def issuers(self):
-        """Return the issuer list"""
-        try:
-            issuers = self._get_property('issuers')
-            result = {
-                '_embedded': {
-                    'issuers': issuers,
-                },
-                'count': len(issuers),
-            }
-            return List(result, Issuer)
-        except KeyError:
-            return None
+        """Return the issuer list."""
+        issuers = self._get_property('issuers') or []
+        result = {
+            '_embedded': {
+                'issuers': issuers,
+            },
+            'count': len(issuers),
+        }
+        return List(result, Issuer)
