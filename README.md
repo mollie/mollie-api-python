@@ -79,7 +79,7 @@ payment = mollie_client.payments.create({
     'amount': {
         'currency': 'EUR',
         'value': '10.00' 
-        },
+    },
     'description': 'My first API payment',
     'redirectUrl': 'https://webshop.example.org/order/12345/',
     'webhookUrl': 'https://webshop.example.org/mollie-webhook/',
@@ -126,7 +126,7 @@ payment = mollie_client.payments.create({
     'amount': {
         'currency': 'USD', 
         'value': '10.00'
-        },
+    },
     'description': 'Order #12345',
     'redirectUrl': 'https://webshop.example.org/order/12345/',
     'webhookUrl': 'https://webshop.example.org/mollie-webhook/',
@@ -154,7 +154,7 @@ payment = mollie_client.payments.create({
     'amount': {
         'currency': 'EUR', 
         'value': '10.00'
-        },
+    },
     'description': 'My first API payment',
     'redirectUrl': 'https://webshop.example.org/order/12345/',
     'webhookUrl': 'https://webshop.example.org/mollie-webhook/',
