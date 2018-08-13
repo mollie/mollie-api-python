@@ -18,7 +18,7 @@ class CustomerMandates(Base):
                 'Invalid mandate ID: "%s". A mandate ID should start with "%s".' % (
                     mandate_id, self.RESOURCE_ID_PREFIX)
             )
-        return super(CustomerMandates, self).get(mandate_id)
+        return super(CustomerMandates, self).get(mandate_id, **params)
 
     def get_resource_name(self):
         return 'customers/%s/mandates' % self.customer_id

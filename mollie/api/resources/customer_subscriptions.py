@@ -18,7 +18,7 @@ class CustomerSubscriptions(Base):
                 'Invalid subscription ID: "%s". A subscription ID should start with "%s".' % (
                     subscription_id, self.RESOURCE_ID_PREFIX)
             )
-        return super(CustomerSubscriptions, self).get(subscription_id)
+        return super(CustomerSubscriptions, self).get(subscription_id, **params)
 
     def delete(self, subscription_id):
         """Cancel subscription and return the subscription object.

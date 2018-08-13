@@ -16,4 +16,4 @@ class Chargebacks(Base):
                 'Invalid chargeback ID: "%s". A chargeback ID should start with "%s".' % (
                     chargeback_id, self.RESOURCE_ID_PREFIX)
             )
-        return super(Chargebacks, self).get(chargeback_id)
+        return super(Chargebacks, self).get(chargeback_id, **params)

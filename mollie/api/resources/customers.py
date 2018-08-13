@@ -17,4 +17,4 @@ class Customers(Base):
                 'Invalid customer ID: "%s". A customer ID should start with "%s".' % (
                     customer_id, self.RESOURCE_ID_PREFIX)
             )
-        return super(Customers, self).get(customer_id)
+        return super(Customers, self).get(customer_id, **params)

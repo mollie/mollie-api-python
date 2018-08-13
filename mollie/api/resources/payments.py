@@ -17,7 +17,7 @@ class Payments(Base):
                 'Invalid payment ID: "%s". A payment ID should start with "%s".' % (
                     payment_id, self.RESOURCE_ID_PREFIX)
             )
-        return super(Payments, self).get(payment_id)
+        return super(Payments, self).get(payment_id, **params)
 
     def delete(self, resource_id):
         """Cancel payment and return the payment object.
