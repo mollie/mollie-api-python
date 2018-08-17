@@ -1,4 +1,5 @@
 import os
+
 import flask
 
 app = flask.Flask(__name__)
@@ -12,7 +13,8 @@ examples = [
     '7-new-customer',
     '8-list-customers',
     '9-create-customer-payment',
-    '10-customer-payment-history'
+    '10-customer-payment-history',
+    '11-refund-payment',
 ]
 
 
@@ -29,6 +31,7 @@ def run_example(example=None):
     if example not in examples:
         flask.abort(404, 'Example does not exist')
     return __import__(example).main()
+
 
 if __name__ == "__main__":
     app.debug = True

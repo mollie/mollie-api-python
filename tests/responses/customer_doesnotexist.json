@@ -1,0 +1,11 @@
+{
+  "status": 404,
+  "title": "Not Found",
+  "detail": "No customer exists with token cst_doesnotexist.",
+  "_links": {
+    "documentation": {
+      "href": "https://docs.mollie.com/guides/handling-errors",
+      "type": "text/html"
+    }
+  }
+}

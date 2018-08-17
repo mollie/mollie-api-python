@@ -1,0 +1,32 @@
+{
+  "resource": "subscription",
+  "id": "sub_rVKGtNd6s3",
+  "customerId": "cst_kEn1PlbGa",
+  "mode": "live",
+  "createdAt": "2016-06-01T12:23:34+00:00",
+  "status": "active",
+  "amount": {
+    "value": "30.00",
+    "currency": "USD"
+  },
+  "description": "Updated subscription",
+  "method": null,
+  "times": 42,
+  "interval": "3 months",
+  "startDate": "2018-12-12",
+  "webhookUrl": "https://example.org/webhook",
+  "_links": {
+    "self": {
+      "href": "http://api.mollie.com/v2/customers/cst_kEn1PlbGa/subscriptions/sub_rVKGtNd6s3",
+      "type": "application/hal+json"
+    },
+    "customer": {
+      "href": "http://api.mollie.com/v2/customers/cst_kEn1PlbGa",
+      "type": "application/hal+json"
+    },
+    "documentation": {
+      "href": "https://docs.mollie.com/reference/v2/subscriptions-api/update-subscription",
+      "type": "text/html"
+    }
+  }
+}
