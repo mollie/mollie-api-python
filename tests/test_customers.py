@@ -61,15 +61,21 @@ def test_customers_all(client, response):
 def test_customer_get(client, response):
     """Retrieve a single customer."""
     response.get('https://api.mollie.com/v2/customers/%s' % CUSTOMER_ID, 'customer_new')
+    response.get('https://api.mollie.com/v2/customers/%s/payments' % CUSTOMER_ID, 'customer_payments_multiple')
+
     customer = client.customers.get(CUSTOMER_ID)
     assert isinstance(customer, Customer)
     assert customer.id == CUSTOMER_ID
     assert customer.name == 'Customer A'
     assert customer.email == 'customer@example.org'
-    assert customer.created_at == '2018-04-06T13:10:19.0Z'
-    assert customer.metadata == {'orderId': '12345'}
     assert customer.locale == 'nl_NL'
+    assert customer.metadata == {'orderId': '12345'}
     assert customer.mode == 'test'
+    assert customer.resource == 'customer'
+    assert customer.created_at == '2018-04-06T13:10:19.0Z'
+    assert customer.subscriptions is None
+    assert customer.mandates is None
+    assert customer.payments is not None
 
 
 def test_customer_get_related_mandates(client, response):
@@ -89,9 +95,9 @@ def test_customer_get_related_mandates(client, response):
 
 def test_customer_get_related_subscriptions(client, response):
     """Retrieve related subscriptions for a customer."""
+    response.get('https://api.mollie.com/v2/customers/%s' % CUSTOMER_ID, 'customer_single')
     response.get('https://api.mollie.com/v2/customers/%s/subscriptions' % CUSTOMER_ID,
                  'subscriptions_list')
-    response.get('https://api.mollie.com/v2/customers/%s' % CUSTOMER_ID, 'customer_single')
 
     customer = client.customers.get(CUSTOMER_ID)
     subscriptions = customer.subscriptions
@@ -113,6 +119,7 @@ def test_customer_get_related_payments(client, response):
     payments = customer.payments
     assert isinstance(payments, List)
     assert payments.count == 1
+
     iterated = 0
     iterated_payment_ids = []
     for payment in payments:
