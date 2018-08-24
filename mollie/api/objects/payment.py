@@ -146,6 +146,7 @@ class Payment(Base):
 
     @property
     def refunds(self):
+        """Return the refunds related to this payment."""
         from .refund import Refund
         url = self._get_link('refunds')
         if url:
@@ -154,6 +155,7 @@ class Payment(Base):
 
     @property
     def chargebacks(self):
+        """Return the chargebacks related to this payment."""
         from .chargeback import Chargeback
         url = self._get_link('chargebacks')
         if url:
@@ -162,6 +164,7 @@ class Payment(Base):
 
     @property
     def customer(self):
+        """Return the customer for this payment."""
         from .customer import Customer
         url = self._get_link('customer')
         if url:
