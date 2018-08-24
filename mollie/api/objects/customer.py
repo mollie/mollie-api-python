@@ -37,7 +37,7 @@ class Customer(Base):
 
     @property
     def subscriptions(self):
-        """Return subscription object from the links attribute"""
+        """Return subscription object from the links attribute."""
         from .subscription import Subscription
         try:
             url = self['_links']['subscriptions']['href']

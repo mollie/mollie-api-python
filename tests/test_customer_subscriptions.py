@@ -7,7 +7,7 @@ SUBSCRIPTION_ID = 'sub_rVKGtNd6s3'
 
 
 def test_customer_subscriptions_all(client, response):
-    """Retrieve a list of subscriptions"""
+    """Retrieve a list of subscriptions."""
     response.get('https://api.mollie.com/v2/customers/%s/subscriptions' % CUSTOMER_ID, 'subscriptions_list')
 
     subscriptions = client.customer_subscriptions.with_parent_id(CUSTOMER_ID).all()
@@ -26,7 +26,7 @@ def test_customer_subscriptions_all(client, response):
 
 
 def test_get_customer_subscription_by_id(client, response):
-    """Retrieve a single subscription by ID """
+    """Retrieve a single subscription by ID."""
     response.get('https://api.mollie.com/v2/customers/%s/subscriptions/%s' % (CUSTOMER_ID, SUBSCRIPTION_ID),
                  'subscription_single')
 
@@ -50,7 +50,7 @@ def test_get_customer_subscription_by_id(client, response):
 
 
 def test_get_all_customer_subscriptions_by_customer_object(client, response):
-    """Retrieve all subscriptions related to customer"""
+    """Retrieve all subscriptions related to customer."""
     response.get('https://api.mollie.com/v2/customers/%s/subscriptions' % CUSTOMER_ID,
                  'subscriptions_list')
     response.get('https://api.mollie.com/v2/customers/%s' % CUSTOMER_ID, 'customer_single')
@@ -67,7 +67,7 @@ def test_get_all_customer_subscriptions_by_customer_object(client, response):
 
 
 def test_get_one_customer_subscription_by_customer_object(client, response):
-    """Retrieve specific subscription related to customer"""
+    """Retrieve specific subscription related to customer."""
     response.get('https://api.mollie.com/v2/customers/%s/subscriptions/%s' % (CUSTOMER_ID, SUBSCRIPTION_ID),
                  'subscription_single')
     response.get('https://api.mollie.com/v2/customers/%s' % CUSTOMER_ID, 'customer_single')
@@ -79,7 +79,7 @@ def test_get_one_customer_subscription_by_customer_object(client, response):
 
 
 def test_customer_subscription_get_related_customer(client, response):
-    """Retrieve a related customer object from a subscription"""
+    """Retrieve a related customer object from a subscription."""
     response.get('https://api.mollie.com/v2/customers/%s/subscriptions/%s' % (CUSTOMER_ID, SUBSCRIPTION_ID),
                  'subscription_single')
     response.get('https://api.mollie.com/v2/customers/%s' % CUSTOMER_ID, 'customer_single')
@@ -90,7 +90,7 @@ def test_customer_subscription_get_related_customer(client, response):
 
 
 def test_cancel_customer_subscription(client, response):
-    """Cancel a subscription by customer ID and subscription ID"""
+    """Cancel a subscription by customer ID and subscription ID."""
     response.delete('https://api.mollie.com/v2/customers/%s/subscriptions/%s' % (CUSTOMER_ID, SUBSCRIPTION_ID),
                     'subscription_canceled', 200)
 
@@ -100,7 +100,7 @@ def test_cancel_customer_subscription(client, response):
 
 
 def test_create_customer_subscription(client, response):
-    """create a subscription with customer object"""
+    """Create a subscription with customer object."""
     response.post('https://api.mollie.com/v2/customers/%s/subscriptions' % CUSTOMER_ID, 'subscription_single')
     data = {
         'amount': {'currency': 'EUR', 'value': '25.00'},
@@ -114,7 +114,7 @@ def test_create_customer_subscription(client, response):
 
 
 def test_update_customer_subscription(client, response):
-    """Update existing subscription of a customer"""
+    """Update existing subscription of a customer."""
     response.patch('https://api.mollie.com/v2/customers/%s/subscriptions/%s' % (CUSTOMER_ID, SUBSCRIPTION_ID),
                    'subscription_updated')
 

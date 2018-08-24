@@ -3,7 +3,7 @@ from mollie.api.objects.refund import Refund
 
 
 def test_list_all_refunds(client, response):
-    """Retrieve a list of all refunds"""
+    """Retrieve a list of all refunds."""
     response.get('https://api.mollie.com/v2/refunds', 'refunds_list')
     refunds = client.refunds.all()
     assert refunds.count == 1

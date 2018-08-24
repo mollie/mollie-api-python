@@ -21,7 +21,7 @@ def test_create_customer(client, response):
 
 
 def test_update_customer(client, response):
-    """Update an existing customer"""
+    """Update an existing customer."""
     response.patch('https://api.mollie.com/v2/customers/%s' % CUSTOMER_ID, 'customer_updated')
 
     updated_customer = client.customers.update(CUSTOMER_ID, {
@@ -33,7 +33,7 @@ def test_update_customer(client, response):
 
 
 def test_delete_customers(client, response):
-    """Delete a customer"""
+    """Delete a customer."""
     response.delete('https://api.mollie.com/v2/customers/%s' % CUSTOMER_ID, 'empty')
 
     deleted_customer = client.customers.delete('cst_8wmqcHMN4U')
@@ -41,7 +41,7 @@ def test_delete_customers(client, response):
 
 
 def test_customers_all(client, response):
-    """Retrieve a list of all existing customers"""
+    """Retrieve a list of all existing customers."""
     response.get('https://api.mollie.com/v2/customers', 'customers_list')
 
     customers = client.customers.all()
@@ -88,7 +88,7 @@ def test_customer_get_related_mandates(client, response):
 
 
 def test_customer_get_related_subscriptions(client, response):
-    """Retrieve related subscriptions for a customer"""
+    """Retrieve related subscriptions for a customer."""
     response.get('https://api.mollie.com/v2/customers/%s/subscriptions' % CUSTOMER_ID,
                  'subscriptions_list')
     response.get('https://api.mollie.com/v2/customers/%s' % CUSTOMER_ID, 'customer_single')
@@ -105,7 +105,7 @@ def test_customer_get_related_subscriptions(client, response):
 
 
 def test_customer_get_related_payments(client, response):
-    """Retrieve related payments for a customer"""
+    """Retrieve related payments for a customer."""
     response.get('https://api.mollie.com/v2/customers/%s' % CUSTOMER_ID, 'customer_new')
     response.get('https://api.mollie.com/v2/customers/%s/payments' % CUSTOMER_ID, 'customer_payments_multiple')
 

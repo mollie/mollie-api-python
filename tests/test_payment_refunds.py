@@ -6,7 +6,7 @@ REFUND_ID = 're_4qqhO89gsT'
 
 
 def test_get_refund(client, response):
-    """Retrieve a specific refund of a payment"""
+    """Retrieve a specific refund of a payment."""
     response.get('https://api.mollie.com/v2/payments/%s/refunds/%s' % (PAYMENT_ID, REFUND_ID), 'refund_single')
 
     refund = client.payment_refunds.with_parent_id(PAYMENT_ID).get(REFUND_ID)
@@ -23,7 +23,7 @@ def test_get_refund(client, response):
 
 
 def test_create_refund(client, response):
-    """Create a payment refund of a payment"""
+    """Create a payment refund of a payment."""
     response.post('https://api.mollie.com/v2/payments/%s/refunds' % PAYMENT_ID, 'refund_single')
 
     data = {
@@ -35,7 +35,7 @@ def test_create_refund(client, response):
 
 
 def test_get_single_refund_on_payment_object(client, response):
-    """Retrieve a payment refund of a payment"""
+    """Retrieve a payment refund of a payment."""
     response.get('https://api.mollie.com/v2/payments/%s' % PAYMENT_ID, 'payment_single')
     response.get('https://api.mollie.com/v2/payments/%s/refunds/%s' % (PAYMENT_ID, REFUND_ID), 'refund_single')
 
@@ -46,7 +46,7 @@ def test_get_single_refund_on_payment_object(client, response):
 
 
 def test_get_all_refunds_on_payment_object(client, response):
-    """Retrieve all payment refunds of a payment"""
+    """Retrieve all payment refunds of a payment."""
     response.get('https://api.mollie.com/v2/payments/%s' % PAYMENT_ID, 'payment_single')
     response.get('https://api.mollie.com/v2/payments/%s/refunds' % PAYMENT_ID, 'refunds_list')
 
@@ -67,7 +67,7 @@ def test_get_all_refunds_on_payment_object(client, response):
 
 
 def test_cancel_refund(client, response):
-    """Cancel a refund of a payment"""
+    """Cancel a refund of a payment."""
     response.delete('https://api.mollie.com/v2/payments/%s/refunds/%s' % (PAYMENT_ID, REFUND_ID), 'empty')
 
     canceled_refund = client.payment_refunds.with_parent_id(PAYMENT_ID).delete(REFUND_ID)

@@ -11,7 +11,7 @@ CUSTOMER_ID = 'cst_8wmqcHMN4U'
 
 
 def test_get_all_payments(client, response):
-    """Retrieve all existing payments"""
+    """Retrieve all existing payments."""
     response.get('https://api.mollie.com/v2/payments', 'payments_list')
 
     payments = client.payments.all()
@@ -29,7 +29,7 @@ def test_get_all_payments(client, response):
 
 
 def test_create_payment(client, response):
-    """Create a new payment"""
+    """Create a new payment."""
     response.post('https://api.mollie.com/v2/payments', 'payment_single')
 
     payment = client.payments.create(
@@ -44,7 +44,7 @@ def test_create_payment(client, response):
 
 
 def test_cancel_payment(client, response):
-    """Cancel existing payment"""
+    """Cancel existing payment."""
     response.delete('https://api.mollie.com/v2/payments/%s' % PAYMENT_ID, 'payment_canceled', 200)
 
     canceled_payment = client.payments.delete(PAYMENT_ID)
@@ -54,7 +54,7 @@ def test_cancel_payment(client, response):
 
 
 def test_get_single_payment(client, response):
-    """Retrieve a single payment by payment id,"""
+    """Retrieve a single payment by payment id."""
     response.get('https://api.mollie.com/v2/payments/%s' % PAYMENT_ID, 'payment_single')
     response.get('https://api.mollie.com/v2/customers/%s' % CUSTOMER_ID, 'customer_single')
 
@@ -92,8 +92,8 @@ def test_get_single_payment(client, response):
     assert payment.has_sequence_type_recurring() is False
 
 
-def test_get_all_related_refunds_of_payment(client, response):
-    """Retrieve a list of all refunds related to a payment"""
+def test_payment_get_related_refunds(client, response):
+    """Retrieve a list of all refunds related to a payment."""
     response.get('https://api.mollie.com/v2/payments/%s' % PAYMENT_ID, 'payment_single')
     response.get('https://api.mollie.com/v2/payments/%s/refunds/%s' % (PAYMENT_ID, REFUND_ID), 'refunds_list')
 
@@ -113,8 +113,8 @@ def test_get_all_related_refunds_of_payment(client, response):
     assert len(set(iterated_refund_ids)) == refunds.count, 'Expected unique refund ids retrieved'
 
 
-def test_get_related_chargebacks(client, response):
-    """Get chargebacks related to payment id"""
+def test_payment_get_related_chargebacks(client, response):
+    """Get chargebacks related to payment id."""
     response.get('https://api.mollie.com/v2/payments/%s' % PAYMENT_ID, 'payment_single')
     response.get('https://api.mollie.com/v2/payments/%s/chargebacks' % PAYMENT_ID, 'chargebacks_list')
 

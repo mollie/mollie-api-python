@@ -6,7 +6,7 @@ CHARGEBACK_ID = 'chb_n9z0tp'
 
 
 def test_get_payment_chargeback_by_payment_id(client, response):
-    """Get chargebacks relevant to payment by payment id"""
+    """Get chargebacks relevant to payment by payment id."""
     response.get('https://api.mollie.com/v2/payments/%s/chargebacks' % PAYMENT_ID, 'chargebacks_list')
 
     chargebacks = client.payment_chargebacks.with_parent_id(PAYMENT_ID).all()
@@ -26,7 +26,7 @@ def test_get_payment_chargeback_by_payment_id(client, response):
 
 
 def test_get_single_payment_chargeback(client, response):
-    """Get a single chargeback relevant to payment by payment id"""
+    """Get a single chargeback relevant to payment by payment id."""
     response.get('https://api.mollie.com/v2/payments/%s/chargebacks/%s' % (PAYMENT_ID, CHARGEBACK_ID),
                  'chargeback_single')
 
@@ -43,7 +43,7 @@ def test_get_single_payment_chargeback(client, response):
 
 
 def test_get_all_payment_chargebacks_by_payment_object(client, response):
-    """Get all chargebacks relevant to payment object"""
+    """Get all chargebacks relevant to payment object."""
     response.get('https://api.mollie.com/v2/payments/%s/chargebacks' % PAYMENT_ID, 'chargebacks_list')
     response.get('https://api.mollie.com/v2/payments/%s' % PAYMENT_ID, 'payment_single')
 
@@ -65,7 +65,7 @@ def test_get_all_payment_chargebacks_by_payment_object(client, response):
 
 
 def test_get_single_payment_chargeback_by_payment_object(client, response):
-    """Get a single chargeback relevant to payment object"""
+    """Get a single chargeback relevant to payment object."""
     response.get('https://api.mollie.com/v2/payments/%s/chargebacks/%s' % (PAYMENT_ID, CHARGEBACK_ID),
                  'chargeback_single')
     response.get('https://api.mollie.com/v2/payments/%s' % PAYMENT_ID, 'payment_single')
