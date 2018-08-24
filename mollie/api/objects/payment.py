@@ -33,16 +33,10 @@ class Payment(Base):
         return self._get_property('status') == self.STATUS_FAILED
 
     def has_refunds(self):
-        try:
-            return self['_links']['refunds'] is not None
-        except KeyError:
-            return False
+        return self._get_link('refunds') is not None
 
     def can_be_refunded(self):
-        try:
-            return self._get_property('amountRemaining') is not None
-        except KeyError:
-            return False
+        return self._get_property('amountRemaining') is not None
 
     def has_sequence_type_first(self):
         return self._get_property('sequenceType') == self.SEQUENCETYPE_FIRST
@@ -52,10 +46,7 @@ class Payment(Base):
 
     @property
     def checkout_url(self):
-        try:
-            return self['_links']['checkout']['href']
-        except KeyError:
-            return None
+        return self._get_link('checkout')
 
     @property
     def resource(self):
@@ -156,29 +147,23 @@ class Payment(Base):
     @property
     def refunds(self):
         from .refund import Refund
-        try:
-            url = self['_links']['refunds']['href']
-        except KeyError:
-            return None
-        resp = self._resource.perform_api_call(self._resource.REST_READ, url)
-        return List(resp, Refund)
+        url = self._get_link('refunds')
+        if url:
+            resp = self._resource.perform_api_call(self._resource.REST_READ, url)
+            return List(resp, Refund)
 
     @property
     def chargebacks(self):
         from .chargeback import Chargeback
-        try:
-            url = self['_links']['chargebacks']['href']
-        except KeyError:
-            return None
-        resp = self._resource.perform_api_call(self._resource.REST_READ, url)
-        return List(resp, Chargeback)
+        url = self._get_link('chargebacks')
+        if url:
+            resp = self._resource.perform_api_call(self._resource.REST_READ, url)
+            return List(resp, Chargeback)
 
     @property
     def customer(self):
         from .customer import Customer
-        try:
-            url = self['_links']['customer']['href']
-        except KeyError:
-            return None
-        resp = self._resource.perform_api_call(self._resource.REST_READ, url)
-        return Customer(resp)
+        url = self._get_link('customer')
+        if url:
+            resp = self._resource.perform_api_call(self._resource.REST_READ, url)
+            return Customer(resp)

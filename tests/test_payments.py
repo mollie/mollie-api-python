@@ -1,6 +1,7 @@
 from mollie.api.objects.chargeback import Chargeback
 from mollie.api.objects.customer import Customer
 from mollie.api.objects.list import List
+from mollie.api.objects.method import Method
 from mollie.api.objects.payment import Payment
 from mollie.api.objects.refund import Refund
 
@@ -56,6 +57,8 @@ def test_cancel_payment(client, response):
 def test_get_single_payment(client, response):
     """Retrieve a single payment by payment id."""
     response.get('https://api.mollie.com/v2/payments/%s' % PAYMENT_ID, 'payment_single')
+    response.get('https://api.mollie.com/v2/payments/%s/refunds' % PAYMENT_ID, 'refunds_list')
+    response.get('https://api.mollie.com/v2/payments/%s/chargebacks' % PAYMENT_ID, 'chargebacks_list')
     response.get('https://api.mollie.com/v2/customers/%s' % CUSTOMER_ID, 'customer_single')
 
     payment = client.payments.get(PAYMENT_ID)
@@ -66,23 +69,30 @@ def test_get_single_payment(client, response):
     assert payment.created_at == '2018-03-20T09:13:37+00:00'
     assert payment.expires_at == '2018-03-20T09:28:37+00:00'
     assert payment.profile_id == 'pfl_QkEhN94Ba'
-    assert payment.method == 'ideal'
+    assert payment.method == Method.IDEAL
     assert payment.metadata == {'order_id': '12345'}
-    assert payment.sequence_type == 'oneoff'
+    assert payment.sequence_type == Payment.SEQUENCETYPE_ONEOFF
     assert payment.profile_id == 'pfl_QkEhN94Ba'
     assert payment.checkout_url == 'https://www.mollie.com/payscreen/select-method/7UhSN1zuXS'
     assert payment.resource == 'payment'
     assert payment.id == PAYMENT_ID
     assert payment.mode == 'test'
-    assert payment.status == 'open'
+    assert payment.status == Payment.STATUS_OPEN
     assert payment.amount_refunded is None
     assert payment.amount_remaining is None
-    assert isinstance(payment.customer, Customer)
-    assert payment.customer.id == CUSTOMER_ID
+    assert payment.is_cancelable is False
+    assert payment.paid_at is None
+    assert payment.canceled_at is None
+    assert payment.expired_at is None
+    assert payment.failed_at is None
+    assert payment.details is None
+    assert payment.settlement_amount is None
+    assert payment.refunds is not None
+    assert payment.chargebacks is not None
+    assert payment.customer is not None
     assert payment.is_open() is True
     assert payment.is_pending() is False
     assert payment.is_canceled() is False
-    assert payment.is_cancelable is False
     assert payment.is_expired() is False
     assert payment.is_paid() is False
     assert payment.is_failed() is False
@@ -95,7 +105,7 @@ def test_get_single_payment(client, response):
 def test_payment_get_related_refunds(client, response):
     """Retrieve a list of all refunds related to a payment."""
     response.get('https://api.mollie.com/v2/payments/%s' % PAYMENT_ID, 'payment_single')
-    response.get('https://api.mollie.com/v2/payments/%s/refunds/%s' % (PAYMENT_ID, REFUND_ID), 'refunds_list')
+    response.get('https://api.mollie.com/v2/payments/%s/refunds' % PAYMENT_ID, 'refunds_list')
 
     payment = client.payments.get(PAYMENT_ID)
     refunds = payment.refunds
@@ -127,3 +137,14 @@ def test_payment_get_related_chargebacks(client, response):
         assert isinstance(chargeback, Chargeback)
         iterated += 1
     assert iterated == chargebacks.count
+
+
+def test_payment_get_related_customer(client, response):
+    """Get customer related to payment."""
+    response.get('https://api.mollie.com/v2/payments/%s' % PAYMENT_ID, 'payment_single')
+    response.get('https://api.mollie.com/v2/customers/%s' % CUSTOMER_ID, 'customer_single')
+
+    payment = client.payments.get(PAYMENT_ID)
+    customer = payment.customer
+    assert isinstance(customer, Customer)
+    assert customer.id == CUSTOMER_ID
