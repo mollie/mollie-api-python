@@ -37,33 +37,27 @@ class Customer(Base):
 
     @property
     def subscriptions(self):
-        """Return subscription object from the links attribute"""
+        """Return the subscription list for the customer."""
         from .subscription import Subscription
-        try:
-            url = self['_links']['subscriptions']['href']
-        except KeyError:
-            return None
-        resp = self._resource.perform_api_call(self._resource.REST_READ, url)
-        return List(resp, Subscription)
+        url = self._get_link('subscriptions')
+        if url:
+            resp = self._resource.perform_api_call(self._resource.REST_READ, url)
+            return List(resp, Subscription)
 
     @property
     def mandates(self):
-        """Return the mandate list referenced in the _links."""
+        """Return the mandate list for the customer."""
         from .mandate import Mandate  # work around circular import
-        try:
-            url = self['_links']['mandates']['href']
-        except KeyError:
-            return None
-        resp = self._resource.perform_api_call(self._resource.REST_READ, url)
-        return List(resp, Mandate)
+        url = self._get_link('mandates')
+        if url:
+            resp = self._resource.perform_api_call(self._resource.REST_READ, url)
+            return List(resp, Mandate)
 
     @property
     def payments(self):
-        """Return the payment list referenced in the _links."""
+        """Return the payment list for the customer."""
         from .payment import Payment  # work around circular import
-        try:
-            url = self['_links']['payments']['href']
-        except KeyError:
-            return None
-        resp = self._resource.perform_api_call(self._resource.REST_READ, url)
-        return List(resp, Payment)
+        url = self._get_link('payments')
+        if url:
+            resp = self._resource.perform_api_call(self._resource.REST_READ, url)
+            return List(resp, Payment)

@@ -35,7 +35,7 @@
       "type": "application/json"
     },
     "refunds": {
-      "href": "https://api.mollie.com/v2/payments/tr_7UhSN1zuXS/refunds/re_4qqhO89gsT",
+      "href": "https://api.mollie.com/v2/payments/tr_7UhSN1zuXS/refunds",
       "type": "application/json"
     },
     "customer": {

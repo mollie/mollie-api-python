@@ -6,54 +6,53 @@ REFUND_ID = 're_4qqhO89gsT'
 
 
 def test_get_refund(client, response):
-    """Retrieve a specific refund of a payment"""
+    """Retrieve a specific refund of a payment."""
     response.get('https://api.mollie.com/v2/payments/%s/refunds/%s' % (PAYMENT_ID, REFUND_ID), 'refund_single')
 
     refund = client.payment_refunds.with_parent_id(PAYMENT_ID).get(REFUND_ID)
+    assert isinstance(refund, Refund)
     assert refund.resource == 'refund'
     assert refund.id == REFUND_ID
-    assert refund.amount['currency'] == 'EUR'
-    assert refund.amount['value'] == '5.95'
-    assert refund.settlement_amount['currency'] == 'EUR'
-    assert refund.settlement_amount['value'] == '10.00'
+    assert refund.amount == {'currency': 'EUR', 'value': '5.95'}
+    assert refund.settlement_amount == {'currency': 'EUR', 'value': '10.00'}
     assert refund.description == 'Order'
-    assert refund.status == 'pending'
+    assert refund.status == Refund.STATUS_PENDING
     assert refund.created_at == '2018-03-14T17:09:02.0Z'
     assert refund.payment_id == PAYMENT_ID
 
 
 def test_create_refund(client, response):
-    """Create a payment refund of a payment"""
+    """Create a payment refund of a payment."""
     response.post('https://api.mollie.com/v2/payments/%s/refunds' % PAYMENT_ID, 'refund_single')
 
     data = {
         'amount': {'value': '5.95', 'currency': 'EUR'}
     }
     refund = client.payment_refunds.with_parent_id(PAYMENT_ID).create(data)
-    assert refund.id == REFUND_ID
     assert isinstance(refund, Refund)
+    assert refund.id == REFUND_ID
 
 
 def test_get_single_refund_on_payment_object(client, response):
-    """Retrieve a payment refund of a payment"""
+    """Retrieve a payment refund of a payment."""
     response.get('https://api.mollie.com/v2/payments/%s' % PAYMENT_ID, 'payment_single')
     response.get('https://api.mollie.com/v2/payments/%s/refunds/%s' % (PAYMENT_ID, REFUND_ID), 'refund_single')
 
     payment = client.payments.get(PAYMENT_ID)
     refund = client.payment_refunds.on(payment).get(REFUND_ID)
-    assert refund.id == REFUND_ID
     assert isinstance(refund, Refund)
+    assert refund.id == REFUND_ID
 
 
 def test_get_all_refunds_on_payment_object(client, response):
-    """Retrieve all payment refunds of a payment"""
+    """Retrieve all payment refunds of a payment."""
     response.get('https://api.mollie.com/v2/payments/%s' % PAYMENT_ID, 'payment_single')
     response.get('https://api.mollie.com/v2/payments/%s/refunds' % PAYMENT_ID, 'refunds_list')
 
     payment = client.payments.get(PAYMENT_ID)
     refunds = client.payment_refunds.on(payment).all()
-    assert refunds.count == 1
     assert isinstance(refunds, List)
+    assert refunds.count == 1
 
     iterated = 0
     iterated_refund_ids = []
@@ -67,7 +66,7 @@ def test_get_all_refunds_on_payment_object(client, response):
 
 
 def test_cancel_refund(client, response):
-    """Cancel a refund of a payment"""
+    """Cancel a refund of a payment."""
     response.delete('https://api.mollie.com/v2/payments/%s/refunds/%s' % (PAYMENT_ID, REFUND_ID), 'empty')
 
     canceled_refund = client.payment_refunds.with_parent_id(PAYMENT_ID).delete(REFUND_ID)

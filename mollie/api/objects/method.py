@@ -48,7 +48,7 @@ class Method(Base):
 
     @property
     def issuers(self):
-        """Return the issuer list."""
+        """Return the list of available issuers for this payment method."""
         issuers = self._get_property('issuers') or []
         result = {
             '_embedded': {
