@@ -30,6 +30,7 @@ def test_get_customer_mandate_by_id(client, response):
         'https://api.mollie.com/v2/customers/%s/mandates/%s' % (CUSTOMER_ID, MANDATE_ID),
         'customer_mandate_single',
     )
+    response.get('https://api.mollie.com/v2/customers/%s' % CUSTOMER_ID, 'customer_new')
 
     mandate = client.customer_mandates.with_parent_id(CUSTOMER_ID).get(MANDATE_ID)
     assert mandate.id == MANDATE_ID
@@ -47,6 +48,7 @@ def test_get_customer_mandate_by_id(client, response):
     assert mandate.is_pending() is False
     assert mandate.is_valid() is True
     assert mandate.is_invalid() is False
+    assert mandate.customer is not None
 
 
 def test_get_customer_mandate_by_customer(client, response):

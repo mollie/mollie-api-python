@@ -39,21 +39,22 @@ class Mandate(Base):
         return self._get_property('createdAt')
 
     def is_pending(self):
+        """Check if the mandate is pending."""
         return self.status == self.STATUS_PENDING
 
     def is_valid(self):
+        """Check if the mandate is valid."""
         return self.status == self.STATUS_VALID
 
     def is_invalid(self):
+        """Check if the mandate is invalid."""
         return self.status == self.STATUS_INVALID
 
     @property
     def customer(self):
-        """Return the customer referenced in the _links."""
+        """Return the customer for this mandate."""
         from .customer import Customer  # work around circular imports
-        try:
-            url = self['_links']['customer']['href']
-        except KeyError:
-            return None
-        resp = self._resource.perform_api_call(self._resource.REST_READ, url)
-        return Customer(resp)
+        url = self._get_link('customer')
+        if url:
+            resp = self._resource.perform_api_call(self._resource.REST_READ, url)
+            return Customer(resp)
