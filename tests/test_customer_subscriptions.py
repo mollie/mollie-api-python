@@ -1,5 +1,6 @@
 from mollie.api.objects.customer import Customer
 from mollie.api.objects.list import List
+from mollie.api.objects.method import Method
 from mollie.api.objects.subscription import Subscription
 
 CUSTOMER_ID = 'cst_8wmqcHMN4U'
@@ -29,31 +30,35 @@ def test_get_customer_subscription_by_id(client, response):
     """Retrieve a single subscription by ID."""
     response.get('https://api.mollie.com/v2/customers/%s/subscriptions/%s' % (CUSTOMER_ID, SUBSCRIPTION_ID),
                  'subscription_single')
+    response.get('https://api.mollie.com/v2/customers/%s' % CUSTOMER_ID, 'customer_single')
 
     subscription = client.customer_subscriptions.with_parent_id(CUSTOMER_ID).get(SUBSCRIPTION_ID)
     assert subscription.resource == 'subscription'
     assert subscription.id == SUBSCRIPTION_ID
     assert subscription.mode == 'live'
     assert subscription.created_at == '2016-06-01T12:23:34+00:00'
+    assert subscription.amount == {'value': '25.00', 'currency': 'EUR'}
+    assert subscription.times == 4
+    assert subscription.interval == '3 months'
+    assert subscription.description == 'Quarterly payment'
+    assert subscription.method == Method.IDEAL
+    assert subscription.webhook_url == 'https://webshop.example.org/payments/webhook'
+    assert subscription.status == Subscription.STATUS_ACTIVE
+    assert subscription.start_date is None
+    assert subscription.canceled_at is None
+    assert subscription.customer is not None
     assert subscription.is_active() is True
     assert subscription.is_suspended() is False
     assert subscription.is_pending() is False
     assert subscription.is_completed() is False
     assert subscription.is_canceled() is False
-    assert subscription.amount['value'] == '25.00'
-    assert subscription.amount['currency'] == 'EUR'
-    assert subscription.times == 4
-    assert subscription.interval == '3 months'
-    assert subscription.description == 'Quarterly payment'
-    assert subscription.method == 'ideal'
-    assert subscription.webhook_url == 'https://webshop.example.org/payments/webhook'
 
 
 def test_get_all_customer_subscriptions_by_customer_object(client, response):
     """Retrieve all subscriptions related to customer."""
+    response.get('https://api.mollie.com/v2/customers/%s' % CUSTOMER_ID, 'customer_single')
     response.get('https://api.mollie.com/v2/customers/%s/subscriptions' % CUSTOMER_ID,
                  'subscriptions_list')
-    response.get('https://api.mollie.com/v2/customers/%s' % CUSTOMER_ID, 'customer_single')
 
     customer = client.customers.get(CUSTOMER_ID)
     subscriptions = client.customer_subscriptions.on(customer).all()
@@ -95,6 +100,7 @@ def test_cancel_customer_subscription(client, response):
                     'subscription_canceled', 200)
 
     subscription = client.customer_subscriptions.with_parent_id(CUSTOMER_ID).delete(SUBSCRIPTION_ID)
+    assert isinstance(subscription, Subscription)
     assert subscription.status == 'canceled'
     assert subscription.canceled_at == '2018-08-01T11:04:21+00:00'
 

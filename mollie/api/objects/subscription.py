@@ -79,9 +79,7 @@ class Subscription(Base):
     @property
     def customer(self):
         """Return customer object from the links attribute."""
-        try:
-            url = self['_links']['customer']['href']
-        except KeyError:
-            return None
-        resp = self._resource.perform_api_call(self._resource.REST_READ, url)
-        return Customer(resp)
+        url = self._get_link('customer')
+        if url:
+            resp = self._resource.perform_api_call(self._resource.REST_READ, url)
+            return Customer(resp)
