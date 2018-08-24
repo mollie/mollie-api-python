@@ -70,7 +70,6 @@ def test_get_single_payment(client, response):
     assert payment.metadata == {'order_id': '12345'}
     assert payment.sequence_type == 'oneoff'
     assert payment.profile_id == 'pfl_QkEhN94Ba'
-    assert payment.can_be_refunded is False
     assert payment.checkout_url == 'https://www.mollie.com/payscreen/select-method/7UhSN1zuXS'
     assert payment.resource == 'payment'
     assert payment.id == PAYMENT_ID
@@ -88,6 +87,7 @@ def test_get_single_payment(client, response):
     assert payment.is_paid() is False
     assert payment.is_failed() is False
     assert payment.has_refunds() is True
+    assert payment.can_be_refunded() is False
     assert payment.has_sequence_type_first() is False
     assert payment.has_sequence_type_recurring() is False
 

@@ -38,6 +38,12 @@ class Payment(Base):
         except KeyError:
             return False
 
+    def can_be_refunded(self):
+        try:
+            return self._get_property('amountRemaining') is not None
+        except KeyError:
+            return False
+
     def has_sequence_type_first(self):
         return self._get_property('sequenceType') == self.SEQUENCETYPE_FIRST
 
@@ -138,13 +144,6 @@ class Payment(Base):
     @property
     def customer_id(self):
         return self._get_property('customerId')
-
-    @property
-    def can_be_refunded(self):
-        try:
-            return self._get_property('amountRemaining') is not None
-        except KeyError:
-            return False
 
     @property
     def amount_refunded(self):
