@@ -20,6 +20,7 @@ def test_get_issuers(client, response):
     assert len(set(iterated_issuer_ids)) == len(issuers), 'Unexpected number of unique issuers'
 
     # check the last issuer
+    assert issuer.image_svg == 'https://www.mollie.com/external/icons/ideal-issuers/FVLBNL22.svg'
     assert issuer.image_size1x == 'https://www.mollie.com/images/checkout/v2/ideal-issuer-icons/FVLBNL22.png'
     assert issuer.image_size2x == 'https://www.mollie.com/images/checkout/v2/ideal-issuer-icons/FVLBNL22.png'
     assert issuer.name == 'van Lanschot'
