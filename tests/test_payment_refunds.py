@@ -10,14 +10,13 @@ def test_get_refund(client, response):
     response.get('https://api.mollie.com/v2/payments/%s/refunds/%s' % (PAYMENT_ID, REFUND_ID), 'refund_single')
 
     refund = client.payment_refunds.with_parent_id(PAYMENT_ID).get(REFUND_ID)
+    assert isinstance(refund, Refund)
     assert refund.resource == 'refund'
     assert refund.id == REFUND_ID
-    assert refund.amount['currency'] == 'EUR'
-    assert refund.amount['value'] == '5.95'
-    assert refund.settlement_amount['currency'] == 'EUR'
-    assert refund.settlement_amount['value'] == '10.00'
+    assert refund.amount == {'currency': 'EUR', 'value': '5.95'}
+    assert refund.settlement_amount == {'currency': 'EUR', 'value': '10.00'}
     assert refund.description == 'Order'
-    assert refund.status == 'pending'
+    assert refund.status == Refund.STATUS_PENDING
     assert refund.created_at == '2018-03-14T17:09:02.0Z'
     assert refund.payment_id == PAYMENT_ID
 
@@ -30,8 +29,8 @@ def test_create_refund(client, response):
         'amount': {'value': '5.95', 'currency': 'EUR'}
     }
     refund = client.payment_refunds.with_parent_id(PAYMENT_ID).create(data)
-    assert refund.id == REFUND_ID
     assert isinstance(refund, Refund)
+    assert refund.id == REFUND_ID
 
 
 def test_get_single_refund_on_payment_object(client, response):
@@ -41,8 +40,8 @@ def test_get_single_refund_on_payment_object(client, response):
 
     payment = client.payments.get(PAYMENT_ID)
     refund = client.payment_refunds.on(payment).get(REFUND_ID)
-    assert refund.id == REFUND_ID
     assert isinstance(refund, Refund)
+    assert refund.id == REFUND_ID
 
 
 def test_get_all_refunds_on_payment_object(client, response):
@@ -52,8 +51,8 @@ def test_get_all_refunds_on_payment_object(client, response):
 
     payment = client.payments.get(PAYMENT_ID)
     refunds = client.payment_refunds.on(payment).all()
-    assert refunds.count == 1
     assert isinstance(refunds, List)
+    assert refunds.count == 1
 
     iterated = 0
     iterated_refund_ids = []

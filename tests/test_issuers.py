@@ -1,18 +1,20 @@
+from mollie.api.objects.issuer import Issuer
+from mollie.api.objects.list import List
+
 
 def test_get_issuers(client, response):
     """Get all the iDeal issuers via the include querystring parameter."""
     response.get('https://api.mollie.com/v2/methods/ideal?include=issuers', 'method_get_ideal_with_includes')
 
     issuers = client.methods.get('ideal', include='issuers').issuers
-    assert issuers.__class__.__name__ == 'List'
-    assert len(issuers) == 11
+    assert isinstance(issuers, List)
 
     iterated = 0
     iterated_issuer_ids = []
     for issuer in issuers:
-        assert issuer.__class__.__name__ == 'Issuer'
-        iterated += 1
+        assert isinstance(issuer, Issuer)
         assert issuer.id is not None
+        iterated += 1
         iterated_issuer_ids.append(issuer.id)
     assert iterated == len(issuers), 'Unexpected amount of issuers retrieved'
     assert len(set(iterated_issuer_ids)) == len(issuers), 'Unexpected number of unique issuers'

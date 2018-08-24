@@ -14,9 +14,9 @@ def test_get_all_customer_payments(client, response):
     iterated = 0
     iterated_payment_ids = []
     for payment in payments:
-        iterated += 1
         assert isinstance(payment, Payment)
         assert payment.id is not None
+        iterated += 1
         iterated_payment_ids.append(payment.id)
     assert iterated == payments.count, 'Unexpected amount of payments retrieved'
     assert len(set(iterated_payment_ids)) == payments.count, 'Unexpected unique payment ids retrieved'
@@ -34,4 +34,5 @@ def test_create_customer_payment(client, response):
             'webhookUrl': 'https://webshop.example.org/payments/webhook/',
             'method': 'ideal',
         })
+    assert isinstance(payment, Payment)
     assert payment.customer_id == CUSTOMER_ID

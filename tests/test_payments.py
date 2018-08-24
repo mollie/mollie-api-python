@@ -18,12 +18,13 @@ def test_get_all_payments(client, response):
     payments = client.payments.all()
     assert isinstance(payments, List)
     assert payments.count == 3
+
     iterated = 0
     iterated_payment_ids = []
     for payment in payments:
-        iterated += 1
         assert isinstance(payment, Payment)
         assert payment.id is not None
+        iterated += 1
         iterated_payment_ids.append(payment.id)
     assert iterated == payments.count, 'Unexpected amount of payments retrieved'
     assert len(set(iterated_payment_ids)) == payments.count, 'Unexpected unique payment ids retrieved'
@@ -49,6 +50,7 @@ def test_cancel_payment(client, response):
     response.delete('https://api.mollie.com/v2/payments/%s' % PAYMENT_ID, 'payment_canceled', 200)
 
     canceled_payment = client.payments.delete(PAYMENT_ID)
+    assert isinstance(canceled_payment, Payment)
     assert canceled_payment.is_canceled() is True
     assert canceled_payment.canceled_at == '2018-03-20T09:28:37+00:00'
     assert canceled_payment.id == PAYMENT_ID
@@ -62,6 +64,7 @@ def test_get_single_payment(client, response):
     response.get('https://api.mollie.com/v2/customers/%s' % CUSTOMER_ID, 'customer_single')
 
     payment = client.payments.get(PAYMENT_ID)
+    assert isinstance(payment, Payment)
     assert payment.amount == {'value': '10.00', 'currency': 'EUR'}
     assert payment.description == 'Order #12345'
     assert payment.redirect_url == 'https://webshop.example.org/order/12345/'
@@ -109,8 +112,8 @@ def test_payment_get_related_refunds(client, response):
 
     payment = client.payments.get(PAYMENT_ID)
     refunds = payment.refunds
-    assert refunds.count == 1
     assert isinstance(refunds, List)
+    assert refunds.count == 1
 
     iterated = 0
     iterated_refund_ids = []

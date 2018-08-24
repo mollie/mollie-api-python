@@ -28,6 +28,7 @@ def test_update_customer(client, response):
         'name': 'Updated Customer A',
         'email': 'updated-customer@example.org',
     })
+    assert isinstance(updated_customer, Customer)
     assert updated_customer.name == 'Updated Customer A'
     assert updated_customer.email == 'updated-customer@example.org'
 
@@ -51,8 +52,8 @@ def test_customers_all(client, response):
     iterated_customer_ids = []
     for customer in customers:
         assert isinstance(customer, Customer)
-        iterated += 1
         assert customer.id is not None
+        iterated += 1
         iterated_customer_ids.append(customer.id)
     assert iterated == customers.count, 'Unexpected amount of customers retrieved'
     assert len(set(iterated_customer_ids)) == customers.count, 'Unexpected amount of unique customer ids retrieved'

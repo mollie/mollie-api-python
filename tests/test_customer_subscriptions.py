@@ -18,8 +18,8 @@ def test_customer_subscriptions_all(client, response):
     iterated_subscription_ids = []
     for subscription in subscriptions:
         assert isinstance(subscription, Subscription)
-        iterated += 1
         assert subscription.id is not None
+        iterated += 1
         iterated_subscription_ids.append(subscription.id)
     assert iterated == subscriptions.count, 'Unexpected amount of subscriptions retrieved'
     assert len(set(iterated_subscription_ids)) == subscriptions.count, \
@@ -79,8 +79,8 @@ def test_get_one_customer_subscription_by_customer_object(client, response):
 
     customer = client.customers.get(CUSTOMER_ID)
     subscription = client.customer_subscriptions.on(customer).get(SUBSCRIPTION_ID)
-    assert subscription.customer.id == CUSTOMER_ID
     assert isinstance(subscription, Subscription)
+    assert subscription.customer.id == CUSTOMER_ID
 
 
 def test_customer_subscription_get_related_customer(client, response):
@@ -108,6 +108,7 @@ def test_cancel_customer_subscription(client, response):
 def test_create_customer_subscription(client, response):
     """Create a subscription with customer object."""
     response.post('https://api.mollie.com/v2/customers/%s/subscriptions' % CUSTOMER_ID, 'subscription_single')
+
     data = {
         'amount': {'currency': 'EUR', 'value': '25.00'},
         'times': 4,
@@ -116,6 +117,7 @@ def test_create_customer_subscription(client, response):
         'webhookUrl': 'https://webshop.example.org/subscriptions/webhook'
     }
     subscription = client.customer_subscriptions.with_parent_id(CUSTOMER_ID).create(data=data)
+    assert isinstance(subscription, Subscription)
     assert subscription.id == SUBSCRIPTION_ID
 
 
@@ -132,4 +134,5 @@ def test_update_customer_subscription(client, response):
         'webhookUrl': 'https://webshop.example.org/subscriptions/webhook'
     }
     subscription = client.customer_subscriptions.with_parent_id(CUSTOMER_ID).update(SUBSCRIPTION_ID, data)
+    assert isinstance(subscription, Subscription)
     assert subscription.id == SUBSCRIPTION_ID

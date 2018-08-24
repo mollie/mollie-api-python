@@ -7,8 +7,8 @@ def test_get_all_chargebacks(client, response):
     response.get('https://api.mollie.com/v2/chargebacks', 'chargebacks_list')
 
     chargebacks = client.chargebacks.all()
-    assert chargebacks.count == 1
     assert isinstance(chargebacks, List)
+    assert chargebacks.count == 1
 
     iterated = 0
     iterated_chargeback_ids = []

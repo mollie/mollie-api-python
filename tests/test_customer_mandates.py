@@ -33,6 +33,7 @@ def test_get_customer_mandate_by_id(client, response):
     response.get('https://api.mollie.com/v2/customers/%s' % CUSTOMER_ID, 'customer_new')
 
     mandate = client.customer_mandates.with_parent_id(CUSTOMER_ID).get(MANDATE_ID)
+    assert isinstance(mandate, Mandate)
     assert mandate.id == MANDATE_ID
     assert mandate.resource == 'mandate'
     assert mandate.status == 'valid'
@@ -65,6 +66,7 @@ def test_get_customer_mandate_by_customer(client, response):
     assert MANDATE_ID in [x.id for x in mandates]
 
     mandate = client.customer_mandates.on(customer).get(MANDATE_ID)
+    assert isinstance(mandate, Mandate)
     assert mandate.id == MANDATE_ID
 
 
@@ -94,6 +96,7 @@ def test_customer_mandates_create_mandate(client, response):
         'mandateReference': 'YOUR-COMPANY-MD1380',
     }
     mandate = client.customer_mandates.with_parent_id(CUSTOMER_ID).create(data=data)
+    assert isinstance(mandate, Mandate)
     assert mandate.id == MANDATE_ID
 
 
@@ -112,4 +115,5 @@ def test_update_customer_mandate(client, response):
         'mandateReference': 'OTHER-COMPANY-12345',
     }
     mandate = client.customer_mandates.with_parent_id(CUSTOMER_ID).update(MANDATE_ID, data=data)
+    assert isinstance(mandate, Mandate)
     assert mandate.id == MANDATE_ID
