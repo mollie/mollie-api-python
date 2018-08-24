@@ -15,6 +15,14 @@ class Issuer(Base):
         return self._get_property('name')
 
     @property
+    def image_svg(self):
+        try:
+            images = self._get_property('image')
+            return images['svg']
+        except KeyError:
+            return None
+
+    @property
     def image_size1x(self):
         try:
             images = self._get_property('image')
