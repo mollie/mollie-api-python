@@ -1,7 +1,6 @@
 import platform
 import re
 import ssl
-import sys
 
 import pkg_resources
 import requests
@@ -32,7 +31,7 @@ class Client(object):
     UNAME = ' '.join(platform.uname())
     USER_AGENT = ' '.join(vs.replace(r'\s+', '-') for vs in [
         'Mollie/{client_version}'.format(client_version=CLIENT_VERSION),
-        'Python/{python_version}'.format(python_version=sys.version.split(' ')[0]),
+        'Python/{python_version}'.format(python_version=platform.python_version()),
         'OpenSSL/{ssl_version}'.format(ssl_version=ssl.OPENSSL_VERSION.split(' ')[1]),
     ])
 
