@@ -28,20 +28,21 @@ def main():
         customer_id = flask.request.args.get('customer_id')
 
         # If no customer ID was provided in the URL, we grab the first customer
+        customer = None
         if customer_id is None:
-            customers = mollie_client.customers.all()
+            customers = mollie_client.customers.list()
 
-            body += '<p>No customer ID specified. Attempting to retrieve all customers and grabbing the first.</p>'
-
-            if int(customers.count) == 0:
+            if not len(customers):
                 body += '<p>You have no customers. You can create one from the examples.</p>'
                 return body
 
-            for customer in customers:
-                customer_id = customer.id
-                break
+            body += '<p>No customer ID specified. Attempting to retrieve all customers and grabbing the first.</p>'
 
-        customer = mollie_client.customers.get(customer_id)
+            customer = next(customers)
+            customer_id = customer.id
+
+        if not customer:
+            customer = mollie_client.customers.get(customer_id)
 
         amount_of_payments_to_retrieve = 20
 
@@ -53,7 +54,7 @@ def main():
         params = {
             'limit': amount_of_payments_to_retrieve,
         }
-        payments = mollie_client.customer_payments.with_parent_id(customer_id).all(**params)
+        payments = mollie_client.customer_payments.with_parent_id(customer_id).list(**params)
 
         body += '<p>Showing the last %s payments for customer "%s"</p>' % (payments.count, customer.id)
 

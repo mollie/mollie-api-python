@@ -24,9 +24,15 @@ def main():
         #
         # Get the first page of payments for this API key ordered by newest.
         #
-        payments = mollie_client.payments.all()
+        payments = mollie_client.payments.list()
 
-        body = 'Showing the first page of payments for this API key<br>'
+        body = ''
+
+        if not len(payments):
+            body += '<p>You have no payments. You can create one from the examples.</p>'
+            return body
+
+        body += '<p>Showing the first page of payments for this API key</p>'
 
         for payment in payments:
             body += "%s %s, status: '%s'<br>" % (payment.amount['value'], payment.amount['currency'], payment.status)

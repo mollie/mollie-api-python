@@ -31,12 +31,15 @@ def main():
         #
         # See: https://www.mollie.com/nl/docs/reference/customers/list
         #
-        customers = mollie_client.customers.all(**params)
+        customers = mollie_client.customers.list(**params)
 
-        body = '<p>Showing the last %s customers for your API key.</p>' % customers.count
+        body = ''
 
-        if int(customers.count) == 0:
+        if not len(customers):
+            body += '<p>You have no customers. You can create one from the examples.</p>'
             return body
+
+        body += '<p>Showing the last %s customers for your API key.</p>' % len(customers)
 
         body += """
             <table>
