@@ -2,11 +2,11 @@ from mollie.api.objects.chargeback import Chargeback
 from mollie.api.objects.list import List
 
 
-def test_get_all_chargebacks(client, response):
+def test_list_chargebacks(client, response):
     """Get all chargebacks."""
     response.get('https://api.mollie.com/v2/chargebacks', 'chargebacks_list')
 
-    chargebacks = client.chargebacks.all()
+    chargebacks = client.chargebacks.list()
     assert isinstance(chargebacks, List)
     assert chargebacks.count == 1
 

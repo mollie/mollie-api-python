@@ -33,7 +33,7 @@ def test_update_customer(client, response):
     assert updated_customer.email == 'updated-customer@example.org'
 
 
-def test_delete_customers(client, response):
+def test_delete_customer(client, response):
     """Delete a customer."""
     response.delete('https://api.mollie.com/v2/customers/%s' % CUSTOMER_ID, 'empty')
 
@@ -41,11 +41,11 @@ def test_delete_customers(client, response):
     assert deleted_customer == {}
 
 
-def test_customers_all(client, response):
+def test_list_customers(client, response):
     """Retrieve a list of all existing customers."""
     response.get('https://api.mollie.com/v2/customers', 'customers_list')
 
-    customers = client.customers.all()
+    customers = client.customers.list()
     assert isinstance(customers, List)
     assert customers.count == 3
     iterated = 0

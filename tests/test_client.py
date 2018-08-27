@@ -38,7 +38,7 @@ def test_client_querystring(client, response):
     )
 
     params = {'amount': {'currency': 'USD', 'value': '100.00'}}
-    methods = client.methods.all(**params)
+    methods = client.methods.list(**params)
     assert methods.count == 11
 
 
@@ -46,7 +46,7 @@ def test_client_no_api_key():
     """A Request without an API key should raise an error."""
     client = Client()
     with pytest.raises(RequestSetupError) as excinfo:
-        client.customers.all()
+        client.customers.list()
     assert excinfo.match('You have not set an API key.')
 
 
@@ -67,7 +67,7 @@ def test_client_no_cert_bundle(monkeypatch):
     client = Client()
     client.set_api_key('test_test')
     with pytest.raises(RequestSetupError) as excinfo:
-        client.customers.all()
+        client.customers.list()
     assert excinfo.match('Unable to load cacert.pem')
 
 
@@ -81,7 +81,7 @@ def test_client_generic_request_error(response):
     client.set_api_key('test_test')
     client.set_api_endpoint('https://api.mollie.invalid/')
     with pytest.raises(RequestError) as excinfo:
-        client.customers.all()
+        client.customers.list()
     assert excinfo.match('Unable to communicate with Mollie: Connection refused')
 
 
@@ -140,7 +140,7 @@ def test_client_invalid_json_response(client, response):
     """An invalid json response should raise an error."""
     response.get('https://api.mollie.com/v2/customers', 'invalid_json')
     with pytest.raises(ResponseHandlingError) as excinfo:
-        client.customers.all()
+        client.customers.list()
     assert excinfo.match(r'Unable to decode Mollie API response \(status code: 200\)')
 
 
@@ -172,7 +172,7 @@ def test_client_response_404_but_no_payload(response):
     client.set_api_key('test_test')
 
     with pytest.raises(ResponseHandlingError) as excinfo:
-        client.customers.all()
+        client.customers.list()
     assert excinfo.match('Invalid API version')
 
 

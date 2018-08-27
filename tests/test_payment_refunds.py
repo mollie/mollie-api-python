@@ -69,13 +69,13 @@ def test_get_single_refund_on_payment_object(client, response):
     assert refund.id == REFUND_ID
 
 
-def test_get_all_refunds_on_payment_object(client, response):
+def test_list_refunds_on_payment_object(client, response):
     """Retrieve all payment refunds of a payment."""
     response.get('https://api.mollie.com/v2/payments/%s' % PAYMENT_ID, 'payment_single')
     response.get('https://api.mollie.com/v2/payments/%s/refunds' % PAYMENT_ID, 'refunds_list')
 
     payment = client.payments.get(PAYMENT_ID)
-    refunds = client.payment_refunds.on(payment).all()
+    refunds = client.payment_refunds.on(payment).list()
     assert isinstance(refunds, List)
     assert refunds.count == 1
 

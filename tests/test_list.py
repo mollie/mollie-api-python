@@ -8,7 +8,7 @@ def test_list_iterator_behaviour(client, response):
     """Verify the behaviour of the List object in iterator circumstances."""
     response.get('https://api.mollie.com/v2/methods', 'methods_list')
 
-    methods = client.methods.all()
+    methods = client.methods.list()
     assert isinstance(methods, List)
 
     # walk the list using next()
@@ -50,7 +50,7 @@ def test_list_multiple_api_calls(client, response):
     response.get('https://api.mollie.com/v2/customers?from=cst_8pknKQJzJa&limit=5', 'customers_list_second')
     response.get('https://api.mollie.com/v2/customers?from=cst_HwBHgJgRAf&limit=5', 'customers_list_first')
 
-    customers = client.customers.all(limit=5)
+    customers = client.customers.list(limit=5)
     assert customers.count == 5
     all_customers_count = customers.count
     while customers.has_next():

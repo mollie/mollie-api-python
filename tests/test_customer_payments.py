@@ -4,11 +4,11 @@ from mollie.api.objects.payment import Payment
 CUSTOMER_ID = 'cst_8wmqcHMN4U'
 
 
-def test_get_all_customer_payments(client, response):
+def test_list_customer_payments(client, response):
     """Retrieve a list of payments related to a customer id."""
     response.get('https://api.mollie.com/v2/customers/%s/payments' % CUSTOMER_ID, 'customer_payments_multiple')
 
-    payments = client.customer_payments.with_parent_id(CUSTOMER_ID).all()
+    payments = client.customer_payments.with_parent_id(CUSTOMER_ID).list()
     assert isinstance(payments, List)
     assert payments.count == 1
     iterated = 0
@@ -27,7 +27,7 @@ def test_list_customer_payments_by_object(client, response):
     response.get('https://api.mollie.com/v2/customers/%s/payments' % CUSTOMER_ID, 'customer_payments_multiple')
 
     customer = client.customers.get(CUSTOMER_ID)
-    payments = client.customer_payments.on(customer).all()
+    payments = client.customer_payments.on(customer).list()
     assert isinstance(payments, List)
     for payment in payments:
         assert isinstance(payment, Payment)

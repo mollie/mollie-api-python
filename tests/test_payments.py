@@ -19,11 +19,11 @@ MANDATE_ID = 'mdt_h3gAaD5zP'
 SUBSCRIPTION_ID = 'sub_rVKGtNd6s3'
 
 
-def test_get_all_payments(client, response):
-    """Retrieve all existing payments."""
+def test_list_payments(client, response):
+    """Retrieve a list of payments."""
     response.get('https://api.mollie.com/v2/payments', 'payments_list')
 
-    payments = client.payments.all()
+    payments = client.payments.list()
     assert isinstance(payments, List)
     assert payments.count == 3
 
@@ -64,7 +64,7 @@ def test_cancel_payment(client, response):
     assert canceled_payment.id == PAYMENT_ID
 
 
-def test_cancel_paymanet_invalid_id(client):
+def test_cancel_payment_invalid_id(client):
     """Verify that an invalid payment id is validated and an error is raised."""
     with pytest.raises(IdentifierError):
         client.payments.delete('invalid')
@@ -138,7 +138,7 @@ def test_get_single_payment(client, response):
 
 
 def test_payment_get_related_refunds(client, response):
-    """Retrieve a list of all refunds related to a payment."""
+    """Retrieve a list of refunds related to a payment."""
     response.get('https://api.mollie.com/v2/payments/%s' % PAYMENT_ID, 'payment_single')
     response.get('https://api.mollie.com/v2/payments/%s/refunds' % PAYMENT_ID, 'refunds_list')
 

@@ -5,11 +5,11 @@ PAYMENT_ID = 'tr_7UhSN1zuXS'
 CHARGEBACK_ID = 'chb_n9z0tp'
 
 
-def test_get_payment_chargeback_by_payment_id(client, response):
+def test_get_payment_chargebacks_by_payment_id(client, response):
     """Get chargebacks relevant to payment by payment id."""
     response.get('https://api.mollie.com/v2/payments/%s/chargebacks' % PAYMENT_ID, 'chargebacks_list')
 
-    chargebacks = client.payment_chargebacks.with_parent_id(PAYMENT_ID).all()
+    chargebacks = client.payment_chargebacks.with_parent_id(PAYMENT_ID).list()
     assert isinstance(chargebacks, List)
     assert chargebacks.count == 1
 
@@ -46,7 +46,7 @@ def test_get_all_payment_chargebacks_by_payment_object(client, response):
     response.get('https://api.mollie.com/v2/payments/%s' % PAYMENT_ID, 'payment_single')
 
     payment = client.payments.get(PAYMENT_ID)
-    chargebacks = client.payment_chargebacks.on(payment).all()
+    chargebacks = client.payment_chargebacks.on(payment).list()
     assert isinstance(chargebacks, List)
     assert chargebacks.count == 1
 

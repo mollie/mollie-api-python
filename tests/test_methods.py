@@ -2,11 +2,11 @@ from mollie.api.objects.list import List
 from mollie.api.objects.method import Method
 
 
-def test_methods_all(client, response):
+def test_list_methods(client, response):
     """Retrieve a list of available payment methods."""
     response.get('https://api.mollie.com/v2/methods', 'methods_list')
 
-    methods = client.methods.all()
+    methods = client.methods.list()
     assert isinstance(methods, List)
     assert methods.count == 11
 
