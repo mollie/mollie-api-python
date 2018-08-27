@@ -8,9 +8,7 @@ class Refunds(Base):
     payment_id = None
 
     def get_resource_object(self, result):
-        refund = Refund(result)
-        refund._resource = self
-        return refund
+        return Refund(result, self)
 
     def get(self, refund_id, **params):
         if not refund_id or not refund_id.startswith(self.RESOURCE_ID_PREFIX):
