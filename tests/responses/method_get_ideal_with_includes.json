@@ -12,15 +12,17 @@
   "description": "iDEAL",
   "id": "ideal",
   "image": {
-    "size1x": "https://www.mollie.com/images/payscreen/methods/ideal.png",
-    "size2x": "https://www.mollie.com/images/payscreen/methods/ideal%402x.png"
+    "size1x": "https://www.mollie.com/external/icons/payment-methods/ideal.png",
+    "size2x": "https://www.mollie.com/external/icons/payment-methods/ideal%402x.png",
+    "svg": "https://www.mollie.com/external/icons/payment-methods/ideal.svg"
   },
   "issuers": [
     {
       "id": "ideal_ABNANL2A",
       "image": {
         "size1x": "https://www.mollie.com/images/checkout/v2/ideal-issuer-icons/ABNANL2A.png",
-        "size2x": "https://www.mollie.com/images/checkout/v2/ideal-issuer-icons/ABNANL2A.png"
+        "size2x": "https://www.mollie.com/images/checkout/v2/ideal-issuer-icons/ABNANL2A.png",
+        "svg": "https://www.mollie.com/external/icons/ideal-issuers/ABNANL2A.svg"
       },
       "name": "ABN AMRO",
       "resource": "issuer"
@@ -29,7 +31,8 @@
       "id": "ideal_ASNBNL21",
       "image": {
         "size1x": "https://www.mollie.com/images/checkout/v2/ideal-issuer-icons/ASNBNL21.png",
-        "size2x": "https://www.mollie.com/images/checkout/v2/ideal-issuer-icons/ASNBNL21.png"
+        "size2x": "https://www.mollie.com/images/checkout/v2/ideal-issuer-icons/ASNBNL21.png",
+        "svg": "https://www.mollie.com/external/icons/ideal-issuers/ASNBNL21.svg"
       },
       "name": "ASN Bank",
       "resource": "issuer"
@@ -38,7 +41,8 @@
       "id": "ideal_BUNQNL2A",
       "image": {
         "size1x": "https://www.mollie.com/images/checkout/v2/ideal-issuer-icons/BUNQNL2A.png",
-        "size2x": "https://www.mollie.com/images/checkout/v2/ideal-issuer-icons/BUNQNL2A.png"
+        "size2x": "https://www.mollie.com/images/checkout/v2/ideal-issuer-icons/BUNQNL2A.png",
+        "svg": "https://www.mollie.com/external/icons/ideal-issuers/BUNQNL2A.svg"
       },
       "name": "bunq",
       "resource": "issuer"
@@ -47,7 +51,8 @@
       "id": "ideal_INGBNL2A",
       "image": {
         "size1x": "https://www.mollie.com/images/checkout/v2/ideal-issuer-icons/INGBNL2A.png",
-        "size2x": "https://www.mollie.com/images/checkout/v2/ideal-issuer-icons/INGBNL2A.png"
+        "size2x": "https://www.mollie.com/images/checkout/v2/ideal-issuer-icons/INGBNL2A.png",
+        "svg": "https://www.mollie.com/external/icons/ideal-issuers/INGBNL2A.svg"
       },
       "name": "ING",
       "resource": "issuer"
@@ -56,7 +61,8 @@
       "id": "ideal_KNABNL2H",
       "image": {
         "size1x": "https://www.mollie.com/images/checkout/v2/ideal-issuer-icons/KNABNL2H.png",
-        "size2x": "https://www.mollie.com/images/checkout/v2/ideal-issuer-icons/KNABNL2H.png"
+        "size2x": "https://www.mollie.com/images/checkout/v2/ideal-issuer-icons/KNABNL2H.png",
+        "svg": "https://www.mollie.com/external/icons/ideal-issuers/KNABNL2H.svg"
       },
       "name": "Knab",
       "resource": "issuer"
@@ -65,7 +71,8 @@
       "id": "ideal_MOYONL21",
       "image": {
         "size1x": "https://www.mollie.com/images/checkout/v2/ideal-issuer-icons/MOYONL21.png",
-        "size2x": "https://www.mollie.com/images/checkout/v2/ideal-issuer-icons/MOYONL21.png"
+        "size2x": "https://www.mollie.com/images/checkout/v2/ideal-issuer-icons/MOYONL21.png",
+        "svg": "https://www.mollie.com/external/icons/ideal-issuers/MOYONL21.svg"
       },
       "name": "Moneyou",
       "resource": "issuer"
@@ -74,7 +81,8 @@
       "id": "ideal_RABONL2U",
       "image": {
         "size1x": "https://www.mollie.com/images/checkout/v2/ideal-issuer-icons/RABONL2U.png",
-        "size2x": "https://www.mollie.com/images/checkout/v2/ideal-issuer-icons/RABONL2U.png"
+        "size2x": "https://www.mollie.com/images/checkout/v2/ideal-issuer-icons/RABONL2U.png",
+        "svg": "https://www.mollie.com/external/icons/ideal-issuers/RABONL2U.svg"
       },
       "name": "Rabobank",
       "resource": "issuer"
@@ -83,7 +91,8 @@
       "id": "ideal_RBRBNL21",
       "image": {
         "size1x": "https://www.mollie.com/images/checkout/v2/ideal-issuer-icons/RBRBNL21.png",
-        "size2x": "https://www.mollie.com/images/checkout/v2/ideal-issuer-icons/RBRBNL21.png"
+        "size2x": "https://www.mollie.com/images/checkout/v2/ideal-issuer-icons/RBRBNL21.png",
+        "svg": "https://www.mollie.com/external/icons/ideal-issuers/RBRBNL21.svg"
       },
       "name": "RegioBank",
       "resource": "issuer"
@@ -92,7 +101,8 @@
       "id": "ideal_SNSBNL2A",
       "image": {
         "size1x": "https://www.mollie.com/images/checkout/v2/ideal-issuer-icons/SNSBNL2A.png",
-        "size2x": "https://www.mollie.com/images/checkout/v2/ideal-issuer-icons/SNSBNL2A.png"
+        "size2x": "https://www.mollie.com/images/checkout/v2/ideal-issuer-icons/SNSBNL2A.png",
+        "svg": "https://www.mollie.com/external/icons/ideal-issuers/SNSBNL2A.svg"
       },
       "name": "SNS Bank",
       "resource": "issuer"
@@ -101,7 +111,8 @@
       "id": "ideal_TRIONL2U",
       "image": {
         "size1x": "https://www.mollie.com/images/checkout/v2/ideal-issuer-icons/TRIONL2U.png",
-        "size2x": "https://www.mollie.com/images/checkout/v2/ideal-issuer-icons/TRIONL2U.png"
+        "size2x": "https://www.mollie.com/images/checkout/v2/ideal-issuer-icons/TRIONL2U.png",
+        "svg": "https://www.mollie.com/external/icons/ideal-issuers/TRIONL2U.svg"
       },
       "name": "Triodos Bank",
       "resource": "issuer"
@@ -110,7 +121,8 @@
       "id": "ideal_FVLBNL22",
       "image": {
         "size1x": "https://www.mollie.com/images/checkout/v2/ideal-issuer-icons/FVLBNL22.png",
-        "size2x": "https://www.mollie.com/images/checkout/v2/ideal-issuer-icons/FVLBNL22.png"
+        "size2x": "https://www.mollie.com/images/checkout/v2/ideal-issuer-icons/FVLBNL22.png",
+        "svg": "https://www.mollie.com/external/icons/ideal-issuers/FVLBNL22.svg"
       },
       "name": "van Lanschot",
       "resource": "issuer"

@@ -12,8 +12,9 @@
   "description": "iDEAL",
   "id": "ideal",
   "image": {
-    "size1x": "https://www.mollie.com/images/payscreen/methods/ideal.png",
-    "size2x": "https://www.mollie.com/images/payscreen/methods/ideal%402x.png"
+    "size1x": "https://www.mollie.com/external/icons/payment-methods/ideal.png",
+    "size2x": "https://www.mollie.com/external/icons/payment-methods/ideal%402x.png",
+    "svg": "https://www.mollie.com/external/icons/payment-methods/ideal.svg"
   },
   "resource": "method"
 }

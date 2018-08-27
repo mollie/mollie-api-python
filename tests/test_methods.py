@@ -29,5 +29,6 @@ def test_method_get(client, response):
     assert isinstance(method, Method)
     assert method.id == Method.IDEAL
     assert method.description == 'iDEAL'
-    assert method.image_size1x == 'https://www.mollie.com/images/payscreen/methods/ideal.png'
-    assert method.image_size2x == 'https://www.mollie.com/images/payscreen/methods/ideal%402x.png'
+    assert method.image_svg == 'https://www.mollie.com/external/icons/payment-methods/ideal.svg'
+    assert method.image_size1x == 'https://www.mollie.com/external/icons/payment-methods/ideal.png'
+    assert method.image_size2x == 'https://www.mollie.com/external/icons/payment-methods/ideal%402x.png'
