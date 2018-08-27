@@ -33,6 +33,44 @@ def test_list_iterator_behaviour(client, response):
     assert iterated == methods.count
 
 
+def test_list_multiple_iterations(client, response):
+    """Verify that we can iterate a list multiple times."""
+    response.get('https://api.mollie.com/v2/methods', 'methods_list')
+
+    methods = client.methods.list()
+    # iterate once using next()
+    items_first_run = 0
+    while True:
+        try:
+            next(methods)
+            items_first_run += 1
+        except StopIteration:
+            break
+    assert items_first_run == methods.count
+
+    # iterate again
+    items_second_run = 0
+    while True:
+        try:
+            next(methods)
+            items_second_run += 1
+        except StopIteration:
+            break
+    assert items_second_run == methods.count
+
+    methods = client.methods.list()
+    # iterate once using for loop
+    items_third_run = 0
+    for item in methods:
+        items_third_run += 1
+    assert items_third_run == methods.count
+    # iterate again
+    items_fourth_run = 0
+    for item in methods:
+        items_fourth_run += 1
+    assert items_fourth_run == methods.count
+
+
 @pytest.mark.xfail(strict=True, reason="Pagination interface is still undecided")
 def test_list_multiple_api_calls(client, response):
     """
