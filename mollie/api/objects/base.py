@@ -1,5 +1,17 @@
 class Base(dict):
 
+    _resource = None
+
+    def __init__(self, data, resource=None):
+        """
+        Create a new object from API result data.
+
+        We optionally initialize the _resource variable to be able to use this when querying the API
+        for additional data defined as an endpoint in the _links attribute.
+        """
+        super(Base, self).__init__(data)
+        self._resource = resource
+
     def _get_property(self, name):
         """Return the named property from dictionary values."""
         if name not in self:
