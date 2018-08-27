@@ -4,6 +4,8 @@ from mollie.api.objects.mandate import Mandate
 from mollie.api.objects.payment import Payment
 from mollie.api.objects.subscription import Subscription
 
+from .utils import assert_list_object
+
 CUSTOMER_ID = 'cst_8wmqcHMN4U'
 
 
@@ -46,20 +48,10 @@ def test_list_customers(client, response):
     response.get('https://api.mollie.com/v2/customers', 'customers_list')
 
     customers = client.customers.list()
-    assert isinstance(customers, List)
-    assert customers.count == 3
-    iterated = 0
-    iterated_customer_ids = []
-    for customer in customers:
-        assert isinstance(customer, Customer)
-        assert customer.id is not None
-        iterated += 1
-        iterated_customer_ids.append(customer.id)
-    assert iterated == customers.count, 'Unexpected amount of customers retrieved'
-    assert len(set(iterated_customer_ids)) == customers.count, 'Unexpected amount of unique customer ids retrieved'
+    assert_list_object(customers, Customer)
 
 
-def test_customer_get(client, response):
+def test_get_customer(client, response):
     """Retrieve a single customer."""
     response.get('https://api.mollie.com/v2/customers/%s' % CUSTOMER_ID, 'customer_new')
     response.get('https://api.mollie.com/v2/customers/%s/payments' % CUSTOMER_ID, 'customer_payments_multiple')
@@ -86,12 +78,7 @@ def test_customer_get_related_mandates(client, response):
 
     customer = client.customers.get(CUSTOMER_ID)
     mandates = customer.mandates
-    assert isinstance(mandates, List)
-    iterated = 0
-    for mandate in mandates:
-        assert isinstance(mandate, Mandate)
-        iterated += 1
-    assert iterated == mandates.count
+    assert_list_object(mandates, Mandate)
 
 
 def test_customer_get_related_subscriptions(client, response):
@@ -102,13 +89,7 @@ def test_customer_get_related_subscriptions(client, response):
 
     customer = client.customers.get(CUSTOMER_ID)
     subscriptions = customer.subscriptions
-    assert isinstance(subscriptions, List)
-
-    iterated = 0
-    for subscription in subscriptions:
-        assert isinstance(subscription, Subscription)
-        iterated += 1
-    assert iterated == subscriptions.count, 'Unexpected amount of subscriptions retrieved'
+    assert_list_object(subscriptions, Subscription)
 
 
 def test_customer_get_related_payments(client, response):
@@ -118,15 +99,4 @@ def test_customer_get_related_payments(client, response):
 
     customer = client.customers.get(CUSTOMER_ID)
     payments = customer.payments
-    assert isinstance(payments, List)
-    assert payments.count == 1
-
-    iterated = 0
-    iterated_payment_ids = []
-    for payment in payments:
-        iterated += 1
-        assert isinstance(payment, Payment)
-        assert payment.id is not None
-        iterated_payment_ids.append(payment.id)
-    assert iterated == payments.count, 'Unexpected amount of payments retrieved'
-    assert len(set(iterated_payment_ids)) == payments.count, 'Unexpected unique payment ids retrieved'
+    assert_list_object(payments, Payment)

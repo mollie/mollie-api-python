@@ -1,5 +1,6 @@
 from mollie.api.objects.issuer import Issuer
-from mollie.api.objects.list import List
+
+from .utils import assert_list_object
 
 
 def test_get_issuers(client, response):
@@ -7,17 +8,7 @@ def test_get_issuers(client, response):
     response.get('https://api.mollie.com/v2/methods/ideal?include=issuers', 'method_get_ideal_with_includes')
 
     issuers = client.methods.get('ideal', include='issuers').issuers
-    assert isinstance(issuers, List)
-
-    iterated = 0
-    iterated_issuer_ids = []
-    for issuer in issuers:
-        assert isinstance(issuer, Issuer)
-        assert issuer.id is not None
-        iterated += 1
-        iterated_issuer_ids.append(issuer.id)
-    assert iterated == len(issuers), 'Unexpected amount of issuers retrieved'
-    assert len(set(iterated_issuer_ids)) == len(issuers), 'Unexpected number of unique issuers'
+    assert_list_object(issuers, Issuer)
 
     # check the last issuer
     assert issuer.image_svg == 'https://www.mollie.com/external/icons/ideal-issuers/FVLBNL22.svg'

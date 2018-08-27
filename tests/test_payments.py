@@ -3,12 +3,13 @@ import pytest
 from mollie.api.error import IdentifierError
 from mollie.api.objects.chargeback import Chargeback
 from mollie.api.objects.customer import Customer
-from mollie.api.objects.list import List
 from mollie.api.objects.mandate import Mandate
 from mollie.api.objects.method import Method
 from mollie.api.objects.payment import Payment
 from mollie.api.objects.refund import Refund
 from mollie.api.objects.subscription import Subscription
+
+from .utils import assert_list_object
 
 PAYMENT_ID = 'tr_7UhSN1zuXS'
 REFUND_ID = 're_4qqhO89gsT'
@@ -24,18 +25,7 @@ def test_list_payments(client, response):
     response.get('https://api.mollie.com/v2/payments', 'payments_list')
 
     payments = client.payments.list()
-    assert isinstance(payments, List)
-    assert payments.count == 3
-
-    iterated = 0
-    iterated_payment_ids = []
-    for payment in payments:
-        assert isinstance(payment, Payment)
-        assert payment.id is not None
-        iterated += 1
-        iterated_payment_ids.append(payment.id)
-    assert iterated == payments.count, 'Unexpected amount of payments retrieved'
-    assert len(set(iterated_payment_ids)) == payments.count, 'Unexpected unique payment ids retrieved'
+    assert_list_object(payments, Payment)
 
 
 def test_create_payment(client, response):
@@ -144,18 +134,7 @@ def test_payment_get_related_refunds(client, response):
 
     payment = client.payments.get(PAYMENT_ID)
     refunds = payment.refunds
-    assert isinstance(refunds, List)
-    assert refunds.count == 1
-
-    iterated = 0
-    iterated_refund_ids = []
-    for refund in refunds:
-        assert isinstance(refund, Refund)
-        iterated += 1
-        assert refund.id is not None
-        iterated_refund_ids.append(refund.id)
-    assert iterated == refunds.count, 'Unexpected amount of refunds retrieved'
-    assert len(set(iterated_refund_ids)) == refunds.count, 'Expected unique refund ids retrieved'
+    assert_list_object(refunds, Refund)
 
 
 def test_payment_get_related_chargebacks(client, response):
@@ -165,13 +144,7 @@ def test_payment_get_related_chargebacks(client, response):
 
     payment = client.payments.get(PAYMENT_ID)
     chargebacks = payment.chargebacks
-
-    assert isinstance(chargebacks, List)
-    iterated = 0
-    for chargeback in chargebacks:
-        assert isinstance(chargeback, Chargeback)
-        iterated += 1
-    assert iterated == chargebacks.count
+    assert_list_object(chargebacks, Chargeback)
 
 
 @pytest.mark.xfail(strict=True, reason="Settlement API is not yet implemented")

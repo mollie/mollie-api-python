@@ -1,6 +1,7 @@
-from mollie.api.objects.list import List
 from mollie.api.objects.payment import Payment
 from mollie.api.objects.refund import Refund
+
+from .utils import assert_list_object
 
 PAYMENT_ID = 'tr_7UhSN1zuXS'
 REFUND_ID = 're_4qqhO89gsT'
@@ -76,18 +77,7 @@ def test_list_refunds_on_payment_object(client, response):
 
     payment = client.payments.get(PAYMENT_ID)
     refunds = client.payment_refunds.on(payment).list()
-    assert isinstance(refunds, List)
-    assert refunds.count == 1
-
-    iterated = 0
-    iterated_refund_ids = []
-    for refund in refunds:
-        assert isinstance(refund, Refund)
-        assert refund.id is not None
-        iterated += 1
-        iterated_refund_ids.append(refund.id)
-    assert iterated == refunds.count, 'Unexpected amount of refunds retrieved'
-    assert len(set(iterated_refund_ids)) == refunds.count, 'Unexpected amount of unique refund ids retrieved'
+    assert_list_object(refunds, Refund)
 
 
 def test_cancel_refund(client, response):
