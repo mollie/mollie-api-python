@@ -55,7 +55,7 @@ def test_client_invalid_api_key():
     client = Client()
     with pytest.raises(RequestSetupError) as excinfo:
         client.set_api_key('invalid')
-    assert excinfo.match('Invalid API key: "invalid"')
+    assert excinfo.match("Invalid API key: 'invalid'")
 
 
 def test_client_no_cert_bundle(monkeypatch):
@@ -102,9 +102,9 @@ def test_client_invalid_update_data(client):
 
 
 @pytest.mark.parametrize('endpoint, errorstr', [
-    ('customers', 'Invalid customer ID: "invalid". A customer ID should start with "cst_".'),
-    ('payments', 'Invalid payment ID: "invalid". A payment ID should start with "tr_".'),
-    ('refunds', 'Invalid refund ID: "invalid". A refund ID should start with "re_".'),
+    ('customers', "Invalid customer ID: 'invalid'. A customer ID should start with 'cst_'."),
+    ('payments', "Invalid payment ID: 'invalid'. A payment ID should start with 'tr_'."),
+    ('refunds', "Invalid refund ID: 'invalid'. A refund ID should start with 're_'."),
 ])
 def test_client_get_invalid_id(client, endpoint, errorstr):
     """An invalid formatted object ID should raise an error."""
@@ -114,9 +114,9 @@ def test_client_get_invalid_id(client, endpoint, errorstr):
 
 
 @pytest.mark.parametrize('endpoint, errorstr', [
-    ('customer_mandates', 'Invalid mandate ID: "invalid". A mandate ID should start with "mdt_".'),
-    ('customer_payments', 'Invalid payment ID: "invalid". A payment ID should start with "tr_".'),
-    ('customer_subscriptions', 'Invalid subscription ID: "invalid". A subscription ID should start with "sub_".'),
+    ('customer_mandates', "Invalid mandate ID: 'invalid'. A mandate ID should start with 'mdt_'."),
+    ('customer_payments', "Invalid payment ID: 'invalid'. A payment ID should start with 'tr_'."),
+    ('customer_subscriptions', "Invalid subscription ID: 'invalid'. A subscription ID should start with 'sub_'."),
 ])
 def test_client_get_customer_related_invalid_id(client, endpoint, errorstr):
     """An invalid formatted object ID should raise an error."""
@@ -126,8 +126,8 @@ def test_client_get_customer_related_invalid_id(client, endpoint, errorstr):
 
 
 @pytest.mark.parametrize('endpoint, errorstr', [
-    ('payment_chargebacks', 'Invalid chargeback ID: "invalid". A chargeback ID should start with "chb_".'),
-    ('payment_refunds', 'Invalid refund ID: "invalid". A refund ID should start with "re_".'),
+    ('payment_chargebacks', "Invalid chargeback ID: 'invalid'. A chargeback ID should start with 'chb_'."),
+    ('payment_refunds', "Invalid refund ID: 'invalid'. A refund ID should start with 're_'."),
 ])
 def test_client_get_payment_related_invalid_id(client, endpoint, errorstr):
     """An invalid formatted object ID should raise an error."""
