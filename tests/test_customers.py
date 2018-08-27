@@ -1,5 +1,4 @@
 from mollie.api.objects.customer import Customer
-from mollie.api.objects.list import List
 from mollie.api.objects.mandate import Mandate
 from mollie.api.objects.payment import Payment
 from mollie.api.objects.subscription import Subscription
