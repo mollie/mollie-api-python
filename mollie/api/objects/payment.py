@@ -170,3 +170,33 @@ class Payment(Base):
         if url:
             resp = self._resource.perform_api_call(self._resource.REST_READ, url)
             return Customer(resp)
+
+    @property
+    def settlement(self):
+        """
+        Return the settlement for this payment (if any).
+
+        TODO: Before we can return a Settlement object, we need to implement the Settlement API.
+        """
+        url = self._get_link('settlement')
+        if url:
+            resp = self._resource.perform_api_call(self._resource.REST_READ, url)
+            return resp
+
+    @property
+    def mandate(self):
+        """Return the customer for this payment."""
+        from .mandate import Mandate
+        url = self._get_link('mandate')
+        if url:
+            resp = self._resource.perform_api_call(self._resource.REST_READ, url)
+            return Mandate(resp)
+
+    @property
+    def subscription(self):
+        """Return the customer for this payment."""
+        from .subscription import Subscription
+        url = self._get_link('subscription')
+        if url:
+            resp = self._resource.perform_api_call(self._resource.REST_READ, url)
+            return Subscription(resp)
