@@ -76,37 +76,48 @@ def test_get_single_payment(client, response):
 
     payment = client.payments.get(PAYMENT_ID)
     assert isinstance(payment, Payment)
-    assert payment.amount == {'value': '10.00', 'currency': 'EUR'}
-    assert payment.description == 'Order #12345'
-    assert payment.redirect_url == 'https://webshop.example.org/order/12345/'
-    assert payment.webhook_url == 'https://webshop.example.org/payments/webhook/'
-    assert payment.created_at == '2018-03-20T09:13:37+00:00'
-    assert payment.expires_at == '2018-03-20T09:28:37+00:00'
-    assert payment.profile_id == 'pfl_QkEhN94Ba'
-    assert payment.method == Method.IDEAL
-    assert payment.metadata == {'order_id': '12345'}
-    assert payment.sequence_type == Payment.SEQUENCETYPE_RECURRING
-    assert payment.profile_id == 'pfl_QkEhN94Ba'
-    assert payment.checkout_url == 'https://www.mollie.com/payscreen/select-method/7UhSN1zuXS'
+    # properties
     assert payment.resource == 'payment'
     assert payment.id == PAYMENT_ID
     assert payment.mode == 'test'
+    assert payment.created_at == '2018-03-20T09:13:37+00:00'
     assert payment.status == Payment.STATUS_OPEN
-    assert payment.amount_refunded is None
-    assert payment.amount_remaining is None
     assert payment.is_cancelable is False
     assert payment.paid_at is None
     assert payment.canceled_at is None
+    assert payment.expires_at == '2018-03-20T09:28:37+00:00'
     assert payment.expired_at is None
     assert payment.failed_at is None
-    assert payment.details is None
+    assert payment.amount == {'value': '10.00', 'currency': 'EUR'}
+    assert payment.amount_refunded is None
+    assert payment.amount_remaining is None
+    assert payment.description == 'Order #12345'
+    assert payment.redirect_url == 'https://webshop.example.org/order/12345/'
+    assert payment.webhook_url == 'https://webshop.example.org/payments/webhook/'
+    assert payment.method == Method.IDEAL
+    assert payment.metadata == {'order_id': '12345'}
+    assert payment.locale is None
+    assert payment.country_code is None
+    assert payment.profile_id == 'pfl_QkEhN94Ba'
     assert payment.settlement_amount is None
+    assert payment.settlement_id is None
+    assert payment.customer_id == CUSTOMER_ID
+    assert payment.sequence_type == Payment.SEQUENCETYPE_RECURRING
+    assert payment.mandate_id == MANDATE_ID
+    assert payment.subscription_id == SUBSCRIPTION_ID
+    assert payment.order_id is None
+    assert payment.application_fee is None
+    assert payment.details is None
+    # properties from _links
+    assert payment.checkout_url == 'https://www.mollie.com/payscreen/select-method/7UhSN1zuXS'
     assert payment.refunds is not None
     assert payment.chargebacks is not None
-    assert payment.customer is not None
     assert payment.settlement is None
     assert payment.mandate is not None
     assert payment.subscription is not None
+    assert payment.customer is not None
+    assert payment.order is None
+    # additional methods
     assert payment.is_open() is True
     assert payment.is_pending() is False
     assert payment.is_canceled() is False
@@ -156,17 +167,6 @@ def test_payment_get_related_chargebacks(client, response):
     assert iterated == chargebacks.count
 
 
-def test_payment_get_related_customer(client, response):
-    """Get customer related to payment."""
-    response.get('https://api.mollie.com/v2/payments/%s' % PAYMENT_ID, 'payment_single')
-    response.get('https://api.mollie.com/v2/customers/%s' % CUSTOMER_ID, 'customer_single')
-
-    payment = client.payments.get(PAYMENT_ID)
-    customer = payment.customer
-    assert isinstance(customer, Customer)
-    assert customer.id == CUSTOMER_ID
-
-
 @pytest.mark.xfail(strict=True, reason="Settlement API is not yet implemented")
 def test_payment_get_related_settlement(client, response):
     """Get the settlement related to the payment."""
@@ -200,3 +200,14 @@ def test_payment_get_related_subscription(client, response):
     subscription = payment.subscription
     assert isinstance(subscription, Subscription)
     assert subscription.id == SUBSCRIPTION_ID
+
+
+def test_payment_get_related_customer(client, response):
+    """Get customer related to payment."""
+    response.get('https://api.mollie.com/v2/payments/%s' % PAYMENT_ID, 'payment_single')
+    response.get('https://api.mollie.com/v2/customers/%s' % CUSTOMER_ID, 'customer_single')
+
+    payment = client.payments.get(PAYMENT_ID)
+    customer = payment.customer
+    assert isinstance(customer, Customer)
+    assert customer.id == CUSTOMER_ID
