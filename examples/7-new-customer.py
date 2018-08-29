@@ -30,10 +30,10 @@ def main():
             'locale': 'nl_NL'
         })
 
-        return "Created new customer '%s' (%s)" % (customer.name, customer.email)
+        return "Created new customer '{name}' ({email})".format(name=customer.name, email=customer.email)
 
     except Error as err:
-        return 'API call failed: %s' % err
+        return 'API call failed: {error}'.format(error=err)
 
 
 if __name__ == '__main__':
