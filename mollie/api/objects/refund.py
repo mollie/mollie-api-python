@@ -1,5 +1,4 @@
 from .base import Base
-from .list import List
 
 
 class Refund(Base):
@@ -64,7 +63,7 @@ class Refund(Base):
         url = self._get_link('payment')
         if url:
             resp = self._resource.perform_api_call(self._resource.REST_READ, url)
-            return List(resp, Payment)
+            return Payment(resp)
 
     @property
     def settlement(self):

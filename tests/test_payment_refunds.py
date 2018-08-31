@@ -1,4 +1,5 @@
 from mollie.api.objects.list import List
+from mollie.api.objects.payment import Payment
 from mollie.api.objects.refund import Refund
 
 PAYMENT_ID = 'tr_7UhSN1zuXS'
@@ -32,6 +33,17 @@ def test_get_refund(client, response):
     assert refund.is_pending() is True
     assert refund.is_processing() is False
     assert refund.is_refunded() is False
+
+
+def test_refund_get_related_payment(client, response):
+    """Verify the related payment of a refund."""
+    response.get('https://api.mollie.com/v2/payments/%s/refunds/%s' % (PAYMENT_ID, REFUND_ID), 'refund_single')
+    response.get('https://api.mollie.com/v2/payments/%s' % PAYMENT_ID, 'payment_single')
+
+    refund = client.payment_refunds.with_parent_id(PAYMENT_ID).get(REFUND_ID)
+    payment = refund.payment
+    assert isinstance(payment, Payment)
+    assert payment.id == PAYMENT_ID
 
 
 def test_create_refund(client, response):
