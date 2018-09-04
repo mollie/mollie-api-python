@@ -1,5 +1,6 @@
 import pytest
 
+from mollie.api.error import IdentifierError
 from mollie.api.objects.chargeback import Chargeback
 from mollie.api.objects.customer import Customer
 from mollie.api.objects.list import List
@@ -61,6 +62,12 @@ def test_cancel_payment(client, response):
     assert canceled_payment.is_canceled() is True
     assert canceled_payment.canceled_at == '2018-03-20T09:28:37+00:00'
     assert canceled_payment.id == PAYMENT_ID
+
+
+def test_cancel_paymanet_invalid_id(client):
+    """Verify that an invalid payment id is validated and an error is raised."""
+    with pytest.raises(IdentifierError):
+        client.payments.delete('invalid')
 
 
 def test_get_single_payment(client, response):

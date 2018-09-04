@@ -1,0 +1,11 @@
+{
+  "_links": {
+    "documentation": {
+      "href": "https://docs.mollie.com/index",
+      "type": "text/html"
+    }
+  },
+  "detail": "Just an example error that is not explicitly supported by the mollie api client library",
+  "status": 418,
+  "title": "I'm a teapot"
+}

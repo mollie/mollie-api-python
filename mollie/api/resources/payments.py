@@ -7,9 +7,7 @@ class Payments(Base):
     RESOURCE_ID_PREFIX = 'tr_'
 
     def get_resource_object(self, result):
-        payment = Payment(result)
-        payment._resource = self
-        return payment
+        return Payment(result, self)
 
     def get(self, payment_id, **params):
         if not payment_id or not payment_id.startswith(self.RESOURCE_ID_PREFIX):

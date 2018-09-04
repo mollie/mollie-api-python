@@ -1,3 +1,6 @@
+import pytest
+
+from mollie.api.error import IdentifierError
 from mollie.api.objects.customer import Customer
 from mollie.api.objects.list import List
 from mollie.api.objects.method import Method
@@ -103,6 +106,12 @@ def test_cancel_customer_subscription(client, response):
     assert isinstance(subscription, Subscription)
     assert subscription.status == 'canceled'
     assert subscription.canceled_at == '2018-08-01T11:04:21+00:00'
+
+
+def test_cancel_customer_subscription_invalid_id(client):
+    """Verify that an invalid subscription id is validated and raises an error."""
+    with pytest.raises(IdentifierError):
+        client.customer_subscriptions.with_parent_id(CUSTOMER_ID).delete('invalid')
 
 
 def test_create_customer_subscription(client, response):

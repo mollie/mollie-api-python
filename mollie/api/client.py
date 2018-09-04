@@ -62,9 +62,6 @@ class Client(object):
         self.customer_subscriptions = CustomerSubscriptions(self)
         self.customer_payments = CustomerPayments(self)
 
-    def get_api_endpoint(self):
-        return self.api_endpoint
-
     def set_api_endpoint(self, api_endpoint):
         self.api_endpoint = self.validate_api_endpoint(api_endpoint)
 

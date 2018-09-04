@@ -22,6 +22,17 @@ def test_get_all_customer_payments(client, response):
     assert len(set(iterated_payment_ids)) == payments.count, 'Unexpected unique payment ids retrieved'
 
 
+def test_list_customer_payments_by_object(client, response):
+    response.get('https://api.mollie.com/v2/customers/%s' % CUSTOMER_ID, 'customer_single')
+    response.get('https://api.mollie.com/v2/customers/%s/payments' % CUSTOMER_ID, 'customer_payments_multiple')
+
+    customer = client.customers.get(CUSTOMER_ID)
+    payments = client.customer_payments.on(customer).all()
+    assert isinstance(payments, List)
+    for payment in payments:
+        assert isinstance(payment, Payment)
+
+
 def test_create_customer_payment(client, response):
     """Create a customer payment."""
     response.post('https://api.mollie.com/v2/customers/%s/payments' % CUSTOMER_ID, 'payment_single')

@@ -2,6 +2,7 @@ from .base import Base
 
 
 class Issuer(Base):
+
     @property
     def resource(self):
         return self._get_property('resource')

@@ -9,9 +9,10 @@ from mollie.api.error import (
     NotFoundError,
     RequestError,
     RequestSetupError,
+    ResponseError,
     ResponseHandlingError,
     UnauthorizedError,
-    UnprocessableEntityError
+    UnprocessableEntityError,
 )
 
 
@@ -147,6 +148,7 @@ def test_client_invalid_json_response(client, response):
     ('error_unauthorized', 401, UnauthorizedError, 'Missing authentication, or failed to authenticate'),
     ('customer_doesnotexist', 404, NotFoundError, 'No customer exists with token cst_doesnotexist.'),
     ('payment_rejected', 422, UnprocessableEntityError, 'The amount is higher than the maximum'),
+    ('error_teapot', 418, ResponseError, 'Just an example error that is not explicitly supported'),
 ])
 def test_client_received_error_response(client, response, resp_payload, resp_status, exception, errormsg):
     """An error response from the API should raise a matching error."""
