@@ -1,18 +1,13 @@
 # coding=utf-8
 #
-#  Example 8 - Retrieving all of your customers with offset and count
+# Example 8 - Retrieving all of your customers with offset and count
 #
 from __future__ import print_function
 
-import sys, os
+import os
 
-#
-# Add Mollie library to module path so we can import it.
-# This is not necessary if you use pip or easy_install.
-#
-sys.path.append(os.path.abspath(os.path.dirname(__file__) + '/../'))
-
-import Mollie
+from mollie.api.client import Client
+from mollie.api.error import Error
 
 
 def main():
@@ -22,25 +17,26 @@ def main():
         #
         # See: https://www.mollie.com/dashboard/settings/profiles
         #
-        mollie = Mollie.API.Client()
-        mollie.setApiKey('test_bt7vvByF6jTcBR4dLuW66eNnHYNIJp')
+        api_key = os.environ.get('MOLLIE_API_KEY', 'test_test')
+        mollie_client = Client()
+        mollie_client.set_api_key(api_key)
 
         amount_of_customers_to_retrieve = 20
+        params = {
+            'limit': amount_of_customers_to_retrieve,
+        }
 
         #
         # Get the latest 20 customers
         #
         # See: https://www.mollie.com/nl/docs/reference/customers/list
         #
-        customers = mollie.customers.all(offset=0, count=amount_of_customers_to_retrieve)
+        customers = mollie_client.customers.all(**params)
 
-        body = '<p>Your API key has %u customers.</p>' % int(customers['totalCount'])
+        body = '<p>Showing the last %s customers for your API key.</p>' % customers.count
 
-        if int(customers['totalCount']) == 0:
+        if int(customers.count) == 0:
             return body
-
-        if int(customers['totalCount']) > amount_of_customers_to_retrieve:
-            body += '<p><b>Note: Only the first %s are shown here.</b></p>' % amount_of_customers_to_retrieve
 
         body += """
             <table>
@@ -58,21 +54,22 @@ def main():
 
         for customer in customers:
             body += '<tr>'
-            body += '<td>%s</td>' % customer['id']
-            body += '<td>%s</td>' % customer['name']
-            body += '<td>%s</td>' % customer['email']
+            body += '<td>%s</td>' % customer.id
+            body += '<td>%s</td>' % customer.name
+            body += '<td>%s</td>' % customer.email
             body += '<td><a href="/9-create-customer-payment?customer_id=%s">Create payment for customer</a></td>' % \
-                    customer['id']
+                    customer.id
             body += '<td><a href="/10-customer-payment-history?customer_id=%s">Show payment history</a>' % \
-                    customer['id']
+                    customer.id
             body += '</tr>'
 
         body += "</tbody></table>"
 
         return body
 
-    except Mollie.API.Error as e:
-        return 'API call failed: ' + str(e)
+    except Error as err:
+        return 'API call failed: %s' % err
+
 
 if __name__ == '__main__':
     print(main())

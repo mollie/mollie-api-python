@@ -3,16 +3,13 @@
 #
 from __future__ import print_function
 
-import sys, os, flask
+import os
+
+import flask
+
 from app import database_write
-
-#
-# Add Mollie library to module path so we can import it.
-# This is not necessary if you use pip or easy_install.
-#
-sys.path.append(os.path.abspath(os.path.dirname(__file__) + '/../'))
-
-import Mollie
+from mollie.api.client import Client
+from mollie.api.error import Error
 
 
 def main():
@@ -22,8 +19,9 @@ def main():
         #
         # See: https://www.mollie.com/dashboard/settings/profiles
         #
-        mollie = Mollie.API.Client()
-        mollie.setApiKey('test_bt7vvByF6jTcBR4dLuW66eNnHYNIJp')
+        api_key = os.environ.get('MOLLIE_API_KEY', 'test_test')
+        mollie_client = Client()
+        mollie_client.set_api_key(api_key)
 
         #
         # Retrieve the payment's current state.
@@ -32,25 +30,25 @@ def main():
             flask.abort(404, 'Unknown payment id')
 
         payment_id = flask.request.form['id']
-        payment = mollie.payments.get(payment_id)
-        order_nr = payment['metadata']['order_nr']
+        payment = mollie_client.payments.get(payment_id)
+        order_id = payment.metadata['order_id']
 
         #
         # Update the order in the database.
         #
-        database_write(order_nr, payment['status'])
+        database_write(order_id, payment.status)
 
-        if payment.isPaid():
+        if payment.is_paid():
             #
             # At this point you'd probably want to start the process of delivering the product to the customer.
             #
             return 'Paid'
-        elif payment.isPending():
+        elif payment.is_pending():
             #
             # The payment has started but is not complete yet.
             #
             return 'Pending'
-        elif payment.isOpen():
+        elif payment.is_open():
             #
             # The payment has not started yet. Wait for it.
             #
@@ -61,8 +59,9 @@ def main():
             #
             return 'Cancelled'
 
-    except Mollie.API.Error as e:
-        return 'API call failed: ' + str(e)
+    except Error as err:
+        return 'API call failed: %s' % err
+
 
 if __name__ == '__main__':
     print(main())

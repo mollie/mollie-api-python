@@ -1,0 +1,127 @@
+{
+  "_embedded": {
+    "payments": [
+      {
+        "resource": "payment",
+        "id": "tr_gM5hTq4x4J",
+        "mode": "test",
+        "createdAt": "2018-07-19T09:49:46+00:00",
+        "amount": {
+          "value": "50.00",
+          "currency": "EUR"
+        },
+        "description": "My first iDEAL API payment",
+        "method": "ideal",
+        "metadata": {
+          "order_id": 1531993786
+        },
+        "status": "open",
+        "isCancelable": false,
+        "expiresAt": "2018-07-19T10:05:16+00:00",
+        "profileId": "pfl_gh5wrNQ6fx",
+        "sequenceType": "oneoff",
+        "redirectUrl": "https://webshop.example.org/order/1531993786",
+        "webhookUrl": "https://webshop.example.org/payments/webhook/",
+        "settlementAmount": {
+          "value": "50.00",
+          "currency": "EUR"
+        },
+        "_links": {
+          "self": {
+            "href": "https://api.mollie.com/v2/payments/tr_gM5hTq4x4J",
+            "type": "application/hal+json"
+          },
+          "checkout": {
+            "href": "https://www.mollie.com/paymentscreen/testmode/?method=ideal&token=spyye1",
+            "type": "text/html"
+          }
+        }
+      },
+      {
+        "resource": "payment",
+        "id": "tr_7UhSN1zuXS",
+        "mode": "test",
+        "createdAt": "2018-07-19T09:49:35+00:00",
+        "amount": {
+          "value": "10.00",
+          "currency": "GBP"
+        },
+        "description": "My first iDEAL API payment",
+        "method": "ideal",
+        "metadata": {
+          "order_id": 1531993773
+        },
+        "status": "open",
+        "isCancelable": false,
+        "expiresAt": "2018-07-19T10:05:05+00:00",
+        "profileId": "pfl_gh5wrNQ6fx",
+        "sequenceType": "oneoff",
+        "redirectUrl": "https://webshop.example.org/order/1531993773",
+        "webhookUrl": "https://webshop.example.org/payments/webhook/",
+        "settlementAmount": {
+          "value": "50.00",
+          "currency": "EUR"
+        },
+        "_links": {
+          "self": {
+            "href": "https://api.mollie.com/v2/payments/tr_7UhSN1zuXS",
+            "type": "application/hal+json"
+          },
+          "checkout": {
+            "href": "https://www.mollie.com/paymentscreen/testmode/?method=ideal&token=xyrvjf",
+            "type": "text/html"
+          }
+        }
+      },
+      {
+        "resource": "payment",
+        "id": "tr_45xyzDE9v9",
+        "mode": "test",
+        "createdAt": "2018-07-19T09:49:37+00:00",
+        "amount": {
+          "value": "100.00",
+          "currency": "EUR"
+        },
+        "description": "My first iDEAL API payment",
+        "method": "ideal",
+        "metadata": {
+          "order_id": 1531993778
+        },
+        "status": "open",
+        "isCancelable": false,
+        "expiresAt": "2018-07-19T10:05:08+00:00",
+        "profileId": "pfl_gh5wrNQ6rt",
+        "sequenceType": "oneoff",
+        "redirectUrl": "https://webshop.example.org/order/1531993778",
+        "webhookUrl": "https://webshop.example.org/payments/webhook/",
+        "settlementAmount": {
+          "value": "50.00",
+          "currency": "EUR"
+        },
+        "_links": {
+          "self": {
+            "href": "https://api.mollie.com/v2/payments/tr_45xyzDE9v9",
+            "type": "application/hal+json"
+          },
+          "checkout": {
+            "href": "https://www.mollie.com/paymentscreen/testmode/?method=ideal&token=xasfjf",
+            "type": "text/html"
+          }
+        }
+      }
+    ]
+  },
+  "count": 3,
+  "_links": {
+    "documentation": {
+      "href": "https://docs.mollie.com/reference/v2/payments-api/list-payments",
+      "type": "text/html"
+    },
+    "self": {
+      "href": "https://api.mollie.com/v2/payments?limit=50",
+      "type": "application/hal+json"
+    },
+    "previous": null,
+    "next": null
+  }
+}

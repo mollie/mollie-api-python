@@ -5,3 +5,6 @@
 *.pyc
 .python-version
 /mk-ca-bundle.pl
+/.eggs
+/.pytest_cache
+/.coverage

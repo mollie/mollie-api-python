@@ -1,21 +1,19 @@
 [[source]]
-
 url = "https://pypi.python.org/simple"
 verify_ssl = true
 name = "pypi"
 
-
 [packages]
-
 requests = "*"
-
+mollie-api-python = {path = ".", editable = true}
 
 [dev-packages]
-
-nose = "*"
+pytest = "*"
+pytest-cov = "*"
 pyflakes = "*"
-
-
-[requires]
-
-python_version = "2.7"
+responses = "*"
+mock = "*"
+pycodestyle = "*"
+isort = "*"
+# locked due to: https://github.com/pypa/pipenv/issues/1586
+futures = "==3.1.1"
