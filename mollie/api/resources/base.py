@@ -75,15 +75,16 @@ class Base(object):
         try:
             result = resp.json() if resp.status_code != 204 else {}
         except Exception:
-            raise ResponseHandlingError("Unable to decode Mollie API response "
-                                        "(status code: {status}): '{response}'.".format(
-                                            status=resp.status_code, response=resp.text))
+            raise ResponseHandlingError(
+                "Unable to decode Mollie API response (status code: {status}): '{response}'.".format(
+                    status=resp.status_code, response=resp.text))
         if resp.status_code < 200 or resp.status_code > 299:
             if 'status' in result and (result['status'] < 200 or result['status'] > 299):
                 # the factory will return the appropriate ResponseError subclass based on the result
                 raise ResponseError.factory(result)
             else:
-                raise ResponseHandlingError("Received HTTP error from Mollie API, but no status in "
-                                            "payload (status code: {status}): '{response}'.".format(
-                                                status=resp.status_code, response=resp.text))
+                raise ResponseHandlingError(
+                    "Received HTTP error from Mollie API, but no status in payload "
+                    "(status code: {status}): '{response}'.".format(
+                        status=resp.status_code, response=resp.text))
         return result
