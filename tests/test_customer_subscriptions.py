@@ -48,7 +48,7 @@ def test_get_customer_subscription_by_id(client, response):
 
 
 def test_list_customer_subscriptions_by_customer_object(client, response):
-    """Retrieve all subscriptions related to customer."""
+    """Retrieve a list of subscriptions related to customer."""
     response.get('https://api.mollie.com/v2/customers/%s' % CUSTOMER_ID, 'customer_single')
     response.get('https://api.mollie.com/v2/customers/%s/subscriptions' % CUSTOMER_ID,
                  'subscriptions_list')

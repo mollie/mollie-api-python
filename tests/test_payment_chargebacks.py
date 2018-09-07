@@ -29,8 +29,8 @@ def test_get_single_payment_chargeback(client, response):
     assert chargeback.payment_id == PAYMENT_ID
 
 
-def test_get_all_payment_chargebacks_by_payment_object(client, response):
-    """Get all chargebacks relevant to payment object."""
+def test_list_payment_chargebacks_by_payment_object(client, response):
+    """Get a list of chargebacks relevant to payment object."""
     response.get('https://api.mollie.com/v2/payments/%s/chargebacks' % PAYMENT_ID, 'chargebacks_list')
     response.get('https://api.mollie.com/v2/payments/%s' % PAYMENT_ID, 'payment_single')
 

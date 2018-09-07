@@ -43,7 +43,7 @@ def test_delete_customer(client, response):
 
 
 def test_list_customers(client, response):
-    """Retrieve a list of all existing customers."""
+    """Retrieve a list of existing customers."""
     response.get('https://api.mollie.com/v2/customers', 'customers_list')
 
     customers = client.customers.list()
