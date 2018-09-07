@@ -42,7 +42,6 @@ def main():
                 return body
 
             customer = next(customers)
-            customer_id = customer.id
 
         if not customer:
             customer = mollie_client.customers.get(customer_id)
@@ -56,7 +55,7 @@ def main():
         #
         # See: https://www.mollie.com/nl/docs/reference/customers/create-payment
         #
-        payment = mollie_client.customer_payments.with_parent_id(customer_id).create({
+        payment = mollie_client.customer_payments.with_parent_id(customer.id).create({
             'amount': {'currency': 'EUR', 'value': '100.00'},
             'description': 'My first API payment',
             'webhookUrl': flask.request.url_root + '2-webhook_verification',

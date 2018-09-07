@@ -30,16 +30,17 @@ def main():
         # If no customer ID was provided in the URL, we grab the first customer
         customer = None
         if customer_id is None:
+
+            body += '<p>No customer ID specified. Attempting to retrieve the first page of customers '
+            body += 'and grabbing the first.</p>'
+
             customers = mollie_client.customers.list()
 
             if not len(customers):
                 body += '<p>You have no customers. You can create one from the examples.</p>'
                 return body
 
-            body += '<p>No customer ID specified. Attempting to retrieve all customers and grabbing the first.</p>'
-
             customer = next(customers)
-            customer_id = customer.id
 
         if not customer:
             customer = mollie_client.customers.get(customer_id)

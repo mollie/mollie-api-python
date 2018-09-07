@@ -25,13 +25,13 @@ def main():
         body = ''
         payment_id = ''
 
+        body += '<p>Attempting to retrieve the first page of payments and grabbing the first.</p>'
+
         payments = mollie_client.payments.list()
 
         if not len(payments):
             body += '<p>You have no payments. You can create one from the examples.</p>'
             return body
-
-        body += '<p>Attempting to retrieve the first page of payments and grabbing the first.</p>'
 
         payment = next(payments)
 
