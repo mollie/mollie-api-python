@@ -22,7 +22,7 @@ examples = [
 def show_list():
     body = ''
     for example in examples:
-        body += '<a href="/%s">%s</a><br>' % (example, example)
+        body += '<a href="/{example}">{example}</a><br>'.format(example=example)
     return body
 
 
@@ -44,11 +44,13 @@ if __name__ == "__main__":
 
 def database_write(order_nr, status):
     order_nr = int(order_nr)
-    database = open(os.path.dirname(os.path.abspath(__file__)) + "/orders/order-%s.txt" % order_nr, 'w')
+    file = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'orders', 'order-{nr}.txt'.format(nr=order_nr))
+    database = open(file, 'w')
     database.write(status)
 
 
 def database_read(order_nr):
     order_nr = int(order_nr)
-    database = open(os.path.dirname(os.path.abspath(__file__)) + "/orders/order-%s.txt" % order_nr, 'r')
+    file = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'orders', 'order-{nr}.txt'.format(nr=order_nr))
+    database = open(file, 'r')
     return database.read()

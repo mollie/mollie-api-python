@@ -1,7 +1,6 @@
 import platform
 import re
 import ssl
-import sys
 
 import pkg_resources
 import requests
@@ -31,9 +30,9 @@ class Client(object):
     API_VERSION = 'v2'
     UNAME = ' '.join(platform.uname())
     USER_AGENT = ' '.join(vs.replace(r'\s+', '-') for vs in [
-        'Mollie/' + CLIENT_VERSION,
-        'Python/' + sys.version.split(' ')[0],
-        'OpenSSL/' + ssl.OPENSSL_VERSION.split(' ')[1],
+        'Mollie/{client_version}'.format(client_version=CLIENT_VERSION),
+        'Python/{python_version}'.format(python_version=platform.python_version()),
+        'OpenSSL/{ssl_version}'.format(ssl_version=ssl.OPENSSL_VERSION.split(' ')[1]),
     ])
 
     @staticmethod
@@ -44,7 +43,8 @@ class Client(object):
     def validate_api_key(api_key):
         api_key = api_key.strip()
         if not re.compile(r'^(live|test)_\w+$').match(api_key):
-            raise RequestSetupError('Invalid API key: "%s". An API key must start with "test_" or "live_".' % api_key)
+            raise RequestSetupError(
+                "Invalid API key: '{api_key}'. An API key must start with 'test_' or 'live_'.".format(api_key=api_key))
         return api_key
 
     def __init__(self, api_key=None, api_endpoint=None):
@@ -95,7 +95,7 @@ class Client(object):
                 verify=cacert,
                 headers={
                     'Accept': 'application/json',
-                    'Authorization': 'Bearer ' + self.api_key,
+                    'Authorization': 'Bearer {api_key}'.format(api_key=self.api_key),
                     'User-Agent': self.USER_AGENT,
                     'X-Mollie-Client-Info': self.UNAME,
                 },
@@ -103,7 +103,7 @@ class Client(object):
                 data=data
             )
         except Exception as err:
-            raise RequestError('Unable to communicate with Mollie: %s' % err)
+            raise RequestError('Unable to communicate with Mollie: {error}'.format(error=err))
         return response
 
 
@@ -126,7 +126,7 @@ def generate_querystring(params):
         else:
             # encode dictionary with square brackets
             for key, sub_value in sorted(value.items()):
-                composed = '%s[%s]' % (param, key)
+                composed = '{param}[{key}]'.format(param=param, key=key)
                 parts.append(urlencode({composed: sub_value}))
     if parts:
         return '&'.join(parts)

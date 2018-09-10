@@ -31,7 +31,7 @@ def main():
         if 'issuer' not in flask.request.form:
             body = '<form method="post">Select your bank: <select name="issuer">'
             for issuer in mollie_client.methods.get('ideal', include='issuers').issuers:
-                body += '<option value="%s">%s</option>' % (issuer.id, issuer.name)
+                body += '<option value="{id}">{issuer}</option>'.format(id=issuer.id, issuer=issuer.name)
             body += '<option value="">or select later</option>'
             body += '</select><button>OK</button></form>'
             return body
@@ -62,15 +62,18 @@ def main():
         # issuer        The customer's bank. If empty the customer can select it later.
         #
         payment = mollie_client.payments.create({
-            'amount': {'currency': 'EUR', 'value': '10.00'},
+            'amount': {
+                'currency': 'EUR',
+                'value': '10.00'
+            },
             'description': 'My first API payment',
-            'webhookUrl': flask.request.url_root + '2-webhook_verification',
-            'redirectUrl': flask.request.url_root + '3-return-page?order_id=%s' % str(order_id),
+            'webhookUrl': '{root}2-webhook_verification'.format(root=flask.request.url_root),
+            'redirectUrl': '{root}3-return-page?order_id={id}'.format(root=flask.request.url_root, id=order_id),
             'metadata': {
-                'order_nr': order_id
+                'order_nr': order_id,
             },
             'method': 'ideal',
-            'issuer': issuer_id
+            'issuer': issuer_id,
         })
 
         #
@@ -84,7 +87,7 @@ def main():
         return flask.redirect(payment.checkout_url)
 
     except Error as err:
-        return 'API call failed: %s' % err
+        return 'API call failed: {error}'.format(error=err)
 
 
 if __name__ == '__main__':

@@ -55,23 +55,26 @@ def main():
         #
         # See: https://www.mollie.com/nl/docs/reference/customers/create-payment
         #
-        payment = mollie_client.customer_payments.with_parent_id(customer.id).create({
-            'amount': {'currency': 'EUR', 'value': '100.00'},
+        payment = mollie_client.customer_payments.with_parent_id(customer_id).create({
+            'amount': {
+                'currency': 'EUR',
+                'value': '100.00'
+            },
             'description': 'My first API payment',
-            'webhookUrl': flask.request.url_root + '2-webhook_verification',
-            'redirectUrl': flask.request.url_root + '3-return-page?order_id=%s' % str(order_id),
+            'webhookUrl': '{root}2-webhook_verification'.format(root=flask.request.url_root),
+            'redirectUrl': '{root}3-return-page?order_id={id}'.format(root=flask.request.url_root, id=order_id),
             'metadata': {
                 'order_id': order_id
-            }
+            },
         })
 
         database_write(order_id, payment.status)
 
-        return '<p>Created payment of %s %s for %s (%s)<p>' % (
-            payment.value, payment.currency, customer.name, customer.id)
+        return '<p>Created payment of {curr} {value} for {cust} ({id})<p>'.format(
+            curr=payment.amount['currency'], value=payment.amount['value'], cust=customer.name, id=customer.id)
 
     except Error as err:
-        return 'API call failed: %s' % err
+        return 'API call failed: {error}'.format(error=err)
 
 
 if __name__ == '__main__':

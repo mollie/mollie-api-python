@@ -40,10 +40,13 @@ def main():
         # metadata      Custom metadata that is stored with the payment.
         #
         payment = mollie_client.payments.create({
-            'amount': {'currency': 'EUR', 'value': '120.00'},
+            'amount': {
+                'currency': 'EUR',
+                'value': '120.00'
+            },
             'description': 'My first API payment',
-            'webhookUrl': flask.request.url_root + '2-webhook_verification',
-            'redirectUrl': flask.request.url_root + '3-return-page?order_id=%s' % str(order_id),
+            'webhookUrl': '{root}2-webhook_verification'.format(root=flask.request.url_root),
+            'redirectUrl': '{root}3-return-page?order_id={id}'.format(root=flask.request.url_root, id=order_id),
             'metadata': {
                 'order_id': order_id
             }
@@ -60,7 +63,7 @@ def main():
         return flask.redirect(payment.checkout_url)
 
     except Error as err:
-        return 'API call failed: %s' % err
+        return 'API call failed: {error}'.format(error=err)
 
 
 if __name__ == '__main__':

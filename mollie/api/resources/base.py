@@ -49,8 +49,8 @@ class Base(object):
         if data is not None:
             try:
                 data = json.dumps(data)
-            except Exception as e:
-                raise RequestSetupError('Error encoding parameters into JSON: "%s"' % str(e))
+            except Exception as err:
+                raise RequestSetupError("Error encoding parameters into JSON: '{error}'.".format(error=err))
         return self.rest_create(data, params)
 
     def get(self, resource_id, **params):
@@ -60,8 +60,8 @@ class Base(object):
         if data is not None:
             try:
                 data = json.dumps(data)
-            except Exception as e:
-                raise RequestSetupError('Error encoding parameters into JSON: "%s"' % str(e))
+            except Exception as err:
+                raise RequestSetupError("Error encoding parameters into JSON: '{error}'.".format(error=err))
         return self.rest_update(resource_id, data, params)
 
     def delete(self, resource_id):
@@ -75,14 +75,16 @@ class Base(object):
         try:
             result = resp.json() if resp.status_code != 204 else {}
         except Exception:
-            raise ResponseHandlingError('Unable to decode Mollie API response (status code: %d): %s' % (
-                resp.status_code, resp.text))
+            raise ResponseHandlingError(
+                "Unable to decode Mollie API response (status code: {status}): '{response}'.".format(
+                    status=resp.status_code, response=resp.text))
         if resp.status_code < 200 or resp.status_code > 299:
             if 'status' in result and (result['status'] < 200 or result['status'] > 299):
                 # the factory will return the appropriate ResponseError subclass based on the result
                 raise ResponseError.factory(result)
             else:
                 raise ResponseHandlingError(
-                    'Received HTTP error from Mollie API, but no status in payload (status code: %d): %s' % (
-                        resp.status_code, resp.text))
+                    "Received HTTP error from Mollie API, but no status in payload "
+                    "(status code: {status}): '{response}'.".format(
+                        status=resp.status_code, response=resp.text))
         return result

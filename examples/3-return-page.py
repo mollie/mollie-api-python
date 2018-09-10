@@ -15,7 +15,7 @@ def main():
     if 'order_id' not in flask.request.args:
         flask.abort(404, 'Unknown order_id')
 
-    body = "<p>Your payment status is '%s'" % database_read(flask.request.args['order_id'])
+    body = "<p>Your payment status is '{status}'".format(status=database_read(flask.request.args['order_id']))
     body += '<p>'
     body += '<a href="/">Back to examples</a><br>'
     body += '</p>'

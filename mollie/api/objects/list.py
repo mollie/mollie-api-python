@@ -13,7 +13,7 @@ class List(Base):
         return int(self['count'])
 
     def get_object_name(self):
-        return self.object_type.__name__.lower() + 's'
+        return '{name}s'.format(name=self.object_type.__name__.lower())
 
     def __iter__(self):
         """Implement iterator interface."""
