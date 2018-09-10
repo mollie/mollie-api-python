@@ -8,7 +8,7 @@ def test_list_iterator_behaviour(client, response):
     """Verify the behaviour of the List object in iterator circumstances."""
     response.get('https://api.mollie.com/v2/methods', 'methods_list')
 
-    methods = client.methods.all()
+    methods = client.methods.list()
     assert isinstance(methods, List)
 
     # walk the list using next()
@@ -33,6 +33,44 @@ def test_list_iterator_behaviour(client, response):
     assert iterated == methods.count
 
 
+def test_list_multiple_iterations(client, response):
+    """Verify that we can iterate a list multiple times."""
+    response.get('https://api.mollie.com/v2/methods', 'methods_list')
+
+    methods = client.methods.list()
+    # iterate once using next()
+    items_first_run = 0
+    while True:
+        try:
+            next(methods)
+            items_first_run += 1
+        except StopIteration:
+            break
+    assert items_first_run == methods.count
+
+    # iterate again
+    items_second_run = 0
+    while True:
+        try:
+            next(methods)
+            items_second_run += 1
+        except StopIteration:
+            break
+    assert items_second_run == methods.count
+
+    methods = client.methods.list()
+    # iterate once using for loop
+    items_third_run = 0
+    for item in methods:
+        items_third_run += 1
+    assert items_third_run == methods.count
+    # iterate again
+    items_fourth_run = 0
+    for item in methods:
+        items_fourth_run += 1
+    assert items_fourth_run == methods.count
+
+
 @pytest.mark.xfail(strict=True, reason="Pagination interface is still undecided")
 def test_list_multiple_api_calls(client, response):
     """
@@ -50,7 +88,7 @@ def test_list_multiple_api_calls(client, response):
     response.get('https://api.mollie.com/v2/customers?from=cst_8pknKQJzJa&limit=5', 'customers_list_second')
     response.get('https://api.mollie.com/v2/customers?from=cst_HwBHgJgRAf&limit=5', 'customers_list_first')
 
-    customers = client.customers.all(limit=5)
+    customers = client.customers.list(limit=5)
     assert customers.count == 5
     all_customers_count = customers.count
     while customers.has_next():

@@ -30,8 +30,8 @@ def main():
                 'value': '100.00',
             }
         }
-        methods = mollie_client.methods.all(**params)
-        body = 'Your API key has %u activated payment methods:<br>' % methods.count
+        methods = mollie_client.methods.list(**params)
+        body = 'Your API key has %u activated payment methods:<br>' % len(methods)
 
         for method in methods:
             body += '<div style="line-height:40px; vertical-align:top">'

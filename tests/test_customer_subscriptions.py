@@ -2,31 +2,21 @@ import pytest
 
 from mollie.api.error import IdentifierError
 from mollie.api.objects.customer import Customer
-from mollie.api.objects.list import List
 from mollie.api.objects.method import Method
 from mollie.api.objects.subscription import Subscription
+
+from .utils import assert_list_object
 
 CUSTOMER_ID = 'cst_8wmqcHMN4U'
 SUBSCRIPTION_ID = 'sub_rVKGtNd6s3'
 
 
-def test_customer_subscriptions_all(client, response):
+def test_list_customer_subscriptions(client, response):
     """Retrieve a list of subscriptions."""
     response.get('https://api.mollie.com/v2/customers/%s/subscriptions' % CUSTOMER_ID, 'subscriptions_list')
 
-    subscriptions = client.customer_subscriptions.with_parent_id(CUSTOMER_ID).all()
-    assert isinstance(subscriptions, List)
-    assert subscriptions.count == 3
-    iterated = 0
-    iterated_subscription_ids = []
-    for subscription in subscriptions:
-        assert isinstance(subscription, Subscription)
-        assert subscription.id is not None
-        iterated += 1
-        iterated_subscription_ids.append(subscription.id)
-    assert iterated == subscriptions.count, 'Unexpected amount of subscriptions retrieved'
-    assert len(set(iterated_subscription_ids)) == subscriptions.count, \
-        'Unexpected amount of unique subscription ids retrieved'
+    subscriptions = client.customer_subscriptions.with_parent_id(CUSTOMER_ID).list()
+    assert_list_object(subscriptions, Subscription)
 
 
 def test_get_customer_subscription_by_id(client, response):
@@ -57,24 +47,18 @@ def test_get_customer_subscription_by_id(client, response):
     assert subscription.is_canceled() is False
 
 
-def test_get_all_customer_subscriptions_by_customer_object(client, response):
-    """Retrieve all subscriptions related to customer."""
+def test_list_customer_subscriptions_by_customer_object(client, response):
+    """Retrieve a list of subscriptions related to customer."""
     response.get('https://api.mollie.com/v2/customers/%s' % CUSTOMER_ID, 'customer_single')
     response.get('https://api.mollie.com/v2/customers/%s/subscriptions' % CUSTOMER_ID,
                  'subscriptions_list')
 
     customer = client.customers.get(CUSTOMER_ID)
-    subscriptions = client.customer_subscriptions.on(customer).all()
-    assert isinstance(subscriptions, List)
-
-    iterated = 0
-    for subscription in subscriptions:
-        assert isinstance(subscription, Subscription)
-        iterated += 1
-    assert iterated == subscriptions.count, 'Unexpected amount of subscriptions retrieved'
+    subscriptions = client.customer_subscriptions.on(customer).list()
+    assert_list_object(subscriptions, Subscription)
 
 
-def test_get_one_customer_subscription_by_customer_object(client, response):
+def test_get_customer_subscription_by_customer_object(client, response):
     """Retrieve specific subscription related to customer."""
     response.get('https://api.mollie.com/v2/customers/%s/subscriptions/%s' % (CUSTOMER_ID, SUBSCRIPTION_ID),
                  'subscription_single')

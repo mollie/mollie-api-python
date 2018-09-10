@@ -67,7 +67,7 @@ class Base(object):
     def delete(self, resource_id):
         return self.rest_delete(resource_id)
 
-    def all(self, **params):
+    def list(self, **params):
         return self.rest_list(params)
 
     def perform_api_call(self, http_method, path, data=None, params=None):

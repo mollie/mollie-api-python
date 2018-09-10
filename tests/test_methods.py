@@ -1,24 +1,14 @@
-from mollie.api.objects.list import List
 from mollie.api.objects.method import Method
 
+from .utils import assert_list_object
 
-def test_methods_all(client, response):
+
+def test_list_methods(client, response):
     """Retrieve a list of available payment methods."""
     response.get('https://api.mollie.com/v2/methods', 'methods_list')
 
-    methods = client.methods.all()
-    assert isinstance(methods, List)
-    assert methods.count == 11
-
-    iterated = 0
-    iterated_method_ids = []
-    for method in methods:
-        assert isinstance(method, Method)
-        iterated += 1
-        assert method.id is not None
-        iterated_method_ids.append(method.id)
-    assert iterated == methods.count
-    assert len(set(iterated_method_ids)) == methods.count, 'Unexpected number of unique methods'
+    methods = client.methods.list()
+    assert_list_object(methods, Method)
 
 
 def test_method_get(client, response):

@@ -30,19 +30,21 @@ def main():
         customer_id = flask.request.args.get('customer_id')
 
         # If no customer ID was provided in the URL, we grab the first customer
+        customer = None
         if customer_id is None:
-            customers = mollie_client.customers.all()
+            customers = mollie_client.customers.list()
 
             body += '<p>No customer ID specified. Attempting to retrieve the first page of '
             body += 'customers and grabbing the first.</p>'
 
-            if int(customers.count) == 0:
+            if not len(customers):
                 body += '<p>You have no customers. You can create one from the examples.</p>'
                 return body
 
-            customer_id = next(customers).id
+            customer = next(customers)
 
-        customer = mollie_client.customers.get(customer_id)
+        if not customer:
+            customer = mollie_client.customers.get(customer_id)
 
         #
         # Generate a unique order number for this example. It is important to include this unique attribute
@@ -53,7 +55,7 @@ def main():
         #
         # See: https://www.mollie.com/nl/docs/reference/customers/create-payment
         #
-        payment = mollie_client.customer_payments.with_parent_id(customer_id).create({
+        payment = mollie_client.customer_payments.with_parent_id(customer.id).create({
             'amount': {'currency': 'EUR', 'value': '100.00'},
             'description': 'My first API payment',
             'webhookUrl': flask.request.url_root + '2-webhook_verification',

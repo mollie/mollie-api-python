@@ -25,20 +25,17 @@ def main():
         body = ''
         payment_id = ''
 
-        payments = mollie_client.payments.all()
-
         body += '<p>Attempting to retrieve the first page of payments and grabbing the first.</p>'
 
-        if int(payments.count) == 0:
+        payments = mollie_client.payments.list()
+
+        if not len(payments):
             body += '<p>You have no payments. You can create one from the examples.</p>'
             return body
 
-        for payment in payments:
-            payment_id = payment.id
-            break
+        payment = next(payments)
 
-        payment = mollie_client.payments.get(payment_id)
-        if payment.can_be_refunded and payment.amount_remaining['currency'] == 'EUR' \
+        if payment.can_be_refunded() and payment.amount_remaining['currency'] == 'EUR' \
                 and float(payment.amount_remaining['value']) >= 2.0:
             data = {
                 'amount': {'value': '2.00', 'currency': 'EUR'}

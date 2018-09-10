@@ -1,25 +1,16 @@
-from mollie.api.objects.list import List
 from mollie.api.objects.payment import Payment
+
+from .utils import assert_list_object
 
 CUSTOMER_ID = 'cst_8wmqcHMN4U'
 
 
-def test_get_all_customer_payments(client, response):
+def test_list_customer_payments(client, response):
     """Retrieve a list of payments related to a customer id."""
     response.get('https://api.mollie.com/v2/customers/%s/payments' % CUSTOMER_ID, 'customer_payments_multiple')
 
-    payments = client.customer_payments.with_parent_id(CUSTOMER_ID).all()
-    assert isinstance(payments, List)
-    assert payments.count == 1
-    iterated = 0
-    iterated_payment_ids = []
-    for payment in payments:
-        assert isinstance(payment, Payment)
-        assert payment.id is not None
-        iterated += 1
-        iterated_payment_ids.append(payment.id)
-    assert iterated == payments.count, 'Unexpected amount of payments retrieved'
-    assert len(set(iterated_payment_ids)) == payments.count, 'Unexpected unique payment ids retrieved'
+    payments = client.customer_payments.with_parent_id(CUSTOMER_ID).list()
+    assert_list_object(payments, Payment)
 
 
 def test_list_customer_payments_by_object(client, response):
@@ -27,10 +18,8 @@ def test_list_customer_payments_by_object(client, response):
     response.get('https://api.mollie.com/v2/customers/%s/payments' % CUSTOMER_ID, 'customer_payments_multiple')
 
     customer = client.customers.get(CUSTOMER_ID)
-    payments = client.customer_payments.on(customer).all()
-    assert isinstance(payments, List)
-    for payment in payments:
-        assert isinstance(payment, Payment)
+    payments = client.customer_payments.on(customer).list()
+    assert_list_object(payments, Payment)
 
 
 def test_create_customer_payment(client, response):
