@@ -21,10 +21,10 @@ To use the Mollie API client, the following things are required:
 By far the easiest way to install the Mollie API client is to install it with [pip](https://pip.pypa.io).
 
 ```
-$ pip install mollie-api-python
+$ pip install mollie-api-python==1.*
 ```
 
-You may also git checkout or [download all the files](https://github.com/mollie/mollie-api-python/archive/master.zip), and include the Mollie API client manually.
+You may also git checkout or [download all the files](https://github.com/mollie/mollie-api-python/archive/v1-develop.zip), and include the Mollie API client manually.
 
 ## How to receive payments ##
 
