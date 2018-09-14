@@ -19,11 +19,11 @@ To use the Mollie API client, the following things are required:
 + Mollie API client for Python has a dependency on [Requests](http://python.requests.org).
 
 ## Installation ##
+**Please note:** there is no official client release for the Mollie v2 API yet. If you are looking to install the latest _released_ version of the Mollie API client, please refer to the [v1-develop branch](https://github.com/mollie/mollie-api-python/tree/v1-develop) for installation instructions.
 
-By far the easiest way to install the Mollie API client is to install it with [pip](https://pip.pypa.io).
-
+By far the easiest way to install the Mollie API client is to install it with [pip](https://pip.pypa.io). The command below will install the client from the master branch of this repository.
 ```
-$ pip install mollie-api-python
+$ pip install -e git+https://github.com/mollie/mollie-api-python.git#egg=mollie-api-python
 ```
 You may also git checkout or [download all the files](https://github.com/mollie/mollie-api-python/archive/master.zip), and include the Mollie API client manually.
 
