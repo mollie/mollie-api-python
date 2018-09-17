@@ -75,4 +75,3 @@ def test_create_order_refund(client, response):
     order = client.orders.get(ORDER_ID)
     refund = order.create_refund(data)
     assert isinstance(refund, Refund)
-
