@@ -57,7 +57,7 @@ def test_list_orders(client, response):
 
 
 def test_create_order_refund(client, response):
-    """Create a order refund of an order."""
+    """Create an order refund of an order."""
 
     response.get('https://api.mollie.com/v2/orders/%s' % ORDER_ID, 'order_single')
     response.post('https://api.mollie.com/v2/orders/{}/refunds'.format(ORDER_ID), 'refund_single')
