@@ -1,5 +1,5 @@
-from .base import Base
 from ..resources.order_refunds import OrderRefunds
+from .base import Base
 
 
 class Order(Base):
