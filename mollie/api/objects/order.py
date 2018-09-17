@@ -15,7 +15,8 @@ class Order(Base):
 
     def __init__(self, data, resource=None, client=None):
         """
-        TODO: comment
+        Override the super __init__ to assign the Client to the result object, which is more flexible since it's
+        not tied to a single API resource type
         """
         super(Order, self).__init__(data, resource)
         self.client = client
