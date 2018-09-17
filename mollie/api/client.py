@@ -12,11 +12,11 @@ from .resources.customer_payments import CustomerPayments
 from .resources.customer_subscriptions import CustomerSubscriptions
 from .resources.customers import Customers
 from .resources.methods import Methods
+from .resources.orders import Orders
 from .resources.payment_chargebacks import PaymentChargebacks
 from .resources.payment_refunds import PaymentRefunds
 from .resources.payments import Payments
 from .resources.refunds import Refunds
-from .resources.orders import Orders
 
 try:
     from urllib.parse import urlencode
