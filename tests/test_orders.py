@@ -8,7 +8,7 @@ ORDER_ID = 'ord_kEn1PlbGa'
 
 def test_get_order(client, response):
     """Retrieve a single order by order ID"""
-    response.get('https://api.mollie.com/v2/orders/%s' % ORDER_ID, 'order_single')
+    response.get('https://api.mollie.com/v2/orders/{order_id}'.format(order_id=ORDER_ID), 'order_single')
 
     order = client.orders.get(ORDER_ID)
     assert isinstance(order, Order)
@@ -59,8 +59,8 @@ def test_list_orders(client, response):
 def test_create_order_refund(client, response):
     """Create an order refund of an order."""
 
-    response.get('https://api.mollie.com/v2/orders/%s' % ORDER_ID, 'order_single')
-    response.post('https://api.mollie.com/v2/orders/{}/refunds'.format(ORDER_ID), 'refund_single')
+    response.get('https://api.mollie.com/v2/orders/{order_id}'.format(order_id=ORDER_ID), 'order_single')
+    response.post('https://api.mollie.com/v2/orders/{order_id}/refunds'.format(order_id=ORDER_ID), 'refund_single')
 
     data = {
         "lines": [
