@@ -1,7 +1,7 @@
+from ..resources.order_refunds import OrderRefunds
 from .base import Base
 from .list import List
-from ..resources.order_refunds import OrderRefunds
-from order_line import OrderLine
+from .order_line import OrderLine
 
 
 class Order(Base):

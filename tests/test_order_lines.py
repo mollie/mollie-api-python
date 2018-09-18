@@ -1,5 +1,5 @@
-from mollie.api.objects.order_line import OrderLine
 from mollie.api.objects.list import List
+from mollie.api.objects.order_line import OrderLine
 
 ORDER_ID = 'ord_kEn1PlbGa'
 ORDER_LINE_ID = 'odl_dgtxyl'
@@ -18,27 +18,33 @@ def test_get_order_lines(client, response):
         assert line.resource == 'orderline'
 
     # Test properties of the first line
-    for line in lines:
-        assert line.id == 'odl_dgtxyl'
-        assert line.order_id == 'ord_pbjz8x'
-        assert line.name == 'LEGO 42083 Bugatti Chiron'
-        assert line.product_url == 'https://shop.lego.com/nl-NL/Bugatti-Chiron-42083'
-        assert line.image_url == 'https://sh-s7-live-s.legocdn.com/is/image//LEGO/42083_alt1?$main$'
-        assert line.sku == '5702016116977'
-        assert line.type == 'physical'
-        assert line.status == 'created'
-        assert line.is_cancelable is True
-        assert line.quantity == 2
-        assert line.quantity_shipped == 0
-        assert line.amount_shipped == {'value': '0.00', 'currency': 'EUR'}
-        assert line.quantity_refunded == 0
-        assert line.amount_refunded == {'value': '0.00', 'currency': 'EUR'}
-        assert line.quantity_canceled == 0
-        assert line.amount_canceled == {'value': '0.00', 'currency': 'EUR'}
-        assert line.unit_price == {'value': '399.00', 'currency': 'EUR'}
-        assert line.vat_rate == '21.00'
-        assert line.vat_amount == {'value': '121.14', 'currency': 'EUR'}
-        assert line.discount_amount == {'value': '100.00', 'currency': 'EUR'}
-        assert line.total_amount == {'value': '698.00', 'currency': 'EUR'}
-        assert line.created_at == '2018-08-02T09:29:56+00:00'
-        break
+    line = next(lines)
+    assert line.id == 'odl_dgtxyl'
+    assert line.order_id == 'ord_pbjz8x'
+    assert line.type == 'physical'
+    assert line.name == 'LEGO 42083 Bugatti Chiron'
+    assert line.status == 'created'
+    assert line.is_cancelable is True
+    assert line.quantity == 2
+    assert line.quantity_shipped == 0
+    assert line.amount_shipped == {'value': '0.00', 'currency': 'EUR'}
+    assert line.quantity_refunded == 0
+    assert line.amount_refunded == {'value': '0.00', 'currency': 'EUR'}
+    assert line.quantity_canceled == 0
+    assert line.amount_canceled == {'value': '0.00', 'currency': 'EUR'}
+    assert line.unit_price == {'value': '399.00', 'currency': 'EUR'}
+    assert line.discount_amount == {'value': '100.00', 'currency': 'EUR'}
+    assert line.total_amount == {'value': '698.00', 'currency': 'EUR'}
+    assert line.vat_rate == '21.00'
+    assert line.vat_amount == {'value': '121.14', 'currency': 'EUR'}
+    assert line.sku == '5702016116977'
+    assert line.image_url == 'https://sh-s7-live-s.legocdn.com/is/image//LEGO/42083_alt1?$main$'
+    assert line.product_url == 'https://shop.lego.com/nl-NL/Bugatti-Chiron-42083'
+    assert line.created_at == '2018-08-02T09:29:56+00:00'
+    assert line.is_created() is True
+    assert line.is_authorized() is False
+    assert line.is_paid() is False
+    assert line.is_shipping() is False
+    assert line.is_canceled() is False
+    assert line.is_refunded() is False
+    assert line.is_completed() is False
