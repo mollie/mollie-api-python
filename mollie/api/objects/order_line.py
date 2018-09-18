@@ -3,6 +3,14 @@ from .base import Base
 
 class OrderLine(Base):
 
+    STATUS_CREATED = 'created'
+    STATUS_AUTHORIZED = 'authorized'
+    STATUS_PAID = 'paid'
+    STATUS_SHIPPING = 'shipping'
+    STATUS_CANCELED = 'canceled'
+    STATUS_REFUNDED = 'refunded'
+    STATUS_COMPLETED = 'completed'
+
     def __init__(self, data, resource=None, client=None):
         """
         Override the super __init__ to assign the Client to the result object, which is more flexible since it's
@@ -106,3 +114,26 @@ class OrderLine(Base):
     @property
     def created_at(self):
         return self._get_property('createdAt')
+
+    # additional methods
+
+    def is_created(self):
+        return self._get_property('status') == self.STATUS_CREATED
+
+    def is_authorized(self):
+        return self._get_property('status') == self.STATUS_AUTHORIZED
+
+    def is_paid(self):
+        return self._get_property('status') == self.STATUS_PAID
+
+    def is_shipping(self):
+        return self._get_property('status') == self.STATUS_SHIPPING
+
+    def is_canceled(self):
+        return self._get_property('status') == self.STATUS_CANCELED
+
+    def is_refunded(self):
+        return self._get_property('status') == self.STATUS_REFUNDED
+
+    def is_completed(self):
+        return self._get_property('status') == self.STATUS_COMPLETED
