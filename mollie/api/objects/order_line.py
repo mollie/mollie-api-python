@@ -115,6 +115,12 @@ class OrderLine(Base):
     def created_at(self):
         return self._get_property('createdAt')
 
+    def cancel(self):
+        # Import OrderLines locally to avoid circular import
+        from ..resources.order_lines import OrderLines
+
+        return OrderLines(self.client).with_parent_id(self.order_id).delete(self.id)
+
     # additional methods
 
     def is_created(self):

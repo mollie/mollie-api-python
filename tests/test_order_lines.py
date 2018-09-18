@@ -2,8 +2,8 @@ from mollie.api.objects.order_line import OrderLine
 
 from .utils import assert_list_object
 
-ORDER_ID = 'ord_kEn1PlbGa'
-ORDER_LINE_ID = 'odl_dgtxyl'
+ORDER_ID = 'ord_pbjz8x'
+LINE_ID = 'odl_dgtxyl'
 
 
 def test_get_order_lines(client, response):
@@ -16,9 +16,9 @@ def test_get_order_lines(client, response):
 
     # Test properties of the first line
     line = next(lines)
-    assert line.id == 'odl_dgtxyl'
+    assert line.id == LINE_ID
     assert line.resource == 'orderline'
-    assert line.order_id == 'ord_pbjz8x'
+    assert line.order_id == ORDER_ID
     assert line.type == 'physical'
     assert line.name == 'LEGO 42083 Bugatti Chiron'
     assert line.status == 'created'
@@ -46,3 +46,17 @@ def test_get_order_lines(client, response):
     assert line.is_canceled() is False
     assert line.is_refunded() is False
     assert line.is_completed() is False
+
+
+def test_cancel_order_line(client, response):
+    """Cancel a line of an order."""
+    response.get('https://api.mollie.com/v2/orders/{order_id}'.format(order_id=ORDER_ID), 'order_single')
+    response.delete(
+        'https://api.mollie.com/v2/orders/{order_id}/lines/{line_id}'.format(order_id=ORDER_ID, line_id=LINE_ID),
+        'empty')
+
+    order = client.orders.get(ORDER_ID)
+    line = next(order.order_lines)
+    canceled_line = line.cancel()
+
+    assert canceled_line == {}
