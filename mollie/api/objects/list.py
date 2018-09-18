@@ -3,10 +3,12 @@ from .base import Base
 
 class List(Base):
     current = None
+    client = None
 
-    def __init__(self, result, object_type):
+    def __init__(self, result, object_type, client=None):
         Base.__init__(self, result)
         self.object_type = object_type
+        self.client = client
 
     def __len__(self):
         """Return the count field."""
@@ -25,7 +27,7 @@ class List(Base):
             self.current += 1
         try:
             item = self['_embedded'][self.object_type.get_object_name()][self.current]
-            return self.object_type(item)
+            return self.object_type(item, client=self.client)
         except IndexError:
             self.current = None
             raise StopIteration
