@@ -166,6 +166,4 @@ class Order(Base):
         }
         return List(result, OrderLine)
 
-    # TODO: Order line details
-
     # TODO: Addresses

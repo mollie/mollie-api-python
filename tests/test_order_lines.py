@@ -1,5 +1,6 @@
-from mollie.api.objects.list import List
 from mollie.api.objects.order_line import OrderLine
+
+from .utils import assert_list_object
 
 ORDER_ID = 'ord_kEn1PlbGa'
 ORDER_LINE_ID = 'odl_dgtxyl'
@@ -11,15 +12,12 @@ def test_get_order_lines(client, response):
 
     order = client.orders.get(ORDER_ID)
     lines = order.order_lines
-    assert isinstance(lines, List)
-
-    for line in lines:
-        assert isinstance(line, OrderLine)
-        assert line.resource == 'orderline'
+    assert_list_object(lines, OrderLine)
 
     # Test properties of the first line
     line = next(lines)
     assert line.id == 'odl_dgtxyl'
+    assert line.resource == 'orderline'
     assert line.order_id == 'ord_pbjz8x'
     assert line.type == 'physical'
     assert line.name == 'LEGO 42083 Bugatti Chiron'
