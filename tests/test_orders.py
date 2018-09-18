@@ -147,3 +147,25 @@ def test_create_order(client, response):
     order = client.orders.create(data)
     assert isinstance(order, Order)
     assert order.id == ORDER_ID
+
+
+def test_update_order(client, response):
+    """Update an existing order."""
+    response.patch('https://api.mollie.com/v2/orders/{order_id}'.format(order_id=ORDER_ID), 'order_updated')
+    data = {
+        'billingAddress': {
+            'streetAndNumber': 'Keizersgracht 313',
+            'city': 'Amsterdam',
+            'region': 'Noord-Holland',
+            'postalCode': '1234AB',
+            'country': 'NL',
+            'title': 'Dhr',
+            'givenName': 'Piet',
+            'familyName': 'Mondriaan',
+            'email': 'piet@mondriaan.com',
+            'phone': '+31208202070'
+        }
+    }
+    updated_order = client.orders.update(ORDER_ID, data)
+    assert isinstance(updated_order, Order)
+    assert updated_order.billing_address['givenName'] == 'Piet'
