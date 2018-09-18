@@ -1,5 +1,7 @@
 from ..resources.order_refunds import OrderRefunds
 from .base import Base
+from .list import List
+from .order_line import OrderLine
 
 
 class Order(Base):
@@ -152,6 +154,16 @@ class Order(Base):
     def create_refund(self, data, **params):
         refund = OrderRefunds(self.client).on(self).create(data, **params)
         return refund
-    # TODO: Order line details
+
+    @property
+    def order_lines(self):
+        lines = self._get_property('lines') or []
+        result = {
+            '_embedded': {
+                'lines': lines,
+            },
+            'count': len(lines),
+        }
+        return List(result, OrderLine)
 
     # TODO: Addresses

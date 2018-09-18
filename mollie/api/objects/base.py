@@ -24,3 +24,7 @@ class Base(dict):
             return self['_links'][name]['href']
         except KeyError:
             return None
+
+    @classmethod
+    def get_object_name(cls):
+        return '{name}s'.format(name=cls.__name__.lower())
