@@ -12,9 +12,6 @@ class List(Base):
         """Return the count field."""
         return int(self['count'])
 
-    def get_object_name(self):
-        return self.object_type.get_object_name()
-
     def __iter__(self):
         """Implement iterator interface."""
         self.current = None
@@ -27,7 +24,7 @@ class List(Base):
         else:
             self.current += 1
         try:
-            item = self['_embedded'][self.get_object_name()][self.current]
+            item = self['_embedded'][self.object_type.get_object_name()][self.current]
             return self.object_type(item)
         except IndexError:
             self.current = None
