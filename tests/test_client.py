@@ -150,11 +150,25 @@ def test_client_invalid_json_response(client, response):
     ('payment_rejected', 422, UnprocessableEntityError, 'The amount is higher than the maximum'),
     ('error_teapot', 418, ResponseError, 'Just an example error that is not explicitly supported'),
 ])
-def test_client_received_error_response(client, response, resp_payload, resp_status, exception, errormsg):
+def test_client_get_received_error_response(client, response, resp_payload, resp_status, exception, errormsg):
     """An error response from the API should raise a matching error."""
     response.get('https://api.mollie.com/v2/customers/cst_doesnotexist', resp_payload, status=resp_status)
     with pytest.raises(exception) as excinfo:
         client.customers.get('cst_doesnotexist')
+    assert excinfo.match(errormsg)
+    assert excinfo.value.status == resp_status
+
+
+@pytest.mark.parametrize('resp_payload, resp_status, exception, errormsg', [
+    ('error_unauthorized', 401, UnauthorizedError, 'Missing authentication, or failed to authenticate'),
+    ('customer_doesnotexist', 404, NotFoundError, 'No customer exists with token cst_doesnotexist.'),
+    ('error_teapot', 418, ResponseError, 'Just an example error that is not explicitly supported'),
+])
+def test_client_delete_received_error_response(client, response, resp_payload, resp_status, exception, errormsg):
+    """When deleting, an error response from the API should raise a matching error."""
+    response.delete('https://api.mollie.com/v2/customers/cst_doesnotexist', resp_payload, status=resp_status)
+    with pytest.raises(exception) as excinfo:
+        client.customers.delete('cst_doesnotexist')
     assert excinfo.match(errormsg)
     assert excinfo.value.status == resp_status
 
