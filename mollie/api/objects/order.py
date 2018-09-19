@@ -156,6 +156,11 @@ class Order(Base):
         return refund
 
     @property
+    def refunds(self):
+        refunds = OrderRefunds(self.client).on(self).list()
+        return refunds
+
+    @property
     def order_lines(self):
         lines = self._get_property('lines') or []
         result = {
