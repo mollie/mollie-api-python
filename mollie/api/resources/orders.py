@@ -20,8 +20,8 @@ class Orders(Base):
     def delete(self, order_id):
         """Cancel order and return the order object.
 
-        Deleting a payment causes the payment status to change to canceled.
-        The updated payment object is returned.
+        Deleting an order causes the order status to change to canceled.
+        The updated order object is returned.
         """
         if not order_id or not order_id.startswith(self.RESOURCE_ID_PREFIX):
             raise IdentifierError(
