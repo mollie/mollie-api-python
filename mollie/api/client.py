@@ -12,6 +12,7 @@ from .resources.customer_payments import CustomerPayments
 from .resources.customer_subscriptions import CustomerSubscriptions
 from .resources.customers import Customers
 from .resources.methods import Methods
+from .resources.orders import Orders
 from .resources.payment_chargebacks import PaymentChargebacks
 from .resources.payment_refunds import PaymentRefunds
 from .resources.payments import Payments
@@ -61,6 +62,7 @@ class Client(object):
         self.customer_mandates = CustomerMandates(self)
         self.customer_subscriptions = CustomerSubscriptions(self)
         self.customer_payments = CustomerPayments(self)
+        self.orders = Orders(self)
 
     def set_api_endpoint(self, api_endpoint):
         self.api_endpoint = self.validate_api_endpoint(api_endpoint)
