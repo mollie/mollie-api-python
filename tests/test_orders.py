@@ -169,3 +169,13 @@ def test_update_order(client, response):
     updated_order = client.orders.update(ORDER_ID, data)
     assert isinstance(updated_order, Order)
     assert updated_order.billing_address['givenName'] == 'Piet'
+
+
+def test_cancel_order(client, response):
+    """Cancel an existing order."""
+    response.delete('https://api.mollie.com/v2/orders/{order_id}'.format(order_id=ORDER_ID), 'order_canceled', 200)
+    canceled_order = client.orders.delete(ORDER_ID)
+
+    assert isinstance(canceled_order, Order)
+    assert canceled_order.is_canceled()
+    assert canceled_order.is_cancelable is False
