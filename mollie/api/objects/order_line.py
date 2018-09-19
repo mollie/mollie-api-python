@@ -116,6 +116,10 @@ class OrderLine(Base):
         return self._get_property('createdAt')
 
     def cancel(self):
+        """Cancel order line.
+
+        Deleting an order line causes the order line status to change to canceled.
+        """
         # Import OrderLines locally to avoid circular import
         from ..resources.order_lines import OrderLines
 
