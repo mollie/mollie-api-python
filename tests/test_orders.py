@@ -177,5 +177,15 @@ def test_cancel_order(client, response):
     canceled_order = client.orders.delete(ORDER_ID)
 
     assert isinstance(canceled_order, Order)
-    assert canceled_order.is_canceled()
+    assert canceled_order.is_canceled() is True
     assert canceled_order.is_cancelable is False
+
+
+def test_list_order_refund(client, response):
+    """Retrieve a list of order refunds"""
+    response.get('https://api.mollie.com/v2/orders/{order_id}'.format(order_id=ORDER_ID), 'order_single')
+    response.get('https://api.mollie.com/v2/orders/{order_id}/refunds'.format(order_id=ORDER_ID), 'refunds_list')
+    order = client.orders.get(ORDER_ID)
+
+    refunds = order.refunds
+    assert_list_object(refunds, Refund)
