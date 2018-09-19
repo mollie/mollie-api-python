@@ -4,6 +4,8 @@ from .list import List
 
 
 class Method(Base):
+    # TODO: Support Klarna payment method
+
     IDEAL = 'ideal'
     CREDITCARD = 'creditcard'
     MISTERCASH = 'mistercash'

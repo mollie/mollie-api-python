@@ -145,4 +145,5 @@ def test_create_order(client, response):
         ]
     }
     order = client.orders.create(data)
+    assert isinstance(order, Order)
     assert order.id == ORDER_ID
