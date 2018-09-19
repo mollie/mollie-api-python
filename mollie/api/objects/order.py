@@ -170,5 +170,3 @@ class Order(Base):
             'count': len(lines),
         }
         return List(result, OrderLine, client=self.client)
-
-    # TODO: Addresses

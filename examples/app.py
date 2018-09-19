@@ -15,6 +15,11 @@ examples = [
     '9-create-customer-payment',
     '10-customer-payment-history',
     '11-refund-payment',
+    '12-new-order',
+    '13-handle-order-status-change',
+    '14-cancel-order',
+    '15-list-orders',
+    '16-cancel-order-line',
 ]
 
 
