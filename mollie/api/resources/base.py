@@ -72,6 +72,8 @@ class Base(object):
 
     def perform_api_call(self, http_method, path, data=None, params=None):
         resp = self.client.perform_http_call(http_method, path, data, params)
+        # Mollie returns unicode data in responses, but doesn't set the Content-Type header correctly
+        resp.encoding = 'utf-8'
         try:
             result = resp.json() if resp.status_code != 204 else {}
         except Exception:

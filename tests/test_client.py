@@ -208,3 +208,16 @@ def test_client_error_including_field_response(client, response):
         client.payments.create(**params)
     assert excinfo.match('The amount is higher than the maximum')
     assert excinfo.value.field == 'amount'
+
+
+def test_client_unicode_error(client, response):
+    """An error response containing Unicode characters should also be processed correctly."""
+    response.post('https://api.mollie.com/v2/orders', 'order_error', status=422)
+    with pytest.raises(UnprocessableEntityError) as err:
+        # actual POST data for creating an order can be found in test_orders.py
+        client.orders.create({})
+
+    # printing the result should work even when utf-8 characters are in the response.
+    expected = "UnprocessableEntityError('Order line 1 is invalid. VAT amount is off. Expected VAT amount " \
+               "to be €3.47 (21.00% over €20.00), got €3.10',)"
+    assert repr(err.value) == expected
