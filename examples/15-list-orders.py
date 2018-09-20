@@ -13,18 +13,18 @@ from mollie.api.error import Error
 def main():
     try:
         #
-        # List the most recent orders
+        # Initialize the Mollie API library with your API key.
         #
-        # See: https://docs.mollie.com/reference/v2/orders-api/list-orders
+        # See: https://www.mollie.com/dashboard/settings/profiles
         #
         api_key = os.environ.get('MOLLIE_API_KEY', 'test_test')
         mollie_client = Client()
         mollie_client.set_api_key(api_key)
 
         #
-        # Cancel the order with ID "ord_pbjz8x
+        # List the most recent orders
         #
-        # See: https://docs.mollie.com/reference/v2/orders-api/cancel-order
+        # See: https://docs.mollie.com/reference/v2/orders-api/list-orders
         #
 
         body = ''

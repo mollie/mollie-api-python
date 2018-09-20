@@ -22,12 +22,13 @@ def main():
         mollie_client.set_api_key(api_key)
 
         #
-        # Cancel the order with ID "ord_pbjz8x
+        # Fetch a list of orders and use the first.
+        # Cancel the order.
         #
         # See: https://docs.mollie.com/reference/v2/orders-api/cancel-order
         #
 
-        order = mollie_client.orders.get('ord_pbjz8x')
+        order = next(mollie_client.orders.list())
         if order.is_cancelable:
             mollie_client.orders.delete(order.id)
             return 'Your order {order_id} has been canceled'.format(order_id=order.id)

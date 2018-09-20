@@ -22,28 +22,26 @@ def main():
         mollie_client.set_api_key(api_key)
 
         #
-        # Cancel an order line with ID "odl_dgtxyl" for order ID "ord_8wmqcHMN4U"
+        # Fetch a list of orders and use the first.
+        # Cancel the first order line.
         #
         # See: https://docs.mollie.com/reference/v2/orders-api/cancel-order-line
         #
 
-        order_id = 'ord_8wmqcHMN4U'
-        line_id = 'odl_dgtxyl'
-
-        order = mollie_client.orders.get(order_id)
-        lines = order.order_lines.get(line_id)
-        line = next(lines)
+        order = next(mollie_client.orders.list())
+        line = next(order.order_lines)
         body = ''
         if line and line.is_cancelable:
             line.cancel()
 
-            order = mollie_client.orders.get(order_id)
+            order = mollie_client.orders.get(order.id)
             body += 'Your order {order_id} was updated:'.format(order_id=order.id)
             for line in order.order_lines:
                 body += '{name} Status: <b>{status}</b>'.format(name=line.name, status=line.status)
         else:
-            body += 'Unable to cancel line {line_id} for your order {order_id}'.format(line_id=line_id,
-                                                                                       order_id=order_id)
+            body += 'Unable to cancel line {line_id} for your order {order_id}'.format(line_id=line.id,
+                                                                                       order_id=order.id)
+        return body
 
     except Error as err:
         return 'API call failed: {error}'.format(error=err)

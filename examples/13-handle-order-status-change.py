@@ -35,6 +35,15 @@ def main():
         elif order.is_canceled():
             return 'Your order {order_id} has been canceled'.format(order_id=order.id)
 
+        elif order.is_shipping():
+            return 'Your order {order_id} is shipping'.format(order_id=order.id)
+
+        elif order.is_created():
+            return 'Your order {order_id} has been created'.format(order_id=order.id)
+
+        elif order.is_authorized():
+            return 'Your order {order_id} is authorized'.format(order_id=order.id)
+
         elif order.is_refunded():
             return 'Your order {order_id} has been refunded'.format(order_id=order.id)
 
@@ -43,6 +52,9 @@ def main():
 
         elif order.is_completed():
             return 'Your order {order_id} is completed'.format(order_id=order.id)
+
+        else:
+            return 'The status of your order {order_id} is unknown'.format(order_id=order.id)
 
     except Error as err:
         return 'API call failed: {error}'.format(error=err)
