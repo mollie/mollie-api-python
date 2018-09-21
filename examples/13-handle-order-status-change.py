@@ -54,7 +54,7 @@ def main():
             return 'Your order {order_id} is completed'.format(order_id=order.id)
 
         else:
-            return 'The status of your order {order_id} is unknown'.format(order_id=order.id)
+            return 'The status of your order {order_id} is: {status}'.format(order_id=order.id, status=order.status)
 
     except Error as err:
         return 'API call failed: {error}'.format(error=err)
