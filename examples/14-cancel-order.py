@@ -31,13 +31,23 @@ def main():
         #
         order_id = flask.request.args.get('order_id')
 
+        # If no order ID was provided in the URL, we grab the first order
         order = mollie_client.orders.get(order_id) if order_id else next(mollie_client.orders.list())
+
+        body = ''
+
+        if order_id is None:
+            body += '<p>No order ID specified. Attempting to retrieve the first page of '
+            body += 'orders and grabbing the first.</p>'
+
         if order.is_cancelable:
             mollie_client.orders.delete(order.id)
-            return 'Your order {order_id} has been canceled'.format(order_id=order.id)
+            body += 'Your order {order_id} has been canceled'.format(order_id=order.id)
 
         else:
-            return 'Unable to cancel your order {order_id}'.format(order_id=order.id)
+            body += 'Unable to cancel your order {order_id}'.format(order_id=order.id)
+
+        return body
 
     except Error as err:
         return 'API call failed: {error}'.format(error=err)

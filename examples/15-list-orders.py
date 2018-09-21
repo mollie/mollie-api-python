@@ -59,7 +59,8 @@ def main():
                 shipping_family_name=order.shipping_address['familyName'])
             body += '<td>{currency} {value}</td>'.format(currency=order.amount['currency'],
                                                          value=order.amount['value'])
-            body += '<td><a href="{checkout_url}" target="_blank">Click here to pay</a></td>'.format(checkout_url=order.checkout_url)
+            body += '<td><a href="{checkout_url}" target="_blank">Pay order</a></td>'.format(
+                checkout_url=order.checkout_url)
             body += '<td><a href="/14-cancel-order?order_id={id}">Cancel order</a></td>'.format(
                 id=order.id)
             body += '</tr>'
