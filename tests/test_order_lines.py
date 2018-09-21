@@ -59,5 +59,4 @@ def test_cancel_order_line(client, response):
     order = client.orders.get(ORDER_ID)
     line = next(order.lines)
     canceled_line = line.cancel()
-
     assert canceled_line == {}

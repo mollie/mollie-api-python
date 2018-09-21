@@ -198,6 +198,7 @@ def test_get_payment_orders(client, response):
     """Retrieve an order of a payment."""
     response.get('https://api.mollie.com/v2/payments/%s' % PAYMENT_ID, 'payment_single')
     response.get('https://api.mollie.com/v2/orders/{order_id}'.format(order_id=ORDER_ID), 'order_single')
+
     payment = client.payments.get(PAYMENT_ID)
     order = payment.order
 
