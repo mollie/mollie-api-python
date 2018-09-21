@@ -105,6 +105,7 @@ def test_client_invalid_update_data(client):
     ('customers', "Invalid customer ID: 'invalid'. A customer ID should start with 'cst_'."),
     ('payments', "Invalid payment ID: 'invalid'. A payment ID should start with 'tr_'."),
     ('refunds', "Invalid refund ID: 'invalid'. A refund ID should start with 're_'."),
+    ('orders', "Invalid order ID: 'invalid'. An order ID should start with 'ord_'."),
 ])
 def test_client_get_invalid_id(client, endpoint, errorstr):
     """An invalid formatted object ID should raise an error."""
