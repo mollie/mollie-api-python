@@ -68,8 +68,8 @@ def main():
             'lines': [
                 {
                     'type': 'physical',
-                    'sku': 'a',
-                    'name': 'a',
+                    'sku': '5702016116977',
+                    'name': 'LEGO 42083 Bugatti Chiron',
                     'productUrl': 'https://shop.lego.com/nl-NL/Bugatti-Chiron-42083',
                     'imageUrl': 'https://sh-s7-live-s.legocdn.com/is/image//LEGO/42083_alt1?$main$',
                     'quantity': 1,
