@@ -37,7 +37,7 @@ def main():
 
             order = mollie_client.orders.get(order.id)
             body += 'Your order {order_id} was updated:'.format(order_id=order.id)
-            for line in order.order_lines:
+            for line in order.lines:
                 body += '{name} Status: <b>{status}</b>'.format(name=line.name, status=line.status)
         else:
             body += 'Unable to cancel line {line_id} for your order {order_id}'.format(line_id=line.id,

@@ -153,7 +153,7 @@ class Order(Base):
         return refunds
 
     @property
-    def order_lines(self):
+    def lines(self):
         lines = self._get_property('lines') or []
         result = {
             '_embedded': {

@@ -11,7 +11,7 @@ def test_get_order_lines(client, response):
     response.get('https://api.mollie.com/v2/orders/{order_id}'.format(order_id=ORDER_ID), 'order_single')
 
     order = client.orders.get(ORDER_ID)
-    lines = order.order_lines
+    lines = order.lines
     assert_list_object(lines, OrderLine)
 
     # Test properties of the first line
@@ -57,7 +57,7 @@ def test_cancel_order_line(client, response):
         'empty')
 
     order = client.orders.get(ORDER_ID)
-    line = next(order.order_lines)
+    line = next(order.lines)
     canceled_line = line.cancel()
 
     assert canceled_line == {}
