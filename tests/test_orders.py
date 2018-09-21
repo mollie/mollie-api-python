@@ -15,18 +15,12 @@ def test_get_order(client, response):
     assert order.id == 'ord_kEn1PlbGa'
     assert order.profile_id == 'pfl_URR55HPMGx'
     assert order.method == 'ideal'
+    assert order.mode == 'live'
     assert order.amount == {'value': '1027.99', 'currency': 'EUR'}
     assert order.amount_captured == {'value': '0.00', 'currency': 'EUR'}
     assert order.amount_refunded == {'value': '0.00', 'currency': 'EUR'}
     assert order.status == 'created'
-    assert order.is_created
-    assert order.is_cancelable
-    assert order.metadata is None
-    assert order.created_at == '2018-08-02T09:29:56+00:00'
-    assert order.expires_at == '2018-08-30T09:29:56+00:00'
-    assert order.mode == 'live'
-    assert order.locale == 'nl_NL'
-    assert order.order_number == '18475'
+    assert order.is_cancelable is True
     assert order.billing_address == {
         'streetAndNumber': 'Keizersgracht 313',
         'postalCode': '1016 EE',
@@ -36,6 +30,8 @@ def test_get_order(client, response):
         'familyName': 'Skywalker',
         'email': 'luke@skywalker.com'
     }
+    assert order.consumer_date_of_birth == '11-07-1945'
+    assert order.order_number == '18475'
     assert order.shipping_address == {
         'streetAndNumber': 'Keizersgracht 313',
         'postalCode': '1016 EE',
@@ -45,7 +41,26 @@ def test_get_order(client, response):
         'familyName': 'Skywalker',
         'email': 'luke@skywalker.com'
     }
+    assert order.locale == 'nl_NL'
+    assert order.metadata is None
+    assert order.redirect_url is None
+    assert order.webhook_url is None
+    assert order.created_at == '2018-08-02T09:29:56+00:00'
+    assert order.expires_at == '2018-08-30T09:29:56+00:00'
+    assert order.expired_at is None
+    assert order.paid_at is None
+    assert order.authorized_at is None
+    assert order.canceled_at is None
+    assert order.completed_at is None
     assert order.checkout_url == 'https://www.mollie.com/payscreen/order/checkout/pbjz8x'
+
+    assert order.is_created() is True
+    assert order.is_paid() is False
+    assert order.is_authorized() is False
+    assert order.is_refunded() is False
+    assert order.is_shipping() is False
+    assert order.is_completed() is False
+    assert order.is_expired() is False
 
 
 def test_list_orders(client, response):

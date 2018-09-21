@@ -41,6 +41,7 @@
     "familyName": "Skywalker",
     "email": "luke@skywalker.com"
   },
+  "consumerDateOfBirth": "11-07-1945",
   "lines": [
     {
       "resource": "orderline",
