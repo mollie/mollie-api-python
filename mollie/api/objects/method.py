@@ -4,8 +4,6 @@ from .list import List
 
 
 class Method(Base):
-    # TODO: Support Klarna payment method
-
     IDEAL = 'ideal'
     CREDITCARD = 'creditcard'
     MISTERCASH = 'mistercash'
@@ -23,6 +21,8 @@ class Method(Base):
     BANCONTACT = 'bancontact'
     EPS = 'eps'
     GIROPAY = 'giropay'
+    KLARNAPAYLATER = 'klarnapaylater'
+    KLARNASLICEIT = 'klarnasliceit'
 
     @property
     def description(self):
