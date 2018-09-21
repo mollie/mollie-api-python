@@ -28,7 +28,7 @@ def main():
         # See: https://docs.mollie.com/reference/v2/orders-api/get-order
         #
 
-        order = mollie_client.orders.get('ord_pbjz8x')
+        order = next(mollie_client.orders.list())
         if order.is_paid():
             return 'The payment for your order {order_id} has been processed'.format(order_id=order.id)
 

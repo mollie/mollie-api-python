@@ -6,6 +6,8 @@ from __future__ import print_function
 
 import os
 
+import flask
+
 from mollie.api.client import Client
 from mollie.api.error import Error
 
@@ -27,8 +29,9 @@ def main():
         #
         # See: https://docs.mollie.com/reference/v2/orders-api/cancel-order
         #
+        order_id = flask.request.args.get('order_id')
 
-        order = next(mollie_client.orders.list())
+        order = mollie_client.orders.get(order_id) if order_id else next(mollie_client.orders.list())
         if order.is_cancelable:
             mollie_client.orders.delete(order.id)
             return 'Your order {order_id} has been canceled'.format(order_id=order.id)

@@ -33,26 +33,39 @@ def main():
             body += '<p>You have no orders. You can create one from the examples.</p>'
             return body
 
+        body += '<p>Showing the last {num} orders for your API key.</p>'.format(num=len(orders))
+
+        body += """
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Billed to</th>
+                        <th>Shipped to</th>
+                        <th>Total amount</th>
+                    </tr>
+                </thead>
+                <tbody>
+        """
+
         for order in orders:
-            body += '<li><b>Order {order_id}:</b> ({created_at})'.format(order_id=order.id,
-                                                                         created_at=order.created_at)
-            body += '<b>Status: </b>{status}'.format(status=order.status)
-            body += '<table border="1"><tr><th>Billed to</th><th>Shipped to</th><th>Total amount</th></tr>'
             body += '<tr>'
-            body += '<td>{shipping_given_name} {shipping_family_name}</td>'.format(
-                shipping_given_name=order.shipping_address['givenName'],
-                shipping_family_name=order.shipping_address['familyName'])
+            body += '<td>{id}</td>'.format(id=order.id)
             body += '<td>{billing_given_name} {billing_family_name}</td>'.format(
                 billing_given_name=order.billing_address['givenName'],
                 billing_family_name=order.billing_address['familyName'])
+            body += '<td>{shipping_given_name} {shipping_family_name}</td>'.format(
+                shipping_given_name=order.shipping_address['givenName'],
+                shipping_family_name=order.shipping_address['familyName'])
             body += '<td>{currency} {value}</td>'.format(currency=order.amount['currency'],
                                                          value=order.amount['value'])
+            body += '<td><a href="{checkout_url}" target="_blank">Click here to pay</a></td>'.format(checkout_url=order.checkout_url)
+            body += '<td><a href="/14-cancel-order?order_id={id}">Cancel order</a></td>'.format(
+                id=order.id)
             body += '</tr>'
-            body += '</table>'
-            body += '<a href="{checkout_url}" target="_blank">Click here to pay</a>'.format(
-                checkout_url=order.checkout_url)
-            body += '</li>'
-            return body
+
+        body += "</tbody></table>"
+        return body
 
     except Error as err:
         return 'API call failed: {error}'.format(error=err)
