@@ -7,7 +7,7 @@ LINE_ID = 'odl_dgtxyl'
 
 
 def test_get_order_lines(client, response):
-    """Retrieve lines of a single order by order ID"""
+    """Retrieve lines of a single order by order ID."""
     response.get('https://api.mollie.com/v2/orders/{order_id}'.format(order_id=ORDER_ID), 'order_single')
 
     order = client.orders.get(ORDER_ID)
@@ -16,6 +16,7 @@ def test_get_order_lines(client, response):
 
     # Test properties of the first line
     line = next(lines)
+    assert isinstance(line, OrderLine)
     assert line.id == LINE_ID
     assert line.resource == 'orderline'
     assert line.order_id == ORDER_ID
