@@ -72,6 +72,7 @@ def test_get_single_payment(client, response):
         cust=CUSTOMER_ID, man=MANDATE_ID), 'customer_mandate_single')
     response.get('https://api.mollie.com/v2/customers/{cust}/subscriptions/{sub}'.format(
         cust=CUSTOMER_ID, sub=SUBSCRIPTION_ID), 'subscription_single')
+    response.get('https://api.mollie.com/v2/orders/{order_id}'.format(order_id=ORDER_ID), 'order_single')
 
     payment = client.payments.get(PAYMENT_ID)
     assert isinstance(payment, Payment)
@@ -115,6 +116,7 @@ def test_get_single_payment(client, response):
     assert payment.mandate is not None
     assert payment.subscription is not None
     assert payment.customer is not None
+    assert isinstance(payment.order, Order)
     # additional methods
     assert payment.is_open() is True
     assert payment.is_pending() is False
@@ -192,15 +194,3 @@ def test_payment_get_related_customer(client, response):
     customer = payment.customer
     assert isinstance(customer, Customer)
     assert customer.id == CUSTOMER_ID
-
-
-def test_get_payment_orders(client, response):
-    """Retrieve an order of a payment."""
-    response.get('https://api.mollie.com/v2/payments/%s' % PAYMENT_ID, 'payment_single')
-    response.get('https://api.mollie.com/v2/orders/{order_id}'.format(order_id=ORDER_ID), 'order_single')
-
-    payment = client.payments.get(PAYMENT_ID)
-    order = payment.order
-
-    assert isinstance(order, Order)
-    assert order.id == ORDER_ID

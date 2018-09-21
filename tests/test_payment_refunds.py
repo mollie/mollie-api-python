@@ -14,6 +14,7 @@ def test_get_refund(client, response):
     """Retrieve a specific refund of a payment."""
     response.get('https://api.mollie.com/v2/payments/%s/refunds/%s' % (PAYMENT_ID, REFUND_ID), 'refund_single')
     response.get('https://api.mollie.com/v2/payments/%s' % PAYMENT_ID, 'payment_single')
+    response.get('https://api.mollie.com/v2/orders/{order_id}'.format(order_id=ORDER_ID), 'order_single')
 
     refund = client.payment_refunds.with_parent_id(PAYMENT_ID).get(REFUND_ID)
     assert isinstance(refund, Refund)
@@ -24,12 +25,14 @@ def test_get_refund(client, response):
     assert refund.settlement_amount == {'currency': 'EUR', 'value': '10.00'}
     assert refund.description == 'Order'
     assert refund.status == Refund.STATUS_PENDING
+    assert_list_object(refund.lines, OrderLine)
     assert refund.payment_id == PAYMENT_ID
     assert refund.order_id is None
     assert refund.created_at == '2018-03-14T17:09:02.0Z'
     # properties from _links
     assert refund.payment is not None
     assert refund.settlement is None
+    assert isinstance(refund.order, Order)
     # additional methods
     assert refund.is_queued() is False
     assert refund.is_pending() is True
@@ -87,23 +90,3 @@ def test_cancel_refund(client, response):
 
     canceled_refund = client.payment_refunds.with_parent_id(PAYMENT_ID).delete(REFUND_ID)
     assert canceled_refund == {}
-
-
-def test_get_refund_lines(client, response):
-    """Retrieve a list of  order lines of a refund."""
-    response.get('https://api.mollie.com/v2/payments/%s/refunds/%s' % (PAYMENT_ID, REFUND_ID), 'refund_single')
-    refund = client.payment_refunds.with_parent_id(PAYMENT_ID).get(REFUND_ID)
-
-    lines = refund.lines
-    assert_list_object(lines, OrderLine)
-
-
-def test_get_refund_orders(client, response):
-    """Retrieve an order of a refund."""
-    response.get('https://api.mollie.com/v2/payments/%s/refunds/%s' % (PAYMENT_ID, REFUND_ID), 'refund_single')
-    response.get('https://api.mollie.com/v2/orders/{order_id}'.format(order_id=ORDER_ID), 'order_single')
-
-    refund = client.payment_refunds.with_parent_id(PAYMENT_ID).get(REFUND_ID)
-    order = refund.order
-    assert isinstance(order, Order)
-    assert order.id == ORDER_ID
