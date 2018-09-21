@@ -99,7 +99,7 @@ def test_get_refund_lines(client, response):
 
 
 def test_get_refund_orders(client, response):
-    """Retrieve a order of a refund."""
+    """Retrieve an order of a refund."""
     response.get('https://api.mollie.com/v2/payments/%s/refunds/%s' % (PAYMENT_ID, REFUND_ID), 'refund_single')
     response.get('https://api.mollie.com/v2/orders/{order_id}'.format(order_id=ORDER_ID), 'order_single')
     refund = client.payment_refunds.with_parent_id(PAYMENT_ID).get(REFUND_ID)

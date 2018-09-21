@@ -52,6 +52,10 @@
       "href": "https://api.mollie.com/v2/customers/cst_8wmqcHMN4U/subscriptions/sub_rVKGtNd6s3",
       "type": "application/hal+json"
     },
+    "order": {
+      "href": "https://api.mollie.com/v2/orders/ord_kEn1PlbGa",
+      "type": "application/hal+json"
+    },
     "documentation": {
       "href": "https://docs.mollie.com/reference/v2/payments-api/create-payment",
       "type": "text/html"
