@@ -16,7 +16,6 @@ def test_get_shipment(client, response):
 
     order = client.orders.get(ORDER_ID)
     shipment = order.get_shipment(SHIPMENT_ID)
-
     assert isinstance(shipment, Shipment)
     assert shipment.resource == 'shipment'
     assert shipment.id == SHIPMENT_ID
@@ -41,7 +40,6 @@ def test_get_shipment_lines(client, response):
     order = client.orders.get(ORDER_ID)
     shipment = order.get_shipment(SHIPMENT_ID)
     lines = shipment.lines
-
     assert_list_object(lines, OrderLine)
 
 
@@ -50,9 +48,9 @@ def test_get_order_from_shipment(client, response):
     response.get('https://api.mollie.com/v2/orders/{order_id}'.format(order_id=ORDER_ID), 'order_single')
     response.get('https://api.mollie.com/v2/orders/{order_id}/shipments/{shipment_id}'.format(
         order_id=ORDER_ID, shipment_id=SHIPMENT_ID), 'shipment_single')
+
     order = client.orders.get(ORDER_ID)
     shipment = order.get_shipment(SHIPMENT_ID)
-
     assert isinstance(shipment.order, Order)
     assert order == shipment.order
 
@@ -61,6 +59,7 @@ def test_create_shipment(client, response):
     """Create a shipment of an order object"""
     response.get('https://api.mollie.com/v2/orders/{order_id}'.format(order_id=ORDER_ID), 'order_single')
     response.post('https://api.mollie.com/v2/orders/ord_kEn1PlbGa/shipments', 'shipment_single')
+
     data = {
         'lines': [
             {
@@ -105,6 +104,7 @@ def test_list_shipments(client, response):
     """Retrieve all shipments for an order."""
     response.get('https://api.mollie.com/v2/orders/{order_id}'.format(order_id=ORDER_ID), 'order_single')
     response.get('https://api.mollie.com/v2/orders/{order_id}/shipments'.format(order_id=ORDER_ID), 'shipments_list')
+
     order = client.orders.get(ORDER_ID)
     shipments = order.shipments
     assert_list_object(shipments, Shipment)

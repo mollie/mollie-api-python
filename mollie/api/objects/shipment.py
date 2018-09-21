@@ -4,14 +4,6 @@ from .order_line import OrderLine
 
 
 class Shipment(Base):
-    def __init__(self, data, resource=None, client=None):
-        """
-        Override the super __init__ to assign the Client to the result object, which is more flexible since it's
-        not tied to a single API resource type
-        """
-        super(Shipment, self).__init__(data, resource)
-        self.client = client
-
     @property
     def resource(self):
         return self._get_property('resource')
