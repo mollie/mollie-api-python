@@ -15,14 +15,6 @@ class Order(Base):
     STATUS_COMPLETED = 'completed'
     STATUS_EXPIRED = 'expired'
 
-    def __init__(self, data, resource=None, client=None):
-        """
-        Override the super __init__ to assign the Client to the result object, which is more flexible since it's
-        not tied to a single API resource type
-        """
-        super(Order, self).__init__(data, resource)
-        self.client = client
-
     @property
     def id(self):
         return self._get_property('id')

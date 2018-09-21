@@ -11,14 +11,6 @@ class OrderLine(Base):
     STATUS_REFUNDED = 'refunded'
     STATUS_COMPLETED = 'completed'
 
-    def __init__(self, data, resource=None, client=None):
-        """
-        Override the super __init__ to assign the Client to the result object, which is more flexible since it's
-        not tied to a single API resource type
-        """
-        super(OrderLine, self).__init__(data, None)
-        self.client = client
-
     @classmethod
     def get_object_name(cls):
         return 'lines'
