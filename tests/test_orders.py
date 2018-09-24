@@ -1,5 +1,6 @@
 from mollie.api.objects.order import Order
 from mollie.api.objects.refund import Refund
+from mollie.api.objects.shipment import Shipment
 
 from .utils import assert_list_object
 
@@ -230,3 +231,13 @@ def test_cancel_order_lines(client, response):
     }
     canceled = order.cancel_lines(data)
     assert canceled == {}
+
+
+def test_list_shipments(client, response):
+    """Retrieve all shipments for an order."""
+    response.get('https://api.mollie.com/v2/orders/{order_id}'.format(order_id=ORDER_ID), 'order_single')
+    response.get('https://api.mollie.com/v2/orders/{order_id}/shipments'.format(order_id=ORDER_ID), 'shipments_list')
+
+    order = client.orders.get(ORDER_ID)
+    shipments = order.shipments
+    assert_list_object(shipments, Shipment)

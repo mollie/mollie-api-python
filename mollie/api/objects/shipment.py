@@ -24,12 +24,6 @@ class Shipment(Base):
     def tracking(self):
         return self._get_property('tracking')
 
-    def has_tracking(self):
-        return self.tracking is not None
-
-    def has_tracking_url(self):
-        return self.has_tracking() and self.tracking['url'] is not None
-
     @property
     def tracking_url(self):
         return self.tracking['url'] if self.has_tracking_url() else None
@@ -49,8 +43,12 @@ class Shipment(Base):
     @property
     def order(self):
         """Return the order of this shipment."""
-        from .order import Order
-        url = self._get_link('order')
-        if url:
-            resp = self._resource.perform_api_call(self._resource.REST_READ, url)
-            return Order(resp)
+        return self.client.orders.get(self.order_id)
+
+    # additional methods
+
+    def has_tracking(self):
+        return self.tracking is not None
+
+    def has_tracking_url(self):
+        return self.has_tracking() and self.tracking['url'] is not None

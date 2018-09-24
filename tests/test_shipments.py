@@ -29,30 +29,8 @@ def test_get_shipment(client, response):
     assert shipment.has_tracking() is True
     assert shipment.has_tracking_url() is True
     assert shipment.tracking_url == 'http://postnl.nl/tracktrace/?B=3SKABA000000000&P=1016EE&D=NL&T=C'
-
-
-def test_get_shipment_lines(client, response):
-    """Retrieve a single shipment and the order lines shipped by a shipment's ID."""
-    response.get('https://api.mollie.com/v2/orders/{order_id}'.format(order_id=ORDER_ID), 'order_single')
-    response.get('https://api.mollie.com/v2/orders/{order_id}/shipments/{shipment_id}'.format(
-        order_id=ORDER_ID, shipment_id=SHIPMENT_ID), 'shipment_single')
-
-    order = client.orders.get(ORDER_ID)
-    shipment = order.get_shipment(SHIPMENT_ID)
-    lines = shipment.lines
-    assert_list_object(lines, OrderLine)
-
-
-def test_get_order_from_shipment(client, response):
-    """Retrieve the order from the shipment object"""
-    response.get('https://api.mollie.com/v2/orders/{order_id}'.format(order_id=ORDER_ID), 'order_single')
-    response.get('https://api.mollie.com/v2/orders/{order_id}/shipments/{shipment_id}'.format(
-        order_id=ORDER_ID, shipment_id=SHIPMENT_ID), 'shipment_single')
-
-    order = client.orders.get(ORDER_ID)
-    shipment = order.get_shipment(SHIPMENT_ID)
+    assert_list_object(shipment.lines, OrderLine)
     assert isinstance(shipment.order, Order)
-    assert order == shipment.order
 
 
 def test_create_shipment(client, response):
@@ -98,13 +76,3 @@ def test_update_shipment(client, response):
     updated_shipment = order.update_shipment(SHIPMENT_ID, data)
     assert isinstance(updated_shipment, Shipment)
     assert updated_shipment.id == SHIPMENT_ID
-
-
-def test_list_shipments(client, response):
-    """Retrieve all shipments for an order."""
-    response.get('https://api.mollie.com/v2/orders/{order_id}'.format(order_id=ORDER_ID), 'order_single')
-    response.get('https://api.mollie.com/v2/orders/{order_id}/shipments'.format(order_id=ORDER_ID), 'shipments_list')
-
-    order = client.orders.get(ORDER_ID)
-    shipments = order.shipments
-    assert_list_object(shipments, Shipment)

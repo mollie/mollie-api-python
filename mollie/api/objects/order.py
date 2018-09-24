@@ -186,7 +186,7 @@ class Order(Base):
         return Shipments(self.client).on(self).list()
 
     def create_shipment(self, data=None):
-        """Create a shipments for an order."""
+        """Create a shipment for an order."""
         if data is None:
             data = {'lines': []}
         return Shipments(self.client).on(self).create(data)
