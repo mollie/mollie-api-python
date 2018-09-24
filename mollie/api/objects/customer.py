@@ -4,7 +4,7 @@ from .list import List
 
 class Customer(Base):
     @classmethod
-    def get_object_resource(cls, client):
+    def get_resource_class(cls, client):
         from ..resources.customers import Customers
         return Customers(client)
 

@@ -39,21 +39,23 @@ class List(Base):
         return int(self['count'])
 
     def has_next(self):
+        """Return True if the list contains an url for the next set"""
         return self._get_link('next') is not None
 
     def has_previous(self):
+        """Return True if the list contains an url for the previous set"""
         return self._get_link('previous') is not None
 
     def get_next(self):
         """Return the next set of objects in a list"""
         url = self._get_link('next')
-        resource = self.object_type.get_object_resource(self.client)
+        resource = self.object_type.get_resource_class(self.client)
         resp = resource.perform_api_call(resource.REST_READ, url)
         return List(resp, self.object_type, client=self.client)
 
     def get_previous(self):
         """Return the previous set of objects in a list"""
         url = self._get_link('previous')
-        resource = self.object_type.get_object_resource(self.client)
+        resource = self.object_type.get_resource_class(self.client)
         resp = resource.perform_api_call(resource.REST_READ, url)
         return List(resp, self.object_type, client=self.client)

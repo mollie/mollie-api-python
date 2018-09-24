@@ -27,5 +27,5 @@ class Base(dict):
         return '{name}s'.format(name=cls.__name__.lower())
 
     @classmethod
-    def get_object_resource(cls, client):
+    def get_resource_class(cls, client):
         raise NotImplementedError
