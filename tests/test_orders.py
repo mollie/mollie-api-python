@@ -10,6 +10,8 @@ ORDER_ID = 'ord_kEn1PlbGa'
 def test_get_order(client, response):
     """Retrieve a single order by order ID."""
     response.get('https://api.mollie.com/v2/orders/{order_id}'.format(order_id=ORDER_ID), 'order_single')
+    response.get('https://api.mollie.com/v2/orders/{order_id}/shipments'.format(order_id=ORDER_ID), 'shipments_list')
+    response.get('https://api.mollie.com/v2/orders/{order_id}/refunds'.format(order_id=ORDER_ID), 'refunds_list')
 
     order = client.orders.get(ORDER_ID)
     assert isinstance(order, Order)
@@ -61,6 +63,8 @@ def test_get_order(client, response):
     assert order.canceled_at is None
     assert order.completed_at is None
     assert order.checkout_url == 'https://www.mollie.com/payscreen/order/checkout/pbjz8x'
+    assert_list_object(order.shipments, Shipment)
+    assert_list_object(order.refunds, Refund)
 
     assert order.is_created() is True
     assert order.is_paid() is False
@@ -204,16 +208,6 @@ def test_cancel_order(client, response):
     assert canceled_order.is_cancelable is False
 
 
-def test_list_order_refund(client, response):
-    """Retrieve a list of order refunds."""
-    response.get('https://api.mollie.com/v2/orders/{order_id}'.format(order_id=ORDER_ID), 'order_single')
-    response.get('https://api.mollie.com/v2/orders/{order_id}/refunds'.format(order_id=ORDER_ID), 'order_refunds_list')
-
-    order = client.orders.get(ORDER_ID)
-    refunds = order.refunds
-    assert_list_object(refunds, Refund)
-
-
 def test_cancel_order_lines(client, response):
     """Cancel a line of an order."""
     response.get('https://api.mollie.com/v2/orders/{order_id}'.format(order_id=ORDER_ID), 'order_single')
@@ -231,13 +225,3 @@ def test_cancel_order_lines(client, response):
     }
     canceled = order.cancel_lines(data)
     assert canceled == {}
-
-
-def test_list_shipments(client, response):
-    """Retrieve all shipments for an order."""
-    response.get('https://api.mollie.com/v2/orders/{order_id}'.format(order_id=ORDER_ID), 'order_single')
-    response.get('https://api.mollie.com/v2/orders/{order_id}/shipments'.format(order_id=ORDER_ID), 'shipments_list')
-
-    order = client.orders.get(ORDER_ID)
-    shipments = order.shipments
-    assert_list_object(shipments, Shipment)
