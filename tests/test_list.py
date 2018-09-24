@@ -81,17 +81,20 @@ def test_list_multiple_api_calls(client, response):
 
     customers = client.customers.list(limit=5)
     assert customers.count == 5
-    all_customers_count = customers.count
-    first_customer = next(customers).id
+    forward_first_id = next(customers).id
+    customer_ids = [customer.id for customer in customers]
     while customers.has_next():
         customers = customers.get_next()
-        all_customers_count += customers.count
+        for customer in customers:
+            customer_ids.append(customer.id)
 
-    assert all_customers_count == 17
+    assert len(customer_ids) == 17, 'Unexpected number of customers'
+    assert len(set(customer_ids)) == 17, 'Unexpected number of unique customers'
 
     # now reverse the behaviour
     while customers.has_previous():
         customers = customers.get_previous()
-        all_customers_count -= customers.count
+    reverse_last_id = next(customers).id
 
-    assert next(customers).id == first_customer
+    assert forward_first_id == reverse_last_id, \
+        "Expected the first customer of the first page to be stable, but it wasn't"
