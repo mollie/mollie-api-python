@@ -147,7 +147,9 @@ class Order(Base):
     def is_expired(self):
         return self._get_property('status') == self.STATUS_EXPIRED
 
-    def create_refund(self, data, **params):
+    def create_refund(self, data=None, **params):
+        if data is None:
+            data = {'lines': []}
         refund = OrderRefunds(self.client).on(self).create(data, **params)
         return refund
 
