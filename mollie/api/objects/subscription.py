@@ -3,6 +3,11 @@ from .customer import Customer
 
 
 class Subscription(Base):
+    @classmethod
+    def get_resource_class(cls, client):
+        from ..resources.customer_subscriptions import CustomerSubscriptions
+        return CustomerSubscriptions(client)
+
     STATUS_ACTIVE = 'active'
     STATUS_PENDING = 'pending'   # Waiting for a valid mandate.
     STATUS_CANCELED = 'canceled'

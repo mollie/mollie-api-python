@@ -4,6 +4,11 @@ from .list import List
 
 
 class Method(Base):
+    @classmethod
+    def get_resource_class(cls, client):
+        from ..resources.methods import Methods
+        return Methods(client)
+
     IDEAL = 'ideal'
     CREDITCARD = 'creditcard'
     MISTERCASH = 'mistercash'

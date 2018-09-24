@@ -2,6 +2,10 @@ from .base import Base
 
 
 class OrderLine(Base):
+    @classmethod
+    def get_resource_class(cls, client):
+        from ..resources.order_lines import OrderLines
+        return OrderLines(client)
 
     STATUS_CREATED = 'created'
     STATUS_AUTHORIZED = 'authorized'

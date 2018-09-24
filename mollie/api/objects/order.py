@@ -6,6 +6,11 @@ from .order_line import OrderLine
 
 
 class Order(Base):
+    @classmethod
+    def get_resource_class(cls, client):
+        from ..resources.orders import Orders
+        return Orders(client)
+
     STATUS_CREATED = 'created'
     STATUS_PAID = 'paid'
     STATUS_AUTHORIZED = 'authorized'

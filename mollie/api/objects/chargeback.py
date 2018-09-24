@@ -2,6 +2,11 @@ from .base import Base
 
 
 class Chargeback(Base):
+    @classmethod
+    def get_resource_class(cls, client):
+        from ..resources.chargebacks import Chargebacks
+        return Chargebacks(client)
+
     @property
     def id(self):
         return self._get_property('id')
