@@ -6,6 +6,8 @@ from __future__ import print_function
 
 import os
 
+import flask
+
 from mollie.api.client import Client
 from mollie.api.error import Error
 
@@ -15,6 +17,7 @@ def main():
         #
         # Initialize the Mollie API library with your API key.
         #
+        # See: https://www.mollie.com/dashboard/settings/profiles
         #
 
         api_key = os.environ.get('MOLLIE_API_KEY', 'test_test')
@@ -26,9 +29,17 @@ def main():
         #
         # See: https://docs.mollie.com/reference/v2/shipments-api/create-shipment
         #
+        order_id = flask.request.args.get('order_id')
+
+        # If no order ID was provided in the URL, we grab the first order
+        order = mollie_client.orders.get(order_id) if order_id else next(mollie_client.orders.list())
 
         body = ''
-        order = next(mollie_client.orders.list())
+
+        if order_id is None:
+            body += '<p>No order ID specified. Attempting to retrieve the first page of '
+            body += 'orders and grabbing the first.</p>'
+
         shipment = order.create_shipment()
         body += 'A shipment with ID {shipment_id} has been created for your order with ID {order_id}'.format(
             shipment_id=shipment.id, order_id=order.id)

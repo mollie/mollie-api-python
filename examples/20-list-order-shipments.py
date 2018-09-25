@@ -32,10 +32,26 @@ def main():
         shipments = order.shipments
 
         body += 'Shipments for order with ID {order_id}:'.format(order_id=order.id)
+        body += """
+            <table>
+                <thead>
+                    <tr>
+                        <th>Shipment ID</th>
+                        <th>tracking url</th>
+                        <th>Created at</th>
+                    </tr>
+                </thead>
+                <tbody>
+        """
         for shipment in shipments:
-            body += 'Shipment {shipment_id} Items:'
-            for line in shipment.lines:
-                body += '{name} Status: <b> {status}</b>'.format(name=line.description, status=line.status)
+            body += '<tr>'
+            body += '<td>{id}</td>'.format(id=shipment.id)
+            body += '<td>{url}</td>'.format(url=shipment.tracking_url)
+            body += '<td>{created}</td>'.format(created=shipment.created_at)
+            body += '</tr>'
+
+        body += "</tbody></table>"
+
         return body
     except Error as err:
         return 'API call failed: {error}'.format(error=err)

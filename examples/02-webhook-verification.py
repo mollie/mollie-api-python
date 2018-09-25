@@ -6,8 +6,8 @@ from __future__ import print_function
 import os
 
 import flask
-from app import database_write
 
+from app import database_write
 from mollie.api.client import Client
 from mollie.api.error import Error
 

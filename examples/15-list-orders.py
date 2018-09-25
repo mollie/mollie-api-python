@@ -62,6 +62,8 @@ def main():
                 checkout_url=order.checkout_url)
             body += '<td><a href="/14-cancel-order?order_id={id}">Cancel order</a></td>'.format(
                 id=order.id)
+            body += '<td><a href="/17-ship-order?order_id={id}">Ship order</a></td>'.format(
+                id=order.id)
             body += '</tr>'
 
         body += "</tbody></table>"
