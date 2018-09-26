@@ -1,3 +1,7 @@
+# -*- coding: utf-8 -*-
+from __future__ import unicode_literals
+
+import sys
 from datetime import datetime
 
 import pkg_resources
@@ -210,14 +214,31 @@ def test_client_error_including_field_response(client, response):
     assert excinfo.value.field == 'amount'
 
 
-def test_client_unicode_error(client, response):
+@pytest.mark.skipif(sys.version_info.major != 2, reason='output differs for python 2')
+def test_client_unicode_error_py2(client, response):
     """An error response containing Unicode characters should also be processed correctly."""
     response.post('https://api.mollie.com/v2/orders', 'order_error', status=422)
     with pytest.raises(UnprocessableEntityError) as err:
         # actual POST data for creating an order can be found in test_orders.py
         client.orders.create({})
 
-    # printing the result should work even when utf-8 characters are in the response.
-    expected = "UnprocessableEntityError('Order line 1 is invalid. VAT amount is off. Expected VAT amount " \
-               "to be €3.47 (21.00% over €20.00), got €3.10',)"
-    assert repr(err.value) == expected
+    # handling the error should work even when utf-8 characters are in the response.
+    exception = err.value
+    expected = 'Order line 1 is invalid. VAT amount is off. ' \
+        'Expected VAT amount to be 3.47 (21.00% over 20.00), got 3.10'
+    assert str(exception) == expected
+
+
+@pytest.mark.skipif(sys.version_info.major == 2, reason='output differs for python 2')
+def test_client_unicode_error_py3(client, response):
+    """An error response containing Unicode characters should also be processed correctly."""
+    response.post('https://api.mollie.com/v2/orders', 'order_error', status=422)
+    with pytest.raises(UnprocessableEntityError) as err:
+        # actual POST data for creating an order can be found in test_orders.py
+        client.orders.create({})
+
+    # handling the error should work even when utf-8 characters are in the response.
+    exception = err.value
+    expected = 'Order line 1 is invalid. VAT amount is off. ' \
+        'Expected VAT amount to be €3.47 (21.00% over €20.00), got €3.10'
+    assert str(exception) == expected
