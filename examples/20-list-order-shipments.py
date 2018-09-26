@@ -26,8 +26,7 @@ def main():
         #
         # See: https://docs.mollie.com/reference/v2/shipments-api/get-shipment
         #
-        body = ''
-
+        body = '<p>Attempting to retrieve the first page of orders, and grabbing the first.</p>'
         order = next(mollie_client.orders.list())
         shipments = order.shipments
 

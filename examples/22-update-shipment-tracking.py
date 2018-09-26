@@ -26,12 +26,12 @@ def main():
         #
         # See: https://docs.mollie.com/reference/v2/shipments-api/get-shipment
         #
-        body = ''
-
+        body = '<p>Attempting to retrieve the first page of orders, and grabbing the first.</p>'
         order = next(mollie_client.orders.list())
         if not len(order.shipments):
             body += '<p>You have no shipments. You can create one from the examples.</p>'
             return body
+        body = '<p>Attempting to retrieve the first page of shipments if your order, and grabbing the first.</p>'
         shipment = next(order.shipments)
 
         tracking = {
