@@ -27,7 +27,6 @@ def main():
         #
         # See: https://docs.mollie.com/reference/v2/orders-api/cancel-order-line
         #
-
         body = '<p>Attempting to retrieve the first page of orders, and grabbing the first.</p>'
         order = next(mollie_client.orders.list())
         line = next(order.lines)
