@@ -1,7 +1,4 @@
 class Base(dict):
-
-    _resource = None
-
     def __init__(self, data, resource=None, client=None):
         """
         Create a new object from API result data.
