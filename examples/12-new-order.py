@@ -25,7 +25,7 @@ def main():
         mollie_client = Client()
         mollie_client.set_api_key(api_key)
 
-        # Not to be confused with Mollie's order_id
+        # Generate a unique webshop order id for this example.
         my_webshop_id = int(time.time())
 
         #
@@ -65,7 +65,8 @@ def main():
             'consumerDateOfBirth': '1958-01-31',
             'locale': 'nl_NL',
             'orderNumber': '1337',
-            'redirectUrl': '{root}3-return-page?order_id={id}'.format(root=flask.request.url_root, id=my_webshop_id),
+            'redirectUrl': '{root}17-order-return-page?my_webshop_id={id}'.format(root=flask.request.url_root,
+                                                                                  id=my_webshop_id),
             'webhookUrl': '{root}13-handle-order-status-change'.format(root=flask.request.url_root),
             'method': 'ideal',
             'lines': [
@@ -97,7 +98,8 @@ def main():
 
             ]
         })
-        database_write(my_webshop_id, order.status)
+        data = {'status': order.status, 'order_id': order.id}
+        database_write(my_webshop_id, data)
 
         #
         # Send the customer off to complete the order payment.

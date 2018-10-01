@@ -46,10 +46,10 @@ def main():
                 issuer_id = str(flask.request.form['issuer'])
 
         #
-        # Generate a unique order number for this example. It is important to include this unique attribute
+        # Generate a unique webshop order id for this example. It is important to include this unique attribute
         # in the redirectUrl (below) so a proper return page can be shown to the customer.
         #
-        order_id = int(time.time())
+        my_webshop_id = int(time.time())
 
         #
         # Payment parameters:
@@ -68,9 +68,9 @@ def main():
             },
             'description': 'My first API payment',
             'webhookUrl': '{root}2-webhook_verification'.format(root=flask.request.url_root),
-            'redirectUrl': '{root}3-return-page?order_id={id}'.format(root=flask.request.url_root, id=order_id),
+            'redirectUrl': '{root}3-return-page?order_id={id}'.format(root=flask.request.url_root, id=my_webshop_id),
             'metadata': {
-                'order_nr': order_id,
+                'my_webshop_id': str(my_webshop_id),
             },
             'method': 'ideal',
             'issuer': issuer_id,
@@ -79,7 +79,8 @@ def main():
         #
         # In this example we store the order with its payment status in a database.
         #
-        database_write(order_id, payment.status)
+        data = {'status': payment.status}
+        database_write(my_webshop_id, data)
 
         #
         # Send the customer off to complete the payment.

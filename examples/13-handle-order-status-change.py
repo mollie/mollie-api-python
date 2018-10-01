@@ -30,7 +30,6 @@ def main():
         #
         # See: https://docs.mollie.com/reference/v2/orders-api/get-order
         #
-
         if 'id' not in flask.request.form:
             flask.abort(404, 'Unknown payment id')
 
@@ -41,35 +40,8 @@ def main():
         #
         # Update the order in the database.
         #
-        database_write(my_webshop_id, order.status)
-
-        order = next(mollie_client.orders.list())
-        if order.is_paid():
-            return 'The payment for your order {order_id} has been processed'.format(order_id=order.id)
-
-        elif order.is_canceled():
-            return 'Your order {order_id} has been canceled'.format(order_id=order.id)
-
-        elif order.is_shipping():
-            return 'Your order {order_id} is shipping'.format(order_id=order.id)
-
-        elif order.is_created():
-            return 'Your order {order_id} has been created'.format(order_id=order.id)
-
-        elif order.is_authorized():
-            return 'Your order {order_id} is authorized'.format(order_id=order.id)
-
-        elif order.is_refunded():
-            return 'Your order {order_id} has been refunded'.format(order_id=order.id)
-
-        elif order.is_expired():
-            return 'Your order {order_id} has expired'.format(order_id=order.id)
-
-        elif order.is_completed():
-            return 'Your order {order_id} is completed'.format(order_id=order.id)
-
-        else:
-            return 'The status of your order {order_id} is: {status}'.format(order_id=order.id, status=order.status)
+        data = {'order_id': order.id, 'status': order.status}
+        database_write(my_webshop_id, data)
 
     except Error as err:
         return 'API call failed: {error}'.format(error=err)

@@ -31,33 +31,13 @@ def main():
 
         payment_id = flask.request.form['id']
         payment = mollie_client.payments.get(payment_id)
-        order_id = payment.metadata['order_id']
+        my_webshop_id = payment.metadata['my_webshop_id']
 
         #
         # Update the order in the database.
         #
-        database_write(order_id, payment.status)
-
-        if payment.is_paid():
-            #
-            # At this point you'd probably want to start the process of delivering the product to the customer.
-            #
-            return 'Paid'
-        elif payment.is_pending():
-            #
-            # The payment has started but is not complete yet.
-            #
-            return 'Pending'
-        elif payment.is_open():
-            #
-            # The payment has not started yet. Wait for it.
-            #
-            return 'Open'
-        else:
-            #
-            # The payment isn't paid, pending nor open. We can assume it was aborted.
-            #
-            return 'Cancelled'
+        data = {'status': payment.status}
+        database_write(my_webshop_id, data)
 
     except Error as err:
         return 'API call failed: {error}'.format(error=err)
