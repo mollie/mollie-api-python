@@ -210,7 +210,7 @@ class Payment(Base):
         url = self._get_link('order')
         if url:
             resp = self._resource.perform_api_call(self._resource.REST_READ, url)
-            return Order(resp)
+            return Order(resp, client=self.client)
 
     # additional methods
 
