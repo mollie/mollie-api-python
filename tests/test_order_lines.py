@@ -45,7 +45,6 @@ def test_get_order_lines(client, response):
     assert line.is_paid() is False
     assert line.is_shipping() is False
     assert line.is_canceled() is False
-    assert line.is_refunded() is False
     assert line.is_completed() is False
 
 

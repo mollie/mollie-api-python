@@ -8,7 +8,6 @@ class OrderLine(Base):
     STATUS_PAID = 'paid'
     STATUS_SHIPPING = 'shipping'
     STATUS_CANCELED = 'canceled'
-    STATUS_REFUNDED = 'refunded'
     STATUS_COMPLETED = 'completed'
 
     @classmethod
@@ -133,9 +132,6 @@ class OrderLine(Base):
 
     def is_canceled(self):
         return self._get_property('status') == self.STATUS_CANCELED
-
-    def is_refunded(self):
-        return self._get_property('status') == self.STATUS_REFUNDED
 
     def is_completed(self):
         return self._get_property('status') == self.STATUS_COMPLETED
