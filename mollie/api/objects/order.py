@@ -10,7 +10,6 @@ class Order(Base):
     STATUS_PAID = 'paid'
     STATUS_AUTHORIZED = 'authorized'
     STATUS_CANCELED = 'canceled'
-    STATUS_REFUNDED = 'refunded'
     STATUS_SHIPPING = 'shipping'
     STATUS_COMPLETED = 'completed'
     STATUS_EXPIRED = 'expired'
@@ -130,9 +129,6 @@ class Order(Base):
 
     def is_canceled(self):
         return self._get_property('status') == self.STATUS_CANCELED
-
-    def is_refunded(self):
-        return self._get_property('status') == self.STATUS_REFUNDED
 
     def is_shipping(self):
         return self._get_property('status') == self.STATUS_SHIPPING

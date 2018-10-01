@@ -57,7 +57,6 @@ def test_get_order(client, response):
     assert order.is_created() is True
     assert order.is_paid() is False
     assert order.is_authorized() is False
-    assert order.is_refunded() is False
     assert order.is_shipping() is False
     assert order.is_completed() is False
     assert order.is_expired() is False
