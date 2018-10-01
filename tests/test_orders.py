@@ -13,6 +13,7 @@ def test_get_order(client, response):
     order = client.orders.get(ORDER_ID)
     assert isinstance(order, Order)
     assert order.id == 'ord_kEn1PlbGa'
+    assert order.resource == 'order'
     assert order.profile_id == 'pfl_URR55HPMGx'
     assert order.method == 'ideal'
     assert order.mode == 'live'

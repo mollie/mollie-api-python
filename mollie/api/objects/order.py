@@ -19,6 +19,10 @@ class Order(Base):
         return self._get_property('id')
 
     @property
+    def resource(self):
+        return self._get_property('resource')
+
+    @property
     def profile_id(self):
         return self._get_property('profileId')
 
