@@ -6,6 +6,9 @@ from __future__ import print_function
 
 import os
 
+import flask
+
+from app import database_write
 from mollie.api.client import Client
 from mollie.api.error import Error
 
@@ -27,6 +30,18 @@ def main():
         #
         # See: https://docs.mollie.com/reference/v2/orders-api/get-order
         #
+
+        if 'id' not in flask.request.form:
+            flask.abort(404, 'Unknown payment id')
+
+        order_id = flask.request.form['id']
+        order = mollie_client.orders.get(order_id)
+        my_webshop_id = order.metadata['my_webshop_id']
+
+        #
+        # Update the order in the database.
+        #
+        database_write(my_webshop_id, order.status)
 
         order = next(mollie_client.orders.list())
         if order.is_paid():
