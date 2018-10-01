@@ -25,10 +25,13 @@ def test_get_order_lines(client, response):
     assert line.status == 'created'
     assert line.is_cancelable is True
     assert line.quantity == 2
+    assert line.shippable_quantity == 0
     assert line.quantity_shipped == 0
     assert line.amount_shipped == {'value': '0.00', 'currency': 'EUR'}
+    assert line.refundable_quantity == 0
     assert line.quantity_refunded == 0
     assert line.amount_refunded == {'value': '0.00', 'currency': 'EUR'}
+    assert line.cancelable_quantity == 0
     assert line.quantity_canceled == 0
     assert line.amount_canceled == {'value': '0.00', 'currency': 'EUR'}
     assert line.unit_price == {'value': '399.00', 'currency': 'EUR'}

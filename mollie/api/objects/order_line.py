@@ -71,6 +71,18 @@ class OrderLine(Base):
         return self._get_property('amountCanceled')
 
     @property
+    def shippable_quantity(self):
+        return self._get_property('shippableQuantity')
+
+    @property
+    def refundable_quantity(self):
+        return self._get_property('refundableQuantity')
+
+    @property
+    def cancelable_quantity(self):
+        return self._get_property('cancelableQuantity')
+
+    @property
     def unit_price(self):
         return self._get_property('unitPrice')
 
