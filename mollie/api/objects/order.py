@@ -5,7 +5,6 @@ from .order_line import OrderLine
 
 
 class Order(Base):
-
     STATUS_CREATED = 'created'
     STATUS_PAID = 'paid'
     STATUS_AUTHORIZED = 'authorized'
@@ -146,6 +145,18 @@ class Order(Base):
     def create_refund(self, data, **params):
         refund = OrderRefunds(self.client).on(self).create(data, **params)
         return refund
+
+    def cancel_lines(self, data=None, **params):
+        """Cancel the lines given. When no lines are given, cancel all the lines.
+
+        We're using the create function,
+        because the API expects a POST request containing the lines you want to cancel.
+        Canceling an order line causes the order line status to change to canceled.
+        An empty OrderLine object will be returned.
+        """
+        from ..resources.order_lines import OrderLines
+        canceled = OrderLines(self.client).on(self).create(data, **params)
+        return canceled
 
     @property
     def refunds(self):

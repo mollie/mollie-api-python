@@ -14,3 +14,6 @@ class OrderLines(Base):
 
     def get_resource_name(self):
         return 'orders/{order_id}/lines'.format(order_id=self.order_id)
+
+    def on(self, order):
+        return self.with_parent_id(order.id)
