@@ -149,13 +149,12 @@ class Order(Base):
     def cancel_lines(self, data=None, **params):
         """Cancel the lines given. When no lines are given, cancel all the lines.
 
-        We're using the create function,
-        because the API expects a POST request containing the lines you want to cancel.
         Canceling an order line causes the order line status to change to canceled.
         An empty OrderLine object will be returned.
         """
         from ..resources.order_lines import OrderLines
-        canceled = OrderLines(self.client).on(self).create(data, **params)
+
+        canceled = OrderLines(self.client).on(self).delete(data, **params)
         return canceled
 
     @property

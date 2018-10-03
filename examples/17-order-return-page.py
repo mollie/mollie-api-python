@@ -19,7 +19,7 @@ def main():
     mollie_client.set_api_key(api_key)
 
     if 'my_webshop_id' not in flask.request.args:
-        flask.abort(404, 'Unknown order_id')
+        flask.abort(404, 'Unknown webshop id')
 
     data = database_read(flask.request.args['my_webshop_id'])
 

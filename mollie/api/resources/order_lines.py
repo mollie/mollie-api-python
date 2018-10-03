@@ -17,3 +17,9 @@ class OrderLines(Base):
 
     def on(self, order):
         return self.with_parent_id(order.id)
+
+    def delete(self, data):
+        # Delete function on the parent ID without own id
+        path = self.get_resource_name()
+        result = self.perform_api_call(self.REST_DELETE, path, data=data)
+        return self.get_resource_object(result)

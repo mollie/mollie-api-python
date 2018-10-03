@@ -209,16 +209,11 @@ def test_list_order_refund(client, response):
 
 
 def test_cancel_order_lines(client, response):
-    """Firstly cancel a single line, then cancel all the lines of an order."""
+    """Cancel a line of an order."""
     response.get('https://api.mollie.com/v2/orders/{order_id}'.format(order_id=ORDER_ID), 'order_single')
-    response.post('https://api.mollie.com/v2/orders/{order_id}/lines'.format(order_id=ORDER_ID), 'empty', 204)
+    response.delete('https://api.mollie.com/v2/orders/{order_id}/lines'.format(order_id=ORDER_ID), 'empty', 204)
     order = client.orders.get(ORDER_ID)
     line = next(order.lines)
-    data = {'lines': []}
-    data['lines'].append({'id': line.id, 'quantity': line.quantity})
-    single_canceled = order.cancel_lines(data)
-    assert isinstance(single_canceled, OrderLine)
-
-    # Now cancel all the lines in the order
-    all_canceled = order.cancel_lines()
-    assert isinstance(all_canceled, OrderLine)
+    data = {'lines': [{'id': line.id, 'quantity': line.quantity}]}
+    canceled = order.cancel_lines(data)
+    assert isinstance(canceled, OrderLine)

@@ -46,14 +46,15 @@ if __name__ == "__main__":
 
 
 #
-# NOTE: This example uses a plain txt file as a "database". Please use a real database like MySQL in production.
+# NOTE: This example uses json files as a "database".
+# Please use a real database like MySQL in production.
 #
 
 
 def database_write(my_webshop_id, data):
     my_webshop_id = int(my_webshop_id)
     file = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'orders',
-                        'order-{nr}.txt'.format(nr=my_webshop_id))
+                        'order-{nr}.json'.format(nr=my_webshop_id))
     database = open(file, 'w')
     database.write(json.dumps(data))
 
@@ -61,6 +62,6 @@ def database_write(my_webshop_id, data):
 def database_read(my_webshop_id):
     my_webshop_id = int(my_webshop_id)
     file = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'orders',
-                        'order-{nr}.txt'.format(nr=my_webshop_id))
+                        'order-{nr}.json'.format(nr=my_webshop_id))
     database = open(file, 'r')
     return json.loads(database.read())

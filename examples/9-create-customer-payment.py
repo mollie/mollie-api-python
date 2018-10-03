@@ -62,7 +62,8 @@ def main():
             },
             'description': 'My first API payment',
             'webhookUrl': '{root}2-webhook_verification'.format(root=flask.request.url_root),
-            'redirectUrl': '{root}3-return-page?order_id={id}'.format(root=flask.request.url_root, id=my_webshop_id),
+            'redirectUrl': '{root}3-return-page?my_webshop_id={id}'.format(
+                root=flask.request.url_root, id=my_webshop_id),
             'metadata': {
                 'my_webshop_id': str(my_webshop_id)
             },

@@ -39,6 +39,11 @@ def main():
         data = {'status': payment.status}
         database_write(my_webshop_id, data)
 
+        #
+        # When your payment status is paid,
+        # you'd probably want to start the process of delivering the product to the owner
+        #
+
     except Error as err:
         return 'API call failed: {error}'.format(error=err)
 
