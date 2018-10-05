@@ -67,7 +67,7 @@ def main():
             'orderNumber': '1337',
             'redirectUrl': '{root}17-order-return-page?my_webshop_id={id}'.format(root=flask.request.url_root,
                                                                                   id=my_webshop_id),
-            'webhookUrl': '{root}13-handle-order-status-change'.format(root=flask.request.url_root),
+            'webhookUrl': '{root}13-order-webhook-verification'.format(root=flask.request.url_root),
             'method': 'ideal',
             'lines': [
                 {

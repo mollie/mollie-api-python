@@ -40,10 +40,22 @@ def main():
         #
         data = {'order_id': order.id, 'status': order.status}
         database_write(my_webshop_id, data)
-        #
-        # When your payment status is paid,
-        # you'd probably want to start the process of delivering the product to the owner
-        #
+
+        if order.is_paid() or order.is_authorized():
+            #
+            # At this point you'd probably want to start the process of delivering the product to the customer.
+            #
+            return 'Paid'
+        if order.is_canceled():
+            #
+            # Here you'd probably want to create a refund.
+            #
+            return 'Canceled'
+        if order.is_completed():
+            #
+            # At this point you'd could inform the customer that all deliveries to the customer have started.
+            #
+            return 'Completed'
 
     except Error as err:
         return 'API call failed: {error}'.format(error=err)
