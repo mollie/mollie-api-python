@@ -146,7 +146,7 @@ class Order(Base):
         refund = OrderRefunds(self.client).on(self).create(data, **params)
         return refund
 
-    def cancel_lines(self, data=None, **params):
+    def cancel_lines(self, data=None):
         """Cancel the lines given. When no lines are given, cancel all the lines.
 
         Canceling an order line causes the order line status to change to canceled.
@@ -154,7 +154,7 @@ class Order(Base):
         """
         from ..resources.order_lines import OrderLines
 
-        canceled = OrderLines(self.client).on(self).delete(data, **params)
+        canceled = OrderLines(self.client).on(self).delete(data)
         return canceled
 
     @property
