@@ -5,7 +5,7 @@ class List(Base):
     current = None
 
     def __init__(self, result, object_type, client=None):
-        Base.__init__(self, result, client=client)
+        super(List, self).__init__(result, client=client)
         self.object_type = object_type
 
     def __len__(self):
