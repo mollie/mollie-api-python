@@ -39,10 +39,26 @@ def main():
         data = {'status': payment.status}
         database_write(my_webshop_id, data)
 
-        #
-        # When your payment status is paid,
-        # you'd probably want to start the process of delivering the product to the owner
-        #
+        if payment.is_paid():
+            #
+            # At this point you'd probably want to start the process of delivering the product to the customer.
+            #
+            return 'Paid'
+        elif payment.is_pending():
+            #
+            # The payment has started but is not complete yet.
+            #
+            return 'Pending'
+        elif payment.is_open():
+            #
+            # The payment has not started yet. Wait for it.
+            #
+            return 'Open'
+        else:
+            #
+            # The payment isn't paid, pending nor open. We can assume it was aborted.
+            #
+            return 'Cancelled'
 
     except Error as err:
         return 'API call failed: {error}'.format(error=err)
