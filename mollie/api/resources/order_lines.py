@@ -27,4 +27,4 @@ class OrderLines(Base):
         """
         path = self.get_resource_name()
         result = self.perform_api_call(self.REST_DELETE, path, data=data)
-        return self.get_resource_object(result)
+        return result

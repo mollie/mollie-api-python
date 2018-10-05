@@ -1,5 +1,4 @@
 from mollie.api.objects.order import Order
-from mollie.api.objects.order_line import OrderLine
 from mollie.api.objects.refund import Refund
 
 from .utils import assert_list_object
@@ -224,4 +223,4 @@ def test_cancel_order_lines(client, response):
         ]
     }
     canceled = order.cancel_lines(data)
-    assert isinstance(canceled, OrderLine)
+    assert canceled == {}
