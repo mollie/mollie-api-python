@@ -1,4 +1,5 @@
 from mollie.api.objects.order import Order
+from mollie.api.objects.order_line import OrderLine
 from mollie.api.objects.refund import Refund
 
 from .utils import assert_list_object
@@ -13,6 +14,7 @@ def test_get_order(client, response):
     order = client.orders.get(ORDER_ID)
     assert isinstance(order, Order)
     assert order.id == 'ord_kEn1PlbGa'
+    assert order.resource == 'order'
     assert order.profile_id == 'pfl_URR55HPMGx'
     assert order.method == 'ideal'
     assert order.mode == 'live'
@@ -57,7 +59,6 @@ def test_get_order(client, response):
     assert order.is_created() is True
     assert order.is_paid() is False
     assert order.is_authorized() is False
-    assert order.is_refunded() is False
     assert order.is_shipping() is False
     assert order.is_completed() is False
     assert order.is_expired() is False
@@ -205,3 +206,22 @@ def test_list_order_refund(client, response):
     order = client.orders.get(ORDER_ID)
     refunds = order.refunds
     assert_list_object(refunds, Refund)
+
+
+def test_cancel_order_lines(client, response):
+    """Cancel a line of an order."""
+    response.get('https://api.mollie.com/v2/orders/{order_id}'.format(order_id=ORDER_ID), 'order_single')
+    response.delete('https://api.mollie.com/v2/orders/{order_id}/lines'.format(order_id=ORDER_ID), 'empty', 204)
+
+    order = client.orders.get(ORDER_ID)
+    line = next(order.lines)
+    data = {
+        'lines': [
+            {
+                'id': line.id,
+                'quantity': line.quantity
+            }
+        ]
+    }
+    canceled = order.cancel_lines(data)
+    assert isinstance(canceled, OrderLine)

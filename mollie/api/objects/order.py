@@ -5,12 +5,10 @@ from .order_line import OrderLine
 
 
 class Order(Base):
-
     STATUS_CREATED = 'created'
     STATUS_PAID = 'paid'
     STATUS_AUTHORIZED = 'authorized'
     STATUS_CANCELED = 'canceled'
-    STATUS_REFUNDED = 'refunded'
     STATUS_SHIPPING = 'shipping'
     STATUS_COMPLETED = 'completed'
     STATUS_EXPIRED = 'expired'
@@ -18,6 +16,10 @@ class Order(Base):
     @property
     def id(self):
         return self._get_property('id')
+
+    @property
+    def resource(self):
+        return self._get_property('resource')
 
     @property
     def profile_id(self):
@@ -131,9 +133,6 @@ class Order(Base):
     def is_canceled(self):
         return self._get_property('status') == self.STATUS_CANCELED
 
-    def is_refunded(self):
-        return self._get_property('status') == self.STATUS_REFUNDED
-
     def is_shipping(self):
         return self._get_property('status') == self.STATUS_SHIPPING
 
@@ -146,6 +145,17 @@ class Order(Base):
     def create_refund(self, data, **params):
         refund = OrderRefunds(self.client).on(self).create(data, **params)
         return refund
+
+    def cancel_lines(self, data=None):
+        """Cancel the lines given. When no lines are given, cancel all the lines.
+
+        Canceling an order line causes the order line status to change to canceled.
+        An empty OrderLine object will be returned.
+        """
+        from ..resources.order_lines import OrderLines
+
+        canceled = OrderLines(self.client).on(self).delete(data)
+        return canceled
 
     @property
     def refunds(self):

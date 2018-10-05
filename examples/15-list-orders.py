@@ -26,7 +26,6 @@ def main():
         #
         # See: https://docs.mollie.com/reference/v2/orders-api/list-orders
         #
-
         body = ''
         orders = mollie_client.orders.list()
         if not len(orders):

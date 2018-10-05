@@ -5,6 +5,7 @@
 from __future__ import print_function
 
 import os
+import time
 
 import flask
 
@@ -24,12 +25,14 @@ def main():
         mollie_client = Client()
         mollie_client.set_api_key(api_key)
 
+        # Generate a unique webshop order id for this example.
+        my_webshop_id = int(time.time())
+
         #
         # Order creation parameters.
         #
         # See: https://docs.mollie.com/reference/v2/orders-api/create-order
         #
-
         order = mollie_client.orders.create({
             'amount': {
                 'value': '299.00',
@@ -56,14 +59,15 @@ def main():
                 'email': 'norris@chucknorrisfacts.net'
             },
             'metadata': {
-                'order_id': '1337',
+                'my_webshop_id': str(my_webshop_id),
                 'description': 'Lego cars'
             },
             'consumerDateOfBirth': '1958-01-31',
             'locale': 'nl_NL',
             'orderNumber': '1337',
-            'redirectUrl': 'https://example.org/redirect',
-            'webhookUrl': 'https://example.org/webhook',
+            'redirectUrl': '{root}17-order-return-page?my_webshop_id={id}'.format(root=flask.request.url_root,
+                                                                                  id=my_webshop_id),
+            'webhookUrl': '{root}13-order-webhook-verification'.format(root=flask.request.url_root),
             'method': 'ideal',
             'lines': [
                 {
@@ -94,7 +98,8 @@ def main():
 
             ]
         })
-        database_write(order.metadata['order_id'], order.status)
+        data = {'status': order.status, 'order_id': order.id}
+        database_write(my_webshop_id, data)
 
         #
         # Send the customer off to complete the order payment.

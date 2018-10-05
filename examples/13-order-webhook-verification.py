@@ -1,5 +1,6 @@
+# coding=utf-8
 #
-# Example 2 - How to verify Mollie API Payments in a webhook.
+# Example 13 - Handle an order status change using the Mollie API.
 #
 from __future__ import print_function
 
@@ -22,43 +23,39 @@ def main():
         api_key = os.environ.get('MOLLIE_API_KEY', 'test_test')
         mollie_client = Client()
         mollie_client.set_api_key(api_key)
-
         #
-        # Retrieve the payment's current state.
+        # After your webhook has been called with the order ID in its body, you'd like
+        # to handle the order's status change. This is how you can do that.
+        #
+        # See: https://docs.mollie.com/reference/v2/orders-api/get-order
         #
         if 'id' not in flask.request.form:
-            flask.abort(404, 'Unknown payment id')
+            flask.abort(404, 'Unknown order id')
 
-        payment_id = flask.request.form['id']
-        payment = mollie_client.payments.get(payment_id)
-        my_webshop_id = payment.metadata['my_webshop_id']
-
+        order_id = flask.request.form['id']
+        order = mollie_client.orders.get(order_id)
+        my_webshop_id = order.metadata['my_webshop_id']
         #
         # Update the order in the database.
         #
-        data = {'status': payment.status}
+        data = {'order_id': order.id, 'status': order.status}
         database_write(my_webshop_id, data)
 
-        if payment.is_paid():
+        if order.is_paid() or order.is_authorized():
             #
             # At this point you'd probably want to start the process of delivering the product to the customer.
             #
             return 'Paid'
-        elif payment.is_pending():
+        if order.is_canceled():
             #
-            # The payment has started but is not complete yet.
+            # Here you'd probably want to create a refund.
             #
-            return 'Pending'
-        elif payment.is_open():
+            return 'Canceled'
+        if order.is_completed():
             #
-            # The payment has not started yet. Wait for it.
+            # At this point you'd could inform the customer that all deliveries to the customer have started.
             #
-            return 'Open'
-        else:
-            #
-            # The payment isn't paid, pending nor open. We can assume it was aborted.
-            #
-            return 'Cancelled'
+            return 'Completed'
 
     except Error as err:
         return 'API call failed: {error}'.format(error=err)

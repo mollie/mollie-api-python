@@ -8,7 +8,6 @@ class OrderLine(Base):
     STATUS_PAID = 'paid'
     STATUS_SHIPPING = 'shipping'
     STATUS_CANCELED = 'canceled'
-    STATUS_REFUNDED = 'refunded'
     STATUS_COMPLETED = 'completed'
 
     @classmethod
@@ -72,6 +71,18 @@ class OrderLine(Base):
         return self._get_property('amountCanceled')
 
     @property
+    def shippable_quantity(self):
+        return self._get_property('shippableQuantity')
+
+    @property
+    def refundable_quantity(self):
+        return self._get_property('refundableQuantity')
+
+    @property
+    def cancelable_quantity(self):
+        return self._get_property('cancelableQuantity')
+
+    @property
     def unit_price(self):
         return self._get_property('unitPrice')
 
@@ -107,16 +118,6 @@ class OrderLine(Base):
     def created_at(self):
         return self._get_property('createdAt')
 
-    def cancel(self):
-        """Cancel order line.
-
-        Deleting an order line causes the order line status to change to canceled.
-        """
-        # Import OrderLines locally to avoid circular import
-        from ..resources.order_lines import OrderLines
-
-        return OrderLines(self.client).with_parent_id(self.order_id).delete(self.id)
-
     # additional methods
 
     def is_created(self):
@@ -133,9 +134,6 @@ class OrderLine(Base):
 
     def is_canceled(self):
         return self._get_property('status') == self.STATUS_CANCELED
-
-    def is_refunded(self):
-        return self._get_property('status') == self.STATUS_REFUNDED
 
     def is_completed(self):
         return self._get_property('status') == self.STATUS_COMPLETED

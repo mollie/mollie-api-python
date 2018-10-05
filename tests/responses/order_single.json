@@ -55,16 +55,19 @@
       "status": "created",
       "isCancelable": true,
       "quantity": 2,
+      "shippableQuantity": 0,
       "quantityShipped": 0,
       "amountShipped": {
         "value": "0.00",
         "currency": "EUR"
       },
+      "refundableQuantity": 0,
       "quantityRefunded": 0,
       "amountRefunded": {
         "value": "0.00",
         "currency": "EUR"
       },
+      "cancelableQuantity": 0,
       "quantityCanceled": 0,
       "amountCanceled": {
         "value": "0.00",

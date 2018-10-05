@@ -14,37 +14,37 @@
   "description": "Order",
   "paymentId": "tr_7UhSN1zuXS",
   "lines": [
-        {
-            "resource": "orderline",
-            "id": "odl_dgtxyl",
-            "orderId": "ord_kEn1PlbGa",
-            "name": "LEGO 42083 Bugatti Chiron",
-            "productUrl": "https://shop.lego.com/nl-NL/Bugatti-Chiron-42083",
-            "imageUrl": "https://sh-s7-live-s.legocdn.com/is/image//LEGO/42083_alt1?$main$",
-            "sku": "5702016116977",
-            "type": "physical",
-            "status": "refunded",
-            "quantity": 2,
-            "unitPrice": {
-                "value": "399.00",
-                "currency": "EUR"
-            },
-            "vatRate": "21.00",
-            "vatAmount": {
-                "value": "121.14",
-                "currency": "EUR"
-            },
-            "discountAmount": {
-                "value": "100.00",
-                "currency": "EUR"
-            },
-            "totalAmount": {
-                "value": "698.00",
-                "currency": "EUR"
-            },
-            "createdAt": "2018-08-02T09:29:56+00:00"
-        }
-    ],
+    {
+      "resource": "orderline",
+      "id": "odl_dgtxyl",
+      "orderId": "ord_kEn1PlbGa",
+      "name": "LEGO 42083 Bugatti Chiron",
+      "productUrl": "https://shop.lego.com/nl-NL/Bugatti-Chiron-42083",
+      "imageUrl": "https://sh-s7-live-s.legocdn.com/is/image//LEGO/42083_alt1?$main$",
+      "sku": "5702016116977",
+      "type": "physical",
+      "status": "refunded",
+      "quantity": 2,
+      "unitPrice": {
+        "value": "399.00",
+        "currency": "EUR"
+      },
+      "vatRate": "21.00",
+      "vatAmount": {
+        "value": "121.14",
+        "currency": "EUR"
+      },
+      "discountAmount": {
+        "value": "100.00",
+        "currency": "EUR"
+      },
+      "totalAmount": {
+        "value": "698.00",
+        "currency": "EUR"
+      },
+      "createdAt": "2018-08-02T09:29:56+00:00"
+    }
+  ],
   "_links": {
     "self": {
       "href": "https://api.mollie.com/v2/payments/tr_7UhSN1zuXS/refunds/re_4qqhO89gsT",
@@ -55,9 +55,9 @@
       "type": "application/hal+json"
     },
     "order": {
-            "href": "https://api.mollie.com/v2/orders/ord_kEn1PlbGa",
-            "type": "application/hal+json"
-        },
+      "href": "https://api.mollie.com/v2/orders/ord_kEn1PlbGa",
+      "type": "application/hal+json"
+    },
     "documentation": {
       "href": "https://docs.mollie.com/reference/v2/refunds-api/get-refund",
       "type": "text/html"

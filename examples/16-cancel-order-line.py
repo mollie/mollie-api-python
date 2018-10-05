@@ -27,13 +27,20 @@ def main():
         #
         # See: https://docs.mollie.com/reference/v2/orders-api/cancel-order-line
         #
-
         body = '<p>Attempting to retrieve the first page of orders, and grabbing the first.</p>'
         order = next(mollie_client.orders.list())
         line = next(order.lines)
 
         if line and line.is_cancelable:
-            line.cancel()
+            data = {
+                'lines': [
+                    {
+                        'id': line.id,
+                        'quantity': 1
+                    }
+                ]
+            }
+            order.cancel_lines(data)
 
             order = mollie_client.orders.get(order.id)
             body += 'Your order {order_id} was updated:'.format(order_id=order.id)

@@ -25,10 +25,13 @@ def test_get_order_lines(client, response):
     assert line.status == 'created'
     assert line.is_cancelable is True
     assert line.quantity == 2
+    assert line.shippable_quantity == 0
     assert line.quantity_shipped == 0
     assert line.amount_shipped == {'value': '0.00', 'currency': 'EUR'}
+    assert line.refundable_quantity == 0
     assert line.quantity_refunded == 0
     assert line.amount_refunded == {'value': '0.00', 'currency': 'EUR'}
+    assert line.cancelable_quantity == 0
     assert line.quantity_canceled == 0
     assert line.amount_canceled == {'value': '0.00', 'currency': 'EUR'}
     assert line.unit_price == {'value': '399.00', 'currency': 'EUR'}
@@ -45,18 +48,4 @@ def test_get_order_lines(client, response):
     assert line.is_paid() is False
     assert line.is_shipping() is False
     assert line.is_canceled() is False
-    assert line.is_refunded() is False
     assert line.is_completed() is False
-
-
-def test_cancel_order_line(client, response):
-    """Cancel a line of an order."""
-    response.get('https://api.mollie.com/v2/orders/{order_id}'.format(order_id=ORDER_ID), 'order_single')
-    response.delete(
-        'https://api.mollie.com/v2/orders/{order_id}/lines/{line_id}'.format(order_id=ORDER_ID, line_id=LINE_ID),
-        'empty')
-
-    order = client.orders.get(ORDER_ID)
-    line = next(order.lines)
-    canceled_line = line.cancel()
-    assert canceled_line == {}

@@ -47,10 +47,10 @@ def main():
             customer = mollie_client.customers.get(customer_id)
 
         #
-        # Generate a unique order number for this example. It is important to include this unique attribute
+        # Generate a unique webshop order number for this example. It is important to include this unique attribute
         # in the redirectUrl (below) so a proper return page can be shown to the customer.
         #
-        order_id = int(time.time())
+        my_webshop_id = int(time.time())
 
         #
         # See: https://www.mollie.com/nl/docs/reference/customers/create-payment
@@ -62,13 +62,14 @@ def main():
             },
             'description': 'My first API payment',
             'webhookUrl': '{root}2-webhook_verification'.format(root=flask.request.url_root),
-            'redirectUrl': '{root}3-return-page?order_id={id}'.format(root=flask.request.url_root, id=order_id),
+            'redirectUrl': '{root}3-return-page?my_webshop_id={id}'.format(
+                root=flask.request.url_root, id=my_webshop_id),
             'metadata': {
-                'order_id': order_id
+                'my_webshop_id': str(my_webshop_id)
             },
         })
-
-        database_write(order_id, payment.status)
+        data = {'status': payment.status}
+        database_write(my_webshop_id, data)
 
         return '<p>Created payment of {curr} {value} for {cust} ({id})<p>'.format(
             curr=payment.amount['currency'], value=payment.amount['value'], cust=customer.name, id=customer.id)
