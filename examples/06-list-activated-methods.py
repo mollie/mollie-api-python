@@ -1,6 +1,6 @@
 # coding=utf-8
 #
-#  Example 6 - How to get the currently activated payment methods.
+#  Example: How to get the currently activated payment methods.
 #
 from __future__ import print_function
 

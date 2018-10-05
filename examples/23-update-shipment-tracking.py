@@ -1,6 +1,6 @@
 # coding=utf-8
 #
-# Example 22 - Update shipment tracking information using the Mollie API.
+# Example: Update shipment tracking information using the Mollie API.
 #
 from __future__ import print_function
 

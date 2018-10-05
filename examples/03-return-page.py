@@ -1,5 +1,5 @@
 #
-# Example 3 - How to show a return page to the customer.
+# Example: How to show a return page to the customer.
 #
 # In this example we retrieve the order stored in the database.
 # Here, it's unnecessary to use the Mollie API Client.

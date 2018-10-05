@@ -1,6 +1,6 @@
 # coding=utf-8
 #
-# Example 19 - Retrieve a shipment using the Mollie API.
+# Example: Retrieve a shipment using the Mollie API.
 #
 from __future__ import print_function
 

@@ -1,6 +1,6 @@
 # coding=utf-8
 #
-# Example 15 - List orders using the Mollie API.
+# Example: List orders using the Mollie API.
 #
 from __future__ import print_function
 

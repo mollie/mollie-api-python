@@ -1,6 +1,6 @@
 # coding=utf-8
 #
-# Example 14 - Cancel an order using the Mollie API.
+# Example: Cancel an order using the Mollie API.
 #
 from __future__ import print_function
 

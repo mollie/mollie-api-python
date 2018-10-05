@@ -1,6 +1,6 @@
 # coding=utf-8
 #
-#  Example 10 - Retrieving the payment history for a customer
+#  Example: Retrieving the payment history for a customer
 #
 from __future__ import print_function
 
