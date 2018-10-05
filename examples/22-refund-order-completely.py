@@ -24,7 +24,7 @@ def main():
         #
         #  Refund all eligible items for your first order
         #
-        # See: https://docs.mollie.com/reference/v2/shipments-api/get-shipment
+        # See: https://docs.mollie.com/reference/v2/orders-api/create-order-refund
         #
         body = '<p>Attempting to retrieve the first page of orders, and grabbing the first.</p>'
 

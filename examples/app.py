@@ -21,12 +21,13 @@ examples = [
     '14-cancel-order',
     '15-list-orders',
     '16-cancel-order-line',
-    '17-ship-order-completely',
-    '18-ship-order-partially',
-    '19-get-shipment',
-    '20-list-order-shipments',
-    '21-refund-order-completely',
-    '22-update-shipment-tracking'
+    '17-order-return-page',
+    '18-ship-order-completely',
+    '19-ship-order-partially',
+    '20-get-shipment',
+    '21-list-order-shipments',
+    '22-refund-order-completely',
+    '23-update-shipment-tracking',
 ]
 
 

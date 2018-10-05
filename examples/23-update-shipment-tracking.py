@@ -24,7 +24,7 @@ def main():
         #
         #  Update the tracking information for a shipment
         #
-        # See: https://docs.mollie.com/reference/v2/shipments-api/get-shipment
+        # See: https://docs.mollie.com/reference/v2/shipments-api/update-shipment
         #
         body = '<p>Attempting to retrieve the first page of orders, and grabbing the first.</p>'
         order = next(mollie_client.orders.list())
