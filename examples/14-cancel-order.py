@@ -28,14 +28,14 @@ def main():
         #
         # See: https://docs.mollie.com/reference/v2/orders-api/cancel-order
         #
-        order_id = flask.request.args.get('order_id')
         body = ''
+
+        order_id = flask.request.args.get('order_id')
 
         if order_id is None:
             body += '<p>No order ID specified. Attempting to retrieve the first page of '
             body += 'orders and grabbing the first.</p>'
 
-        # If no order ID was provided in the URL, we grab the first order
         order = mollie_client.orders.get(order_id) if order_id else next(mollie_client.orders.list())
 
         if order.is_cancelable:
