@@ -11,7 +11,7 @@ def test_get_order(client, response):
     """Retrieve a single order by order ID."""
     response.get('https://api.mollie.com/v2/orders/{order_id}'.format(order_id=ORDER_ID), 'order_single')
     response.get('https://api.mollie.com/v2/orders/{order_id}/shipments'.format(order_id=ORDER_ID), 'shipments_list')
-    response.get('https://api.mollie.com/v2/orders/{order_id}/refunds'.format(order_id=ORDER_ID), 'refunds_list')
+    response.get('https://api.mollie.com/v2/orders/{order_id}/refunds'.format(order_id=ORDER_ID), 'order_refunds_list')
 
     order = client.orders.get(ORDER_ID)
     assert isinstance(order, Order)
