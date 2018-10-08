@@ -206,7 +206,7 @@ def test_cancel_order(client, response):
 def test_list_order_refund(client, response):
     """Retrieve a list of order refunds."""
     response.get('https://api.mollie.com/v2/orders/{order_id}'.format(order_id=ORDER_ID), 'order_single')
-    response.get('https://api.mollie.com/v2/orders/{order_id}/refunds'.format(order_id=ORDER_ID), 'refunds_list')
+    response.get('https://api.mollie.com/v2/orders/{order_id}/refunds'.format(order_id=ORDER_ID), 'order_refunds_list')
 
     order = client.orders.get(ORDER_ID)
     refunds = order.refunds
