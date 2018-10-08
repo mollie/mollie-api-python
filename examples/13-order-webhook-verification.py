@@ -48,12 +48,12 @@ def main():
             return 'Paid'
         if order.is_canceled():
             #
-            # Here you'd probably want to create a refund.
+            # At this point you'd probably want to inform the customer that the order has been canceled.
             #
             return 'Canceled'
         if order.is_completed():
             #
-            # At this point you'd could inform the customer that all deliveries to the customer have started.
+            # At this point you could inform the customer that all deliveries to the customer have started.
             #
             return 'Completed'
 
