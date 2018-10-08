@@ -107,14 +107,6 @@ class OrderLine(Base):
         return self._get_property('sku')
 
     @property
-    def image_url(self):
-        return self._get_property('imageUrl')
-
-    @property
-    def product_url(self):
-        return self._get_property('productUrl')
-
-    @property
     def created_at(self):
         return self._get_property('createdAt')
 
