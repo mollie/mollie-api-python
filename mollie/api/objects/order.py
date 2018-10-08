@@ -150,10 +150,12 @@ class Order(Base):
         """Cancel the lines given. When no lines are given, cancel all the lines.
 
         Canceling an order line causes the order line status to change to canceled.
-        An empty OrderLine object will be returned.
+        An empty dictionary will be returned.
         """
         from ..resources.order_lines import OrderLines
 
+        if data is None:
+            data = {'lines': []}
         canceled = OrderLines(self.client).on(self).delete(data)
         return canceled
 
