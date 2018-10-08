@@ -11,40 +11,44 @@
           "value": "1027.99",
           "currency": "EUR"
         },
-        "amountCaptured": {
-          "value": "0.00",
-          "currency": "EUR"
-        },
-        "amountRefunded": {
-          "value": "0.00",
-          "currency": "EUR"
-        },
         "status": "created",
         "isCancelable": true,
-        "metadata": null,
+        "metadata": {
+          "order_id": "1337",
+          "description": "Lego cars"
+        },
         "createdAt": "2018-08-02T09:29:56+00:00",
         "expiresAt": "2018-08-30T09:29:56+00:00",
         "mode": "live",
         "locale": "nl_NL",
-        "orderNumber": "18475",
         "billingAddress": {
           "streetAndNumber": "Keizersgracht 313",
-          "postalCode": "1016 EE",
           "city": "Amsterdam",
-          "country": "nl",
-          "givenName": "Luke",
-          "familyName": "Skywalker",
-          "email": "luke@skywalker.com"
+          "region": "Noord-Holland",
+          "postalCode": "1234AB",
+          "country": "NL",
+          "title": "Dhr.",
+          "givenName": "Piet",
+          "familyName": "Mondriaan",
+          "email": "piet@mondriaan.com",
+          "phone": "+31309202070"
         },
+        "consumerDateOfBirth": "1958-01-31",
+        "orderNumber": "1337",
         "shippingAddress": {
           "streetAndNumber": "Keizersgracht 313",
-          "postalCode": "1016 EE",
-          "city": "Amsterdam",
-          "country": "nl",
-          "givenName": "Luke",
-          "familyName": "Skywalker",
-          "email": "luke@skywalker.com"
-        }
+          "streetAdditional": "4th floor",
+          "city": "Haarlem",
+          "region": "Noord-Holland",
+          "postalCode": "5678AB",
+          "country": "NL",
+          "title": "Mr.",
+          "givenName": "Chuck",
+          "familyName": "Norris",
+          "email": "norris@chucknorrisfacts.net"
+        },
+        "redirectUrl": "https://example.org/redirect",
+        "webhookUrl": "https://example.org/webhook"
       },
       {
         "resource": "order",
@@ -55,40 +59,44 @@
           "value": "1027.99",
           "currency": "EUR"
         },
-        "amountCaptured": {
-          "value": "0.00",
-          "currency": "EUR"
-        },
-        "amountRefunded": {
-          "value": "0.00",
-          "currency": "EUR"
-        },
         "status": "created",
         "isCancelable": true,
-        "metadata": null,
+        "metadata": {
+          "order_id": "1338",
+          "description": "Lego cars"
+        },
         "createdAt": "2018-08-02T09:29:56+00:00",
         "expiresAt": "2018-08-30T09:29:56+00:00",
         "mode": "live",
         "locale": "nl_NL",
-        "orderNumber": "18475",
         "billingAddress": {
           "streetAndNumber": "Keizersgracht 313",
-          "postalCode": "1016 EE",
           "city": "Amsterdam",
-          "country": "nl",
-          "givenName": "Anakin",
-          "familyName": "Skywalker",
-          "email": "anakin@skywalker.com"
+          "region": "Noord-Holland",
+          "postalCode": "1234AB",
+          "country": "NL",
+          "title": "Dhr.",
+          "givenName": "Piet",
+          "familyName": "Mondriaan",
+          "email": "piet@mondriaan.com",
+          "phone": "+31309202070"
         },
+        "consumerDateOfBirth": "1958-01-31",
+        "orderNumber": "1337",
         "shippingAddress": {
           "streetAndNumber": "Keizersgracht 313",
-          "postalCode": "1016 EE",
-          "city": "Amsterdam",
-          "country": "nl",
-          "givenName": "Anakin",
-          "familyName": "Skywalker",
-          "email": "anakin@skywalker.com"
-        }
+          "streetAdditional": "4th floor",
+          "city": "Haarlem",
+          "region": "Noord-Holland",
+          "postalCode": "5678AB",
+          "country": "NL",
+          "title": "Mr.",
+          "givenName": "Chuck",
+          "familyName": "Norris",
+          "email": "norris@chucknorrisfacts.net"
+        },
+        "redirectUrl": "https://example.org/redirect",
+        "webhookUrl": "https://example.org/webhook"
       },
       {
         "resource": "order",
@@ -99,40 +107,44 @@
           "value": "1027.99",
           "currency": "EUR"
         },
-        "amountCaptured": {
-          "value": "0.00",
-          "currency": "EUR"
-        },
-        "amountRefunded": {
-          "value": "0.00",
-          "currency": "EUR"
-        },
         "status": "created",
         "isCancelable": true,
-        "metadata": null,
+        "metadata": {
+          "order_id": "1339",
+          "description": "Lego cars"
+        },
         "createdAt": "2018-08-02T09:29:56+00:00",
         "expiresAt": "2018-08-30T09:29:56+00:00",
         "mode": "live",
         "locale": "nl_NL",
-        "orderNumber": "18475",
         "billingAddress": {
           "streetAndNumber": "Keizersgracht 313",
-          "postalCode": "1016 EE",
           "city": "Amsterdam",
-          "country": "nl",
-          "givenName": "Han",
-          "familyName": "Solo",
-          "email": "han@solo.com"
+          "region": "Noord-Holland",
+          "postalCode": "1234AB",
+          "country": "NL",
+          "title": "Dhr.",
+          "givenName": "Piet",
+          "familyName": "Mondriaan",
+          "email": "piet@mondriaan.com",
+          "phone": "+31309202070"
         },
+        "consumerDateOfBirth": "1958-01-31",
+        "orderNumber": "1337",
         "shippingAddress": {
           "streetAndNumber": "Keizersgracht 313",
-          "postalCode": "1016 EE",
-          "city": "Amsterdam",
-          "country": "nl",
-          "givenName": "Han",
-          "familyName": "Solo",
-          "email": "han@solo.com"
-        }
+          "streetAdditional": "4th floor",
+          "city": "Haarlem",
+          "region": "Noord-Holland",
+          "postalCode": "5678AB",
+          "country": "NL",
+          "title": "Mr.",
+          "givenName": "Chuck",
+          "familyName": "Norris",
+          "email": "norris@chucknorrisfacts.net"
+        },
+        "redirectUrl": "https://example.org/redirect",
+        "webhookUrl": "https://example.org/webhook"
       }
     ]
   },

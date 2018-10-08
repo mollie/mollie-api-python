@@ -18,34 +18,40 @@ def test_get_order(client, response):
     assert order.method == 'ideal'
     assert order.mode == 'live'
     assert order.amount == {'value': '1027.99', 'currency': 'EUR'}
-    assert order.amount_captured == {'value': '0.00', 'currency': 'EUR'}
-    assert order.amount_refunded == {'value': '0.00', 'currency': 'EUR'}
+    assert order.amount_captured is None
+    assert order.amount_refunded is None
     assert order.status == 'created'
     assert order.is_cancelable is True
     assert order.billing_address == {
-        'streetAndNumber': 'Keizersgracht 313',
-        'postalCode': '1016 EE',
-        'city': 'Amsterdam',
-        'country': 'nl',
-        'givenName': 'Luke',
-        'familyName': 'Skywalker',
-        'email': 'luke@skywalker.com'
+        "streetAndNumber": "Keizersgracht 313",
+        "city": "Amsterdam",
+        "region": "Noord-Holland",
+        "postalCode": "1234AB",
+        "country": "NL",
+        "title": "Dhr.",
+        "givenName": "Piet",
+        "familyName": "Mondriaan",
+        "email": "piet@mondriaan.com",
+        "phone": "+31309202070"
     }
-    assert order.consumer_date_of_birth == '11-07-1945'
-    assert order.order_number == '18475'
+    assert order.consumer_date_of_birth == '1958-01-31'
+    assert order.order_number == '1337'
     assert order.shipping_address == {
         'streetAndNumber': 'Keizersgracht 313',
-        'postalCode': '1016 EE',
-        'city': 'Amsterdam',
-        'country': 'nl',
-        'givenName': 'Luke',
-        'familyName': 'Skywalker',
-        'email': 'luke@skywalker.com'
+        'streetAdditional': '4th floor',
+        'city': 'Haarlem',
+        'region': 'Noord-Holland',
+        'postalCode': '5678AB',
+        'country': 'NL',
+        'title': 'Mr.',
+        'givenName': 'Chuck',
+        'familyName': 'Norris',
+        'email': 'norris@chucknorrisfacts.net'
     }
     assert order.locale == 'nl_NL'
-    assert order.metadata is None
-    assert order.redirect_url is None
-    assert order.webhook_url is None
+    assert order.metadata == {'description': 'Lego cars', 'order_id': '1337'}
+    assert order.redirect_url == 'https://example.org/redirect'
+    assert order.webhook_url == 'https://example.org/webhook'
     assert order.created_at == '2018-08-02T09:29:56+00:00'
     assert order.expires_at == '2018-08-30T09:29:56+00:00'
     assert order.expired_at is None

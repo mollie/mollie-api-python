@@ -23,11 +23,11 @@ def test_get_refund(client, response):
     assert refund.id == REFUND_ID
     assert refund.amount == {'currency': 'EUR', 'value': '5.95'}
     assert refund.settlement_amount == {'currency': 'EUR', 'value': '10.00'}
-    assert refund.description == 'Order'
+    assert refund.description == 'Required quantity not in stock, refunding one photo book.'
     assert refund.status == Refund.STATUS_PENDING
     assert_list_object(refund.lines, OrderLine)
     assert refund.payment_id == PAYMENT_ID
-    assert refund.order_id is None
+    assert refund.order_id == ORDER_ID
     assert refund.created_at == '2018-03-14T17:09:02.0Z'
     # properties from _links
     assert refund.payment is not None
