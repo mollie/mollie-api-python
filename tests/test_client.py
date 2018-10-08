@@ -105,6 +105,7 @@ def test_client_invalid_update_data(client):
     ('customers', "Invalid customer ID: 'invalid'. A customer ID should start with 'cst_'."),
     ('payments', "Invalid payment ID: 'invalid'. A payment ID should start with 'tr_'."),
     ('refunds', "Invalid refund ID: 'invalid'. A refund ID should start with 're_'."),
+    ('orders', "Invalid order ID: 'invalid'. An order ID should start with 'ord_'."),
 ])
 def test_client_get_invalid_id(client, endpoint, errorstr):
     """An invalid formatted object ID should raise an error."""
@@ -150,11 +151,25 @@ def test_client_invalid_json_response(client, response):
     ('payment_rejected', 422, UnprocessableEntityError, 'The amount is higher than the maximum'),
     ('error_teapot', 418, ResponseError, 'Just an example error that is not explicitly supported'),
 ])
-def test_client_received_error_response(client, response, resp_payload, resp_status, exception, errormsg):
+def test_client_get_received_error_response(client, response, resp_payload, resp_status, exception, errormsg):
     """An error response from the API should raise a matching error."""
     response.get('https://api.mollie.com/v2/customers/cst_doesnotexist', resp_payload, status=resp_status)
     with pytest.raises(exception) as excinfo:
         client.customers.get('cst_doesnotexist')
+    assert excinfo.match(errormsg)
+    assert excinfo.value.status == resp_status
+
+
+@pytest.mark.parametrize('resp_payload, resp_status, exception, errormsg', [
+    ('error_unauthorized', 401, UnauthorizedError, 'Missing authentication, or failed to authenticate'),
+    ('customer_doesnotexist', 404, NotFoundError, 'No customer exists with token cst_doesnotexist.'),
+    ('error_teapot', 418, ResponseError, 'Just an example error that is not explicitly supported'),
+])
+def test_client_delete_received_error_response(client, response, resp_payload, resp_status, exception, errormsg):
+    """When deleting, an error response from the API should raise a matching error."""
+    response.delete('https://api.mollie.com/v2/customers/cst_doesnotexist', resp_payload, status=resp_status)
+    with pytest.raises(exception) as excinfo:
+        client.customers.delete('cst_doesnotexist')
     assert excinfo.match(errormsg)
     assert excinfo.value.status == resp_status
 

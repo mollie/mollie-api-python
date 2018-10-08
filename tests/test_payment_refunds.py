@@ -1,3 +1,5 @@
+from mollie.api.objects.order import Order
+from mollie.api.objects.order_line import OrderLine
 from mollie.api.objects.payment import Payment
 from mollie.api.objects.refund import Refund
 
@@ -5,12 +7,14 @@ from .utils import assert_list_object
 
 PAYMENT_ID = 'tr_7UhSN1zuXS'
 REFUND_ID = 're_4qqhO89gsT'
+ORDER_ID = 'ord_kEn1PlbGa'
 
 
 def test_get_refund(client, response):
     """Retrieve a specific refund of a payment."""
     response.get('https://api.mollie.com/v2/payments/%s/refunds/%s' % (PAYMENT_ID, REFUND_ID), 'refund_single')
     response.get('https://api.mollie.com/v2/payments/%s' % PAYMENT_ID, 'payment_single')
+    response.get('https://api.mollie.com/v2/orders/{order_id}'.format(order_id=ORDER_ID), 'order_single')
 
     refund = client.payment_refunds.with_parent_id(PAYMENT_ID).get(REFUND_ID)
     assert isinstance(refund, Refund)
@@ -19,16 +23,16 @@ def test_get_refund(client, response):
     assert refund.id == REFUND_ID
     assert refund.amount == {'currency': 'EUR', 'value': '5.95'}
     assert refund.settlement_amount == {'currency': 'EUR', 'value': '10.00'}
-    assert refund.description == 'Order'
+    assert refund.description == 'Required quantity not in stock, refunding one photo book.'
     assert refund.status == Refund.STATUS_PENDING
-    assert refund.lines is None
+    assert_list_object(refund.lines, OrderLine)
     assert refund.payment_id == PAYMENT_ID
-    assert refund.order_id is None
+    assert refund.order_id == ORDER_ID
     assert refund.created_at == '2018-03-14T17:09:02.0Z'
     # properties from _links
     assert refund.payment is not None
     assert refund.settlement is None
-    assert refund.order is None
+    assert isinstance(refund.order, Order)
     # additional methods
     assert refund.is_queued() is False
     assert refund.is_pending() is True

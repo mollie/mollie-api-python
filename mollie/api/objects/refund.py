@@ -1,4 +1,6 @@
 from .base import Base
+from .list import List
+from .order_line import OrderLine
 
 
 class Refund(Base):
@@ -35,12 +37,15 @@ class Refund(Base):
 
     @property
     def lines(self):
-        """
-        A list of order lines.
-
-        TODO: to support this, we need to implement the Order API first.
-        """
-        pass
+        """Return the lines for this refund."""
+        lines = self._get_property('lines') or []
+        result = {
+            '_embedded': {
+                'lines': lines,
+            },
+            'count': len(lines),
+        }
+        return List(result, OrderLine, client=self.client)
 
     @property
     def payment_id(self):
@@ -79,15 +84,13 @@ class Refund(Base):
 
     @property
     def order(self):
-        """
-        Return the payment for this refund.
+        """Return the order for this refund."""
+        from ..resources.orders import Order
 
-        TODO: Before we can return an Order object, we need to implement the Orders API.
-        """
         url = self._get_link('order')
         if url:
             resp = self._resource.perform_api_call(self._resource.REST_READ, url)
-            return resp
+            return Order(resp, client=self.client)
 
     # additional methods
 

@@ -205,15 +205,12 @@ class Payment(Base):
 
     @property
     def order(self):
-        """
-        Return the order for this payment.
-
-        TODO: Before we can return an Order object, we need to implement the Orders API.
-        """
+        """Return the order for this payment. """
+        from ..resources.orders import Order
         url = self._get_link('order')
         if url:
             resp = self._resource.perform_api_call(self._resource.REST_READ, url)
-            return resp
+            return Order(resp, client=self.client)
 
     # additional methods
 

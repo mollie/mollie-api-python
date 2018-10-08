@@ -11,6 +11,7 @@ certdata.txt: mk-ca-bundle.pl
 
 .PHONY: develop
 develop:
+	pipenv run pip install 'pip<=18.0' # see https://github.com/pypa/pipenv/issues/2924
 	pipenv sync --dev
 
 .PHONY: test

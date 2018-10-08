@@ -5,6 +5,7 @@ from mollie.api.objects.chargeback import Chargeback
 from mollie.api.objects.customer import Customer
 from mollie.api.objects.mandate import Mandate
 from mollie.api.objects.method import Method
+from mollie.api.objects.order import Order
 from mollie.api.objects.payment import Payment
 from mollie.api.objects.refund import Refund
 from mollie.api.objects.subscription import Subscription
@@ -18,6 +19,7 @@ CUSTOMER_ID = 'cst_8wmqcHMN4U'
 SETTLEMENT_ID = 'stl_jDk30akdN'
 MANDATE_ID = 'mdt_h3gAaD5zP'
 SUBSCRIPTION_ID = 'sub_rVKGtNd6s3'
+ORDER_ID = 'ord_kEn1PlbGa'
 
 
 def test_list_payments(client, response):
@@ -70,6 +72,7 @@ def test_get_single_payment(client, response):
         cust=CUSTOMER_ID, man=MANDATE_ID), 'customer_mandate_single')
     response.get('https://api.mollie.com/v2/customers/{cust}/subscriptions/{sub}'.format(
         cust=CUSTOMER_ID, sub=SUBSCRIPTION_ID), 'subscription_single')
+    response.get('https://api.mollie.com/v2/orders/{order_id}'.format(order_id=ORDER_ID), 'order_single')
 
     payment = client.payments.get(PAYMENT_ID)
     assert isinstance(payment, Payment)
@@ -113,7 +116,7 @@ def test_get_single_payment(client, response):
     assert payment.mandate is not None
     assert payment.subscription is not None
     assert payment.customer is not None
-    assert payment.order is None
+    assert isinstance(payment.order, Order)
     # additional methods
     assert payment.is_open() is True
     assert payment.is_pending() is False

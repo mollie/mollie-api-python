@@ -21,6 +21,8 @@ class Method(Base):
     BANCONTACT = 'bancontact'
     EPS = 'eps'
     GIROPAY = 'giropay'
+    KLARNAPAYLATER = 'klarnapaylater'
+    KLARNASLICEIT = 'klarnasliceit'
 
     @property
     def description(self):
