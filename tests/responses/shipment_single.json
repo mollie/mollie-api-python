@@ -17,6 +17,7 @@
       "sku": "5702016116977",
       "type": "physical",
       "status": "shipping",
+      "isCancelable": true,
       "quantity": 2,
       "unitPrice": {
         "value": "399.00",

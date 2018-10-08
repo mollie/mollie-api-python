@@ -16,7 +16,6 @@ def main():
         # Initialize the Mollie API library with your API key.
         #
         #
-
         api_key = os.environ.get('MOLLIE_API_KEY', 'test_test')
         mollie_client = Client()
         mollie_client.set_api_key(api_key)
@@ -24,7 +23,7 @@ def main():
         #
         # Listing shipments for the first order.
         #
-        # See: https://docs.mollie.com/reference/v2/shipments-api/get-shipment
+        # See: https://docs.mollie.com/reference/v2/shipments-api/list-shipments
         #
         body = '<p>Attempting to retrieve the first page of orders, and grabbing the first.</p>'
         order = next(mollie_client.orders.list())
@@ -36,7 +35,7 @@ def main():
                 <thead>
                     <tr>
                         <th>Shipment ID</th>
-                        <th>tracking url</th>
+                        <th>Tracking url</th>
                         <th>Created at</th>
                     </tr>
                 </thead>

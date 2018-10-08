@@ -19,7 +19,6 @@ def main():
         #
         # See: https://www.mollie.com/dashboard/settings/profiles
         #
-
         api_key = os.environ.get('MOLLIE_API_KEY', 'test_test')
         mollie_client = Client()
         mollie_client.set_api_key(api_key)

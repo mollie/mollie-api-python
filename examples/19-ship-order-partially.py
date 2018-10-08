@@ -16,13 +16,12 @@ def main():
         # Initialize the Mollie API library with your API key.
         #
         #
-
         api_key = os.environ.get('MOLLIE_API_KEY', 'test_test')
         mollie_client = Client()
         mollie_client.set_api_key(api_key)
 
         #
-        # Create a shipment for your entire first order
+        # Create a shipment for the first line of your first order
         #
         # See: https://docs.mollie.com/reference/v2/shipments-api/create-shipment
         #
