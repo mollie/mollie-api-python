@@ -1,8 +1,22 @@
+import sys
+
+
 class Error(Exception):
     """Base exception."""
 
     def __init__(self, message):
         Exception.__init__(self, message)
+
+    def __str__(self):
+        """
+        Customize string repesentation in Python 2.
+
+        We can't have string representation containing unicode characters in Python 2.
+        """
+        if sys.version_info.major == 2:
+            return self.message.encode('ascii', errors='ignore')
+        else:
+            return super(Error, self).__str__()
 
 
 class RequestError(Error):
