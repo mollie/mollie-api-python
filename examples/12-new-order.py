@@ -1,6 +1,6 @@
 # coding=utf-8
 #
-# Example 12 - How to prepare a new order with the Mollie API.
+# Example: How to prepare a new order with the Mollie API.
 #
 from __future__ import print_function
 

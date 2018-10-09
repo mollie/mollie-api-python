@@ -1,5 +1,6 @@
 from mollie.api.objects.order import Order
 from mollie.api.objects.refund import Refund
+from mollie.api.objects.shipment import Shipment
 
 from .utils import assert_list_object
 
@@ -9,6 +10,8 @@ ORDER_ID = 'ord_kEn1PlbGa'
 def test_get_order(client, response):
     """Retrieve a single order by order ID."""
     response.get('https://api.mollie.com/v2/orders/{order_id}'.format(order_id=ORDER_ID), 'order_single')
+    response.get('https://api.mollie.com/v2/orders/{order_id}/shipments'.format(order_id=ORDER_ID), 'shipments_list')
+    response.get('https://api.mollie.com/v2/orders/{order_id}/refunds'.format(order_id=ORDER_ID), 'order_refunds_list')
 
     order = client.orders.get(ORDER_ID)
     assert isinstance(order, Order)
@@ -60,6 +63,8 @@ def test_get_order(client, response):
     assert order.canceled_at is None
     assert order.completed_at is None
     assert order.checkout_url == 'https://www.mollie.com/payscreen/order/checkout/pbjz8x'
+    assert_list_object(order.shipments, Shipment)
+    assert_list_object(order.refunds, Refund)
 
     assert order.is_created() is True
     assert order.is_paid() is False
@@ -201,16 +206,6 @@ def test_cancel_order(client, response):
     assert isinstance(canceled_order, Order)
     assert canceled_order.is_canceled() is True
     assert canceled_order.is_cancelable is False
-
-
-def test_list_order_refund(client, response):
-    """Retrieve a list of order refunds."""
-    response.get('https://api.mollie.com/v2/orders/{order_id}'.format(order_id=ORDER_ID), 'order_single')
-    response.get('https://api.mollie.com/v2/orders/{order_id}/refunds'.format(order_id=ORDER_ID), 'order_refunds_list')
-
-    order = client.orders.get(ORDER_ID)
-    refunds = order.refunds
-    assert_list_object(refunds, Refund)
 
 
 def test_cancel_order_lines(client, response):

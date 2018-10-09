@@ -1,6 +1,6 @@
 # coding=utf-8
 #
-# Example 15 - List orders using the Mollie API.
+# Example: List orders using the Mollie API.
 #
 from __future__ import print_function
 
@@ -61,6 +61,8 @@ def main():
             body += '<td><a href="{checkout_url}" target="_blank">Pay order</a></td>'.format(
                 checkout_url=order.checkout_url)
             body += '<td><a href="/14-cancel-order?order_id={id}">Cancel order</a></td>'.format(
+                id=order.id)
+            body += '<td><a href="/18-ship-order-completely?order_id={id}">Ship order</a></td>'.format(
                 id=order.id)
             body += '</tr>'
 

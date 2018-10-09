@@ -43,7 +43,7 @@ class Base(object):
     def rest_list(self, params=None):
         path = self.get_resource_name()
         result = self.perform_api_call(self.REST_LIST, path, params=params)
-        return List(result, self.get_resource_object({}).__class__)
+        return List(result, self.get_resource_object({}).__class__, client=self.client)
 
     def create(self, data=None, **params):
         if data is not None:

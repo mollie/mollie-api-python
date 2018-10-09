@@ -5,15 +5,15 @@ import flask
 
 app = flask.Flask(__name__)
 examples = [
-    '1-new-payment',
-    '2-webhook-verification',
-    '3-return-page',
-    '4-ideal-payment',
-    '5-payments-history',
-    '6-list-activated-methods',
-    '7-new-customer',
-    '8-list-customers',
-    '9-create-customer-payment',
+    '01-new-payment',
+    '02-webhook-verification',
+    '03-return-page',
+    '04-ideal-payment',
+    '05-payments-history',
+    '06-list-activated-methods',
+    '07-new-customer',
+    '08-list-customers',
+    '09-create-customer-payment',
     '10-customer-payment-history',
     '11-refund-payment',
     '12-new-order',
@@ -22,6 +22,12 @@ examples = [
     '15-list-orders',
     '16-cancel-order-line',
     '17-order-return-page',
+    '18-ship-order-completely',
+    '19-ship-order-partially',
+    '20-get-shipment',
+    '21-list-order-shipments',
+    '22-refund-order-completely',
+    '23-update-shipment-tracking',
 ]
 
 

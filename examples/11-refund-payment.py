@@ -1,6 +1,6 @@
 # coding=utf-8
 #
-# Example 11 - How to prepare a new refund with the Mollie API.
+# Example: How to prepare a new refund with the Mollie API.
 #
 from __future__ import print_function
 

@@ -1,6 +1,6 @@
 # coding=utf-8
 #
-# Example 16 - Cancel an order line using the Mollie API.
+# Example: Cancel an order line using the Mollie API.
 #
 from __future__ import print_function
 

@@ -1,4 +1,5 @@
 from ..resources.order_refunds import OrderRefunds
+from ..resources.shipments import Shipments
 from .base import Base
 from .list import List
 from .order_line import OrderLine
@@ -142,7 +143,10 @@ class Order(Base):
     def is_expired(self):
         return self._get_property('status') == self.STATUS_EXPIRED
 
-    def create_refund(self, data, **params):
+    def create_refund(self, data=None, **params):
+        """Create a refund for the order. When no data arg is given, a refund for all order lines is assumed."""
+        if data is None:
+            data = {'lines': []}
         refund = OrderRefunds(self.client).on(self).create(data, **params)
         return refund
 
@@ -174,3 +178,22 @@ class Order(Base):
             'count': len(lines),
         }
         return List(result, OrderLine, client=self.client)
+
+    @property
+    def shipments(self):
+        """Retrieve all shipments for an order."""
+        return Shipments(self.client).on(self).list()
+
+    def create_shipment(self, data=None):
+        """Create a shipment for an order. When no data arg is given, a shipment for all order lines is assumed."""
+        if data is None:
+            data = {'lines': []}
+        return Shipments(self.client).on(self).create(data)
+
+    def get_shipment(self, resource_id):
+        """Retrieve a single shipment by a shipment's ID."""
+        return Shipments(self.client).on(self).get(resource_id)
+
+    def update_shipment(self, resource_id, data):
+        """Update the tracking information of a shipment."""
+        return Shipments(self.client).on(self).update(resource_id, data)

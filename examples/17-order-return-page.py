@@ -1,5 +1,5 @@
 #
-# Example 17 - How to show a return page to the customer.
+# Example: How to show a return page to the customer.
 #
 # In this example we retrieve the order stored in the database.
 #

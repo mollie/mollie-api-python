@@ -1,6 +1,6 @@
 # coding=utf-8
 #
-# Example 8 - Retrieving all of your customers with offset and count
+# Example: Retrieving all of your customers with offset and count
 #
 from __future__ import print_function
 

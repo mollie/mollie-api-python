@@ -1,6 +1,6 @@
 # coding=utf-8
 #
-#  Example 9 - Creating a payment for a customer
+#  Example: Creating a payment for a customer
 #
 from __future__ import print_function
 

@@ -1,6 +1,6 @@
 # coding=utf-8
 #
-# Example: Cancel an order using the Mollie API.
+# Example: Create a shipment for an entire order using the Mollie API.
 #
 from __future__ import print_function
 
@@ -24,9 +24,9 @@ def main():
         mollie_client.set_api_key(api_key)
 
         #
-        # Cancel the order.
+        # Create a shipment for your entire first order
         #
-        # See: https://docs.mollie.com/reference/v2/orders-api/cancel-order
+        # See: https://docs.mollie.com/reference/v2/shipments-api/create-shipment
         #
         body = ''
 
@@ -38,15 +38,13 @@ def main():
 
         order = mollie_client.orders.get(order_id) if order_id else next(mollie_client.orders.list())
 
-        if order.is_cancelable:
-            mollie_client.orders.delete(order.id)
-            body += 'Your order {order_id} has been canceled'.format(order_id=order.id)
-
-        else:
-            body += 'Unable to cancel your order {order_id}'.format(order_id=order.id)
+        shipment = order.create_shipment()
+        body += 'A shipment with ID {shipment_id} has been created for your order with ID {order_id}'.format(
+            shipment_id=shipment.id, order_id=order.id)
+        for line in shipment.lines:
+            body += '{name} Status: <b>{status}</b>'.format(name=line.name, status=line.status)
 
         return body
-
     except Error as err:
         return 'API call failed: {error}'.format(error=err)
 
