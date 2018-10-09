@@ -3,6 +3,11 @@ from .list import List
 
 
 class Payment(Base):
+    @classmethod
+    def get_resource_class(cls, client):
+        from ..resources.payments import Payments
+        return Payments(client)
+
     STATUS_OPEN = 'open'
     STATUS_PENDING = 'pending'
     STATUS_CANCELED = 'canceled'

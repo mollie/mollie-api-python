@@ -2,6 +2,11 @@ from .base import Base
 
 
 class Mandate(Base):
+    @classmethod
+    def get_resource_class(cls, client):
+        from ..resources.customer_mandates import CustomerMandates
+        return CustomerMandates(client)
+
     STATUS_PENDING = 'pending'
     STATUS_VALID = 'valid'
     STATUS_INVALID = 'invalid'

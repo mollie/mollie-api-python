@@ -1,5 +1,3 @@
-import pytest
-
 from mollie.api.objects.list import List
 from mollie.api.objects.method import Method
 
@@ -71,15 +69,8 @@ def test_list_multiple_iterations(client, response):
     assert items_fourth_run == methods.count
 
 
-@pytest.mark.xfail(strict=True, reason="Pagination interface is still undecided")
 def test_list_multiple_api_calls(client, response):
-    """
-    Verify that we can iterate over a paginated result set.
-
-    The interface using get_next()/get_previous() is not optimal due to the fact that we cant't
-    retrieve the complete dataset count from the api. When that would be possible, we could implement
-    the List object to handle the next and previous links transparently when iterating over results.
-    """
+    """Verify that we can iterate over a paginated result set."""
     response.get('https://api.mollie.com/v2/customers?limit=5', 'customers_list_first')
     response.get('https://api.mollie.com/v2/customers?from=cst_8pknKQJzJa&limit=5', 'customers_list_second')
     response.get('https://api.mollie.com/v2/customers?from=cst_prs8JjDf57&limit=5', 'customers_list_third')
@@ -90,16 +81,20 @@ def test_list_multiple_api_calls(client, response):
 
     customers = client.customers.list(limit=5)
     assert customers.count == 5
-    all_customers_count = customers.count
+    forward_first_id = next(customers).id
+    customer_ids = [customer.id for customer in customers]
     while customers.has_next():
         customers = customers.get_next()
-        all_customers_count += customers.count
+        for customer in customers:
+            customer_ids.append(customer.id)
 
-    assert all_customers_count == 17
+    assert len(customer_ids) == 17, 'Unexpected number of customers'
+    assert len(set(customer_ids)) == 17, 'Unexpected number of unique customers'
 
     # now reverse the behaviour
     while customers.has_previous():
         customers = customers.get_previous()
-        all_customers_count -= customers.count
+    reverse_last_id = next(customers).id
 
-    assert all_customers_count == 5
+    assert forward_first_id == reverse_last_id, \
+        "Expected the first customer of the first page to be stable, but it wasn't"
