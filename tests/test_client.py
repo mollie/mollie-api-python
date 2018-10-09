@@ -222,7 +222,7 @@ def test_client_unicode_error_py2(client, response):
         # actual POST data for creating an order can be found in test_orders.py
         client.orders.create({})
 
-    # handling the error should work even when utf-8 characters are in the response.
+    # handling the error should work even when utf-8 characters (€) are in the response.
     exception = err.value
     expected = 'Order line 1 is invalid. VAT amount is off. ' \
         'Expected VAT amount to be 3.47 (21.00% over 20.00), got 3.10'
@@ -237,7 +237,7 @@ def test_client_unicode_error_py3(client, response):
         # actual POST data for creating an order can be found in test_orders.py
         client.orders.create({})
 
-    # handling the error should work even when utf-8 characters are in the response.
+    # handling the error should work even when utf-8 characters (€) are in the response.
     exception = err.value
     expected = 'Order line 1 is invalid. VAT amount is off. ' \
         'Expected VAT amount to be €3.47 (21.00% over €20.00), got €3.10'
