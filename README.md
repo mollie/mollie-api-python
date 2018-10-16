@@ -171,7 +171,7 @@ definitive. Refunds are only supported for iDEAL, credit card, Bancontact, SOFOR
 ING Home'Pay and bank transfer payments. Other types of payments cannot be refunded through our API at the moment.
 
 ```python
-payment = mollie_client.payment.get(payment.id)
+payment = mollie_client.payments.get(payment.id)
 
 # Refund € 2 of this payment
 refund = mollie_client.refunds.on(payment).create({
