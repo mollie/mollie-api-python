@@ -1,6 +1,4 @@
-import json
-
-from ..error import RequestSetupError, ResponseError, ResponseHandlingError
+from ..error import ResponseError, ResponseHandlingError
 from ..objects.list import List
 
 
@@ -21,54 +19,29 @@ class Base(object):
     def get_resource_name(self):
         return self.__class__.__name__.lower()
 
-    def rest_create(self, data, params=None):
+    def create(self, data=None, **params):
         path = self.get_resource_name()
         result = self.perform_api_call(self.REST_CREATE, path, data, params)
         return self.get_resource_object(result)
 
-    def rest_read(self, resource_id, params=None):
+    def get(self, resource_id, **params):
         path = self.get_resource_name() + '/' + str(resource_id)
         result = self.perform_api_call(self.REST_READ, path, params=params)
         return self.get_resource_object(result)
 
-    def rest_update(self, resource_id, data, params=None):
+    def update(self, resource_id, data=None, **params):
         path = self.get_resource_name() + '/' + str(resource_id)
         result = self.perform_api_call(self.REST_UPDATE, path, data, params)
         return self.get_resource_object(result)
 
-    def rest_delete(self, resource_id, params=None):
+    def delete(self, resource_id, data=None):
         path = self.get_resource_name() + '/' + str(resource_id)
-        return self.perform_api_call(self.REST_DELETE, path, params=params)
+        return self.perform_api_call(self.REST_DELETE, path, data)
 
-    def rest_list(self, params=None):
+    def list(self, **params):
         path = self.get_resource_name()
         result = self.perform_api_call(self.REST_LIST, path, params=params)
         return List(result, self.get_resource_object({}).__class__, client=self.client)
-
-    def create(self, data=None, **params):
-        if data is not None:
-            try:
-                data = json.dumps(data)
-            except Exception as err:
-                raise RequestSetupError("Error encoding parameters into JSON: '{error}'.".format(error=err))
-        return self.rest_create(data, params)
-
-    def get(self, resource_id, **params):
-        return self.rest_read(resource_id, params)
-
-    def update(self, resource_id, data=None, **params):
-        if data is not None:
-            try:
-                data = json.dumps(data)
-            except Exception as err:
-                raise RequestSetupError("Error encoding parameters into JSON: '{error}'.".format(error=err))
-        return self.rest_update(resource_id, data, params)
-
-    def delete(self, resource_id):
-        return self.rest_delete(resource_id)
-
-    def list(self, **params):
-        return self.rest_list(params)
 
     def perform_api_call(self, http_method, path, data=None, params=None):
         resp = self.client.perform_http_call(http_method, path, data, params)

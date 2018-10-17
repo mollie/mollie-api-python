@@ -7,6 +7,9 @@ class Error(Exception):
     def __init__(self, message):
         Exception.__init__(self, message)
 
+        # Avoid warnings about BaseException.message being deprecated.
+        self.message = message
+
     def __str__(self):
         """
         Customize string repesentation in Python 2.
