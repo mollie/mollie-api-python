@@ -34,9 +34,9 @@ class Base(object):
         result = self.perform_api_call(self.REST_UPDATE, path, data, params)
         return self.get_resource_object(result)
 
-    def delete(self, resource_id):
+    def delete(self, resource_id, data=None):
         path = self.get_resource_name() + '/' + str(resource_id)
-        return self.perform_api_call(self.REST_DELETE, path)
+        return self.perform_api_call(self.REST_DELETE, path, data)
 
     def list(self, **params):
         path = self.get_resource_name()

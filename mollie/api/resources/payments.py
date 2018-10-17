@@ -17,7 +17,7 @@ class Payments(Base):
             )
         return super(Payments, self).get(payment_id, **params)
 
-    def delete(self, payment_id):
+    def delete(self, payment_id, data=None):
         """Cancel payment and return the payment object.
 
         Deleting a payment causes the payment status to change to canceled.
@@ -28,5 +28,5 @@ class Payments(Base):
                 "Invalid payment ID: '{id}'. A payment ID should start with '{prefix}'.".format(
                     id=payment_id, prefix=self.RESOURCE_ID_PREFIX)
             )
-        result = super(Payments, self).delete(payment_id)
+        result = super(Payments, self).delete(payment_id, data)
         return self.get_resource_object(result)

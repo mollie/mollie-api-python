@@ -18,7 +18,7 @@ class CustomerSubscriptions(Base):
             )
         return super(CustomerSubscriptions, self).get(subscription_id, **params)
 
-    def delete(self, subscription_id):
+    def delete(self, subscription_id, data=None):
         """Cancel subscription and return the subscription object.
 
         Deleting a subscription causes the subscription status to changed to 'canceled'.
@@ -29,7 +29,7 @@ class CustomerSubscriptions(Base):
                 "Invalid subscription ID: '{id}'. A subscription ID should start with '{prefix}'.".format(
                     id=subscription_id, prefix=self.RESOURCE_ID_PREFIX)
             )
-        result = super(CustomerSubscriptions, self).delete(subscription_id)
+        result = super(CustomerSubscriptions, self).delete(subscription_id, data)
         return self.get_resource_object(result)
 
     def get_resource_name(self):
