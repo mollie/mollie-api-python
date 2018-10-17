@@ -1,7 +1,7 @@
+import json
 import platform
 import re
 import ssl
-import json
 
 import pkg_resources
 import requests
