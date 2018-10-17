@@ -1,6 +1,7 @@
 import platform
 import re
 import ssl
+import json
 
 import pkg_resources
 import requests
@@ -26,7 +27,7 @@ except ImportError:
 
 
 class Client(object):
-    CLIENT_VERSION = '2.0.0a0'
+    CLIENT_VERSION = '2.0.1'
     API_ENDPOINT = 'https://api.mollie.com'
     API_VERSION = 'v2'
     UNAME = ' '.join(platform.uname())
@@ -83,7 +84,12 @@ class Client(object):
             url = path
         else:
             url = '%s/%s/%s' % (self.api_endpoint, self.api_version, path)
-        data = '{}' if data is None else data
+
+        if data is not None:
+            try:
+                data = json.dumps(data)
+            except Exception as err:
+                raise RequestSetupError("Error encoding parameters into JSON: '{error}'.".format(error=err))
 
         querystring = generate_querystring(params)
         if querystring:
@@ -98,6 +104,7 @@ class Client(object):
                 headers={
                     'Accept': 'application/json',
                     'Authorization': 'Bearer {api_key}'.format(api_key=self.api_key),
+                    'Content-Type': 'application/json',
                     'User-Agent': self.USER_AGENT,
                     'X-Mollie-Client-Info': self.UNAME,
                 },

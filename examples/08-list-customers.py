@@ -60,7 +60,7 @@ def main():
             body += '<td>{id}</td>'.format(id=customer.id)
             body += '<td>{name}</td>'.format(name=customer.name)
             body += '<td>{email}</td>'.format(email=customer.email)
-            body += '<td><a href="/9-create-customer-payment?customer_id={id}">' \
+            body += '<td><a href="/09-create-customer-payment?customer_id={id}">' \
                 'Create payment for customer</a></td>'.format(id=customer.id)
             body += '<td><a href="/10-customer-payment-history?customer_id={id}">Show payment history</a>'.format(
                 id=customer.id)
