@@ -4,6 +4,7 @@ from __future__ import unicode_literals
 import sys
 from datetime import datetime
 
+import mock
 import pkg_resources
 import pytest
 
@@ -242,3 +243,16 @@ def test_client_unicode_error_py3(client, response):
     expected = 'Order line 1 is invalid. VAT amount is off. ' \
         'Expected VAT amount to be €3.47 (21.00% over €20.00), got €3.10'
     assert str(exception) == expected
+
+
+@mock.patch('mollie.api.client.requests.request')
+def test_client_request_timeout(request_mock, client):
+    """Mock requests.request in the client to be able to read if the timeout is in the request call args."""
+    response = mock.Mock(status_code=200)
+    response.json.return_value = {}
+    response.headers.get.return_value = 'application/hal+json'
+    request_mock.return_value = response
+
+    client.set_timeout(300)
+    client.payments.list()
+    assert request_mock.call_args[1]['timeout'] == 300

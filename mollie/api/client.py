@@ -49,10 +49,11 @@ class Client(object):
                 "Invalid API key: '{api_key}'. An API key must start with 'test_' or 'live_'.".format(api_key=api_key))
         return api_key
 
-    def __init__(self, api_key=None, api_endpoint=None):
+    def __init__(self, api_key=None, api_endpoint=None, timeout=None):
         self.api_endpoint = self.validate_api_endpoint(api_endpoint or self.API_ENDPOINT)
         self.api_version = self.API_VERSION
         self.api_key = self.validate_api_key(api_key) if api_key else None
+        self.timeout = timeout
         self.payments = Payments(self)
         self.payment_refunds = PaymentRefunds(self)
         self.payment_chargebacks = PaymentChargebacks(self)
@@ -70,6 +71,9 @@ class Client(object):
 
     def set_api_key(self, api_key):
         self.api_key = self.validate_api_key(api_key)
+
+    def set_timeout(self, timeout):
+        self.timeout = timeout
 
     def get_cacert(self):
         cacert = pkg_resources.resource_filename('mollie.api', 'cacert.pem')
@@ -109,7 +113,8 @@ class Client(object):
                     'X-Mollie-Client-Info': self.UNAME,
                 },
                 params=params,
-                data=data
+                data=data,
+                timeout=self.timeout,
             )
         except Exception as err:
             raise RequestError('Unable to communicate with Mollie: {error}'.format(error=err))
