@@ -1,9 +1,20 @@
+import os.path
+
 from setuptools import find_packages, setup
+
+
+def get_long_description():
+    root_dir = os.path.abspath(os.path.dirname(__file__))
+    with open(os.path.join(root_dir, 'README.md'), encoding='utf-8') as f:
+        long_description = f.read()
+    return long_description
 
 setup(
     name='mollie-api-python',
     version='2.0.3',
     license='BSD',
+    long_description=get_long_description(),
+    long_description_content_type='text/markdown',
     packages=find_packages(),
     include_package_data=True,
     description='Mollie API client for Python',
