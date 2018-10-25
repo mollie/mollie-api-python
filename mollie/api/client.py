@@ -49,7 +49,7 @@ class Client(object):
                 "Invalid API key: '{api_key}'. An API key must start with 'test_' or 'live_'.".format(api_key=api_key))
         return api_key
 
-    def __init__(self, api_key=None, api_endpoint=None, timeout=None):
+    def __init__(self, api_key=None, api_endpoint=None, timeout=10):
         self.api_endpoint = self.validate_api_endpoint(api_endpoint or self.API_ENDPOINT)
         self.api_version = self.API_VERSION
         self.api_key = self.validate_api_key(api_key) if api_key else None
