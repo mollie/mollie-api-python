@@ -31,7 +31,12 @@ setup(
     ],
     classifiers=[
         'Programming Language :: Python',
+        'Programming Language :: Python :: 2',
         'Programming Language :: Python :: 3',
+        'Development Status :: 5 - Production/Stable',
+        'Intended Audience :: Developers',
+        'License :: OSI Approved :: BSD License',
+        'Topic :: Office/Business :: Financial',
     ],
     setup_requires=["pytest-runner", ],
     tests_require=["pytest", ],
