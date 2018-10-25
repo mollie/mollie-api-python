@@ -5,9 +5,14 @@ from setuptools import find_packages, setup
 
 def get_long_description():
     root_dir = os.path.abspath(os.path.dirname(__file__))
-    with open(os.path.join(root_dir, 'README.md'), encoding='utf-8') as f:
-        long_description = f.read()
+    try:
+        readme = open(os.path.join(root_dir, 'README.md'), encoding='utf-8')
+    except TypeError:
+        # support python 2
+        readme = open(os.path.join(root_dir, 'README.md'))
+    long_description = readme.read()
     return long_description
+
 
 setup(
     name='mollie-api-python',
