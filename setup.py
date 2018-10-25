@@ -2,7 +2,7 @@ from setuptools import find_packages, setup
 
 setup(
     name='mollie-api-python',
-    version='2.0.1',
+    version='2.0.2',
     license='BSD',
     packages=find_packages(),
     include_package_data=True,

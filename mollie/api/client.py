@@ -27,7 +27,7 @@ except ImportError:
 
 
 class Client(object):
-    CLIENT_VERSION = '2.0.1'
+    CLIENT_VERSION = '2.0.2'
     API_ENDPOINT = 'https://api.mollie.com'
     API_VERSION = 'v2'
     UNAME = ' '.join(platform.uname())
