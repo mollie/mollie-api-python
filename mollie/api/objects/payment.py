@@ -14,6 +14,7 @@ class Payment(Base):
     STATUS_EXPIRED = 'expired'
     STATUS_FAILED = 'failed'
     STATUS_PAID = 'paid'
+    STATUS_AUTHORIZED = 'authorized'
 
     SEQUENCETYPE_ONEOFF = 'oneoff'
     SEQUENCETYPE_FIRST = 'first'
@@ -44,6 +45,10 @@ class Payment(Base):
     @property
     def is_cancelable(self):
         return self._get_property('isCancelable')
+
+    @property
+    def authorized_at(self):
+        return self._get_property('authorizedAt')
 
     @property
     def paid_at(self):
@@ -233,6 +238,9 @@ class Payment(Base):
 
     def is_failed(self):
         return self._get_property('status') == self.STATUS_FAILED
+
+    def is_authorized(self):
+        return self._get_property('status') == self.STATUS_AUTHORIZED
 
     def is_paid(self):
         return self._get_property('paidAt') is not None
