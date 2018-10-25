@@ -85,6 +85,7 @@ def test_get_single_payment(client, response):
     assert payment.is_cancelable is False
     assert payment.paid_at is None
     assert payment.canceled_at is None
+    assert payment.authorized_at is None
     assert payment.expires_at == '2018-03-20T09:28:37+00:00'
     assert payment.expired_at is None
     assert payment.failed_at is None
@@ -124,6 +125,7 @@ def test_get_single_payment(client, response):
     assert payment.is_expired() is False
     assert payment.is_paid() is False
     assert payment.is_failed() is False
+    assert payment.is_authorized() is False
     assert payment.has_refunds() is True
     assert payment.can_be_refunded() is False
     assert payment.has_sequence_type_first() is False
