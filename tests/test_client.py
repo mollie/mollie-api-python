@@ -4,8 +4,10 @@ from __future__ import unicode_literals
 import sys
 from datetime import datetime
 
+import mock
 import pkg_resources
 import pytest
+import requests
 
 from mollie.api.client import Client, generate_querystring
 from mollie.api.error import (
@@ -64,8 +66,10 @@ def test_client_invalid_api_key():
 
 def test_client_no_cert_bundle(monkeypatch):
     """A request should raise an error when the certificate bundle is not available."""
+
     def mockreturn(modulepath, file):
         return ''
+
     monkeypatch.setattr(pkg_resources, 'resource_filename', mockreturn)
 
     client = Client()
@@ -225,7 +229,7 @@ def test_client_unicode_error_py2(client, response):
     # handling the error should work even when utf-8 characters (€) are in the response.
     exception = err.value
     expected = 'Order line 1 is invalid. VAT amount is off. ' \
-        'Expected VAT amount to be 3.47 (21.00% over 20.00), got 3.10'
+               'Expected VAT amount to be 3.47 (21.00% over 20.00), got 3.10'
     assert str(exception) == expected
 
 
@@ -240,5 +244,29 @@ def test_client_unicode_error_py3(client, response):
     # handling the error should work even when utf-8 characters (€) are in the response.
     exception = err.value
     expected = 'Order line 1 is invalid. VAT amount is off. ' \
-        'Expected VAT amount to be €3.47 (21.00% over €20.00), got €3.10'
+               'Expected VAT amount to be €3.47 (21.00% over €20.00), got €3.10'
     assert str(exception) == expected
+
+
+@mock.patch('mollie.api.client.requests.request')
+def test_client_request_timeout(request_mock, client):
+    """Mock requests.request in the client to be able to read if the timeout is in the request call args."""
+    response = mock.Mock(status_code=200)
+    response.json.return_value = {}
+    response.headers.get.return_value = 'application/hal+json'
+    request_mock.return_value = response
+
+    client.set_timeout(300)
+    client.payments.list()
+    assert request_mock.call_args[1]['timeout'] == 300
+
+
+@mock.patch('mollie.api.client.requests.request')
+def test_client_request_timed_out(request_mock, client):
+    """Timeout should raise a RequestError."""
+    request_mock.side_effect = requests.exceptions.ReadTimeout(
+        "HTTPSConnectionPool(host='api.mollie.com', port=443): Read timed out. (read timeout=10)")
+
+    with pytest.raises(RequestError) as err:
+        client.payments.list()
+    assert "Read timed out." in str(err.value)
