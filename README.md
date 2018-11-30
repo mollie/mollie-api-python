@@ -109,7 +109,7 @@ if payment.is_paid():
 Or retrieve a collection of payments.
 
 ```python
-payments = mollie_client.payments.all()
+payments = mollie_client.payments.list()
 ```
 
 For an extensive example of listing payments with the details and status, see [Example 5 - Payments History](https://github.com/mollie/mollie-api-python/blob/master/examples/05-payments-history.py).
