@@ -7,9 +7,10 @@ python:
   - "3.6"
 
 install:
-  - pip install --upgrade pip setuptools
+  - pip install --upgrade 'pip<=18.0'  # see https://github.com/pypa/pipenv/issues/2924
+  - pip install --upgrade setuptools
   - pip install pipenv
-  - pipenv install --dev
+  - pipenv sync --dev
 
 script:
   - nosetests -s -v
