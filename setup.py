@@ -16,7 +16,7 @@ def get_long_description():
 
 setup(
     name='mollie-api-python',
-    version='2.0.5',
+    version='2.0.6',
     license='BSD',
     long_description=get_long_description(),
     long_description_content_type='text/markdown',
