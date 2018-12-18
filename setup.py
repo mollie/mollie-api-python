@@ -26,7 +26,7 @@ setup(
     author='Mollie B.V.',
     author_email='info@mollie.com',
     maintainer='Four Digits B.V.',
-    mainatiner_email='info@fourdigits.nl',
+    maintainer_email='info@fourdigits.nl',
     keywords=['mollie', 'payment', 'service', 'ideal', 'creditcard', 'mistercash', 'bancontact', 'sofort',
               'sofortbanking', 'sepa', 'bitcoin', 'paypal', 'paysafecard', 'podiumcadeaukaart', 'banktransfer',
               'direct debit', 'belfius', 'belfius direct net', 'kbc', 'cbc', 'refunds', 'payments', 'gateway',
