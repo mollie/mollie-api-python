@@ -18,6 +18,7 @@ from .resources.payment_chargebacks import PaymentChargebacks
 from .resources.payment_refunds import PaymentRefunds
 from .resources.payments import Payments
 from .resources.refunds import Refunds
+from .version import VERSION
 
 try:
     from urllib.parse import urlencode
@@ -27,7 +28,7 @@ except ImportError:
 
 
 class Client(object):
-    CLIENT_VERSION = '2.0.6'
+    CLIENT_VERSION = VERSION
     API_ENDPOINT = 'https://api.mollie.com'
     API_VERSION = 'v2'
     UNAME = ' '.join(platform.uname())

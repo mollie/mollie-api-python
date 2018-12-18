@@ -1,22 +1,43 @@
 import os.path
+import re
 
 from setuptools import find_packages, setup
 
+ROOT_DIR = os.path.abspath(os.path.dirname(__file__))
+
 
 def get_long_description():
-    root_dir = os.path.abspath(os.path.dirname(__file__))
     try:
-        readme = open(os.path.join(root_dir, 'README.md'), encoding='utf-8')
+        readme = open(os.path.join(ROOT_DIR, 'README.md'), encoding='utf-8')
     except TypeError:
         # support python 2
-        readme = open(os.path.join(root_dir, 'README.md'))
+        readme = open(os.path.join(ROOT_DIR, 'README.md'))
     long_description = readme.read()
     return long_description
 
 
+def get_version():
+    """
+    Read the version from a file (mollie/api/version.py) in the repository.
+
+    We can't import here since we might import from an installed version.
+    """
+    try:
+        version_file = open(os.path.join(ROOT_DIR, 'mollie', 'api', 'version.py'), encoding='utf=8')
+    except TypeError:
+        # support python 2
+        version_file = open(os.path.join(ROOT_DIR, 'mollie', 'api', 'version.py'))
+    contents = version_file.read()
+    match = re.search(r'VERSION = [\'"]([^\'"]+)', contents)
+    if match:
+        return match.group(1)
+    else:
+        raise RuntimeError("Can't determine package version")
+
+
 setup(
     name='mollie-api-python',
-    version='2.0.6',
+    version=get_version(),
     license='BSD',
     long_description=get_long_description(),
     long_description_content_type='text/markdown',
