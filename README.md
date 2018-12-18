@@ -38,7 +38,7 @@ $ python -m virtualenv env
 $ source env/bin/activate
 ```
 
-Install the requirements, then install Mollie itself.
+Install the additional requirements for the examples, then install the Mollie API client itself.
 ```
 $ pip install flask
 $ pip install -e .
