@@ -5,9 +5,8 @@ import sys
 from datetime import datetime
 
 import mock
-import pkg_resources
 import pytest
-import requests
+import requests.adapters
 
 from mollie.api.client import Client, generate_querystring
 from mollie.api.error import (
@@ -64,19 +63,23 @@ def test_client_invalid_api_key():
     assert excinfo.match("Invalid API key: 'invalid'")
 
 
-def test_client_no_cert_bundle(monkeypatch):
-    """A request should raise an error when the certificate bundle is not available."""
+def test_client_broken_cert_bundle(monkeypatch):
+    """
+    A request should raise an error when the certificate bundle is not available.
 
-    def mockreturn(modulepath, file):
-        return ''
+    Under circumstances it could be possible that the certifi package is not correctly installed, broken,
+    or just plain too old. Connecting to the Mollie API should fail with an error when the certificate
+    cannot be verified.
 
-    monkeypatch.setattr(pkg_resources, 'resource_filename', mockreturn)
+    We monkeypatch requests with a non-existent path at the location where certifi normally sets the correct path.
+    """
+    monkeypatch.setattr(requests.adapters, 'DEFAULT_CA_BUNDLE_PATH', '/does/not/exist')
 
     client = Client()
     client.set_api_key('test_test')
-    with pytest.raises(RequestSetupError) as excinfo:
+    with pytest.raises(RequestError) as excinfo:
         client.customers.list()
-    assert excinfo.match('Unable to load cacert.pem')
+    assert excinfo.match('Could not find a suitable TLS CA certificate bundle, invalid path: /does/not/exist')
 
 
 def test_client_generic_request_error(response):
