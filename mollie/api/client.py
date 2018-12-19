@@ -3,7 +3,6 @@ import platform
 import re
 import ssl
 
-import pkg_resources
 import requests
 
 from .error import RequestError, RequestSetupError
@@ -75,12 +74,6 @@ class Client(object):
     def set_timeout(self, timeout):
         self.timeout = timeout
 
-    def get_cacert(self):
-        cacert = pkg_resources.resource_filename('mollie.api', 'cacert.pem')
-        if not cacert or len(cacert) < 1:
-            raise RequestSetupError('Unable to load cacert.pem')
-        return cacert
-
     def perform_http_call(self, http_method, path, data=None, params=None):
         if not self.api_key:
             raise RequestSetupError('You have not set an API key. Please use set_api_key() to set the API key.')
@@ -100,11 +93,10 @@ class Client(object):
             url += '?' + querystring
             params = None
 
-        cacert = self.get_cacert()
         try:
             response = requests.request(
                 http_method, url,
-                verify=cacert,
+                verify=True,
                 headers={
                     'Accept': 'application/json',
                     'Authorization': 'Bearer {api_key}'.format(api_key=self.api_key),
