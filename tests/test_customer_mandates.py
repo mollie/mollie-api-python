@@ -107,3 +107,14 @@ def test_update_customer_mandate(client, response):
     mandate = client.customer_mandates.with_parent_id(CUSTOMER_ID).update(MANDATE_ID, data=data)
     assert isinstance(mandate, Mandate)
     assert mandate.id == MANDATE_ID
+
+
+def test_revoke_customer_mandate(client, response):
+    response.delete(
+        'https://api.mollie.com/v2/customers/%s/mandates/%s' % (CUSTOMER_ID, MANDATE_ID),
+        'empty',
+        204
+    )
+
+    resp = client.customer_mandates.with_parent_id(CUSTOMER_ID).delete(MANDATE_ID)
+    assert resp == {}
