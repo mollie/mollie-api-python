@@ -9,7 +9,7 @@ test: develop
 	pipenv run pyflakes .
 	pipenv run pycodestyle
 	pipenv run isort --recursive --check-only
-	pipenv check
+	pipenv check --ignore 36810
 
 .PHONY: clean
 clean:
