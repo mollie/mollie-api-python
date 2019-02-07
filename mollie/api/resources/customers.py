@@ -7,7 +7,7 @@ class Customers(Base):
     RESOURCE_ID_PREFIX = 'cst_'
 
     def get_resource_object(self, result):
-        return Customer(result, self)
+        return Customer(result, client=self.client)
 
     def get(self, customer_id, **params):
         if not customer_id or not customer_id.startswith(self.RESOURCE_ID_PREFIX):

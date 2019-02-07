@@ -53,6 +53,8 @@ def test_list_customers(client, response):
 def test_get_customer(client, response):
     """Retrieve a single customer."""
     response.get('https://api.mollie.com/v2/customers/%s' % CUSTOMER_ID, 'customer_new')
+    response.get('https://api.mollie.com/v2/customers/%s/subscriptions' % CUSTOMER_ID, 'subscriptions_list')
+    response.get('https://api.mollie.com/v2/customers/%s/mandates' % CUSTOMER_ID, 'customer_mandates_list')
     response.get('https://api.mollie.com/v2/customers/%s/payments' % CUSTOMER_ID, 'customer_payments_multiple')
 
     customer = client.customers.get(CUSTOMER_ID)
@@ -65,8 +67,8 @@ def test_get_customer(client, response):
     assert customer.mode == 'test'
     assert customer.resource == 'customer'
     assert customer.created_at == '2018-04-06T13:10:19.0Z'
-    assert customer.subscriptions is None
-    assert customer.mandates is None
+    assert customer.subscriptions is not None
+    assert customer.mandates is not None
     assert customer.payments is not None
 
 

@@ -1,5 +1,4 @@
 from .base import Base
-from .list import List
 
 
 class Customer(Base):
@@ -43,26 +42,14 @@ class Customer(Base):
     @property
     def subscriptions(self):
         """Return the subscription list for the customer."""
-        from .subscription import Subscription
-        url = self._get_link('subscriptions')
-        if url:
-            resp = self._resource.perform_api_call(self._resource.REST_READ, url)
-            return List(resp, Subscription)
+        return self.client.customer_subscriptions.on(self).list()
 
     @property
     def mandates(self):
         """Return the mandate list for the customer."""
-        from .mandate import Mandate  # work around circular import
-        url = self._get_link('mandates')
-        if url:
-            resp = self._resource.perform_api_call(self._resource.REST_READ, url)
-            return List(resp, Mandate)
+        return self.client.customer_mandates.on(self).list()
 
     @property
     def payments(self):
         """Return the payment list for the customer."""
-        from .payment import Payment  # work around circular import
-        url = self._get_link('payments')
-        if url:
-            resp = self._resource.perform_api_call(self._resource.REST_READ, url)
-            return List(resp, Payment)
+        return self.client.customer_payments.on(self).list()
