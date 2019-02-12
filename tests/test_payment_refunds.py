@@ -31,7 +31,6 @@ def test_get_refund(client, response):
     assert refund.created_at == '2018-03-14T17:09:02.0Z'
     # properties from _links
     assert refund.payment is not None
-    assert refund.settlement is None
     assert isinstance(refund.order, Order)
     # additional methods
     assert refund.is_queued() is False
