@@ -10,6 +10,7 @@ import requests.adapters
 
 from mollie.api.client import Client, generate_querystring
 from mollie.api.error import (
+    DataConsistencyError,
     IdentifierError,
     NotFoundError,
     RequestError,
@@ -273,3 +274,20 @@ def test_client_request_timed_out(request_mock, client):
     with pytest.raises(RequestError) as err:
         client.payments.list()
     assert "Read timed out." in str(err.value)
+
+
+def test_client_data_consistency_error(client, response):
+    """When the API sends us data we did not expect raise an consistency error."""
+    order_id = 'ord_kEn1PlbGa'
+    line_id = 'odl_12345'
+    response.get('https://api.mollie.com/v2/orders/{order_id}'.format(order_id=order_id), 'order_single')
+    response.patch('https://api.mollie.com/v2/orders/{order_id}/lines/{order_line_id}'.format(
+        order_id=order_id, order_line_id=line_id), 'order_single')
+
+    order = client.orders.get(order_id)
+    data = {
+        "name": "LEGO 71043 Hogwarts™ Castle",
+    }
+    # Update an nonexistent order line. This raises an data consistency error.
+    with pytest.raises(DataConsistencyError, match=r'Line id .* not found in response.'):
+        order.update_line(line_id, data)

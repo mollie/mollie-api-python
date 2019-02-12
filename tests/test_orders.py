@@ -63,7 +63,7 @@ def test_get_order(client, response):
     assert order.authorized_at is None
     assert order.canceled_at is None
     assert order.completed_at is None
-    assert order.checkout_url == 'https://www.mollie.com/payscreen/order/checkout/pbjz8x'
+    assert order.checkout_url == 'https://www.mollie.com/payscreen/order/checkout/kEn1PlbGa'
     assert_list_object(order.shipments, Shipment)
     assert_list_object(order.refunds, Refund)
 
