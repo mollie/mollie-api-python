@@ -6,7 +6,7 @@ class Shipments(Base):
     order_id = None
 
     def get_resource_object(self, result):
-        return Shipment(result, client=self.client)
+        return Shipment(result, self.client)
 
     def get_resource_name(self):
         return 'orders/{id}/shipments'.format(id=self.order_id)

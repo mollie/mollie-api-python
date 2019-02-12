@@ -196,7 +196,7 @@ class Payment(Base):
         url = self._get_link('order')
         if url:
             resp = self.client.orders.perform_api_call(self.client.orders.REST_READ, url)
-            return Order(resp, client=self.client)
+            return Order(resp, self.client)
 
     # additional methods
 

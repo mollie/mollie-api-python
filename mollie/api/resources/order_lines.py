@@ -9,7 +9,7 @@ class OrderLines(Base):
         return 'orders/{order_id}/lines'.format(order_id=self.order_id)
 
     def get_resource_object(self, result):
-        return OrderLine(result, client=self.client)
+        return OrderLine(result, self.client)
 
     def with_parent_id(self, order_id):
         self.order_id = order_id

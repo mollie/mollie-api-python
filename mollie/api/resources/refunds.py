@@ -7,7 +7,7 @@ class Refunds(Base):
     RESOURCE_ID_PREFIX = 're_'
 
     def get_resource_object(self, result):
-        return Refund(result, client=self.client)
+        return Refund(result, self.client)
 
     def get(self, refund_id, **params):
         if not refund_id or not refund_id.startswith(self.RESOURCE_ID_PREFIX):

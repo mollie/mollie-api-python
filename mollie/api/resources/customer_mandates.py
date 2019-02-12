@@ -8,7 +8,7 @@ class CustomerMandates(Base):
     customer_id = None
 
     def get_resource_object(self, result):
-        return Mandate(result, client=self.client)
+        return Mandate(result, self.client)
 
     def get(self, mandate_id, **params):
         if not mandate_id or not mandate_id.startswith(self.RESOURCE_ID_PREFIX):
