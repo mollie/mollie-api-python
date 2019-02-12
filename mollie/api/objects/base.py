@@ -1,12 +1,9 @@
 class Base(dict):
-    def __init__(self, data, resource=None, client=None):
+    def __init__(self, data, client=None):
         """
         Create a new object from API result data.
-
-        TODO: remove self._resource when all of its usage is refactored to using self.client
         """
         super(Base, self).__init__(data)
-        self._resource = resource
         self.client = client
 
     def _get_property(self, name):
