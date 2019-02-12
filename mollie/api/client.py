@@ -17,6 +17,7 @@ from .resources.payment_chargebacks import PaymentChargebacks
 from .resources.payment_refunds import PaymentRefunds
 from .resources.payments import Payments
 from .resources.refunds import Refunds
+from .resources.subscription_payments import SubscriptionPayments
 from .version import VERSION
 
 try:
@@ -65,6 +66,7 @@ class Client(object):
         self.customer_subscriptions = CustomerSubscriptions(self)
         self.customer_payments = CustomerPayments(self)
         self.orders = Orders(self)
+        self.subscription_payments = SubscriptionPayments(self)
 
     def set_api_endpoint(self, api_endpoint):
         self.api_endpoint = self.validate_api_endpoint(api_endpoint)

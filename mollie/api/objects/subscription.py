@@ -88,3 +88,9 @@ class Subscription(Base):
         if url:
             resp = self.client.customers.perform_api_call(self.client.customers.REST_READ, url)
             return Customer(resp)
+
+    @property
+    def payments(self):
+        """Return a list of payments for this subscription."""
+        payments = self.client.subscription_payments.on(self).list()
+        return payments
