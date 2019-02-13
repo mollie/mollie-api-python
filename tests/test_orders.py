@@ -1,6 +1,7 @@
 from mollie.api.objects.order import Order
 from mollie.api.objects.refund import Refund
 from mollie.api.objects.shipment import Shipment
+from mollie.api.objects.payment import Payment
 
 from .utils import assert_list_object
 
@@ -225,3 +226,13 @@ def test_cancel_order_lines(client, response):
     }
     canceled = order.cancel_lines(data)
     assert canceled == {}
+
+def test_create_order_payment(client, response):
+    """Create a payment for an order."""
+    response.get('https://api.mollie.com/v2/orders/{order_id}'.format(order_id=ORDER_ID), 'order_single')
+    response.post('https://api.mollie.com/v2/orders/{order_id}/payments'.format(order_id=ORDER_ID), 'payment_single')
+
+    order = client.orders.get(ORDER_ID)
+    payment = order.create_payment()
+
+    assert isinstance(payment, Payment)
