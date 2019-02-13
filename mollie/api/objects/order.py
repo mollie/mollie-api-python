@@ -1,6 +1,6 @@
+from ..resources.order_payments import OrderPayments
 from ..resources.order_refunds import OrderRefunds
 from ..resources.shipments import Shipments
-from ..resources.order_payments import OrderPayments
 from .base import Base
 from .list import List
 from .order_line import OrderLine
