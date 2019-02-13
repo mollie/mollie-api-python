@@ -1,5 +1,6 @@
 from ..resources.order_refunds import OrderRefunds
 from ..resources.shipments import Shipments
+from ..resources.order_payments import OrderPayments
 from .base import Base
 from .list import List
 from .order_line import OrderLine
@@ -202,3 +203,7 @@ class Order(Base):
     def update_shipment(self, resource_id, data):
         """Update the tracking information of a shipment."""
         return Shipments(self.client).on(self).update(resource_id, data)
+
+    def create_payment(self, data=None):
+        """ Creates a new payment object for an order. """
+        return OrderPayments(self.client).on(self).create(data)
