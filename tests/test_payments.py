@@ -113,7 +113,6 @@ def test_get_single_payment(client, response):
     assert payment.checkout_url == 'https://www.mollie.com/payscreen/select-method/7UhSN1zuXS'
     assert payment.refunds is not None
     assert payment.chargebacks is not None
-    assert payment.settlement is None
     assert payment.mandate is not None
     assert payment.subscription is not None
     assert payment.customer is not None

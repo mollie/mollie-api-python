@@ -1,5 +1,4 @@
 from .base import Base
-from .list import List
 
 
 class Payment(Base):
@@ -159,59 +158,36 @@ class Payment(Base):
     @property
     def refunds(self):
         """Return the refunds related to this payment."""
-        from .refund import Refund
-        url = self._get_link('refunds')
-        if url:
-            resp = self._resource.perform_api_call(self._resource.REST_READ, url)
-            return List(resp, Refund)
+        return self.client.payment_refunds.on(self).list()
 
     @property
     def chargebacks(self):
         """Return the chargebacks related to this payment."""
-        from .chargeback import Chargeback
-        url = self._get_link('chargebacks')
-        if url:
-            resp = self._resource.perform_api_call(self._resource.REST_READ, url)
-            return List(resp, Chargeback)
+        return self.client.payment_chargebacks.on(self).list()
 
-    @property
-    def settlement(self):
-        """
-        Return the settlement for this payment.
+    # @property
+    # def settlement(self):
+    #     """
+    #     Return the settlement for this payment.
 
-        TODO: Before we can return a Settlement object, we need to implement the Settlement API.
-        """
-        url = self._get_link('settlement')
-        if url:
-            resp = self._resource.perform_api_call(self._resource.REST_READ, url)
-            return resp
+    #     TODO: Before we can return a Settlement object, we need to implement the Settlement API.
+    #     """
+    #     pass
 
     @property
     def mandate(self):
         """Return the mandate for this payment."""
-        from .mandate import Mandate
-        url = self._get_link('mandate')
-        if url:
-            resp = self._resource.perform_api_call(self._resource.REST_READ, url)
-            return Mandate(resp)
+        return self.client.customer_mandates.with_parent_id(self.customer_id).get(self.mandate_id)
 
     @property
     def subscription(self):
         """Return the subscription for this payment."""
-        from .subscription import Subscription
-        url = self._get_link('subscription')
-        if url:
-            resp = self._resource.perform_api_call(self._resource.REST_READ, url)
-            return Subscription(resp)
+        return self.client.customer_subscriptions.with_parent_id(self.customer_id).get(self.subscription_id)
 
     @property
     def customer(self):
         """Return the customer for this payment."""
-        from .customer import Customer
-        url = self._get_link('customer')
-        if url:
-            resp = self._resource.perform_api_call(self._resource.REST_READ, url)
-            return Customer(resp)
+        return self.client.customers.get(self.customer_id)
 
     @property
     def order(self):
@@ -219,8 +195,8 @@ class Payment(Base):
         from ..resources.orders import Order
         url = self._get_link('order')
         if url:
-            resp = self._resource.perform_api_call(self._resource.REST_READ, url)
-            return Order(resp, client=self.client)
+            resp = self.client.orders.perform_api_call(self.client.orders.REST_READ, url)
+            return Order(resp, self.client)
 
     # additional methods
 

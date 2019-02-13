@@ -86,5 +86,5 @@ class Subscription(Base):
         """Return the customer for this subscription."""
         url = self._get_link('customer')
         if url:
-            resp = self._resource.perform_api_call(self._resource.REST_READ, url)
+            resp = self.client.customers.perform_api_call(self.client.customers.REST_READ, url)
             return Customer(resp)

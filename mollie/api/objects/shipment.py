@@ -38,7 +38,7 @@ class Shipment(Base):
             },
             'count': len(lines),
         }
-        return List(result, OrderLine, client=self.client)
+        return List(result, OrderLine, self.client)
 
     @property
     def order(self):

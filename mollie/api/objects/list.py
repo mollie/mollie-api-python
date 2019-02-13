@@ -5,7 +5,7 @@ class List(Base):
     current = None
 
     def __init__(self, result, object_type, client=None):
-        super(List, self).__init__(result, client=client)
+        super(List, self).__init__(result, client)
         self.object_type = object_type
 
     def __len__(self):
@@ -25,7 +25,7 @@ class List(Base):
             self.current += 1
         try:
             item = self['_embedded'][self.object_type.get_object_name()][self.current]
-            return self.object_type(item, client=self.client)
+            return self.object_type(item, self.client)
         except IndexError:
             self.current = None
             raise StopIteration
@@ -51,11 +51,11 @@ class List(Base):
         url = self._get_link('next')
         resource = self.object_type.get_resource_class(self.client)
         resp = resource.perform_api_call(resource.REST_READ, url)
-        return List(resp, self.object_type, client=self.client)
+        return List(resp, self.object_type, self.client)
 
     def get_previous(self):
         """Return the previous set of objects in a list"""
         url = self._get_link('previous')
         resource = self.object_type.get_resource_class(self.client)
         resp = resource.perform_api_call(resource.REST_READ, url)
-        return List(resp, self.object_type, client=self.client)
+        return List(resp, self.object_type, self.client)

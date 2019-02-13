@@ -50,7 +50,7 @@ class Refund(Base):
             },
             'count': len(lines),
         }
-        return List(result, OrderLine, client=self.client)
+        return List(result, OrderLine, self.client)
 
     @property
     def payment_id(self):
@@ -69,33 +69,21 @@ class Refund(Base):
     @property
     def payment(self):
         """Return the payment for this refund."""
-        from .payment import Payment
-        url = self._get_link('payment')
-        if url:
-            resp = self._resource.perform_api_call(self._resource.REST_READ, url)
-            return Payment(resp)
+        return self.client.payments.get(self.payment_id)
 
-    @property
-    def settlement(self):
-        """
-        Return the settlement for this refund.
+    # @property
+    # def settlement(self):
+    #     """
+    #     Return the settlement for this refund.
 
-        TODO: Before we can return an Settlement object, we need to implement the Setlement API.
-        """
-        url = self._get_link('settlement')
-        if url:
-            resp = self._resource.perform_api_call(self._resource.REST_READ, url)
-            return resp
+    #     TODO: Before we can return an Settlement object, we need to implement the Setlement API.
+    #     """
+    #     pass
 
     @property
     def order(self):
         """Return the order for this refund."""
-        from ..resources.orders import Order
-
-        url = self._get_link('order')
-        if url:
-            resp = self._resource.perform_api_call(self._resource.REST_READ, url)
-            return Order(resp, client=self.client)
+        return self.client.orders.get(self.order_id)
 
     # additional methods
 
