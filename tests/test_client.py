@@ -51,17 +51,15 @@ def test_client_querystring(client, response):
 def test_client_no_api_key():
     """A Request without an API key should raise an error."""
     client = Client()
-    with pytest.raises(RequestSetupError) as excinfo:
+    with pytest.raises(RequestSetupError, match='You have not set an API key.'):
         client.customers.list()
-    assert excinfo.match('You have not set an API key.')
 
 
 def test_client_invalid_api_key():
     """Setting up an invalid api key raises an error."""
     client = Client()
-    with pytest.raises(RequestSetupError) as excinfo:
+    with pytest.raises(RequestSetupError, match="Invalid API key: 'invalid'"):
         client.set_api_key('invalid')
-    assert excinfo.match("Invalid API key: 'invalid'")
 
 
 def test_client_broken_cert_bundle(monkeypatch):
@@ -78,9 +76,10 @@ def test_client_broken_cert_bundle(monkeypatch):
 
     client = Client()
     client.set_api_key('test_test')
-    with pytest.raises(RequestError) as excinfo:
+    with pytest.raises(
+            RequestError,
+            match='Could not find a suitable TLS CA certificate bundle, invalid path: /does/not/exist'):
         client.customers.list()
-    assert excinfo.match('Could not find a suitable TLS CA certificate bundle, invalid path: /does/not/exist')
 
 
 def test_client_generic_request_error(response):
@@ -92,25 +91,22 @@ def test_client_generic_request_error(response):
     client = Client()
     client.set_api_key('test_test')
     client.set_api_endpoint('https://api.mollie.invalid/')
-    with pytest.raises(RequestError) as excinfo:
+    with pytest.raises(RequestError, match='Unable to communicate with Mollie: Connection refused'):
         client.customers.list()
-    assert excinfo.match('Unable to communicate with Mollie: Connection refused')
 
 
 def test_client_invalid_create_data(client):
     """Invalid data for a create command should raise an error."""
     data = datetime.now()
-    with pytest.raises(RequestSetupError) as excinfo:
+    with pytest.raises(RequestSetupError, match='Error encoding parameters into JSON'):
         client.customers.create(data=data)
-    assert excinfo.match('Error encoding parameters into JSON')
 
 
 def test_client_invalid_update_data(client):
     """Invalid data for a create command should raise an error."""
     data = datetime.now()
-    with pytest.raises(RequestSetupError) as excinfo:
+    with pytest.raises(RequestSetupError, match='Error encoding parameters into JSON'):
         client.customers.update('cst_12345', data=data)
-    assert excinfo.match('Error encoding parameters into JSON')
 
 
 @pytest.mark.parametrize('endpoint, errorstr', [
@@ -121,9 +117,8 @@ def test_client_invalid_update_data(client):
 ])
 def test_client_get_invalid_id(client, endpoint, errorstr):
     """An invalid formatted object ID should raise an error."""
-    with pytest.raises(IdentifierError) as excinfo:
+    with pytest.raises(IdentifierError, match=errorstr):
         getattr(client, endpoint).get('invalid')
-    assert excinfo.match(errorstr)
 
 
 @pytest.mark.parametrize('endpoint, errorstr', [
@@ -133,9 +128,8 @@ def test_client_get_invalid_id(client, endpoint, errorstr):
 ])
 def test_client_get_customer_related_invalid_id(client, endpoint, errorstr):
     """An invalid formatted object ID should raise an error."""
-    with pytest.raises(IdentifierError) as excinfo:
+    with pytest.raises(IdentifierError, match=errorstr):
         getattr(client, endpoint).with_parent_id('cst_12345').get('invalid')
-    assert excinfo.match(errorstr)
 
 
 @pytest.mark.parametrize('endpoint, errorstr', [
@@ -144,17 +138,15 @@ def test_client_get_customer_related_invalid_id(client, endpoint, errorstr):
 ])
 def test_client_get_payment_related_invalid_id(client, endpoint, errorstr):
     """An invalid formatted object ID should raise an error."""
-    with pytest.raises(IdentifierError) as excinfo:
+    with pytest.raises(IdentifierError, match=errorstr):
         getattr(client, endpoint).with_parent_id('tr_12345').get('invalid')
-    assert excinfo.match(errorstr)
 
 
 def test_client_invalid_json_response(client, response):
     """An invalid json response should raise an error."""
     response.get('https://api.mollie.com/v2/customers', 'invalid_json')
-    with pytest.raises(ResponseHandlingError) as excinfo:
+    with pytest.raises(ResponseHandlingError, match=r'Unable to decode Mollie API response \(status code: 200\)'):
         client.customers.list()
-    assert excinfo.match(r'Unable to decode Mollie API response \(status code: 200\)')
 
 
 @pytest.mark.parametrize('resp_payload, resp_status, exception, errormsg', [
@@ -166,9 +158,8 @@ def test_client_invalid_json_response(client, response):
 def test_client_get_received_error_response(client, response, resp_payload, resp_status, exception, errormsg):
     """An error response from the API should raise a matching error."""
     response.get('https://api.mollie.com/v2/customers/cst_doesnotexist', resp_payload, status=resp_status)
-    with pytest.raises(exception) as excinfo:
+    with pytest.raises(exception, match=errormsg) as excinfo:
         client.customers.get('cst_doesnotexist')
-    assert excinfo.match(errormsg)
     assert excinfo.value.status == resp_status
 
 
@@ -180,9 +171,8 @@ def test_client_get_received_error_response(client, response, resp_payload, resp
 def test_client_delete_received_error_response(client, response, resp_payload, resp_status, exception, errormsg):
     """When deleting, an error response from the API should raise a matching error."""
     response.delete('https://api.mollie.com/v2/customers/cst_doesnotexist', resp_payload, status=resp_status)
-    with pytest.raises(exception) as excinfo:
+    with pytest.raises(exception, match=errormsg) as excinfo:
         client.customers.delete('cst_doesnotexist')
-    assert excinfo.match(errormsg)
     assert excinfo.value.status == resp_status
 
 
@@ -198,9 +188,8 @@ def test_client_response_404_but_no_payload(response):
     client.api_version = 'v3'
     client.set_api_key('test_test')
 
-    with pytest.raises(ResponseHandlingError) as excinfo:
+    with pytest.raises(ResponseHandlingError, match='Invalid API version'):
         client.customers.list()
-    assert excinfo.match('Invalid API version')
 
 
 def test_client_error_including_field_response(client, response):
@@ -216,9 +205,8 @@ def test_client_error_including_field_response(client, response):
         'redirectUrl': 'https://webshop.example.org/order/12345/',
         'webhookUrl': 'https://webshop.example.org/payments/webhook/',
     }
-    with pytest.raises(UnprocessableEntityError) as excinfo:
+    with pytest.raises(UnprocessableEntityError, match='The amount is higher than the maximum') as excinfo:
         client.payments.create(**params)
-    assert excinfo.match('The amount is higher than the maximum')
     assert excinfo.value.field == 'amount'
 
 
@@ -271,9 +259,8 @@ def test_client_request_timed_out(request_mock, client):
     request_mock.side_effect = requests.exceptions.ReadTimeout(
         "HTTPSConnectionPool(host='api.mollie.com', port=443): Read timed out. (read timeout=10)")
 
-    with pytest.raises(RequestError) as err:
+    with pytest.raises(RequestError, match='Read timed out.'):
         client.payments.list()
-    assert "Read timed out." in str(err.value)
 
 
 def test_client_data_consistency_error(client, response):
