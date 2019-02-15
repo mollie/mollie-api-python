@@ -3,6 +3,7 @@ import pytest
 from mollie.api.error import IdentifierError
 from mollie.api.objects.customer import Customer
 from mollie.api.objects.method import Method
+from mollie.api.objects.payment import Payment
 from mollie.api.objects.subscription import Subscription
 
 from .utils import assert_list_object
@@ -129,3 +130,15 @@ def test_update_customer_subscription(client, response):
     subscription = client.customer_subscriptions.with_parent_id(CUSTOMER_ID).update(SUBSCRIPTION_ID, data)
     assert isinstance(subscription, Subscription)
     assert subscription.id == SUBSCRIPTION_ID
+
+
+def test_customer_subscription_get_related_payments(client, response):
+    """Retrieve a list of payments related to the subscription. """
+    response.get('https://api.mollie.com/v2/customers/%s/subscriptions/%s' % (CUSTOMER_ID, SUBSCRIPTION_ID),
+                 'subscription_single')
+    response.get('https://api.mollie.com/v2/customers/%s' % CUSTOMER_ID, 'customer_single')
+    response.get('https://api.mollie.com/v2/customers/%s/subscription/%s/payments' % (CUSTOMER_ID, SUBSCRIPTION_ID),
+                 'payments_list')
+    subscription = client.customer_subscriptions.with_parent_id(CUSTOMER_ID).get(SUBSCRIPTION_ID)
+    payments = subscription.payments
+    assert_list_object(payments, Payment)
