@@ -99,3 +99,12 @@ class UnprocessableEntityError(ResponseError):
     """
 
     pass
+
+
+class DataConsistencyError(Error):
+    """
+    We could not process the API response due to an inconsistency.
+
+    We received different data than expected from the API.
+    """
+    pass

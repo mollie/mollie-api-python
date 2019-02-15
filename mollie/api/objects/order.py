@@ -1,3 +1,4 @@
+from ..resources.order_lines import OrderLines
 from ..resources.order_payments import OrderPayments
 from ..resources.order_refunds import OrderRefunds
 from ..resources.shipments import Shipments
@@ -184,6 +185,10 @@ class Order(Base):
             'count': len(lines),
         }
         return List(result, OrderLine, self.client)
+
+    def update_line(self, resource_id, data):
+        """Update a line for an order."""
+        return OrderLines(self.client).on(self).update(resource_id, data)
 
     @property
     def shipments(self):

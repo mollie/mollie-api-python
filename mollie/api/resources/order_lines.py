@@ -1,3 +1,4 @@
+from ..error import DataConsistencyError
 from ..objects.order_line import OrderLine
 from .base import Base
 
@@ -22,9 +23,26 @@ class OrderLines(Base):
         """
         Custom handling for deleting orderlines.
 
-        Orderlines are deleted by issueing a DELETE on the orders/*/lines endpoint,
+        Orderlines are deleted by issuing a DELETE on the orders/*/lines endpoint,
         with the orderline IDs and quantities in the request body.
         """
         path = self.get_resource_name()
         result = self.perform_api_call(self.REST_DELETE, path, data=data)
         return result
+
+    def update(self, resource_id, data=None, **params):
+        """
+        Custom handling for updating orderlines.
+
+        The API returns an Order object. Since we are sending the request through an orderline object, it makes more
+        sense to convert the returned object to to the updated orderline object.
+
+        If you wish to retrieve the order object, you can do so by using the order_id property of the orderline.
+        """
+        path = self.get_resource_name() + '/' + str(resource_id)
+        result = self.perform_api_call(self.REST_UPDATE, path, data=data)
+
+        for line in result['lines']:
+            if line['id'] == resource_id:
+                return self.get_resource_object(line)
+        raise DataConsistencyError('Line id {resource_id} not found in response.'.format(resource_id=resource_id))
