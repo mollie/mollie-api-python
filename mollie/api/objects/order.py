@@ -204,6 +204,6 @@ class Order(Base):
         """Update the tracking information of a shipment."""
         return Shipments(self.client).on(self).update(resource_id, data)
 
-    def create_payment(self, data=None):
+    def create_payment(self, data):
         """ Creates a new payment object for an order. """
         return OrderPayments(self.client).on(self).create(data)
