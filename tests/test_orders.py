@@ -234,6 +234,7 @@ def test_create_order_payment(client, response):
     response.post('https://api.mollie.com/v2/orders/{order_id}/payments'.format(order_id=ORDER_ID), 'payment_single')
 
     order = client.orders.get(ORDER_ID)
-    payment = order.create_payment()
-
+    data = {'method': 'ideal'}
+    payment = order.create_payment(data)
     assert isinstance(payment, Payment)
+    assert payment.order_id == ORDER_ID
