@@ -106,7 +106,7 @@ def test_get_single_payment(client, response):
     assert payment.sequence_type == Payment.SEQUENCETYPE_RECURRING
     assert payment.mandate_id == MANDATE_ID
     assert payment.subscription_id == SUBSCRIPTION_ID
-    assert payment.order_id is None
+    assert payment.order_id == ORDER_ID
     assert payment.application_fee is None
     assert payment.details is None
     # properties from _links
