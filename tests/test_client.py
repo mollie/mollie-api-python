@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
+import re
 import sys
 from datetime import datetime
 
@@ -313,3 +314,82 @@ def test_client_data_consistency_error(client, response):
     # Update an nonexistent order line. This raises an data consistency error.
     with pytest.raises(DataConsistencyError, match=r'Line id .* not found in response.'):
         order.update_line(line_id, data)
+
+
+def test_client_default_user_agent(client, response):
+    """Default user-agent should contain some known values."""
+
+    regex = re.compile(r'^Mollie/[\d\.]+ Python/[\d\.]+ Openssl/\w+')
+    assert re.match(regex, client.user_agent)
+
+    # perform a request and inpect the actual used headers
+    response.get('https://api.mollie.com/v2/methods', 'methods_list')
+    client.methods.list()
+    request = response.calls[0].request
+    assert re.match(regex, request.headers['User-Agent'])
+
+
+def test_client_set_user_agent_component(response):
+    """We should be able to add useragent components.
+
+    Note: we don't use the fixture client because it is shared between tests, and we don't want it
+    to be clobbered with random User-Agent strings.
+    """
+    client = Client()
+    assert 'Hoeba' not in client.user_agent
+    client.set_user_agent_component('Hoeba', '1.0.0')
+    assert 'Hoeba/1.0.0' in client.user_agent
+
+    response.get('https://api.mollie.com/v2/methods', 'methods_list')
+    client.set_api_key('test_123')
+    client.methods.list()
+    request = response.calls[0].request
+    assert 'Hoeba/1.0.0' in request.headers['User-Agent']
+
+
+@pytest.mark.parametrize("key, expected", [
+    ('lowercase', 'Lowercase'),
+    ('UPPERCASE', 'Uppercase'),
+    ('multiple words', 'MultipleWords'),
+    ('multiple   spaces', 'MultipleSpaces'),
+    ('trailing space ', 'TrailingSpace')
+])
+def test_client_set_user_agent_component_correct_key_syntax(key, expected):
+    """When we receive UA component keys that don't adhere to the proposed syntax, they are corrected."""
+    client = Client()
+    client.set_user_agent_component(key, '1.0.0')
+    assert "{expected}/1.0.0".format(expected=expected) in client.user_agent
+
+
+@pytest.mark.parametrize("value, expected", [
+    ('1.2.3', '1.2.3'),
+    ('singleword', 'singleword'),
+    ('MiXedCaSe', 'MiXedCaSe'),  # should be preserved
+    ('UPPERCASE', 'UPPERCASE'),  # should be preserved
+    ('with space', 'with_space'),
+    ('multiple   spaces', 'multiple_spaces'),
+    ('trailing space ', 'trailing_space')
+])
+def test_client_set_user_agent_component_correct_value_syntax(value, expected):
+    """When we receive UA component values that don't adhere to the proposed syntax, they are corrected."""
+    client = Client()
+    client.set_user_agent_component('Something', value)
+    assert "Something/{expected}".format(expected=expected) in client.user_agent
+
+
+def test_client_update_user_agent_component():
+    """We should be able to update the User-Agent component when using the same key."""
+    client = Client()
+    client.set_user_agent_component('Test', '1.0.0')
+    assert 'Test/1.0.0' in client.user_agent
+
+    # now update the component using the same key
+    client.set_user_agent_component('Test', '2.0.0')
+    assert 'Test/2.0.0' in client.user_agent
+    assert 'Test/1.0.0' not in client.user_agent
+
+    # and update with a key that will be converted to the same value
+    client.set_user_agent_component('TEST', '3.0.0')
+    assert 'Test/3.0.0' in client.user_agent
+    assert 'Test/2.0.0' not in client.user_agent
+    assert 'Test/1.0.0' not in client.user_agent
