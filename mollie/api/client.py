@@ -2,6 +2,7 @@ import json
 import platform
 import re
 import ssl
+import warnings
 
 import requests
 
@@ -50,10 +51,19 @@ class Client(object):
                 "Invalid API key: '{api_key}'. An API key must start with 'test_' or 'live_'.".format(api_key=api_key))
         return api_key
 
+    @staticmethod
+    def validate_access_token(access_token):
+        access_token = access_token.strip()
+        if not access_token.startswith('access_'):
+            raise RequestSetupError(
+                "Invalid access token: '{access_token}'. An access token must start with 'access_'.".format(
+                    access_token=access_token))
+        return access_token
+
     def __init__(self, api_key=None, api_endpoint=None, timeout=10):
         self.api_endpoint = self.validate_api_endpoint(api_endpoint or self.API_ENDPOINT)
         self.api_version = self.API_VERSION
-        self.api_key = self.validate_api_key(api_key) if api_key else None
+        self.api_key = None
         self.timeout = timeout
         self.payments = Payments(self)
         self.payment_refunds = PaymentRefunds(self)
@@ -68,11 +78,25 @@ class Client(object):
         self.orders = Orders(self)
         self.subscription_payments = SubscriptionPayments(self)
 
+        if api_key:
+            # There is no clean way for supporting both API key and access token acceptance and validation
+            #  in __init__(). Furthermore the naming of the parameter would be inconsistent.
+            # Using class methods is way cleaner.
+            #
+            # Warning added in 2.1.1, remove support in 2.3.x or so.
+            msg = "Setting the API key during init will be removed in the future. " \
+                  "Use Client.set_api_key() or Client.set_access_token() instead."
+            warnings.warn(msg, PendingDeprecationWarning)
+            self.api_key = self.validate_api_key(api_key)
+
     def set_api_endpoint(self, api_endpoint):
         self.api_endpoint = self.validate_api_endpoint(api_endpoint)
 
     def set_api_key(self, api_key):
         self.api_key = self.validate_api_key(api_key)
+
+    def set_access_token(self, access_token):
+        self.api_key = self.validate_access_token(access_token)
 
     def set_timeout(self, timeout):
         self.timeout = timeout
