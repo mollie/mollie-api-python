@@ -108,7 +108,7 @@ class Client(object):
     def set_user_agent_component(self, key, value):
         """Add or replace new user-agent component strings.
 
-        Given string are formatted along the format agreed upon by Mollie and implementors:
+        Given strings are formatted along the format agreed upon by Mollie and implementers:
         - key and values are separated by a forward slash ("/").
         - multiple key/values are separated by a space.
         - keys are camel-cased, and cannot contain spaces.
@@ -121,6 +121,7 @@ class Client(object):
 
     @property
     def user_agent(self):
+        """Return the formatted user agent string."""
         components = ["/".join(x) for x in self.user_agent_components.items()]
         return " ".join(components)
 

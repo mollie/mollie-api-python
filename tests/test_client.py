@@ -378,6 +378,7 @@ def test_client_set_user_agent_component_correct_value_syntax(value, expected):
 
 
 def test_client_update_user_agent_component():
+    """We should be able to update the User-Agent component when using the same key."""
     client = Client()
     client.set_user_agent_component('Test', '1.0.0')
     assert 'Test/1.0.0' in client.user_agent
