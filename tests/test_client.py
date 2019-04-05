@@ -358,3 +358,18 @@ def test_client_set_user_agent_component_correct_key_syntax(key, expected):
     client = Client()
     client.set_user_agent_component(key, '1.0.0')
     assert "{expected}/1.0.0".format(expected=expected) in client.user_agent
+
+
+@pytest.mark.parametrize("value, expected", [
+    ('1.2.3', '1.2.3'),
+    ('singleword', 'singleword'),
+    ('MiXedCaSe', 'MiXedCaSe'),  # should be preserved
+    ('UPPERCASE', 'UPPERCASE'),  # should be preserved
+    ('with space', 'with_space'),
+    ('multiple   spaces', 'multiple_spaces'),
+])
+def test_client_set_user_agent_component_correct_value_syntax(value, expected):
+    """When we receive UA component values that don't adhere to the proposed syntax, they are corrected."""
+    client = Client()
+    client.set_user_agent_component('Something', value)
+    assert "Something/{expected}".format(expected=expected) in client.user_agent

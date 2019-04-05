@@ -115,6 +115,8 @@ class Client(object):
         - values cannot contain spaces.
         """
         key = ''.join(_x.capitalize() for _x in re.findall(r'\S+', key))
+        if re.search(r'\s+', value):
+            value = '_'.join(re.findall(r'\S+', value))
         self.user_agent_components[key] = value
 
     @property
