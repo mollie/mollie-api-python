@@ -329,13 +329,19 @@ def test_client_default_user_agent(client, response):
     assert re.match(regex, request.headers['User-Agent'])
 
 
-def test_client_set_user_agent_component(client, response):
-    """We should be able to add useragent components."""
+def test_client_set_user_agent_component(response):
+    """We should be able to add useragent components.
+
+    Note: we don't use the fixture client because it is shared between tests, and we don't want it
+    to be clobbered with random User-Agent strings.
+    """
+    client = Client()
     assert 'Hoeba' not in client.user_agent
     client.set_user_agent_component('Hoeba', '1.0.0')
     assert 'Hoeba/1.0.0' in client.user_agent
 
     response.get('https://api.mollie.com/v2/methods', 'methods_list')
+    client.set_api_key('test_123')
     client.methods.list()
     request = response.calls[0].request
     assert 'Hoeba/1.0.0' in request.headers['User-Agent']
@@ -347,7 +353,8 @@ def test_client_set_user_agent_component(client, response):
     ('multiple words', 'MultipleWords'),
     ('multiple   spaces', 'MultipleSpaces'),
 ])
-def test_client_set_user_agent_component_correct_key_syntax(client, key, expected):
-    """When we receive UA component values that don't adhere to the proposed syntax, they are corrected."""
+def test_client_set_user_agent_component_correct_key_syntax(key, expected):
+    """When we receive UA component keys that don't adhere to the proposed syntax, they are corrected."""
+    client = Client()
     client.set_user_agent_component(key, '1.0.0')
     assert "{expected}/1.0.0".format(expected=expected) in client.user_agent
