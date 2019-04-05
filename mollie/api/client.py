@@ -106,6 +106,15 @@ class Client(object):
         self.timeout = timeout
 
     def set_user_agent_component(self, key, value):
+        """Add or replace new user-agent component strings.
+
+        Given string are formatted along the format agreed upon by Mollie and implementors:
+        - key and values are separated by a forward slash ("/").
+        - multiple key/values are separated by a space.
+        - keys are camel-cased, and cannot contain spaces.
+        - values cannot contain spaces.
+        """
+        key = ''.join(_x.capitalize() for _x in re.findall(r'\S+', key))
         self.user_agent_components[key] = value
 
     @property

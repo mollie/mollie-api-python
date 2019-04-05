@@ -319,7 +319,7 @@ def test_client_data_consistency_error(client, response):
 def test_client_default_user_agent(client, response):
     """Default user-agent should contain some known values."""
 
-    regex = re.compile(r'^Mollie/[\d\.]+ Python/[\d\.]+ OpenSSL/\w+')
+    regex = re.compile(r'^Mollie/[\d\.]+ Python/[\d\.]+ Openssl/\w+')
     assert re.match(regex, client.user_agent)
 
     # perform a request and inpect the actual used headers
@@ -339,3 +339,15 @@ def test_client_set_user_agent_component(client, response):
     client.methods.list()
     request = response.calls[0].request
     assert 'Hoeba/1.0.0' in request.headers['User-Agent']
+
+
+@pytest.mark.parametrize("key, expected", [
+    ('lowercase', 'Lowercase'),
+    ('UPPERCASE', 'Uppercase'),
+    ('multiple words', 'MultipleWords'),
+    ('multiple   spaces', 'MultipleSpaces'),
+])
+def test_client_set_user_agent_component_correct_key_syntax(client, key, expected):
+    """When we receive UA component values that don't adhere to the proposed syntax, they are corrected."""
+    client.set_user_agent_component(key, '1.0.0')
+    assert "{expected}/1.0.0".format(expected=expected) in client.user_agent
