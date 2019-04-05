@@ -80,7 +80,8 @@ class Client(object):
         self.user_agent_components = OrderedDict()
         self.set_user_agent_component('Mollie', self.CLIENT_VERSION)
         self.set_user_agent_component('Python', platform.python_version())
-        self.set_user_agent_component('OpenSSL', ssl.OPENSSL_VERSION.split(' ')[1])
+        self.set_user_agent_component('OpenSSL', ssl.OPENSSL_VERSION.split(' ')[1],
+                                      sanitize=False)  # keep legacy formatting of this component
 
         if api_key:
             # There is no clean way for supporting both API key and access token acceptance and validation
@@ -101,11 +102,12 @@ class Client(object):
 
     def set_access_token(self, access_token):
         self.api_key = self.validate_access_token(access_token)
+        self.set_user_agent_component('OAuth', '2.0', sanitize=False)  # keep spelling equal to the PHP client
 
     def set_timeout(self, timeout):
         self.timeout = timeout
 
-    def set_user_agent_component(self, key, value):
+    def set_user_agent_component(self, key, value, sanitize=True):
         """Add or replace new user-agent component strings.
 
         Given strings are formatted along the format agreed upon by Mollie and implementers:
@@ -113,10 +115,13 @@ class Client(object):
         - multiple key/values are separated by a space.
         - keys are camel-cased, and cannot contain spaces.
         - values cannot contain spaces.
+
+        Note: When you set sanitize=false yuu need to make sure the formatting is correct yourself.
         """
-        key = ''.join(_x.capitalize() for _x in re.findall(r'\S+', key))
-        if re.search(r'\s+', value):
-            value = '_'.join(re.findall(r'\S+', value))
+        if sanitize:
+            key = ''.join(_x.capitalize() for _x in re.findall(r'\S+', key))
+            if re.search(r'\s+', value):
+                value = '_'.join(re.findall(r'\S+', value))
         self.user_agent_components[key] = value
 
     @property

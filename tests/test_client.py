@@ -319,7 +319,7 @@ def test_client_data_consistency_error(client, response):
 def test_client_default_user_agent(client, response):
     """Default user-agent should contain some known values."""
 
-    regex = re.compile(r'^Mollie/[\d\.]+ Python/[\d\.]+ Openssl/\w+')
+    regex = re.compile(r'^Mollie/[\d\.]+ Python/[\d\.]+ OpenSSL/\w+')
     assert re.match(regex, client.user_agent)
 
     # perform a request and inpect the actual used headers
@@ -327,6 +327,14 @@ def test_client_default_user_agent(client, response):
     client.methods.list()
     request = response.calls[0].request
     assert re.match(regex, request.headers['User-Agent'])
+
+
+def test_client_user_agent_with_oauth():
+    """When authenticating with an access token, the User-Agent should cont an OAuth component."""
+    client = Client()
+    assert 'OAuth'.lower() not in client.user_agent.lower()
+    client.set_access_token('access_123')
+    assert 'OAuth/2.0' in client.user_agent
 
 
 def test_client_set_user_agent_component(response):
