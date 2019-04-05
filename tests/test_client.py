@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
+import re
 import sys
 from datetime import datetime
 
@@ -313,3 +314,28 @@ def test_client_data_consistency_error(client, response):
     # Update an nonexistent order line. This raises an data consistency error.
     with pytest.raises(DataConsistencyError, match=r'Line id .* not found in response.'):
         order.update_line(line_id, data)
+
+
+def test_client_default_user_agent(client, response):
+    """Default user-agent should contain some known values."""
+
+    regex = re.compile(r'^Mollie/[\d\.]+ Python/[\d\.]+ OpenSSL/\w+')
+    assert re.match(regex, client.user_agent)
+
+    # perform a request and inpect the actual used headers
+    response.get('https://api.mollie.com/v2/methods', 'methods_list')
+    client.methods.list()
+    request = response.calls[0].request
+    assert re.match(regex, request.headers['User-Agent'])
+
+
+def test_client_set_user_agent_component(client, response):
+    """We should be able to add useragent components."""
+    assert 'Hoeba' not in client.user_agent
+    client.set_user_agent_component('Hoeba', '1.0.0')
+    assert 'Hoeba/1.0.0' in client.user_agent
+
+    response.get('https://api.mollie.com/v2/methods', 'methods_list')
+    client.methods.list()
+    request = response.calls[0].request
+    assert 'Hoeba/1.0.0' in request.headers['User-Agent']

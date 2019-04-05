@@ -3,6 +3,7 @@ import platform
 import re
 import ssl
 import warnings
+from collections import OrderedDict
 
 import requests
 
@@ -33,11 +34,6 @@ class Client(object):
     API_ENDPOINT = 'https://api.mollie.com'
     API_VERSION = 'v2'
     UNAME = ' '.join(platform.uname())
-    USER_AGENT = ' '.join(vs.replace(r'\s+', '-') for vs in [
-        'Mollie/{client_version}'.format(client_version=CLIENT_VERSION),
-        'Python/{python_version}'.format(python_version=platform.python_version()),
-        'OpenSSL/{ssl_version}'.format(ssl_version=ssl.OPENSSL_VERSION.split(' ')[1]),
-    ])
 
     @staticmethod
     def validate_api_endpoint(api_endpoint):
@@ -63,8 +59,10 @@ class Client(object):
     def __init__(self, api_key=None, api_endpoint=None, timeout=10):
         self.api_endpoint = self.validate_api_endpoint(api_endpoint or self.API_ENDPOINT)
         self.api_version = self.API_VERSION
-        self.api_key = None
         self.timeout = timeout
+        self.api_key = None
+
+        # add endpoint resources
         self.payments = Payments(self)
         self.payment_refunds = PaymentRefunds(self)
         self.payment_chargebacks = PaymentChargebacks(self)
@@ -77,6 +75,12 @@ class Client(object):
         self.customer_payments = CustomerPayments(self)
         self.orders = Orders(self)
         self.subscription_payments = SubscriptionPayments(self)
+
+        # compose base user agent string
+        self.user_agent_components = OrderedDict()
+        self.set_user_agent_component('Mollie', self.CLIENT_VERSION)
+        self.set_user_agent_component('Python', platform.python_version())
+        self.set_user_agent_component('OpenSSL', ssl.OPENSSL_VERSION.split(' ')[1])
 
         if api_key:
             # There is no clean way for supporting both API key and access token acceptance and validation
@@ -100,6 +104,14 @@ class Client(object):
 
     def set_timeout(self, timeout):
         self.timeout = timeout
+
+    def set_user_agent_component(self, key, value):
+        self.user_agent_components[key] = value
+
+    @property
+    def user_agent(self):
+        components = ["/".join(x) for x in self.user_agent_components.items()]
+        return " ".join(components)
 
     def perform_http_call(self, http_method, path, data=None, params=None):
         if not self.api_key:
@@ -128,7 +140,7 @@ class Client(object):
                     'Accept': 'application/json',
                     'Authorization': 'Bearer {api_key}'.format(api_key=self.api_key),
                     'Content-Type': 'application/json',
-                    'User-Agent': self.USER_AGENT,
+                    'User-Agent': self.user_agent,
                     'X-Mollie-Client-Info': self.UNAME,
                 },
                 params=params,
