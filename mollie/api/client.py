@@ -50,6 +50,15 @@ class Client(object):
                 "Invalid API key: '{api_key}'. An API key must start with 'test_' or 'live_'.".format(api_key=api_key))
         return api_key
 
+    @staticmethod
+    def validate_access_token(access_token):
+        access_token = access_token.strip()
+        if not access_token.startswith('access_'):
+            raise RequestSetupError(
+                "Invalid access token: '{access_token}'. An access token must start with 'access_'.".format(
+                    access_token=access_token))
+        return access_token
+
     def __init__(self, api_key=None, api_endpoint=None, timeout=10):
         self.api_endpoint = self.validate_api_endpoint(api_endpoint or self.API_ENDPOINT)
         self.api_version = self.API_VERSION
@@ -73,6 +82,9 @@ class Client(object):
 
     def set_api_key(self, api_key):
         self.api_key = self.validate_api_key(api_key)
+
+    def set_access_token(self, access_token):
+        self.api_key = self.validate_access_token(access_token)
 
     def set_timeout(self, timeout):
         self.timeout = timeout

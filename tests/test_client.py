@@ -48,6 +48,20 @@ def test_client_querystring(client, response):
     assert methods.count == 11
 
 
+def test_client_api_key():
+    """Setting up a valid api key or access token should be possible."""
+    client = Client()
+
+    client.set_access_token('access_123')
+    assert client.api_key == 'access_123'
+
+    client.set_api_key('live_123')
+    assert client.api_key == 'live_123'
+
+    client.set_api_key('test_123')
+    assert client.api_key == 'test_123'
+
+
 def test_client_no_api_key():
     """A Request without an API key should raise an error."""
     client = Client()
@@ -58,8 +72,21 @@ def test_client_no_api_key():
 def test_client_invalid_api_key():
     """Setting up an invalid api key raises an error."""
     client = Client()
+
     with pytest.raises(RequestSetupError, match="Invalid API key: 'invalid'"):
         client.set_api_key('invalid')
+
+    with pytest.raises(RequestSetupError, match="Invalid API key: 'access_123'"):
+        client.set_api_key('access_123')
+
+    with pytest.raises(RequestSetupError, match="Invalid access token: 'invalid'"):
+        client.set_access_token('invalid')
+
+    with pytest.raises(RequestSetupError, match="Invalid access token: 'live_123'"):
+        client.set_access_token('live_123')
+
+    with pytest.raises(RequestSetupError, match="Invalid access token: 'test_123'"):
+        client.set_access_token('test_123')
 
 
 def test_client_broken_cert_bundle(monkeypatch):
