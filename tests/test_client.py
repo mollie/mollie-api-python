@@ -352,6 +352,7 @@ def test_client_set_user_agent_component(response):
     ('UPPERCASE', 'Uppercase'),
     ('multiple words', 'MultipleWords'),
     ('multiple   spaces', 'MultipleSpaces'),
+    ('trailing space ', 'TrailingSpace')
 ])
 def test_client_set_user_agent_component_correct_key_syntax(key, expected):
     """When we receive UA component keys that don't adhere to the proposed syntax, they are corrected."""
@@ -367,9 +368,27 @@ def test_client_set_user_agent_component_correct_key_syntax(key, expected):
     ('UPPERCASE', 'UPPERCASE'),  # should be preserved
     ('with space', 'with_space'),
     ('multiple   spaces', 'multiple_spaces'),
+    ('trailing space ', 'trailing_space')
 ])
 def test_client_set_user_agent_component_correct_value_syntax(value, expected):
     """When we receive UA component values that don't adhere to the proposed syntax, they are corrected."""
     client = Client()
     client.set_user_agent_component('Something', value)
     assert "Something/{expected}".format(expected=expected) in client.user_agent
+
+
+def test_client_update_user_agent_component():
+    client = Client()
+    client.set_user_agent_component('Test', '1.0.0')
+    assert 'Test/1.0.0' in client.user_agent
+
+    # now update the component using the same key
+    client.set_user_agent_component('Test', '2.0.0')
+    assert 'Test/2.0.0' in client.user_agent
+    assert 'Test/1.0.0' not in client.user_agent
+
+    # and update with a key that will be converted to the same value
+    client.set_user_agent_component('TEST', '3.0.0')
+    assert 'Test/3.0.0' in client.user_agent
+    assert 'Test/2.0.0' not in client.user_agent
+    assert 'Test/1.0.0' not in client.user_agent
