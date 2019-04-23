@@ -67,7 +67,4 @@ setup(
         'License :: OSI Approved :: BSD License',
         'Topic :: Office/Business :: Financial',
     ],
-    setup_requires=["pytest-runner", ],
-    tests_require=["pytest", ],
-
 )

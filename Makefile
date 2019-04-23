@@ -1,17 +1,40 @@
+# use virtualenv or virtualenv-wrapper location based on availability
+ifdef TRAVIS
+	VIRTUALENV := $(VIRTUAL_ENV)
+endif
+ifdef WORKON_HOME
+	VIRTUALENV = $(WORKON_HOME)/mollie-api-python
+endif
+ifndef VIRTUALENV
+	VIRTUALENV = $(PWD)/venv
+endif
+
+PYTHON = $(VIRTUALENV)/bin/python
+
+
+.PHONY: virtualenv
+virtualenv: $(VIRTUALENV)  # alias
+$(VIRTUALENV):
+	virtualenv $(VIRTUALENV)
+	$(PYTHON) -m pip install --upgrade pip setuptools
+
+
 .PHONY: develop
-develop:
-	pipenv run pip install 'pip<=18.0' # see https://github.com/pypa/pipenv/issues/2924
-	pipenv sync --dev
+develop: virtualenv
+	$(PYTHON) -m pip install .
+
 
 .PHONY: test
 test: develop
-	pipenv run pytest
-	pipenv run pyflakes .
-	pipenv run pycodestyle
-	pipenv run isort --recursive --check-only
-	pipenv check --ignore 36810
+	$(PYTHON) -m pip install pytest pytest-cov responses mock pyflakes pycodestyle isort safety
+	$(PYTHON) -m pytest
+	$(PYTHON) -m pyflakes examples mollie tests
+	$(PYTHON) -m pycodestyle examples mollie tests
+	$(PYTHON) -m isort --recursive --check-only examples mollie tests
+	$(PYTHON) -m safety check
+
 
 .PHONY: clean
 clean:
-	pipenv --rm || true
-	rm -f -r dist/ .eggs/ env/ mollie_api_python.egg-info .pytest_cache
+	rm -f -r $(VIRTUALENV)
+	rm -f -r dist/ .eggs/ mollie_api_python.egg-info .pytest_cache
