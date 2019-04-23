@@ -8,3 +8,4 @@
 /.eggs
 /.pytest_cache
 /.coverage
+/venv
