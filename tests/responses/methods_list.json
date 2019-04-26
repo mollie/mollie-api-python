@@ -138,21 +138,6 @@
       },
       {
         "resource": "method",
-        "id": "bitcoin",
-        "description": "Bitcoin",
-        "image": {
-          "size1x": "https://www.mollie.com/images/payscreen/methods/bitcoin.png",
-          "size2x": "https://www.mollie.com/images/payscreen/methods/bitcoin%402x.png"
-        },
-        "_links": {
-          "self": {
-            "href": "https://api.mollie.com/v2/methods/bitcoin",
-            "type": "application/hal+json"
-          }
-        }
-      },
-      {
-        "resource": "method",
         "id": "giftcard",
         "description": "Gift cards",
         "image": {
@@ -168,7 +153,7 @@
       }
     ]
   },
-  "count": 11,
+  "count": 10,
   "_links": {
     "documentation": {
       "href": "https://docs.mollie.com/reference/v2/methods-api/list-methods",

@@ -21,6 +21,9 @@ from mollie.api.error import (
     UnauthorizedError,
     UnprocessableEntityError,
 )
+from mollie.api.objects.method import Method
+
+from .utils import assert_list_object
 
 
 @pytest.mark.parametrize('params, querystring', [
@@ -46,7 +49,7 @@ def test_client_querystring(client, response):
 
     params = {'amount': {'currency': 'USD', 'value': '100.00'}}
     methods = client.methods.list(**params)
-    assert methods.count == 11
+    assert_list_object(methods, Method)
 
 
 def test_client_api_key():

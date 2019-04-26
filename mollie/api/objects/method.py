@@ -15,7 +15,6 @@ class Method(Base):
     SOFORT = 'sofort'
     BANKTRANSFER = 'banktransfer'
     DIRECTDEBIT = 'directdebit'
-    BITCOIN = 'bitcoin'
     PAYPAL = 'paypal'
     BELFIUS = 'belfius'
     PAYSAFECARD = 'paysafecard'
