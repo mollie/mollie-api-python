@@ -37,4 +37,4 @@ test: develop
 .PHONY: clean
 clean:
 	rm -f -r $(VIRTUALENV)
-	rm -f -r dist/ .eggs/ mollie_api_python.egg-info .pytest_cache
+	rm -f -r build/ dist/ .eggs/ mollie_api_python.egg-info .pytest_cache
