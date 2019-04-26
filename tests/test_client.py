@@ -322,7 +322,7 @@ def test_client_data_consistency_error(client, response):
 def test_client_default_user_agent(client, response):
     """Default user-agent should contain some known values."""
 
-    regex = re.compile(r'^Mollie/[\d\.]+ Python/[\d\.]+ OpenSSL/\w+')
+    regex = re.compile(r'^Mollie/[\d\.]+ Python/[\w\.\+]+ OpenSSL/[\w\.]+$')
     assert re.match(regex, client.user_agent)
 
     # perform a request and inpect the actual used headers
