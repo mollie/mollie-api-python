@@ -49,7 +49,7 @@ setup(
     maintainer='Four Digits B.V.',
     maintainer_email='info@fourdigits.nl',
     keywords=['mollie', 'payment', 'service', 'ideal', 'creditcard', 'mistercash', 'bancontact', 'sofort',
-              'sofortbanking', 'sepa', 'bitcoin', 'paypal', 'paysafecard', 'podiumcadeaukaart', 'banktransfer',
+              'sofortbanking', 'sepa', 'paypal', 'paysafecard', 'podiumcadeaukaart', 'banktransfer',
               'direct debit', 'belfius', 'belfius direct net', 'kbc', 'cbc', 'refunds', 'payments', 'gateway',
               'gift cards', 'intersolve', 'fashioncheque', 'podium cadeaukaart', 'yourgift', 'vvv giftcard',
               'webshop giftcard', 'nationale entertainment card', 'ing homepay', 'klarna pay later',

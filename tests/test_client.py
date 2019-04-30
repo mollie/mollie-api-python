@@ -21,6 +21,9 @@ from mollie.api.error import (
     UnauthorizedError,
     UnprocessableEntityError,
 )
+from mollie.api.objects.method import Method
+
+from .utils import assert_list_object
 
 
 @pytest.mark.parametrize('params, querystring', [
@@ -46,7 +49,7 @@ def test_client_querystring(client, response):
 
     params = {'amount': {'currency': 'USD', 'value': '100.00'}}
     methods = client.methods.list(**params)
-    assert methods.count == 11
+    assert_list_object(methods, Method)
 
 
 def test_client_api_key():
@@ -319,7 +322,7 @@ def test_client_data_consistency_error(client, response):
 def test_client_default_user_agent(client, response):
     """Default user-agent should contain some known values."""
 
-    regex = re.compile(r'^Mollie/[\d\.]+ Python/[\d\.]+ OpenSSL/\w+')
+    regex = re.compile(r'^Mollie/[\d\.]+ Python/[\w\.\+]+ OpenSSL/[\w\.]+$')
     assert re.match(regex, client.user_agent)
 
     # perform a request and inpect the actual used headers

@@ -1,11 +1,13 @@
-/.idea
+# build artifacts
+/build
 /dist
 /*.egg-info
-.DS_Store
-*.pyc
-.python-version
-/mk-ca-bundle.pl
 /.eggs
+
+# test and local dev artifacts
 /.pytest_cache
 /.coverage
 /venv
+/.idea
+.DS_Store
+*.pyc
