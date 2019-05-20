@@ -165,6 +165,10 @@ class Payment(Base):
         """Return the chargebacks related to this payment."""
         return self.client.payment_chargebacks.on(self).list()
 
+    @property
+    def captures(self):
+        """Return the captures related to this payment"""
+        return self.client.captures.on(self).list()
     # @property
     # def settlement(self):
     #     """

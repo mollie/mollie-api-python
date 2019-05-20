@@ -1,6 +1,7 @@
 import pytest
 
 from mollie.api.error import IdentifierError
+from mollie.api.objects.capture import Capture
 from mollie.api.objects.chargeback import Chargeback
 from mollie.api.objects.customer import Customer
 from mollie.api.objects.mandate import Mandate
@@ -14,6 +15,7 @@ from .utils import assert_list_object
 
 PAYMENT_ID = 'tr_7UhSN1zuXS'
 REFUND_ID = 're_4qqhO89gsT'
+CAPTURE_ID = 'cpt_4qqhO89gsT'
 CHARGEBACK_ID = 'chb_n9z0tp'
 CUSTOMER_ID = 'cst_8wmqcHMN4U'
 SETTLEMENT_ID = 'stl_jDk30akdN'
@@ -149,6 +151,16 @@ def test_payment_get_related_chargebacks(client, response):
     payment = client.payments.get(PAYMENT_ID)
     chargebacks = payment.chargebacks
     assert_list_object(chargebacks, Chargeback)
+
+
+def test_payment_get_related_captures(client, response):
+    """Get chargebacks related to payment id."""
+    response.get('https://api.mollie.com/v2/payments/%s' % PAYMENT_ID, 'payment_single')
+    response.get('https://api.mollie.com/v2/payments/%s/captures' % PAYMENT_ID, 'captures_list')
+
+    payment = client.payments.get(PAYMENT_ID)
+    captures = payment.captures
+    assert_list_object(captures, Capture)
 
 
 @pytest.mark.xfail(strict=True, reason="Settlement API is not yet implemented")

@@ -20,21 +20,21 @@ class Capture(Base):
         return self._get_property('amount')
 
     @property
-    def settlementAmount(self):
+    def settlement_amount(self):
         return self._get_property('settlementAmount')
 
     @property
-    def paymentId(self):
+    def payment_id(self):
         return self._get_property('paymentId')
 
     @property
-    def shipmentId(self):
+    def shipment_id(self):
         return self._get_property('shipmentId')
 
     @property
-    def settlementId(self):
+    def settlement_id(self):
         return self._get_property('settlementId')
 
     @property
-    def createdAt(self):
+    def created_at(self):
         return self._get_property('createdAt')

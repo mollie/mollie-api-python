@@ -37,6 +37,10 @@
       "href": "https://api.mollie.com/v2/payments/tr_7UhSN1zuXS/chargebacks",
       "type": "application/hal+json"
     },
+    "captures": {
+      "href": "https://api.mollie.com/v2/payments/tr_7UhSN1zuXS/captures",
+      "type": "application/hal+json"
+    },
     "refunds": {
       "href": "https://api.mollie.com/v2/payments/tr_7UhSN1zuXS/refunds",
       "type": "application/hal+json"
