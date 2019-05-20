@@ -12,7 +12,7 @@ class Error(Exception):
 
     def __str__(self):
         """
-        Customize string repesentation in Python 2.
+        Customize string representation in Python 2.
 
         We can't have string representation containing unicode characters in Python 2.
         """
