@@ -27,6 +27,7 @@ class Method(Base):
     GIROPAY = 'giropay'
     KLARNAPAYLATER = 'klarnapaylater'
     KLARNASLICEIT = 'klarnasliceit'
+    PRZELEWY24 = 'przelewy24'
 
     @property
     def description(self):
