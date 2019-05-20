@@ -8,6 +8,7 @@ from collections import OrderedDict
 import requests
 
 from .error import RequestError, RequestSetupError
+from .resources.captures import Captures
 from .resources.chargebacks import Chargebacks
 from .resources.customer_mandates import CustomerMandates
 from .resources.customer_payments import CustomerPayments
@@ -93,6 +94,7 @@ class Client(object):
         self.invoices = Invoices(self)
         self.permissions = Permissions(self)
         self.onboarding = Onboarding(self)
+        self.captures = Captures(self)
 
         # compose base user agent string
         self.user_agent_components = OrderedDict()
