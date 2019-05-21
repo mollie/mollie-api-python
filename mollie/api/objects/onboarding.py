@@ -4,8 +4,8 @@ from .base import Base
 class Onboarding(Base):
     @classmethod
     def get_resource_class(cls, client):
-        from ..resources.refunds import Refunds
-        return Refunds(client)
+        from ..resources.onboarding import Onboarding as OnboardingResource
+        return OnboardingResource(client)
 
     @property
     def resource(self):
