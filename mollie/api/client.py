@@ -15,6 +15,7 @@ from .resources.customer_subscriptions import CustomerSubscriptions
 from .resources.customers import Customers
 from .resources.methods import Methods
 from .resources.orders import Orders
+from .resources.organisations import Organisations
 from .resources.payment_chargebacks import PaymentChargebacks
 from .resources.payment_refunds import PaymentRefunds
 from .resources.payments import Payments
@@ -74,6 +75,7 @@ class Client(object):
         self.customer_subscriptions = CustomerSubscriptions(self)
         self.customer_payments = CustomerPayments(self)
         self.orders = Orders(self)
+        self.organisations = Organisations(self)
         self.subscription_payments = SubscriptionPayments(self)
 
         # compose base user agent string
