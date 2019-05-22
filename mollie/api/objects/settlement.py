@@ -57,3 +57,18 @@ class Settlement(Base):
 
     def is_failed(self):
         return self._get_property('status') == self.STATUS_FAILED
+
+    @property
+    def payments(self):
+        """Return the payments list for the customer."""
+        return self.client.settlement_payments.on(self).list()
+
+    @property
+    def refunds(self):
+        """Return the refunds related to this settlement."""
+        return self.client.payment_refunds.on(self).list()
+
+    @property
+    def chargebacks(self):
+        """Return the chargebacks related to this settlement."""
+        return self.client.payment_chargebacks.on(self).list()

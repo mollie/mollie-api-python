@@ -27,6 +27,7 @@ def test_settlement_get(client, response):
 
 
 def test_settlement_get_next(client, response):
+    """Retrieve the details of the current settlement that has not yet been paid out."""
     response.get('https://api.mollie.com/v2/settlements/next', 'settlement_next')
 
     settlement = client.settlements.get('next')
