@@ -1,16 +1,15 @@
 from mollie.api.objects.settlement import Settlement
-
-# from tests.utils import assert_list_object
+from tests.utils import assert_list_object
 
 SETTLEMENT_ID = 'stl_jDk30akdN'
 
 
-# def test_list_chargebacks(client, response):
-#     """Get a list of chargebacks."""
-#     response.get('https://api.mollie.com/v2/settlements', 'settlements_list')
-#
-#     settlements = client.settlements.list()
-#     assert_list_object(settlements, Settlement)
+def test_list_settlements(client, response):
+    """Get a list of chargebacks."""
+    response.get('https://api.mollie.com/v2/settlements', 'settlements_list')
+
+    settlements = client.settlements.list()
+    assert_list_object(settlements, Settlement)
 
 
 def test_settlement_get(client, response):

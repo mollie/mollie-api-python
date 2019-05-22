@@ -1,0 +1,67 @@
+{
+    "count": 1,
+    "_embedded": {
+        "settlements": [
+            {
+                "resource": "settlement",
+                "id": "stl_jDk30akdN",
+                "reference": "1234567.1804.03",
+                "createdAt": "2018-04-06T06:00:01.0Z",
+                "settledAt": "2018-04-06T09:41:44.0Z",
+                "amount": {
+                    "currency": "EUR",
+                    "value": "39.75"
+                },
+                "periods": {
+                    "2018": {
+                        "4": {
+                            "revenue": [ ],
+                            "costs": [ ]
+                        }
+                    }
+                },
+                "_links": {
+                    "self": {
+                        "href": "https://api.mollie.com/v2/settlements/next",
+                        "type": "application/hal+json"
+                    },
+                    "payments": {
+                        "href": "https://api.mollie.com/v2/settlements/stl_jDk30akdN/payments",
+                        "type": "application/hal+json"
+                    },
+                    "refunds": {
+                        "href": "https://api.mollie.com/v2/settlements/stl_jDk30akdN/refunds",
+                        "type": "application/hal+json"
+                    },
+                    "chargebacks": {
+                        "href": "https://api.mollie.com/v2/settlements/stl_jDk30akdN/chargebacks",
+                        "type": "application/hal+json"
+                    },
+                    "captures": {
+                        "href": "https://api.mollie.com/v2/settlements/stl_jDk30akdN/captures",
+                        "type": "application/hal+json"
+                    },
+                    "documentation": {
+                        "href": "https://docs.mollie.com/reference/v2/settlements-api/get-settlement",
+                        "type": "text/html"
+                    }
+                }
+            }
+        ]
+    },
+    "_links": {
+        "self": {
+            "href": "https://api.mollie.com/v2/settlements?limit=5",
+            "type": "application/hal+json"
+        },
+        "previous": null,
+        "next": {
+            "href": "https://api.mollie.com/v2/settlements?from=stl_QM8w7JDEhU&limit=5",
+            "type": "application/hal+json"
+        },
+        "documentation": {
+            "href": "https://docs.mollie.com/reference/v2/settlements-api/list-settlements",
+            "type": "text/html"
+        }
+    }
+}
