@@ -1,0 +1,20 @@
+{
+    "resource": "method",
+    "id": "bancontact",
+    "description": "Bancontact",
+    "image": {
+        "size1x": "https://www.mollie.com/external/icons/payment-methods/bancontact.png",
+        "size2x": "https://www.mollie.com/external/icons/payment-methods/bancontact%402x.png",
+        "svg": "https://www.mollie.com/external/icons/payment-methods/bancontact.svg"
+    },
+    "_links": {
+        "self": {
+            "href": "https://api.mollie.com/v2/methods/bancontact",
+            "type": "application/hal+json"
+        },
+        "documentation": {
+            "href": "https://docs.mollie.com/reference/v2/profiles-api/activate-method",
+            "type": "text/html"
+        }
+    }
+}
