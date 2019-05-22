@@ -20,6 +20,7 @@ from .resources.organisations import Organisations
 from .resources.payment_chargebacks import PaymentChargebacks
 from .resources.payment_refunds import PaymentRefunds
 from .resources.payments import Payments
+from .resources.permissions import Permissions
 from .resources.refunds import Refunds
 from .resources.subscription_payments import SubscriptionPayments
 from .version import VERSION
@@ -79,6 +80,7 @@ class Client(object):
         self.organisations = Organisations(self)
         self.subscription_payments = SubscriptionPayments(self)
         self.invoices = Invoices(self)
+        self.permissions = Permissions(self)
 
         # compose base user agent string
         self.user_agent_components = OrderedDict()
