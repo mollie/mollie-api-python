@@ -36,3 +36,16 @@ def test_settlement_get_next(client, response):
     assert settlement.created_at == '2018-04-06T06:00:01.0Z'
     assert settlement.settled_at is None
     assert settlement.amount == {'currency': 'EUR', 'value': '39.75'}
+
+
+def test_settlement_get_open(client, response):
+    """Retrieve the details of the open balance of the organization. """
+    response.get('https://api.mollie.com/v2/settlements/open', 'settlement_open')
+
+    settlement = client.settlements.get('open')
+
+    assert isinstance(settlement, Settlement)
+    assert settlement.reference is None
+    assert settlement.created_at == '2018-04-06T06:00:01.0Z'
+    assert settlement.settled_at is None
+    assert settlement.amount == {'currency': 'EUR', 'value': '39.75'}
