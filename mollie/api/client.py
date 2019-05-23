@@ -13,6 +13,7 @@ from .resources.customer_mandates import CustomerMandates
 from .resources.customer_payments import CustomerPayments
 from .resources.customer_subscriptions import CustomerSubscriptions
 from .resources.customers import Customers
+from .resources.invoices import Invoices
 from .resources.methods import Methods
 from .resources.orders import Orders
 from .resources.organisations import Organisations
@@ -77,6 +78,7 @@ class Client(object):
         self.orders = Orders(self)
         self.organisations = Organisations(self)
         self.subscription_payments = SubscriptionPayments(self)
+        self.invoices = Invoices(self)
 
         # compose base user agent string
         self.user_agent_components = OrderedDict()
