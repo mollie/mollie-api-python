@@ -17,3 +17,4 @@ class Chargebacks(Base):
                     id=chargeback_id, prefix=self.RESOURCE_ID_PREFIX)
             )
         return super(Chargebacks, self).get(chargeback_id, **params)
+

@@ -29,6 +29,7 @@ from .resources.profile_payments import ProfilePayments
 from .resources.profile_refunds import ProfileRefunds
 from .resources.profiles import Profiles
 from .resources.refunds import Refunds
+from .resources.settlement_chargebacks import SettlementChargebacks
 from .resources.settlement_payments import SettlementPayments
 from .resources.settlement_refunds import SettlementRefunds
 from .resources.settlements import Settlements
@@ -101,6 +102,7 @@ class Client(object):
         self.settlements = Settlements(self)
         self.settlement_payments = SettlementPayments(self)
         self.settlement_refunds = SettlementRefunds(self)
+        self.settlement_chargebacks = SettlementChargebacks(self)
 
         # compose base user agent string
         self.user_agent_components = OrderedDict()
