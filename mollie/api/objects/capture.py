@@ -38,3 +38,18 @@ class Capture(Base):
     @property
     def created_at(self):
         return self._get_property('createdAt')
+
+    @property
+    def payment(self):
+        """Return the payment for this refund."""
+        return self.client.payments.get(self.payment_id)
+
+    @property
+    def shipment(self):
+        """Return the payment for this refund."""
+        return self.client.shipments.get(self.shipment_id)
+
+    @property
+    def settlement(self):
+        """Return the payment for this refund."""
+        return self.client.settlements.get(self.settlement_id)

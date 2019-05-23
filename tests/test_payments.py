@@ -15,7 +15,6 @@ from .utils import assert_list_object
 
 PAYMENT_ID = 'tr_7UhSN1zuXS'
 REFUND_ID = 're_4qqhO89gsT'
-CAPTURE_ID = 'cpt_4qqhO89gsT'
 CHARGEBACK_ID = 'chb_n9z0tp'
 CUSTOMER_ID = 'cst_8wmqcHMN4U'
 SETTLEMENT_ID = 'stl_jDk30akdN'

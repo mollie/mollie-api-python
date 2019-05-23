@@ -95,7 +95,6 @@ class Client(object):
         self.permissions = Permissions(self)
         self.onboarding = Onboarding(self)
         self.captures = Captures(self)
-
         # compose base user agent string
         self.user_agent_components = OrderedDict()
         self.set_user_agent_component('Mollie', self.CLIENT_VERSION)

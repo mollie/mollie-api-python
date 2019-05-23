@@ -22,10 +22,13 @@ def test_get_single_payment_capture(client, response):
     capture = client.captures.with_parent_id(PAYMENT_ID).get(CAPTURE_ID)
     assert isinstance(capture, Capture)
     assert capture.id == CAPTURE_ID
+    assert capture.mode == "live"
     assert capture.amount == {'currency': 'EUR', 'value': '1027.99'}
     assert capture.settlement_amount == {'currency': 'EUR', 'value': '399.00'}
     assert capture.created_at == '2018-08-02T09:29:56+00:00'
     assert capture.payment_id == PAYMENT_ID
+    assert capture.shipment_id == 'shp_3wmsgCJN4U'
+    assert capture.settlement_id == 'stl_jDk30akdN'
 
 
 def test_list_payment_captures_by_payment_object(client, response):
@@ -37,7 +40,7 @@ def test_list_payment_captures_by_payment_object(client, response):
     assert_list_object(captures, Capture)
 
 
-def test_get_single_payment_chargeback_by_payment_object(client, response):
+def test_get_single_payment_capture_by_payment_object(client, response):
     """Get a single chargeback relevant to payment object."""
     response.get('https://api.mollie.com/v2/payments/%s/captures/%s' % (PAYMENT_ID, CAPTURE_ID),
                  'chargeback_single')
