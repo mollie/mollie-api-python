@@ -1,4 +1,5 @@
 from mollie.api.objects.capture import Capture
+from mollie.api.objects.payment import Payment
 from mollie.api.objects.shipment import Shipment
 
 from .utils import assert_list_object
@@ -6,7 +7,6 @@ from .utils import assert_list_object
 PAYMENT_ID = 'tr_7UhSN1zuXS'
 CAPTURE_ID = 'cpt_4qqhO89gsT'
 SHIPMENT_ID = 'shp_3wmsgCJN4U'
-SETTLEMENT_ID = 'stl_jDk30akdN'
 
 
 def test_get_payment_captures_by_payment_id(client, response):
@@ -46,13 +46,26 @@ def test_list_payment_captures_by_payment_object(client, response):
 def test_get_single_payment_capture_by_payment_object(client, response):
     """Get a single capture relevant to payment object."""
     response.get('https://api.mollie.com/v2/payments/%s/captures/%s' % (PAYMENT_ID, CAPTURE_ID),
-                 'chargeback_single')
+                 'capture_single')
     response.get('https://api.mollie.com/v2/payments/%s' % PAYMENT_ID, 'payment_single')
 
     payment = client.payments.get(PAYMENT_ID)
     capture = client.captures.on(payment).get(CAPTURE_ID)
     assert isinstance(capture, Capture)
     assert capture.payment_id == PAYMENT_ID
+
+
+def test_capture_get_related_payment(client, response):
+    """Verify the related payment of a refund."""
+    #
+    response.get('https://api.mollie.com/v2/payments/%s/captures/%s' % (PAYMENT_ID, CAPTURE_ID),
+                 'capture_single')
+    response.get('https://api.mollie.com/v2/payments/%s' % PAYMENT_ID, 'payment_single')
+
+    capture = client.captures.with_parent_id(PAYMENT_ID).get(CAPTURE_ID)
+    payment = capture.payment
+    assert isinstance(payment, Payment)
+    assert payment.id == PAYMENT_ID
 
 
 def test_capture_get_related_shipment(client, response):
