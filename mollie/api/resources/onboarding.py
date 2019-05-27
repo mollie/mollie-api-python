@@ -11,7 +11,7 @@ class Onboarding(Base):
     def get(self, onboarding_id, **params):
         if not onboarding_id or not onboarding_id == 'me':
             raise IdentifierError(
-                "Invalid refund ID: '{id}'. A refund ID should be 'me'.".format(
+                "Invalid onboarding ID: '{id}'. A onboarding ID should be 'me'.".format(
                     id=onboarding_id)
             )
         return super(Onboarding, self).get(onboarding_id, **params)

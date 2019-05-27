@@ -7,6 +7,10 @@ class Onboarding(Base):
         from ..resources.onboarding import Onboarding as OnboardingResource
         return OnboardingResource(client)
 
+    STATUS_NEEDS_DATA = 'needs-data'
+    STATUS_IN_REVIEW = 'in-review'  # Waiting for a valid mandate.
+    STATUS_COMPLETED = 'completed'
+
     @property
     def resource(self):
         return self._get_property('resource')
@@ -40,3 +44,12 @@ class Onboarding(Base):
         if url:
             resp = self.client.organisations.perform_api_call(self.client.organisations.REST_READ, url)
             return Organisation(resp)
+
+    def is_needs_data(self):
+        return self.status == self.STATUS_NEEDS_DATA
+
+    def is_in_review(self):
+        return self.status == self.STATUS_IN_REVIEW
+
+    def is_completed(self):
+        return self.status == self.STATUS_COMPLETED

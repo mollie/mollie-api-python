@@ -17,8 +17,12 @@ def test_get_onboarding(client, response):
     assert onboarding.can_receive_payments is True
     assert onboarding.can_receive_settlements is True
 
+    assert onboarding.is_needs_data() is False
+    assert onboarding.is_in_review() is False
+    assert onboarding.is_completed() is True
 
-def test_create_onboarding(client, response):
+
+def test_update_onboarding(client, response):
     """Update onboarding.."""
     response.patch('https://api.mollie.com/v2/onboarding/me', 'empty', 204)
 
