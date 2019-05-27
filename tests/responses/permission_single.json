@@ -1,0 +1,16 @@
+{
+  "resource": "permission",
+  "id": "payments.read",
+  "description": "View your payments",
+  "granted": true,
+  "_links": {
+    "self": {
+      "href": "https://api.mollie.com/v2/permissions/payments.read",
+      "type": "application/hal+json"
+    },
+    "documentation": {
+      "href": "https://docs.mollie.com/reference/v2/permissions-api/get-permission",
+      "type": "text/html"
+    }
+  }
+}
