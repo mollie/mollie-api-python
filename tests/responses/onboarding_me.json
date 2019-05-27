@@ -15,7 +15,7 @@
             "type": "text/html"
         },
         "organization": {
-            "href": "https://api.mollie.com/v2/organization/org_12345",
+            "href": "https://api.mollie.com/v2/organization/org_12345678",
             "type": "application/hal+json"
         },
         "documentation": {

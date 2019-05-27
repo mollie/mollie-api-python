@@ -30,3 +30,13 @@ class Onboarding(Base):
     @property
     def can_receive_settlements(self):
         return self._get_property('canReceiveSettlements')
+
+    @property
+    def organisation(self):
+        """Retrieve organisation for an onboarding."""
+        from .organisation import Organisation
+        url = self._get_link('organization')
+
+        if url:
+            resp = self.client.organisations.perform_api_call(self.client.organisations.REST_READ, url)
+            return Organisation(resp)
