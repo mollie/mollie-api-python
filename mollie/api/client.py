@@ -103,6 +103,7 @@ class Client(object):
         self.settlement_payments = SettlementPayments(self)
         self.settlement_refunds = SettlementRefunds(self)
         self.settlement_chargebacks = SettlementChargebacks(self)
+        self.settlement_captures = SettlementCaptures(self)
 
         # compose base user agent string
         self.user_agent_components = OrderedDict()
