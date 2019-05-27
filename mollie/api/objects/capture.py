@@ -41,15 +41,20 @@ class Capture(Base):
 
     @property
     def payment(self):
-        """Return the payment for this refund."""
+        """Return the payment for this capture."""
         return self.client.payments.get(self.payment_id)
 
     @property
     def shipment(self):
-        """Return the payment for this refund."""
-        return self.client.shipments.get(self.shipment_id)
+        """Return the shipment for this capture."""
+        from .shipment import Shipment
+        url = self._get_link('shipment')
+
+        if url:
+            resp = self.client.orders.perform_api_call(self.client.orders.REST_READ, url)
+            return Shipment(resp)
 
     @property
     def settlement(self):
-        """Return the payment for this refund."""
+        """Return the payment for this capture."""
         return self.client.settlements.get(self.settlement_id)

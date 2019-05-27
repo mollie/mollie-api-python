@@ -7,7 +7,7 @@ class Captures(Base):
     RESOURCE_ID_PREFIX = 'cpt_'
 
     def get_resource_object(self, result):
-        return Capture(result)
+        return Capture(result, self.client)
 
     def get_resource_name(self):
         return 'payments/{id}/captures'.format(id=self.payment_id)
