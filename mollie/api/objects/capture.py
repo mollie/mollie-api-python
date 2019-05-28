@@ -56,5 +56,5 @@ class Capture(Base):
 
     @property
     def settlement(self):
-        """Return the payment for this capture."""
+        """Return the settlement for this capture."""
         return self.client.settlements.get(self.settlement_id)
