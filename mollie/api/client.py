@@ -21,6 +21,11 @@ from .resources.payment_chargebacks import PaymentChargebacks
 from .resources.payment_refunds import PaymentRefunds
 from .resources.payments import Payments
 from .resources.permissions import Permissions
+from .resources.profile_chargebacks import ProfileChargebacks
+from .resources.profile_methods import ProfileMethods
+from .resources.profile_payments import ProfilePayments
+from .resources.profile_refunds import ProfileRefunds
+from .resources.profiles import Profiles
 from .resources.refunds import Refunds
 from .resources.subscription_payments import SubscriptionPayments
 from .version import VERSION
@@ -69,6 +74,11 @@ class Client(object):
         self.payments = Payments(self)
         self.payment_refunds = PaymentRefunds(self)
         self.payment_chargebacks = PaymentChargebacks(self)
+        self.profiles = Profiles(self)
+        self.profile_chargebacks = ProfileChargebacks(self)
+        self.profile_methods = ProfileMethods(self)
+        self.profile_payments = ProfilePayments(self)
+        self.profile_refunds = ProfileRefunds(self)
         self.methods = Methods(self)
         self.refunds = Refunds(self)
         self.chargebacks = Chargebacks(self)
