@@ -15,3 +15,8 @@ class Onboarding(Base):
                     id=onboarding_id)
             )
         return super(Onboarding, self).get(onboarding_id, **params)
+
+    def create(self, resource_id, data=None, **params):
+        path = self.get_resource_name() + '/' + str(resource_id)
+        result = self.perform_api_call(self.REST_CREATE, path, data, params)
+        return self.get_resource_object(result)

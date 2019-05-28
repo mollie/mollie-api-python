@@ -24,7 +24,7 @@ def test_get_onboarding(client, response):
 
 def test_update_onboarding(client, response):
     """Update onboarding.."""
-    response.patch('https://api.mollie.com/v2/onboarding/me', 'empty', 204)
+    response.post('https://api.mollie.com/v2/onboarding/me', 'empty', 204)
 
     data = {
         'profile': {
@@ -32,7 +32,7 @@ def test_update_onboarding(client, response):
         }
     }
 
-    onboarding = client.onboarding.update(resource_id='me', data=data)
+    onboarding = client.onboarding.create(resource_id='me', data=data)
     assert isinstance(onboarding, Onboarding)
 
 
