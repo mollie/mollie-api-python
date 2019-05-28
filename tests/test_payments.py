@@ -153,7 +153,7 @@ def test_payment_get_related_chargebacks(client, response):
 
 
 def test_payment_get_related_captures(client, response):
-    """Get chargebacks related to payment id."""
+    """Get captures related to payment id."""
     response.get('https://api.mollie.com/v2/payments/%s' % PAYMENT_ID, 'payment_single')
     response.get('https://api.mollie.com/v2/payments/%s/captures' % PAYMENT_ID, 'captures_list')
 

@@ -13,7 +13,7 @@ class Captures(Base):
         return 'payments/{id}/captures'.format(id=self.payment_id)
 
     def get(self, capture_id, **params):
-        """Verify the chargeback ID and retrieve the chargeback from the API."""
+        """Verify the capture ID and retrieve the capture from the API."""
         if not capture_id or not capture_id.startswith(self.RESOURCE_ID_PREFIX):
             raise IdentifierError(
                 "Invalid capture ID: '{id}'. A capture ID should start with '{prefix}'.".format(
