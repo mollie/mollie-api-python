@@ -1,12 +1,20 @@
 from mollie.api.objects.capture import Capture
 from mollie.api.objects.payment import Payment
 from mollie.api.objects.shipment import Shipment
+from mollie.api.resources.captures import Captures
 
 from .utils import assert_list_object
 
 PAYMENT_ID = 'tr_7UhSN1zuXS'
 CAPTURE_ID = 'cpt_4qqhO89gsT'
 SHIPMENT_ID = 'shp_3wmsgCJN4U'
+
+
+def test_capture_resource_class(client, response):
+    response.get('https://api.mollie.com/v2/payments/%s/captures/%s' % (PAYMENT_ID, CAPTURE_ID),
+                 'capture_single')
+    client.captures.with_parent_id(PAYMENT_ID).get(CAPTURE_ID)
+    assert isinstance(Capture.get_resource_class(client), Captures)
 
 
 def test_get_payment_captures_by_payment_id(client, response):
