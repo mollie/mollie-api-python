@@ -8,6 +8,7 @@
         "currency": "EUR",
         "value": "39.75"
     },
+    "status": "open",
     "periods": {
         "2018": {
             "4": {
