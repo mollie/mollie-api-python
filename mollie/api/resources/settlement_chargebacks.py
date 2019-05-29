@@ -2,7 +2,7 @@ from .chargebacks import Chargebacks
 
 
 class SettlementChargebacks(Chargebacks):
-    settlementt_id = None
+    settlement_id = None
 
     def get_resource_name(self):
         return 'settlements/{id}/chargebacks'.format(id=self.settlement_id)

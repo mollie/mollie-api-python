@@ -7,7 +7,7 @@ class Settlements(Base):
     RESOURCE_ID_PREFIX = 'stl_'
 
     def get_resource_object(self, result):
-        return Settlement(result)
+        return Settlement(result, self.client)
 
     def get(self, settlement_id, **params):
         """Verify the settlement ID and retrieve the settlement from the API."""

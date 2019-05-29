@@ -44,7 +44,7 @@ class Settlement(Base):
     def invoice_id(self):
         return self._get_property('invoiceId')
 
-    # Additional methodes
+    # Additional methods
 
     def is_open(self):
         return self._get_property('status') == self.STATUS_OPEN
@@ -60,15 +60,15 @@ class Settlement(Base):
 
     @property
     def payments(self):
-        """Return the payments list for the customer."""
+        """Return the payments related to this settlement."""
         return self.client.settlement_payments.on(self).list()
 
     @property
     def refunds(self):
         """Return the refunds related to this settlement."""
-        return self.client.payment_refunds.on(self).list()
+        return self.client.settlement_refunds.on(self).list()
 
     @property
     def chargebacks(self):
         """Return the chargebacks related to this settlement."""
-        return self.client.payment_chargebacks.on(self).list()
+        return self.client.settlement_chargebacks.on(self).list()
