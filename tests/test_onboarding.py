@@ -22,8 +22,8 @@ def test_get_onboarding(client, response):
     assert onboarding.is_completed() is True
 
 
-def test_update_onboarding(client, response):
-    """Update onboarding.."""
+def test_create_onboarding(client, response):
+    """Create onboarding."""
     response.post('https://api.mollie.com/v2/onboarding/me', 'empty', 204)
 
     data = {
