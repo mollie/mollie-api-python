@@ -26,6 +26,10 @@ def test_settlement_get(client, response):
     assert settlement.settled_at == '2018-04-06T09:41:44.0Z'
     assert settlement.amount == {'currency': 'EUR', 'value': '39.75'}
     assert settlement.invoice_id == 'inv_FrvewDA3Pr'
+    assert settlement.is_open() is True
+    assert settlement.is_pending() is False
+    assert settlement.is_canceled() is False
+    assert settlement.is_failed() is False
     assert settlement.periods == json.loads("""{
                                             "2018": {
         "4": {
