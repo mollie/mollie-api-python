@@ -15,6 +15,7 @@ from .resources.customer_subscriptions import CustomerSubscriptions
 from .resources.customers import Customers
 from .resources.invoices import Invoices
 from .resources.methods import Methods
+from .resources.onboarding import Onboarding
 from .resources.orders import Orders
 from .resources.organisations import Organisations
 from .resources.payment_chargebacks import PaymentChargebacks
@@ -91,6 +92,7 @@ class Client(object):
         self.subscription_payments = SubscriptionPayments(self)
         self.invoices = Invoices(self)
         self.permissions = Permissions(self)
+        self.onboarding = Onboarding(self)
 
         # compose base user agent string
         self.user_agent_components = OrderedDict()
