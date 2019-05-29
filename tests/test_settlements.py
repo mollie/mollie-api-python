@@ -1,5 +1,8 @@
 import json
 
+import pytest
+
+from mollie.api.error import IdentifierError
 from mollie.api.objects.settlement import Settlement
 from mollie.api.resources.settlements import Settlements
 from tests.utils import assert_list_object
@@ -167,3 +170,21 @@ def test_settlement_get_open(client, response):
     assert settlement.created_at == '2018-04-06T06:00:01.0Z'
     assert settlement.settled_at is None
     assert settlement.amount == {'currency': 'EUR', 'value': '39.75'}
+
+
+@pytest.mark.parametrize(
+    "input,expected",
+    [
+        (None, IdentifierError),
+        ("foo", IdentifierError),
+        ("next", None),  # Valid
+        ("open", None),  # Valid
+        ("stl_", None),  # Valid
+    ]
+)
+def test_validate_settlement_id(input, expected):
+    if expected == IdentifierError:
+        with pytest.raises(IdentifierError):
+            Settlements.validate_settlement_id(Settlements.RESOURCE_ID_PREFIX, input)
+    else:
+        assert Settlements.validate_settlement_id(Settlements.RESOURCE_ID_PREFIX, input) is expected
