@@ -134,8 +134,6 @@ def test_settlement_get(client, response):
     assert settlement.amount == {'currency': 'EUR', 'value': '39.75'}
     assert settlement.invoice_id == 'inv_FrvewDA3Pr'
 
-    # The following are not in the example json response.
-    # https://docs.mollie.com/reference/v2/settlements-api/get-settlement
     assert settlement.status == settlement.STATUS_OPEN
     assert settlement.is_open() is True
     assert settlement.is_canceled() is False
