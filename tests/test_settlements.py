@@ -7,7 +7,7 @@ SETTLEMENT_ID = 'stl_jDk30akdN'
 
 
 def test_list_settlements(client, response):
-    """Get a list of chargebacks."""
+    """Get a list of settlements."""
     response.get('https://api.mollie.com/v2/settlements', 'settlements_list')
 
     settlements = client.settlements.list()
@@ -15,7 +15,7 @@ def test_list_settlements(client, response):
 
 
 def test_settlement_get(client, response):
-    """Retrieve a single payment method by ID."""
+    """Retrieve a single settlement method by ID."""
     response.get('https://api.mollie.com/v2/settlements/%s' % SETTLEMENT_ID, 'settlement_single')
 
     settlement = client.settlements.get(SETTLEMENT_ID)
@@ -119,7 +119,7 @@ def test_settlement_get(client, response):
                                             )
 
     def test_settlement_get_next(client, response):
-        """Retrieve the details of the current settlement that has not yet been paid out."""
+        """Retrieve the details of the next settlement that has not yet been paid out."""
         response.get('https://api.mollie.com/v2/settlements/next', 'settlement_next')
 
         settlement = client.settlements.get('next')
