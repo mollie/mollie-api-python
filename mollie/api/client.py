@@ -29,6 +29,7 @@ from .resources.profile_payments import ProfilePayments
 from .resources.profile_refunds import ProfileRefunds
 from .resources.profiles import Profiles
 from .resources.refunds import Refunds
+from .resources.settlement_captures import SettlementCaptures
 from .resources.settlement_chargebacks import SettlementChargebacks
 from .resources.settlement_payments import SettlementPayments
 from .resources.settlement_refunds import SettlementRefunds
