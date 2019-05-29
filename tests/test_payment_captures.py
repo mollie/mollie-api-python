@@ -64,7 +64,7 @@ def test_get_single_payment_capture_by_payment_object(client, response):
 
 
 def test_capture_get_related_payment(client, response):
-    """Verify the related payment of a refund."""
+    """Verify the related payment of a capture."""
     #
     response.get('https://api.mollie.com/v2/payments/%s/captures/%s' % (PAYMENT_ID, CAPTURE_ID),
                  'capture_single')
@@ -77,7 +77,7 @@ def test_capture_get_related_payment(client, response):
 
 
 def test_capture_get_related_shipment(client, response):
-    """Verify the related payment of a refund."""
+    """Verify the related shipment of a capture."""
 
     response.get('https://api.mollie.com/v2/payments/%s/captures/%s' % (PAYMENT_ID, CAPTURE_ID),
                  'capture_single')
