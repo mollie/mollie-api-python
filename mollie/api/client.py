@@ -72,6 +72,10 @@ class Client(object):
         self.timeout = timeout
         self.api_key = None
 
+        self.oauth = None
+        self.client_secret = None
+        self.token = None
+
         # add endpoint resources
         self.payments = Payments(self)
         self.payment_refunds = PaymentRefunds(self)
@@ -150,7 +154,7 @@ class Client(object):
         return " ".join(components)
 
     def perform_http_call(self, http_method, path, data=None, params=None):
-        if not self.api_key:
+        if not self.oauth2 and not self.api_key:
             raise RequestSetupError('You have not set an API key. Please use set_api_key() to set the API key.')
         if path.startswith('%s/%s' % (self.api_endpoint, self.api_version)):
             url = path
@@ -168,24 +172,77 @@ class Client(object):
             url += '?' + querystring
             params = None
 
-        try:
-            response = requests.request(
-                http_method, url,
-                verify=True,
-                headers={
-                    'Accept': 'application/json',
-                    'Authorization': 'Bearer {api_key}'.format(api_key=self.api_key),
-                    'Content-Type': 'application/json',
-                    'User-Agent': self.user_agent,
-                    'X-Mollie-Client-Info': self.UNAME,
-                },
-                params=params,
-                data=data,
-                timeout=self.timeout,
-            )
-        except Exception as err:
-            raise RequestError('Unable to communicate with Mollie: {error}'.format(error=err))
+        if self.oauth:
+            try:
+                request_mehtod = getattr(self.oauth, http_method)
+                response = request_mehtod(
+                    url,
+                    params=params,
+                    data=data,
+                )
+            except Exception as err:
+                raise RequestError('Unable to communicate with Mollie: {error}'.format(error=err))
+        else:
+            try:
+                response = requests.request(
+                    http_method, url,
+                    verify=True,
+                    headers={
+                        'Accept': 'application/json',
+                        'Authorization': 'Bearer {api_key}'.format(api_key=self.api_key),
+                        'Content-Type': 'application/json',
+                        'User-Agent': self.user_agent,
+                        'X-Mollie-Client-Info': self.UNAME,
+                    },
+                    params=params,
+                    data=data,
+                    timeout=self.timeout,
+                )
+            except Exception as err:
+                raise RequestError('Unable to communicate with Mollie: {error}'.format(error=err))
         return response
+
+    def setup_oauth2(self, client_id, client_secret, redirect_uri, scope):
+        """
+        :param client_id: (string)
+        :param client_secret: (string)
+        :param redirect_uri: (string)
+        :param scope: Molli connect permissions (list)
+        :return: authorization url (url)
+        """
+
+        # Web Application Flow
+        # The steps below outline how to use the default Authorization Grant Type flow
+        # to obtain an access token and fetch a protected resource.
+        # Here provider is Mollie and the protected resource is the user’s profile.
+
+        # User authorization through redirection.
+        # First we will create an authorization url from the base URL given by the provider
+        # and the credentials previously obtained.
+        # In addition most providers will request that you ask for access to a certain scope.
+        from requests_oauthlib import OAuth2Session
+
+        self.client_secret = client_secret
+        self.oauth = OAuth2Session(
+            client_id,
+            redirect_uri=redirect_uri,
+            scope=scope,
+        )
+        authorization_url, state = self.oauth.authorization_url('https://www.mollie.com/oauth2/authorize')
+
+        return authorization_url  # The merchant should visit this url to authorize access.
+
+    def setup_oath2_authorization_response(self, authorization_response):
+        """
+        :param authorization_response: The full callback URL (string)
+        :return: None
+        """
+        # Fetch an access token from the provider using the authorization code obtained during user authorization.
+        self.token = self.oauth.fetch_token(
+            'https://api.mollie.com/oauth2/tokens',
+            authorization_response=authorization_response,
+            client_secret=self.client_secret,
+        )
 
 
 def generate_querystring(params):
