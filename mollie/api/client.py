@@ -202,14 +202,21 @@ class Client(object):
                 raise RequestError('Unable to communicate with Mollie: {error}'.format(error=err))
         return response
 
-    def setup_oauth2(self, client_id, client_secret, redirect_uri, scope):
+    def setup_oauth(self, client_id, client_secret, redirect_uri, scope, get_token, set_token):
+        # TODO: keyword arguments
+
         """
         :param client_id: (string)
         :param client_secret: (string)
         :param redirect_uri: (string)
-        :param scope: Molli connect permissions (list)
+        :param scope: Mollie connect permissions (list)
+        :param set_token:
+        :param get_token:
         :return: authorization url (url)
         """
+
+        isinstance(get_token, callable)
+        isinstance(set_token, callable)
 
         # Web Application Flow
         # The steps below outline how to use the default Authorization Grant Type flow
@@ -243,37 +250,6 @@ class Client(object):
             authorization_response=authorization_response,
             client_secret=self.client_secret,
         )
-
-    def set_token(self, token):
-        """
-        def token_saver(token):
-            '''Your token setter here'''
-            ...
-
-        client = Client()
-        client.setup_oauth2(...)
-        client.token_saver = set_token
-
-        :param token: (dict)
-        :return: None
-        """
-        raise NotImplementedError("Set Client.token_saver")
-
-    def get_token(self):
-        """
-        def get_token(*args):
-            '''Your token getter here'''
-            ...
-            return token
-
-        client = Client()
-        client.setup_oauth2(...)
-        client.get_token = get_token
-
-        :return: token (dict)
-        """
-        raise NotImplementedError("Set Client.token_saver")
-
 
     def oauth_refresh_token(self):
         token = {
