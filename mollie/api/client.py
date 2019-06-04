@@ -74,7 +74,7 @@ class Client(object):
 
         self.oauth = None
         self.client_secret = None
-        self.token = None
+        self.access_token = None
 
         # add endpoint resources
         self.payments = Payments(self)
@@ -154,7 +154,7 @@ class Client(object):
         return " ".join(components)
 
     def perform_http_call(self, http_method, path, data=None, params=None):
-        if not self.oauth2 and not self.api_key:
+        if not self.oauth and not self.api_key:
             raise RequestSetupError('You have not set an API key. Please use set_api_key() to set the API key.')
         if path.startswith('%s/%s' % (self.api_endpoint, self.api_version)):
             url = path
@@ -174,8 +174,8 @@ class Client(object):
 
         if self.oauth:
             try:
-                request_mehtod = getattr(self.oauth, http_method)
-                response = request_mehtod(
+                response = self.oauth.request(
+                    http_method,
                     url,
                     params=params,
                     data=data,
@@ -232,17 +232,75 @@ class Client(object):
 
         return authorization_url  # The merchant should visit this url to authorize access.
 
-    def setup_oath2_authorization_response(self, authorization_response):
+    def setup_oauth_authorization_response(self, authorization_response):
         """
         :param authorization_response: The full callback URL (string)
         :return: None
         """
         # Fetch an access token from the provider using the authorization code obtained during user authorization.
-        self.token = self.oauth.fetch_token(
+        self.access_token = self.oauth.fetch_token(
             'https://api.mollie.com/oauth2/tokens',
             authorization_response=authorization_response,
             client_secret=self.client_secret,
         )
+
+    def set_token(self, token):
+        """
+        def token_saver(token):
+            '''Your token setter here'''
+            ...
+
+        client = Client()
+        client.setup_oauth2(...)
+        client.token_saver = set_token
+
+        :param token: (dict)
+        :return: None
+        """
+        raise NotImplementedError("Set Client.token_saver")
+
+    def get_token(self):
+        """
+        def get_token(*args):
+            '''Your token getter here'''
+            ...
+            return token
+
+        client = Client()
+        client.setup_oauth2(...)
+        client.get_token = get_token
+
+        :return: token (dict)
+        """
+        raise NotImplementedError("Set Client.token_saver")
+
+
+    def oauth_refresh_token(self):
+        token = {
+            'access_token': 'eswfld123kjhn1v5423',
+            'refresh_token': 'asdfkljh23490sdf',
+            'token_type': 'Bearer',
+            'expires_in': '-30',     # initially 3600, need to be updated by you
+        }
+        client_id = r'foo'
+        refresh_url = 'https://provider.com/token'
+        protected_url = 'https://provider.com/secret'
+
+        # If needed.
+        extra = {
+            'client_id': client_id,
+            'client_secret': r'potato',
+        }
+
+        from requests_oauthlib import OAuth2Session
+        client = OAuth2Session(
+            client_id,
+            token=self.get_token,
+            auto_refresh_url=refresh_url,
+            auto_refresh_kwargs=extra,
+            token_updater=self.set_token
+        )
+        response = client.get(protected_url)
 
 
 def generate_querystring(params):
