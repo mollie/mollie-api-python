@@ -2,7 +2,7 @@ from .refunds import Refunds
 
 
 class SettlementRefunds(Refunds):
-    settlementt_id = None
+    settlement_id = None
 
     def get_resource_name(self):
         return 'settlement/{id}/refunds'.format(id=self.settlement_id)

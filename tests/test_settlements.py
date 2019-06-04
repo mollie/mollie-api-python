@@ -10,13 +10,6 @@ from tests.utils import assert_list_object
 SETTLEMENT_ID = 'stl_jDk30akdN'
 
 
-def test_settlements_resource_class(client, response):
-    response.get('https://api.mollie.com/v2/settlements', 'settlements_list')
-    client.settlements.list()
-
-    assert isinstance(Settlement.get_resource_class(client), Settlements)
-
-
 def test_list_settlements(client, response):
     """Get a list of settlements."""
     response.get('https://api.mollie.com/v2/settlements', 'settlements_list')
@@ -177,7 +170,7 @@ def test_settlement_get_open(client, response):
         ("foo", IdentifierError),
         ("next", None),  # Valid
         ("open", None),  # Valid
-        ("stl_", None),  # Valid
+        (SETTLEMENT_ID, None),  # Valid
     ]
 )
 def test_validate_settlement_id(input, expected):
