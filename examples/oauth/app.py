@@ -24,10 +24,6 @@ def set_token(token):
         file.write(json.dumps(token))
 
 
-Client.get_token = get_token
-Client.set_token = set_token
-
-
 @app.route('/')
 def index():
     """
@@ -78,7 +74,6 @@ def index():
         client_secret,
         redirect_uri,
         scope,
-        get_token,
         set_token,
     )
     body = '<h1>Your applications config panel</h1>'

@@ -202,7 +202,7 @@ class Client(object):
                 raise RequestError('Unable to communicate with Mollie: {error}'.format(error=err))
         return response
 
-    def setup_oauth(self, client_id, client_secret, redirect_uri, scope, get_token, set_token):
+    def setup_oauth(self, client_id, client_secret, redirect_uri, scope, set_token):
         # TODO: keyword arguments
 
         """
@@ -211,12 +211,10 @@ class Client(object):
         :param redirect_uri: (string)
         :param scope: Mollie connect permissions (list)
         :param set_token:
-        :param get_token:
         :return: authorization url (url)
         """
-
-        isinstance(get_token, callable)
-        isinstance(set_token, callable)
+        # isinstance(get_token, callable)
+        # isinstance(set_token, callable)
 
         # Web Application Flow
         # The steps below outline how to use the default Authorization Grant Type flow
@@ -234,6 +232,7 @@ class Client(object):
             client_id,
             redirect_uri=redirect_uri,
             scope=scope,
+            token_updater=set_token
         )
         authorization_url, state = self.oauth.authorization_url('https://www.mollie.com/oauth2/authorize')
 
@@ -250,33 +249,33 @@ class Client(object):
             authorization_response=authorization_response,
             client_secret=self.client_secret,
         )
+        return self.access_token
 
-    def oauth_refresh_token(self):
-        token = {
-            'access_token': 'eswfld123kjhn1v5423',
-            'refresh_token': 'asdfkljh23490sdf',
-            'token_type': 'Bearer',
-            'expires_in': '-30',     # initially 3600, need to be updated by you
-        }
-        client_id = r'foo'
-        refresh_url = 'https://provider.com/token'
-        protected_url = 'https://provider.com/secret'
-
-        # If needed.
-        extra = {
-            'client_id': client_id,
-            'client_secret': r'potato',
-        }
+    def oauth_refresh_token(self, client_id, token, set_token):
+        # token = {
+        #     'access_token': 'eswfld123kjhn1v5423',
+        #     'refresh_token': 'asdfkljh23490sdf',
+        #     'token_type': 'Bearer',
+        #     'expires_in': '-30',     # initially 3600, need to be updated by you
+        # }
+        # client_id = r'foo'
+        # refresh_url = 'https://api.mollie.com/oauth2/tokens'
+        #
+        # # If needed.
+        # extra = {
+        #     'client_id': client_id,
+        #     'client_secret': r'potato',
+        # }
 
         from requests_oauthlib import OAuth2Session
         client = OAuth2Session(
             client_id,
-            token=self.get_token,
-            auto_refresh_url=refresh_url,
-            auto_refresh_kwargs=extra,
-            token_updater=self.set_token
+            token=token,
+            auto_refresh_url='https://api.mollie.com/oauth2/tokens',
+            # auto_refresh_kwargs=extra,
+            token_updater=set_token
         )
-        response = client.get(protected_url)
+
 
 
 def generate_querystring(params):
