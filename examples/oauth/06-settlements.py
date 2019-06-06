@@ -5,9 +5,6 @@ from __future__ import print_function
 from mollie.api.error import Error
 
 
-PROFILE_ID = 'pfl_v9hTwCvYqw'
-
-
 def main(client):
     try:
 

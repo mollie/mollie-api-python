@@ -5,9 +5,6 @@ from __future__ import print_function
 from mollie.api.error import Error
 
 
-ORGANIZATION_ID = 'org_12345678'
-
-
 def main(client):
     try:
         body = ''

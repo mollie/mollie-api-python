@@ -6,8 +6,7 @@ import json
 import os
 
 import flask
-from flask import Flask, redirect, url_for
-from flask import request
+from flask import Flask, redirect, request, url_for
 
 from mollie.api.client import Client
 
