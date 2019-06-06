@@ -10,10 +10,11 @@ ORGANIZATION_ID = 'org_12345678'
 
 def main(client):
     try:
+        body = ''
 
         # https://docs.mollie.com/reference/v2/organizations-api/current-organization
 
-        body = '<h1>Get current organization</h1>'
+        body += '<h1>Get current organization</h1>'
         response = client.organizations.get('me')
 
         print(response)
@@ -21,8 +22,10 @@ def main(client):
 
         # https://docs.mollie.com/reference/v2/organizations-api/current-organization
 
-        body = '<h1>Get organization</h1>'
-        response = client.organizations.get(ORGANIZATION_ID)
+        organisation_id = response.id
+
+        body += '<h1>Get organization</h1>'
+        response = client.organizations.get(organisation_id)
 
         print(response)
         body += str(response)

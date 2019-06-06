@@ -5,9 +5,6 @@ from __future__ import print_function
 from mollie.api.error import Error
 
 
-PROFILE_ID = 'pfl_v9hTwCvYqw'
-
-
 def main(client):
     try:
 
@@ -27,38 +24,32 @@ def main(client):
         print(response)
         body += str(response)
 
+        profile_id = response.id
+
         # https://docs.mollie.com/reference/v2/profiles-api/get-profile
 
-        body = '<h1>Get profile</h1>'
-        response = client.profiles.get(PROFILE_ID)
-
-        print(response)
-        body += str(response)
-
-        # https://docs.mollie.com/reference/v2/profiles-api/get-profile-me
-
-        body = '<h1>Get current profile</h1>'
-        response = client.profiles.get('me')
+        body += '<h1>Get profile</h1>'
+        response = client.profiles.get(profile_id)
 
         print(response)
         body += str(response)
 
         # https://docs.mollie.com/reference/v2/profiles-api/update-profile
 
-        body = '<h1>Update profile</h1>'
-        data = {
+        body += '<h1>Update profile</h1>'
+        data.update({
             'name': 'My website name updated',
             'email': 'updated-profile@example.org',
-        }
-        response = client.profiles.update(PROFILE_ID, data)
+        })
+        response = client.profiles.update(profile_id, data)
 
         print(response)
         body += str(response)
 
         # https://docs.mollie.com/reference/v2/profiles-api/enable-method
 
-        body = '<h1>Enable payment method</h1>'
-        profile = client.profiles.get(PROFILE_ID)
+        body += '<h1>Enable payment method</h1>'
+        profile = client.profiles.get(profile_id)
         response = client.profile_methods.on(profile, 'bancontact').create()
 
         print(response)
@@ -66,8 +57,7 @@ def main(client):
 
         # https://docs.mollie.com/reference/v2/profiles-api/disable-method
 
-        body = '<h1>Disable payment method</h1>'
-        profile = client.profiles.get(PROFILE_ID)
+        body += '<h1>Disable payment method</h1>'
         response = client.profile_methods.on(profile, 'bancontact').delete()
 
         print(response)
@@ -75,7 +65,7 @@ def main(client):
 
         # https://docs.mollie.com/reference/v2/profiles-api/list-profiles
 
-        body = '<h1>List profiles</h1>'
+        body += '<h1>List profiles</h1>'
         response = client.profiles.list()
 
         print(response)
@@ -83,11 +73,11 @@ def main(client):
 
         # https://docs.mollie.com/reference/v2/profiles-api/delete-profile
 
-        body = '<h1>Delete profile</h1>'
-        # response = client.profiles.delete(PROFILE_ID)
+        body += '<h1>Delete profile</h1>'
+        response = client.profiles.delete(profile_id)
 
-        # print(response)
-        # body += str(response)
+        print(response)
+        body += str(response)
 
         return body
 
