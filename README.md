@@ -185,6 +185,65 @@ refund = mollie_client.refunds.on(payment).create({
 })
 ```
 
+## Oauth2 ##
+
+Run the oauth2 examples.
+```
+FLASK_APP=examples/oauth/app.py \
+CLIENT_ID=app_TuUwqdU76H8kFaB5hsrVGdMp \
+CLIENT_SECRET=BrQfR325hwGg84jfNSBBM66BF9jg7hatC8EWrKDg \
+REDIRECT_URI=https://4d9d297d.ngrok.io/callback \
+flask run
+```
+
+The Authorize endpoint is the endpoint on Mollie web site where the merchant logs in, 
+and grants authorization to your client application. 
+E.g. when the merchant clicks on the Connect with Mollie button, 
+you should redirect the merchant to the Authorize endpoint.
+
+The resource owner can then grant the authorization to your client application for the scopes you have requested.
+
+Mollie will then redirect the resource owner to the redirect_uri you have specified. 
+The redirect_uri will be appended with a code parameter, which will contain the auth token. 
+You should then exchange the auth token for an access token using the Tokens API.
+
+Intitializing via oauth2
+
+```python
+
+def get_token():
+    """A method you should supply to retrieve a stored token. Return json or None."""
+    ...
+
+def set_token(token):
+    """A method you should supply to permanently store the token (json)"""
+    ...
+
+
+mollie_client = Client()
+authorized, authorization_url = mollie_client.setup_oauth(
+        client_id,
+        client_secret,
+        redirect_uri,
+        scope,
+        get_token(),
+        set_token,
+    )
+# Redirect to the authorization_url.
+
+# After the user confirmed she is redirected back to your redirect_uri. 
+# The view on this uri should call setup_oauth_authorization_response.
+# With authorization_response as parameter. This is the full callback URL (string) 
+ 
+mollie_client.setup_oauth_authorization_response(authorization_response)
+
+# Now the a token is stored via your `set_token` method for future use.
+
+# You can query the api:
+
+mollie_client.organizations.get('me')
+``` 
+
 For a working example, see [Example 11 - Refund payment](https://github.com/mollie/mollie-api-python/blob/master/examples/11-refund-payment.py).
 
 ## API documentation ##
