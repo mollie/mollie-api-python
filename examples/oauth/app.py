@@ -5,6 +5,7 @@ from __future__ import print_function
 import json
 import os
 
+import flask
 from flask import Flask
 from flask import request
 
@@ -24,24 +25,25 @@ def set_token(token):
         file.write(json.dumps(token))
 
 
+examples = [
+    '01-invoices',
+    '02-onboarding',
+    '03-organizations',
+    '04-permissions',
+    '05-profiles',
+    '06-settlements',
+]
+
+
 @app.route('/')
 def index():
     """
     FLASK_APP=examples/oauth/app.py CLIENT_ID=app_TuUwqdU76H8kFaB5hsrVGdMp CLIENT_SECRET=BrQfR325hwGg84jfNSBBM66BF9jg7hatC8EWrKDg REDIRECT_URI=https://9a334898.ngrok.io/callback flask run
     """
 
-    help_text = "FLASK_APP=examples/oauth/app.py " \
-                "CLIENT_ID=[your mollie client id] " \
-                "CLIENT_SECRET=[your mollie client secret] " \
-                "REDIRECT_URI=[your redirect uri] " \
-                "flask run"
-
     client_id = os.environ.get('CLIENT_ID')
-    assert bool(client_id), 'You have to set MOLLIE_CLIENT_ID. ' + help_text
     client_secret = os.environ.get('CLIENT_SECRET')
-    assert bool(client_secret), 'You have to set CLIENT_SECRET. ' + help_text
     redirect_uri = os.environ.get('REDIRECT_URI')
-    assert bool(redirect_uri), 'You have to set REDIRECT_URI. ' + help_text
 
     scope = [
         'payments.read',
@@ -69,6 +71,7 @@ def index():
     ]
 
     global client
+
     authorization_url = client.setup_oauth(
         client_id,
         client_secret,
@@ -88,7 +91,24 @@ def callback(*args, **kwargs):
     url = request.url.replace('http', 'https')  # This fakes httpS. DONT DO THIS!
     client.setup_oauth_authorization_response(url)
 
-    print(client.profiles.list())
-    print(client.invoices.list())
+    # print(client.profiles.list())
+    # print(client.invoices.list())
+    body = '<h1>Oauth client is setup</h1>'
+    body += '<a href="/examples">Examples</a></p>'
+    return body
 
-    return '200 OK'  # 200 OK
+
+@app.route('/examples')
+def examples_view():
+    body = '<h1>Examples</h1><ul>'
+    for example in examples:
+        body += '<li><a href="/{example}">{example}</a></li>'.format(example=example)
+    body += '</ul>'
+    return body
+
+
+@app.route('/<example>', methods=['GET', 'POST'])
+def run_example(example=None):
+    if example not in examples:
+        flask.abort(404, 'Example does not exist')
+    return __import__(example).main(client)

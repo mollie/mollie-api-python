@@ -18,7 +18,7 @@ from .resources.invoices import Invoices
 from .resources.methods import Methods
 from .resources.onboarding import Onboarding
 from .resources.orders import Orders
-from .resources.organisations import Organisations
+from .resources.organizations import Organizations
 from .resources.payment_chargebacks import PaymentChargebacks
 from .resources.payment_refunds import PaymentRefunds
 from .resources.payments import Payments
@@ -93,7 +93,7 @@ class Client(object):
         self.customer_subscriptions = CustomerSubscriptions(self)
         self.customer_payments = CustomerPayments(self)
         self.orders = Orders(self)
-        self.organisations = Organisations(self)
+        self.organizations = Organizations(self)
         self.subscription_payments = SubscriptionPayments(self)
         self.invoices = Invoices(self)
         self.permissions = Permissions(self)
