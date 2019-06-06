@@ -1,11 +1,11 @@
 from .base import Base
 
 
-class Organisation(Base):
+class Organization(Base):
     @classmethod
     def get_resource_class(cls, client):
-        from ..resources.organisations import Organisations
-        return Organisations(client)
+        from ..resources.organizations import Organizations
+        return Organizations(client)
 
     @property
     def id(self):

@@ -18,7 +18,7 @@ from .resources.invoices import Invoices
 from .resources.methods import Methods
 from .resources.onboarding import Onboarding
 from .resources.orders import Orders
-from .resources.organisations import Organisations
+from .resources.organizations import Organizations
 from .resources.payment_chargebacks import PaymentChargebacks
 from .resources.payment_refunds import PaymentRefunds
 from .resources.payments import Payments
@@ -93,7 +93,7 @@ class Client(object):
         self.customer_subscriptions = CustomerSubscriptions(self)
         self.customer_payments = CustomerPayments(self)
         self.orders = Orders(self)
-        self.organisations = Organisations(self)
+        self.organizations = Organizations(self)
         self.subscription_payments = SubscriptionPayments(self)
         self.invoices = Invoices(self)
         self.permissions = Permissions(self)
@@ -202,7 +202,7 @@ class Client(object):
                 raise RequestError('Unable to communicate with Mollie: {error}'.format(error=err))
         return response
 
-    def setup_oauth(self, client_id, client_secret, redirect_uri, scope, get_token, set_token):
+    def setup_oauth(self, client_id, client_secret, redirect_uri, scope, set_token=None):
         # TODO: keyword arguments
 
         """
@@ -214,9 +214,6 @@ class Client(object):
         :param get_token:
         :return: authorization url (url)
         """
-
-        isinstance(get_token, callable)
-        isinstance(set_token, callable)
 
         # Web Application Flow
         # The steps below outline how to use the default Authorization Grant Type flow
