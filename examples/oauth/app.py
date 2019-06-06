@@ -42,7 +42,8 @@ def index():
     FLASK_APP=examples/oauth/app.py \
     CLIENT_ID=app_TuUwqdU76H8kFaB5hsrVGdMp \
     CLIENT_SECRET=BrQfR325hwGg84jfNSBBM66BF9jg7hatC8EWrKDg \
-    REDIRECT_URI=https://9a334898.ngrok.io/callback flask run
+    REDIRECT_URI=https://4d9d297d.ngrok.io/callback \
+    flask run
     """
 
     client_id = os.environ.get('CLIENT_ID')
