@@ -230,6 +230,11 @@ class Client(object):
         self.client_secret = client_secret
         self.oauth = OAuth2Session(
             client_id,
+            auto_refresh_kwargs={
+                'client_id': client_id,
+                'client_secret': self.client_secret,
+            },
+            auto_refresh_url='https://api.mollie.com/oauth2/tokens',
             redirect_uri=redirect_uri,
             scope=scope,
             token=token,
