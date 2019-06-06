@@ -202,7 +202,7 @@ class Client(object):
                 raise RequestError('Unable to communicate with Mollie: {error}'.format(error=err))
         return response
 
-    def setup_oauth(self, client_id, client_secret, redirect_uri, scope, set_token):
+    def setup_oauth(self, client_id, client_secret, redirect_uri, scope, token, set_token):
         # TODO: keyword arguments
 
         """
@@ -226,17 +226,21 @@ class Client(object):
         # and the credentials previously obtained.
         # In addition most providers will request that you ask for access to a certain scope.
         from requests_oauthlib import OAuth2Session
-
+        self.set_token = set_token
         self.client_secret = client_secret
         self.oauth = OAuth2Session(
             client_id,
             redirect_uri=redirect_uri,
             scope=scope,
+            token=token,
             token_updater=set_token
         )
-        authorization_url, state = self.oauth.authorization_url('https://www.mollie.com/oauth2/authorize')
+        authorization_url = None
+        if not self.oauth.authorized:
+            authorization_url, state = self.oauth.authorization_url('https://www.mollie.com/oauth2/authorize')
 
-        return authorization_url  # The merchant should visit this url to authorize access.
+        # return authorization_url  # The merchant should visit this url to authorize access.
+        return self.oauth.authorized, authorization_url
 
     def setup_oauth_authorization_response(self, authorization_response):
         """
@@ -249,6 +253,7 @@ class Client(object):
             authorization_response=authorization_response,
             client_secret=self.client_secret,
         )
+        self.set_token(self.access_token)
         return self.access_token
 
     def oauth_refresh_token(self, client_id, token, set_token):
@@ -275,7 +280,7 @@ class Client(object):
             # auto_refresh_kwargs=extra,
             token_updater=set_token
         )
-
+        return client
 
 
 def generate_querystring(params):
