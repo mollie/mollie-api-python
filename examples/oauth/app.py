@@ -6,7 +6,7 @@ import json
 import os
 
 import flask
-from flask import Flask
+from flask import Flask, redirect, url_for
 from flask import request
 
 from mollie.api.client import Client
@@ -16,8 +16,9 @@ client = Client()
 
 
 def get_token():
-    with open('token.json', 'r') as file:
-        return json.loads(file.read())
+    if os.path.exists('token.json'):
+        with open('token.json', 'r') as file:
+            return json.loads(file.read())
 
 
 def set_token(token):
@@ -38,7 +39,10 @@ examples = [
 @app.route('/')
 def index():
     """
-    FLASK_APP=examples/oauth/app.py CLIENT_ID=app_TuUwqdU76H8kFaB5hsrVGdMp CLIENT_SECRET=BrQfR325hwGg84jfNSBBM66BF9jg7hatC8EWrKDg REDIRECT_URI=https://9a334898.ngrok.io/callback flask run
+    FLASK_APP=examples/oauth/app.py \
+    CLIENT_ID=app_TuUwqdU76H8kFaB5hsrVGdMp \
+    CLIENT_SECRET=BrQfR325hwGg84jfNSBBM66BF9jg7hatC8EWrKDg \
+    REDIRECT_URI=https://9a334898.ngrok.io/callback flask run
     """
 
     client_id = os.environ.get('CLIENT_ID')
@@ -72,16 +76,20 @@ def index():
 
     global client
 
-    authorization_url = client.setup_oauth(
+    authorized, authorization_url = client.setup_oauth(
         client_id,
         client_secret,
         redirect_uri,
         scope,
+        get_token(),
         set_token,
     )
-    body = '<h1>Your applications config panel</h1>'
-    body += '<a href="{authorization_url}">{authorization_url}</a>'.format(authorization_url=authorization_url)
-    return body
+
+    if not authorized:
+        body = '<h1>Your applications config panel</h1>'
+        body += '<a href="{authorization_url}">{authorization_url}</a>'.format(authorization_url=authorization_url)
+        return body
+    return redirect(url_for('examples_view'))
 
 
 @app.route('/callback')
