@@ -99,5 +99,3 @@ def test_oauth2(client):
     access_token = client.setup_oauth_authorization_response(return_url)
 
     assert get_token() == access_token
-
-    client.oauth_refresh_token(client_id, get_token(), set_token)

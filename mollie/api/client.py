@@ -1,3 +1,5 @@
+# coding=utf-8
+
 import json
 import platform
 import re
@@ -6,6 +8,7 @@ import warnings
 from collections import OrderedDict
 
 import requests
+from requests_oauthlib import OAuth2Session
 
 from .error import RequestError, RequestSetupError
 from .resources.captures import Captures
@@ -80,6 +83,7 @@ class Client(object):
         self.oauth = None
         self.client_secret = None
         self.access_token = None
+        self.set_token = None
 
         # add endpoint resources
         self.payments = Payments(self)
@@ -214,29 +218,15 @@ class Client(object):
         return response
 
     def setup_oauth(self, client_id, client_secret, redirect_uri, scope, token, set_token):
-        # TODO: keyword arguments
-
         """
         :param client_id: (string)
         :param client_secret: (string)
         :param redirect_uri: (string)
         :param scope: Mollie connect permissions (list)
-        :param set_token:
+        :param token: The stored token (dict)
+        :param set_token: Callable that stores a token (dict)
         :return: authorization url (url)
         """
-        # isinstance(get_token, callable)
-        # isinstance(set_token, callable)
-
-        # Web Application Flow
-        # The steps below outline how to use the default Authorization Grant Type flow
-        # to obtain an access token and fetch a protected resource.
-        # Here provider is Mollie and the protected resource is the user’s profile.
-
-        # User authorization through redirection.
-        # First we will create an authorization url from the base URL given by the provider
-        # and the credentials previously obtained.
-        # In addition most providers will request that you ask for access to a certain scope.
-        from requests_oauthlib import OAuth2Session
         self.set_token = set_token
         self.client_secret = client_secret
         self.oauth = OAuth2Session(
@@ -255,7 +245,7 @@ class Client(object):
         if not self.oauth.authorized:
             authorization_url, state = self.oauth.authorization_url('https://www.mollie.com/oauth2/authorize')
 
-        # return authorization_url  # The merchant should visit this url to authorize access.
+        # The merchant should visit this url to authorize access.
         return self.oauth.authorized, authorization_url
 
     def setup_oauth_authorization_response(self, authorization_response):
@@ -271,32 +261,6 @@ class Client(object):
         )
         self.set_token(self.access_token)
         return self.access_token
-
-    def oauth_refresh_token(self, client_id, token, set_token):
-        # token = {
-        #     'access_token': 'eswfld123kjhn1v5423',
-        #     'refresh_token': 'asdfkljh23490sdf',
-        #     'token_type': 'Bearer',
-        #     'expires_in': '-30',     # initially 3600, need to be updated by you
-        # }
-        # client_id = r'foo'
-        # refresh_url = 'https://api.mollie.com/oauth2/tokens'
-        #
-        # # If needed.
-        # extra = {
-        #     'client_id': client_id,
-        #     'client_secret': r'potato',
-        # }
-
-        from requests_oauthlib import OAuth2Session
-        client = OAuth2Session(
-            client_id,
-            token=token,
-            auto_refresh_url='https://api.mollie.com/oauth2/tokens',
-            # auto_refresh_kwargs=extra,
-            token_updater=set_token
-        )
-        return client
 
 
 def generate_querystring(params):
