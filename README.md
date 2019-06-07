@@ -190,9 +190,9 @@ refund = mollie_client.refunds.on(payment).create({
 Run the oauth2 examples.
 ```
 FLASK_APP=examples/oauth/app.py \
-CLIENT_ID=app_TuUwqdU76H8kFaB5hsrVGdMp \
-CLIENT_SECRET=BrQfR325hwGg84jfNSBBM66BF9jg7hatC8EWrKDg \
-REDIRECT_URI=https://4d9d297d.ngrok.io/callback \
+CLIENT_ID=your_client_id \
+CLIENT_SECRET=your_client_secret \
+REDIRECT_URI=https://your_domain.tld/callback \
 flask run
 ```
 
