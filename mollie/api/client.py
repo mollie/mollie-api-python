@@ -243,6 +243,7 @@ class Client(object):
         :param set_token: Callable that stores a token (dict)
         :return: authorization url (url)
         """
+        self.set_user_agent_component('OAuth', '2.0', sanitize=False)  # keep spelling equal to the PHP client
         self.set_token = set_token
         self.client_secret = client_secret
         self.oauth = OAuth2Session(
