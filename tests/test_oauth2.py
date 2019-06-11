@@ -8,12 +8,6 @@ logging.basicConfig(level=logging.DEBUG)
 token = None
 
 
-# try:
-#     import urlparse
-# except ImportError:
-#     import urllib.parse as urlparse
-
-
 def get_token():
     return token
 
