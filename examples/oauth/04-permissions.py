@@ -10,16 +10,12 @@ def main(client):
 
         body = '<h1>List permissions</h1>'
         response = client.permissions.list()
-
-        print(response)
         body += str(response)
 
         # https://docs.mollie.com/reference/v2/permissions-api/get-permission
 
         body += '<h1>Get permission</h1>'
         response = client.permissions.get('payments.read')
-
-        print(response)
         body += str(response)
 
         return body

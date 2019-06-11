@@ -10,9 +10,6 @@ def main(client):
 
         body = '<h1>Get onboarding status</h1>'
         onboarding = client.onboarding.get('me')
-
-        print(onboarding)
-
         body += 'Status: <b>{onboarding.status}</b>'.format(onboarding=onboarding)
 
         # https://docs.mollie.com/reference/v2/onboarding-api/submit-onboarding-data
@@ -24,7 +21,6 @@ def main(client):
             }
         }
         onboarding = client.onboarding.create(resource_id='me', data=data)
-        print(onboarding)
         body += str(onboarding)
 
         return body

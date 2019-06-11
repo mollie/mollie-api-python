@@ -96,9 +96,6 @@ def callback(*args, **kwargs):
 
     url = request.url.replace('http', 'https')  # This fakes httpS. DONT DO THIS!
     client.setup_oauth_authorization_response(url)
-
-    # print(client.profiles.list())
-    # print(client.invoices.list())
     body = '<h1>Oauth client is setup</h1>'
     body += '<a href="/examples">Examples</a></p>'
     return body

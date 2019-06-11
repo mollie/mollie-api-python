@@ -18,8 +18,6 @@ def main(client):
           'mode': 'live',
         }
         response = client.profiles.create(data)
-
-        print(response)
         body += str(response)
 
         profile_id = response.id
@@ -28,8 +26,6 @@ def main(client):
 
         body += '<h1>Get profile</h1>'
         response = client.profiles.get(profile_id)
-
-        print(response)
         body += str(response)
 
         # https://docs.mollie.com/reference/v2/profiles-api/update-profile
@@ -40,8 +36,6 @@ def main(client):
             'email': 'updated-profile@example.org',
         })
         response = client.profiles.update(profile_id, data)
-
-        print(response)
         body += str(response)
 
         # https://docs.mollie.com/reference/v2/profiles-api/enable-method
@@ -49,32 +43,24 @@ def main(client):
         body += '<h1>Enable payment method</h1>'
         profile = client.profiles.get(profile_id)
         response = client.profile_methods.on(profile, 'bancontact').create()
-
-        print(response)
         body += str(response)
 
         # https://docs.mollie.com/reference/v2/profiles-api/disable-method
 
         body += '<h1>Disable payment method</h1>'
         response = client.profile_methods.on(profile, 'bancontact').delete()
-
-        print(response)
         body += str(response)
 
         # https://docs.mollie.com/reference/v2/profiles-api/list-profiles
 
         body += '<h1>List profiles</h1>'
         response = client.profiles.list()
-
-        print(response)
         body += str(response)
 
         # https://docs.mollie.com/reference/v2/profiles-api/delete-profile
 
         body += '<h1>Delete profile</h1>'
         response = client.profiles.delete(profile_id)
-
-        print(response)
         body += str(response)
 
         return body
