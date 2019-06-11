@@ -19,6 +19,7 @@ def set_token(tkn):
 
 @responses.activate
 def test_oauth2(client):
+    """Test oauth2 integration"""
     client_id = "app_TuUwqdU76H8kFaB5hsrVGdMp"
     client_secret = "BrQfR325hwGg84jfNSBBM66BF9jg7hatC8EWrKDg"
     redirect_uri = "https://9a334898.ngrok.io/callback"
