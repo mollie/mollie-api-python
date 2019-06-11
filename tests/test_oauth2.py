@@ -1,9 +1,5 @@
-import logging
-
 import requests
 import responses
-
-logging.basicConfig(level=logging.DEBUG)
 
 token = None
 
