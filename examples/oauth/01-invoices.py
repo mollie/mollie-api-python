@@ -1,7 +1,5 @@
 # coding=utf-8
 
-from __future__ import print_function
-
 from mollie.api.error import Error
 
 INVOICE_ID = 'inv_xBEbP9rvAq'
