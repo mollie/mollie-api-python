@@ -187,7 +187,13 @@ refund = mollie_client.refunds.on(payment).create({
 
 ## Oauth2 ##
 
-Run the oauth2 examples.
+Oauth authentication process redirects back to your application.
+Therefore you should expose your local web server (the examples) as public urls.
+
+A webservice like [ngrok.com](https://ngrok.com/) can help you with that. Make sure to set REDIRECT_URI accordingly.
+
+Run the oauth2 examples:
+
 ```
 FLASK_APP=examples/oauth/app.py \
 CLIENT_ID=your_client_id \
