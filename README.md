@@ -19,7 +19,7 @@ To use the Mollie API client, the following things are required:
 + Follow [a few steps](https://www.mollie.com/dashboard/?modal=onboarding) to enable payment methods in live mode, and let us handle the rest.
 + Python >= 2.7
 + Up-to-date OpenSSL (or other SSL/TLS toolkit)
-+ Mollie API client for Python has a dependency on [Requests](http://docs.python-requests.org/en/master/).
++ Mollie API client for Python has a dependency on [Requests](http://docs.python-requests.org/en/master/) and [Requests-OAuthlib](https://requests-oauthlib.readthedocs.io/en/latest/)
 
 ## Installation ##
 **Please note:** If you are looking to install the v1 version of the Mollie API client, please refer to the [v1-develop branch](https://github.com/mollie/mollie-api-python/tree/v1-develop) for installation instructions.
