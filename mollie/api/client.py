@@ -168,9 +168,7 @@ class Client(object):
         components = ["/".join(x) for x in self.user_agent_components.items()]
         return " ".join(components)
 
-    def perform_http_call(self, http_method, path, data=None, params=None):
-        if not self.oauth and not self.api_key:
-            raise RequestSetupError('You have not set an API key. Please use set_api_key() to set the API key.')
+    def _format_request_data(self, path, data, params):
         if path.startswith('%s/%s' % (self.api_endpoint, self.api_version)):
             url = path
         else:
@@ -187,35 +185,49 @@ class Client(object):
             url += '?' + querystring
             params = None
 
-        if self.oauth:
-            try:
-                response = self.oauth.request(
-                    http_method,
-                    url,
-                    params=params,
-                    data=data,
-                )
-            except Exception as err:
-                raise RequestError('Unable to communicate with Mollie: {error}'.format(error=err))
-        else:
-            try:
-                response = requests.request(
-                    http_method, url,
-                    verify=True,
-                    headers={
-                        'Accept': 'application/json',
-                        'Authorization': 'Bearer {api_key}'.format(api_key=self.api_key),
-                        'Content-Type': 'application/json',
-                        'User-Agent': self.user_agent,
-                        'X-Mollie-Client-Info': self.UNAME,
-                    },
-                    params=params,
-                    data=data,
-                    timeout=self.timeout,
-                )
-            except Exception as err:
-                raise RequestError('Unable to communicate with Mollie: {error}'.format(error=err))
+        return url, data, params
+
+    def _perform_http_call_apikey(self, http_method, path, data=None, params=None):
+        if not self.api_key:
+            raise RequestSetupError('You have not set an API key. Please use set_api_key() to set the API key.')
+        url, data, params = self._format_request_data(path, data, params)
+        try:
+            response = requests.request(
+                http_method, url,
+                verify=True,
+                headers={
+                    'Accept': 'application/json',
+                    'Authorization': 'Bearer {api_key}'.format(api_key=self.api_key),
+                    'Content-Type': 'application/json',
+                    'User-Agent': self.user_agent,
+                    'X-Mollie-Client-Info': self.UNAME,
+                },
+                params=params,
+                data=data,
+                timeout=self.timeout,
+            )
+        except Exception as err:
+            raise RequestError('Unable to communicate with Mollie: {error}'.format(error=err))
         return response
+
+    def _perform_http_call_oauth(self, http_method, path, data=None, params=None):
+        url, data, params = self._format_request_data(path, data, params)
+        try:
+            response = self.oauth.request(
+                http_method,
+                url,
+                params=params,
+                data=data,
+            )
+        except Exception as err:
+            raise RequestError('Unable to communicate with Mollie: {error}'.format(error=err))
+        return response
+
+    def perform_http_call(self, http_method, path, data=None, params=None):
+        if self.oauth:
+            return self._perform_http_call_oauth(http_method, path, data=data, params=params)
+        else:
+            return self._perform_http_call_apikey(http_method, path, data=data, params=params)
 
     def setup_oauth(self, client_id, client_secret, redirect_uri, scope, token, set_token):
         """
