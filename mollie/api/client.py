@@ -53,6 +53,10 @@ class Client(object):
     API_VERSION = 'v2'
     UNAME = ' '.join(platform.uname())
 
+    OAUTH_AUTO_REFRESH_URL = API_ENDPOINT + '/oauth2/tokens'
+    OAUTH_AUTHORIZATION_URL = API_ENDPOINT + '/oauth2/authorize'
+    OAUTH_TOKEN_URL = API_ENDPOINT + '/oauth2/tokens'
+
     @staticmethod
     def validate_api_endpoint(api_endpoint):
         return api_endpoint.strip().rstrip('/')
@@ -247,7 +251,7 @@ class Client(object):
                 'client_id': client_id,
                 'client_secret': self.client_secret,
             },
-            auto_refresh_url='https://api.mollie.com/oauth2/tokens',
+            auto_refresh_url=self.OAUTH_AUTO_REFRESH_URL,
             redirect_uri=redirect_uri,
             scope=scope,
             token=token,
@@ -255,7 +259,7 @@ class Client(object):
         )
         authorization_url = None
         if not self.oauth.authorized:
-            authorization_url, state = self.oauth.authorization_url('https://www.mollie.com/oauth2/authorize')
+            authorization_url, state = self.oauth.authorization_url(self.OAUTH_AUTHORIZATION_URL)
 
         # The merchant should visit this url to authorize access.
         return self.oauth.authorized, authorization_url
@@ -267,7 +271,7 @@ class Client(object):
         """
         # Fetch an access token from the provider using the authorization code obtained during user authorization.
         self.access_token = self.oauth.fetch_token(
-            'https://api.mollie.com/oauth2/tokens',
+            self.OAUTH_TOKEN_URL,
             authorization_response=authorization_response,
             client_secret=self.client_secret,
         )
