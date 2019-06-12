@@ -187,6 +187,8 @@ refund = mollie_client.refunds.on(payment).create({
 
 ## Oauth2 ##
 
+At https://docs.mollie.com/oauth/getting-started the oauth process is explained. Please read this first.
+
 Oauth authentication process redirects back to your application.
 Therefore you should expose your local web server (the examples) as public urls.
 
