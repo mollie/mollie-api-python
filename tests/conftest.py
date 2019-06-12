@@ -1,4 +1,5 @@
 import os
+import time
 
 import pytest
 import responses
@@ -13,6 +14,40 @@ def client():
 
     client = Client()
     client.set_api_key(api_key)
+    return client
+
+
+@pytest.fixture(scope='session')
+def oauth_client():
+    """Setup a Mollie API client with initialized OAuth2 authentication."""
+    client_id = "app_nvQQ4mGHqprcfFFqpnmbOgUs"
+    client_secret = "2Tuc4qk8U6kCA8qBV3Fb2wwceDDfeRebDQpbOgUs"
+    redirect_uri = "https://example.com/callback"
+    scope = ("profile.read",)
+    token = {
+        "access_token": "access_H35x4awgfxPKPuHRjpKMAkP2bOgUs",
+        "expires_in": 3600,
+        "token_type": "bearer",
+        "scope": [
+            "profiles.read",
+        ],
+        "refresh_token": "refresh_asfqqJCxj9TjU8B544r44Tsu9bOgUs",
+        "expires_at": time.time() + 300  # token is valid for another 5 minutes
+    }
+
+    def set_token(x):
+        print(x)
+
+    client = Client()
+    client.setup_oauth(
+        client_id=client_id,
+        client_secret=client_secret,
+        redirect_uri=redirect_uri,
+        scope=scope,
+        token=token,
+        set_token=set_token,
+    )
+    assert client.oauth.authorized is True
     return client
 
 
