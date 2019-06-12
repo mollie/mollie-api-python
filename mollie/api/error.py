@@ -108,3 +108,29 @@ class DataConsistencyError(Error):
     We received different data than expected from the API.
     """
     pass
+
+
+"""
+Deprecation policy
+
+When a minor version release will be done, remove all code that triggers the DeprecationWarning subclass.
+Then rename the DeprecationWarning subclass to the next minor version (RemovedIn23Warning => RemovedIn24Warning).
+and rename the PendingDeprecation subclass below also.
+
+This will make all existing PendingDeprecationWarnings change to DeprecationWarnings.
+
+This deprecation policy is similar to what is used in Django and Django-rest-framework.
+See https://www.django-rest-framework.org/community/release-notes/#deprecation-policy for details.
+"""
+
+
+class RemovedIn23Warning(DeprecationWarning):
+    """Deprecation warning for features that will be removed in version 2.3.0."""
+
+    pass
+
+
+class RemovedIn24Warning(PendingDeprecationWarning):
+    """Pending deprecation warning for features that will be removed in version 2.4.0."""
+
+    pass
