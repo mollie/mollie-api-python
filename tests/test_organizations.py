@@ -3,11 +3,11 @@ from mollie.api.objects.organization import Organization
 ORGANIZATION_ID = 'org_12345678'
 
 
-def test_get_organization(client, response):
+def test_get_organization(oauth_client, response):
     """Retrieve a single organization."""
     response.get('https://api.mollie.com/v2/organizations/%s' % ORGANIZATION_ID, 'organization_single')
 
-    organization = client.organizations.get(ORGANIZATION_ID)
+    organization = oauth_client.organizations.get(ORGANIZATION_ID)
     assert isinstance(organization, Organization)
     assert organization.id == ORGANIZATION_ID
     assert organization.name == 'Mollie B.V.'
@@ -22,11 +22,11 @@ def test_get_organization(client, response):
     }
 
 
-def test_get_current_organization(client, response):
+def test_get_current_organization(oauth_client, response):
     """Retrieve a current organization."""
     response.get('https://api.mollie.com/v2/organizations/me', 'organization_current')
 
-    organization = client.organizations.get('me')
+    organization = oauth_client.organizations.get('me')
     assert isinstance(organization, Organization)
     assert organization.id == ORGANIZATION_ID
     assert organization.name == 'Mollie B.V.'
