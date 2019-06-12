@@ -332,8 +332,20 @@ def test_client_default_user_agent(client, response):
     assert re.match(regex, request.headers['User-Agent'])
 
 
-def test_client_user_agent_with_oauth():
-    """When authenticating with an access token, the User-Agent should cont an OAuth component."""
+def test_oauth_client_default_user_agent(oauth_client, response):
+    """Default user-agent should contain some known values."""
+
+    regex = re.compile(r'^Mollie/[\d\.]+ Python/[\w\.\+]+ OpenSSL/[\w\.]+ OAuth/2.0$')
+    assert re.match(regex, oauth_client.user_agent)
+
+    response.get('https://api.mollie.com/v2/profiles/me', 'profile_single')
+    oauth_client.profiles.get('me')
+    request = response.calls[0].request
+    assert re.match(regex, request.headers['User-Agent'])
+
+
+def test_client_user_agent_with_access_token():
+    """When authenticating with an access token, the User-Agent should contain an OAuth component."""
     client = Client()
     assert 'OAuth'.lower() not in client.user_agent.lower()
     client.set_access_token('access_123')
