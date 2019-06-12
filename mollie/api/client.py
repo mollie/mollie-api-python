@@ -1,3 +1,5 @@
+# coding=utf-8
+
 import json
 import platform
 import re
@@ -6,6 +8,7 @@ import warnings
 from collections import OrderedDict
 
 import requests
+from requests_oauthlib import OAuth2Session
 
 from .error import RequestError, RequestSetupError
 from .resources.captures import Captures
@@ -18,7 +21,7 @@ from .resources.invoices import Invoices
 from .resources.methods import Methods
 from .resources.onboarding import Onboarding
 from .resources.orders import Orders
-from .resources.organisations import Organisations
+from .resources.organizations import Organizations
 from .resources.payment_chargebacks import PaymentChargebacks
 from .resources.payment_refunds import PaymentRefunds
 from .resources.payments import Payments
@@ -50,6 +53,10 @@ class Client(object):
     API_VERSION = 'v2'
     UNAME = ' '.join(platform.uname())
 
+    OAUTH_AUTHORIZATION_URL = 'https://www.mollie.com/oauth2/authorize'
+    OAUTH_AUTO_REFRESH_URL = API_ENDPOINT + '/oauth2/tokens'
+    OAUTH_TOKEN_URL = API_ENDPOINT + '/oauth2/tokens'
+
     @staticmethod
     def validate_api_endpoint(api_endpoint):
         return api_endpoint.strip().rstrip('/')
@@ -77,6 +84,11 @@ class Client(object):
         self.timeout = timeout
         self.api_key = None
 
+        self.oauth = None
+        self.client_secret = None
+        self.access_token = None
+        self.set_token = None
+
         # add endpoint resources
         self.payments = Payments(self)
         self.payment_refunds = PaymentRefunds(self)
@@ -94,7 +106,7 @@ class Client(object):
         self.customer_subscriptions = CustomerSubscriptions(self)
         self.customer_payments = CustomerPayments(self)
         self.orders = Orders(self)
-        self.organisations = Organisations(self)
+        self.organizations = Organizations(self)
         self.subscription_payments = SubscriptionPayments(self)
         self.invoices = Invoices(self)
         self.permissions = Permissions(self)
@@ -160,9 +172,7 @@ class Client(object):
         components = ["/".join(x) for x in self.user_agent_components.items()]
         return " ".join(components)
 
-    def perform_http_call(self, http_method, path, data=None, params=None):
-        if not self.api_key:
-            raise RequestSetupError('You have not set an API key. Please use set_api_key() to set the API key.')
+    def _format_request_data(self, path, data, params):
         if path.startswith('%s/%s' % (self.api_endpoint, self.api_version)):
             url = path
         else:
@@ -179,6 +189,12 @@ class Client(object):
             url += '?' + querystring
             params = None
 
+        return url, data, params
+
+    def _perform_http_call_apikey(self, http_method, path, data=None, params=None):
+        if not self.api_key:
+            raise RequestSetupError('You have not set an API key. Please use set_api_key() to set the API key.')
+        url, data, params = self._format_request_data(path, data, params)
         try:
             response = requests.request(
                 http_method, url,
@@ -197,6 +213,71 @@ class Client(object):
         except Exception as err:
             raise RequestError('Unable to communicate with Mollie: {error}'.format(error=err))
         return response
+
+    def _perform_http_call_oauth(self, http_method, path, data=None, params=None):
+        url, data, params = self._format_request_data(path, data, params)
+        try:
+            response = self.oauth.request(
+                http_method,
+                url,
+                params=params,
+                data=data,
+            )
+        except Exception as err:
+            raise RequestError('Unable to communicate with Mollie: {error}'.format(error=err))
+        return response
+
+    def perform_http_call(self, http_method, path, data=None, params=None):
+        if self.oauth:
+            return self._perform_http_call_oauth(http_method, path, data=data, params=params)
+        else:
+            return self._perform_http_call_apikey(http_method, path, data=data, params=params)
+
+    def setup_oauth(self, client_id, client_secret, redirect_uri, scope, token, set_token):
+        """
+        :param client_id: (string)
+        :param client_secret: (string)
+        :param redirect_uri: (string)
+        :param scope: Mollie connect permissions (list)
+        :param token: The stored token (dict)
+        :param set_token: Callable that stores a token (dict)
+        :return: authorization url (url)
+        """
+        self.set_user_agent_component('OAuth', '2.0', sanitize=False)  # keep spelling equal to the PHP client
+        self.set_token = set_token
+        self.client_secret = client_secret
+        self.oauth = OAuth2Session(
+            client_id,
+            auto_refresh_kwargs={
+                'client_id': client_id,
+                'client_secret': self.client_secret,
+            },
+            auto_refresh_url=self.OAUTH_AUTO_REFRESH_URL,
+            redirect_uri=redirect_uri,
+            scope=scope,
+            token=token,
+            token_updater=set_token
+        )
+        authorization_url = None
+        if not self.oauth.authorized:
+            authorization_url, state = self.oauth.authorization_url(self.OAUTH_AUTHORIZATION_URL)
+
+        # The merchant should visit this url to authorize access.
+        return self.oauth.authorized, authorization_url
+
+    def setup_oauth_authorization_response(self, authorization_response):
+        """
+        :param authorization_response: The full callback URL (string)
+        :return: None
+        """
+        # Fetch an access token from the provider using the authorization code obtained during user authorization.
+        self.access_token = self.oauth.fetch_token(
+            self.OAUTH_TOKEN_URL,
+            authorization_response=authorization_response,
+            client_secret=self.client_secret,
+        )
+        self.set_token(self.access_token)
+        return self.access_token
 
 
 def generate_querystring(params):

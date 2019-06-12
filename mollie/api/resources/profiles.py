@@ -10,9 +10,13 @@ class Profiles(Base):
         return Profile(result, self.client)
 
     def get(self, profile_id, **params):
-        if not profile_id or not profile_id.startswith(self.RESOURCE_ID_PREFIX):
+        if not profile_id or \
+                (not profile_id.startswith(self.RESOURCE_ID_PREFIX)
+                 and not profile_id == 'me'):
             raise IdentifierError(
-                "Invalid profile ID: '{id}'. A profile ID should start with '{prefix}'.".format(
-                    id=profile_id, prefix=self.RESOURCE_ID_PREFIX)
+                "Invalid profile ID: '{id}'. A profile ID should start with '{prefix}' "
+                "or it should be 'me'.".format(
+                    id=profile_id,
+                    prefix=self.RESOURCE_ID_PREFIX)
             )
         return super(Profiles, self).get(profile_id, **params)

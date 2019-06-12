@@ -1,7 +1,7 @@
 from mollie.api.objects.onboarding import Onboarding
-from mollie.api.objects.organisation import Organisation
+from mollie.api.objects.organization import Organization
 
-ORGANISATION_ID = 'org_12345678'
+ORGANIZATION_ID = 'org_12345678'
 
 
 def test_get_onboarding(client, response):
@@ -36,12 +36,12 @@ def test_create_onboarding(client, response):
     assert isinstance(onboarding, Onboarding)
 
 
-def test_onboarding_get_organisation(client, response):
-    """Retrieve organisation related to onboarding."""
+def test_onboarding_get_organization(client, response):
+    """Retrieve organization related to onboarding."""
     response.get('https://api.mollie.com/v2/onboarding/me', 'onboarding_me')
-    response.get('https://api.mollie.com/v2/organization/%s' % ORGANISATION_ID, 'organisation_single')
+    response.get('https://api.mollie.com/v2/organization/%s' % ORGANIZATION_ID, 'organization_single')
 
     onboarding = client.onboarding.get('me')
-    organisation = onboarding.organisation
-    assert isinstance(organisation, Organisation)
-    assert organisation.id == ORGANISATION_ID
+    organization = onboarding.organization
+    assert isinstance(organization, Organization)
+    assert organization.id == ORGANIZATION_ID
