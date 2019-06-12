@@ -13,7 +13,7 @@ def main(client):
         response = client.settlements.list()
         body += str(response)
 
-        settlement_id = 'stl_123'  # Your open settlement id here
+        settlement_id = next(response).id
 
         # https://docs.mollie.com/reference/v2/settlements-api/get-settlement
 
