@@ -217,15 +217,30 @@ You should then exchange the auth token for an access token using the Tokens API
 
 Intitializing via oauth2
 
+You should implement `get_token` and `set_token` methods yourself.
+They get and set the oauth token.
+The token type is dict.
+
+These are example methods, you can use your own storage.
+
 ```python
 
 def get_token():
-    """A method you should supply to retrieve a stored token. Return dict or None."""
-    ...
+    """
+    :return: token (dict) or None
+    """
+    if os.path.exists('token.json'):
+        with open('token.json', 'r') as file:
+            return json.loads(file.read())
+
 
 def set_token(token):
-    """A method you should supply to permanently store the token (dict)"""
-    ...
+    """
+    :param token: token (dict)
+    :return: None
+    """
+    with open('token.json', 'w') as file:
+        file.write(json.dumps(token))
 
 
 mollie_client = Client()

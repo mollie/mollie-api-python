@@ -13,12 +13,19 @@ client = Client()
 
 
 def get_token():
+    """
+    :return: token (dict) or None
+    """
     if os.path.exists('token.json'):
         with open('token.json', 'r') as file:
             return json.loads(file.read())
 
 
 def set_token(token):
+    """
+    :param token: token (dict)
+    :return: None
+    """
     with open('token.json', 'w') as file:
         file.write(json.dumps(token))
 
