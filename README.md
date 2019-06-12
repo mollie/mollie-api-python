@@ -218,11 +218,11 @@ Intitializing via oauth2
 ```python
 
 def get_token():
-    """A method you should supply to retrieve a stored token. Return json or None."""
+    """A method you should supply to retrieve a stored token. Return dict or None."""
     ...
 
 def set_token(token):
-    """A method you should supply to permanently store the token (json)"""
+    """A method you should supply to permanently store the token (dict)"""
     ...
 
 
