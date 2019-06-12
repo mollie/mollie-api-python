@@ -1,6 +1,7 @@
 import pytest
 
 from mollie.api.error import IdentifierError
+from mollie.api.objects.capture import Capture
 from mollie.api.objects.chargeback import Chargeback
 from mollie.api.objects.customer import Customer
 from mollie.api.objects.mandate import Mandate
@@ -8,6 +9,7 @@ from mollie.api.objects.method import Method
 from mollie.api.objects.order import Order
 from mollie.api.objects.payment import Payment
 from mollie.api.objects.refund import Refund
+from mollie.api.objects.settlement import Settlement
 from mollie.api.objects.subscription import Subscription
 
 from .utils import assert_list_object
@@ -66,13 +68,15 @@ def test_get_single_payment(client, response):
     """Retrieve a single payment by payment id."""
     response.get('https://api.mollie.com/v2/payments/%s' % PAYMENT_ID, 'payment_single')
     response.get('https://api.mollie.com/v2/payments/%s/refunds' % PAYMENT_ID, 'refunds_list')
-    response.get('https://api.mollie.com/v2/payments/%s/chargebacks' % PAYMENT_ID, 'chargebacks_list')
+    response.get('https://api.mollie.com/v2/payments/%s/chargebacks' % PAYMENT_ID,
+                 'chargebacks_list')
     response.get('https://api.mollie.com/v2/customers/%s' % CUSTOMER_ID, 'customer_single')
     response.get('https://api.mollie.com/v2/customers/{cust}/mandates/{man}'.format(
         cust=CUSTOMER_ID, man=MANDATE_ID), 'customer_mandate_single')
     response.get('https://api.mollie.com/v2/customers/{cust}/subscriptions/{sub}'.format(
         cust=CUSTOMER_ID, sub=SUBSCRIPTION_ID), 'subscription_single')
-    response.get('https://api.mollie.com/v2/orders/{order_id}'.format(order_id=ORDER_ID), 'order_single')
+    response.get('https://api.mollie.com/v2/orders/{order_id}'.format(order_id=ORDER_ID),
+                 'order_single')
 
     payment = client.payments.get(PAYMENT_ID)
     assert isinstance(payment, Payment)
@@ -100,8 +104,11 @@ def test_get_single_payment(client, response):
     assert payment.locale is None
     assert payment.country_code is None
     assert payment.profile_id == 'pfl_QkEhN94Ba'
-    assert payment.settlement_amount is None
-    assert payment.settlement_id is None
+    assert payment.settlement_amount == {
+        "currency": "EUR",
+        "value": "39.75"
+    }
+    assert payment.settlement_id == 'stl_jDk30akdN'
     assert payment.customer_id == CUSTOMER_ID
     assert payment.sequence_type == Payment.SEQUENCETYPE_RECURRING
     assert payment.mandate_id == MANDATE_ID
@@ -144,14 +151,24 @@ def test_payment_get_related_refunds(client, response):
 def test_payment_get_related_chargebacks(client, response):
     """Get chargebacks related to payment id."""
     response.get('https://api.mollie.com/v2/payments/%s' % PAYMENT_ID, 'payment_single')
-    response.get('https://api.mollie.com/v2/payments/%s/chargebacks' % PAYMENT_ID, 'chargebacks_list')
+    response.get('https://api.mollie.com/v2/payments/%s/chargebacks' % PAYMENT_ID,
+                 'chargebacks_list')
 
     payment = client.payments.get(PAYMENT_ID)
     chargebacks = payment.chargebacks
     assert_list_object(chargebacks, Chargeback)
 
 
-@pytest.mark.xfail(strict=True, reason="Settlement API is not yet implemented")
+def test_payment_get_related_captures(client, response):
+    """Get captures related to payment id."""
+    response.get('https://api.mollie.com/v2/payments/%s' % PAYMENT_ID, 'payment_single')
+    response.get('https://api.mollie.com/v2/payments/%s/captures' % PAYMENT_ID, 'captures_list')
+
+    payment = client.payments.get(PAYMENT_ID)
+    captures = payment.captures
+    assert_list_object(captures, Capture)
+
+
 def test_payment_get_related_settlement(client, response):
     """Get the settlement related to the payment."""
     response.get('https://api.mollie.com/v2/payments/%s' % PAYMENT_ID, 'payment_single')
@@ -159,7 +176,7 @@ def test_payment_get_related_settlement(client, response):
 
     payment = client.payments.get(PAYMENT_ID)
     settlement = payment.settlement
-    # assert isinstance(settlement, Settlement)
+    assert isinstance(settlement, Settlement)
     assert settlement.id == SETTLEMENT_ID
 
 

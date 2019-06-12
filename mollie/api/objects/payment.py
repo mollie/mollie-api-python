@@ -165,14 +165,17 @@ class Payment(Base):
         """Return the chargebacks related to this payment."""
         return self.client.payment_chargebacks.on(self).list()
 
-    # @property
-    # def settlement(self):
-    #     """
-    #     Return the settlement for this payment.
+    @property
+    def captures(self):
+        """Return the captures related to this payment"""
+        return self.client.captures.on(self).list()
 
-    #     TODO: Before we can return a Settlement object, we need to implement the Settlement API.
-    #     """
-    #     pass
+    @property
+    def settlement(self):
+        """
+        Return the settlement for this payment.
+        """
+        return self.client.settlements.get(self.settlement_id)
 
     @property
     def mandate(self):

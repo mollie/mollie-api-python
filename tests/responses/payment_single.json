@@ -19,6 +19,11 @@
   "details": null,
   "profileId": "pfl_QkEhN94Ba",
   "customerId": "cst_8wmqcHMN4U",
+  "settlementId": "stl_jDk30akdN",
+  "settlementAmount": {
+    "currency": "EUR",
+    "value": "39.75"
+  },
   "sequenceType": "recurring",
   "redirectUrl": "https://webshop.example.org/order/12345/",
   "webhookUrl": "https://webshop.example.org/payments/webhook/",
@@ -35,6 +40,10 @@
     },
     "chargebacks": {
       "href": "https://api.mollie.com/v2/payments/tr_7UhSN1zuXS/chargebacks",
+      "type": "application/hal+json"
+    },
+    "captures": {
+      "href": "https://api.mollie.com/v2/payments/tr_7UhSN1zuXS/captures",
       "type": "application/hal+json"
     },
     "refunds": {
@@ -55,6 +64,10 @@
     },
     "order": {
       "href": "https://api.mollie.com/v2/orders/ord_kEn1PlbGa",
+      "type": "application/hal+json"
+    },
+    "settlement": {
+      "href": "https://api.mollie.com/v2/settlements/stl_jDk30akdN",
       "type": "application/hal+json"
     },
     "documentation": {

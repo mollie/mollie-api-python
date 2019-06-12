@@ -57,6 +57,7 @@ setup(
     url='https://github.com/mollie/mollie-api-python',
     install_requires=[
         'requests',
+        'requests_oauthlib',
     ],
     classifiers=[
         'Programming Language :: Python',

@@ -19,7 +19,7 @@ To use the Mollie API client, the following things are required:
 + Follow [a few steps](https://www.mollie.com/dashboard/?modal=onboarding) to enable payment methods in live mode, and let us handle the rest.
 + Python >= 2.7
 + Up-to-date OpenSSL (or other SSL/TLS toolkit)
-+ Mollie API client for Python has a dependency on [Requests](http://docs.python-requests.org/en/master/).
++ Mollie API client for Python has a dependency on [Requests](http://docs.python-requests.org/en/master/) and [Requests-OAuthlib](https://requests-oauthlib.readthedocs.io/en/latest/)
 
 ## Installation ##
 **Please note:** If you are looking to install the v1 version of the Mollie API client, please refer to the [v1-develop branch](https://github.com/mollie/mollie-api-python/tree/v1-develop) for installation instructions.
@@ -183,6 +183,88 @@ refund = mollie_client.refunds.on(payment).create({
         'value': '2.00'
     }
 })
+```
+
+## Oauth2 ##
+
+At https://docs.mollie.com/oauth/getting-started the oauth process is explained. Please read this first.
+
+Oauth authentication process redirects back to your application.
+Therefore you should expose your local web server (the examples) as public urls.
+
+A webservice like [ngrok.com](https://ngrok.com/) can help you with that. Make sure to set REDIRECT_URI accordingly.
+
+Run the oauth2 examples:
+
+```
+FLASK_APP=examples/oauth/app.py \
+CLIENT_ID=your_client_id \
+CLIENT_SECRET=your_client_secret \
+REDIRECT_URI=https://your_domain.tld/callback \
+flask run
+```
+
+The Authorize endpoint is the endpoint on Mollie web site where the merchant logs in,
+and grants authorization to your client application.
+E.g. when the merchant clicks on the Connect with Mollie button,
+you should redirect the merchant to the Authorize endpoint.
+
+The resource owner can then grant the authorization to your client application for the scopes you have requested.
+
+Mollie will then redirect the resource owner to the redirect_uri you have specified.
+The redirect_uri will be appended with a code parameter, which will contain the auth token.
+You should then exchange the auth token for an access token using the Tokens API.
+
+Intitializing via oauth2
+
+You should implement `get_token` and `set_token` methods yourself.
+They get and set the oauth token.
+The token type is dict.
+
+These are example methods, you can use your own storage.
+
+```python
+
+def get_token():
+    """
+    :return: token (dict) or None
+    """
+    if os.path.exists('token.json'):
+        with open('token.json', 'r') as file:
+            return json.loads(file.read())
+
+
+def set_token(token):
+    """
+    :param token: token (dict)
+    :return: None
+    """
+    with open('token.json', 'w') as file:
+        file.write(json.dumps(token))
+
+
+mollie_client = Client()
+authorized, authorization_url = mollie_client.setup_oauth(
+        client_id,
+        client_secret,
+        redirect_uri,
+        scope,
+        get_token(),
+        set_token,
+    )
+# Redirect to the authorization_url.
+
+# After the user confirmed she is redirected back to your redirect_uri.
+# The view on this uri should call setup_oauth_authorization_response.
+# With authorization_response as parameter. This is the full callback URL (string)
+
+mollie_client.setup_oauth_authorization_response(authorization_response)
+
+# Now the a token is stored via your `set_token` method for future use.
+
+# You can query the api:
+
+mollie_client.organizations.get('me')
 ```
 
 For a working example, see [Example 11 - Refund payment](https://github.com/mollie/mollie-api-python/blob/master/examples/11-refund-payment.py).
