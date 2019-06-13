@@ -3,6 +3,7 @@ from __future__ import unicode_literals
 
 import re
 import sys
+import time
 from datetime import datetime
 
 import mock
@@ -22,6 +23,7 @@ from mollie.api.error import (
     UnprocessableEntityError,
 )
 from mollie.api.objects.method import Method
+from mollie.api.objects.organization import Organization
 
 from .utils import assert_list_object
 
@@ -338,8 +340,9 @@ def test_oauth_client_default_user_agent(oauth_client, response):
     regex = re.compile(r'^Mollie/[\d\.]+ Python/[\w\.\+]+ OpenSSL/[\w\.]+ OAuth/2.0$')
     assert re.match(regex, oauth_client.user_agent)
 
-    response.get('https://api.mollie.com/v2/profiles/me', 'profile_single')
-    oauth_client.profiles.get('me')
+    # perform a request and inpect the actual used headers
+    response.get('https://api.mollie.com/v2/organizations/me', 'organization_current')
+    oauth_client.organizations.get('me')
     request = response.calls[0].request
     assert re.match(regex, request.headers['User-Agent'])
 
@@ -416,3 +419,35 @@ def test_client_update_user_agent_component():
     assert 'Test/3.0.0' in client.user_agent
     assert 'Test/2.0.0' not in client.user_agent
     assert 'Test/1.0.0' not in client.user_agent
+
+
+def test_oauth_client_will_refresh_token_automatically(oauth_token, response):
+    """Initializing the client with an expired token will trigger a token refresh automatically."""
+
+    # expire the token: set expiration time in the past.
+    oauth_token["expires_at"] = time.time() - 5
+
+    set_token_mock = mock.Mock()
+
+    client = Client()
+    client.setup_oauth(
+        client_id="client_id",
+        client_secret="client_secret",
+        redirect_uri="https://example.com/callback",
+        scope=("organizations.read",),
+        token=oauth_token,
+        set_token=set_token_mock,
+    )
+
+    # setup two request mocks: the token refresh and the actual data request
+    response.post("https://api.mollie.com/oauth2/tokens", "token_single")
+    response.get("https://api.mollie.com/v2/organizations/me", "organization_current")
+
+    organization = client.organizations.get('me')
+    assert isinstance(organization, Organization), "Unexpected result from request."
+    assert response.assert_all_requests_are_fired, "Not all expected requests have been performed."
+
+    # verify handling of the new token
+    set_token_mock.assert_called_once()
+    args, kwargs = set_token_mock.call_args
+    assert isinstance(args[0], dict), "set_token() did not receive a dictionary."
