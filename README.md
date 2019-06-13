@@ -207,7 +207,7 @@ The resource owner can then grant the authorization to your client application f
 
 Mollie will then redirect the resource owner back to the `redirect_uri` you have specified. The redirect_uri will be appended with a code parameter, which will contain the auth token. At the redirect_uri, you should extract that token, and use it to request a regular oauth token.
 
-Initializing via oauth2
+### Initializing via oauth2 ###
 
 You should implement the `get_token` and `set_token` methods yourself. They should retrieve and store the oauth token that is sent from Mollie somewhere in your application (f.i. in the database).
 
