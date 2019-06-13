@@ -189,10 +189,7 @@ refund = mollie_client.refunds.on(payment).create({
 
 At https://docs.mollie.com/oauth/getting-started the oauth process is explained. Please read this first.
 
-Oauth authentication process redirects back to your application.
-Therefore you should expose your local web server (the examples) as public urls.
-
-A webservice like [ngrok.com](https://ngrok.com/) can help you with that. Make sure to set REDIRECT_URI accordingly.
+Oauth authentication process redirects back to your application. Therefore you should expose your local web server (the examples) as public urls. A webservice like [ngrok.com](https://ngrok.com/) can help you with that. Make sure to set REDIRECT_URI accordingly.
 
 Run the oauth2 examples:
 
@@ -204,24 +201,19 @@ REDIRECT_URI=https://your_domain.tld/callback \
 flask run
 ```
 
-The Authorize endpoint is the endpoint on Mollie web site where the merchant logs in,
-and grants authorization to your client application.
-E.g. when the merchant clicks on the Connect with Mollie button,
-you should redirect the merchant to the Authorize endpoint.
+The Authorize endpoint is the endpoint on the Mollie web site where the merchant logs in, and grants authorization to your client application. E.g. when the merchant clicks on the Connect with Mollie button, you should redirect the merchant to the Authorize endpoint.
 
 The resource owner can then grant the authorization to your client application for the scopes you have requested.
 
-Mollie will then redirect the resource owner to the redirect_uri you have specified.
-The redirect_uri will be appended with a code parameter, which will contain the auth token.
-You should then exchange the auth token for an access token using the Tokens API.
+Mollie will then redirect the resource owner back to the `redirect_uri` you have specified. The redirect_uri will be appended with a code parameter, which will contain the auth token. At the redirect_uri, you should extract that token, and use it to request a regular oauth token.
 
-Intitializing via oauth2
+Initializing via oauth2
 
-You should implement `get_token` and `set_token` methods yourself.
-They get and set the oauth token.
-The token type is dict.
+You should implement the `get_token` and `set_token` methods yourself. They should retrieve and store the oauth token that is sent from Mollie somewhere in your application (f.i. in the database).
 
-These are example methods, you can use your own storage.
+The token data is a python dict.
+
+These are example methods, you should use a storage method that fits your application.
 
 ```python
 
@@ -244,25 +236,25 @@ def set_token(token):
 
 
 mollie_client = Client()
-authorized, authorization_url = mollie_client.setup_oauth(
-        client_id,
-        client_secret,
-        redirect_uri,
-        scope,
-        get_token(),
-        set_token,
-    )
-# Redirect to the authorization_url.
+is_authorized, authorization_url = mollie_client.setup_oauth(
+    client_id,
+    client_secret,
+    redirect_uri,
+    scope,
+    get_token(),
+    set_token,
+)
+# When "is_authorized" is False, you need to redirect the user to the authorization_url.
 
 # After the user confirmed she is redirected back to your redirect_uri.
-# The view on this uri should call setup_oauth_authorization_response.
-# With authorization_response as parameter. This is the full callback URL (string)
+# The view on this uri should call setup_oauth_authorization_response(), with authorization_response as parameter.
+# This is the full callback URL (string)
 
 mollie_client.setup_oauth_authorization_response(authorization_response)
 
-# Now the a token is stored via your `set_token` method for future use.
+# The token will be stored via your `set_token` method for future use. Expired tokens will be refreshed by the client automatically.
 
-# You can query the api:
+# Now You can query the API:
 
 mollie_client.organizations.get('me')
 ```
