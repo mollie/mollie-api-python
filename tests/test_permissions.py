@@ -9,19 +9,19 @@ from .utils import assert_list_object
 PERMISSION_ID = 'payments.read'
 
 
-def test_list_permissions(client, response):
+def test_list_permissions(oauth_client, response):
     """Retrieve a list of existing permissions."""
     response.get('https://api.mollie.com/v2/permissions', 'permissions_list')
 
-    permissions = client.permissions.list()
+    permissions = oauth_client.permissions.list()
     assert_list_object(permissions, Permission)
 
 
-def test_get_permission(client, response):
+def test_get_permission(oauth_client, response):
     """Retrieve a single permission."""
     response.get('https://api.mollie.com/v2/permissions/%s' % PERMISSION_ID, 'permission_single')
 
-    permission = client.permissions.get(PERMISSION_ID)
+    permission = oauth_client.permissions.get(PERMISSION_ID)
     assert isinstance(permission, Permission)
     assert permission.id == PERMISSION_ID
     assert permission.resource == 'permission'

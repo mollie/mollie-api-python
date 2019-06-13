@@ -4,11 +4,11 @@ from mollie.api.objects.organization import Organization
 ORGANIZATION_ID = 'org_12345678'
 
 
-def test_get_onboarding(client, response):
+def test_get_onboarding(oauth_client, response):
     """Retrieve onboarding."""
     response.get('https://api.mollie.com/v2/onboarding/me', 'onboarding_me')
 
-    onboarding = client.onboarding.get('me')
+    onboarding = oauth_client.onboarding.get('me')
     assert isinstance(onboarding, Onboarding)
 
     assert onboarding.name == 'Mollie B.V.'
@@ -22,7 +22,7 @@ def test_get_onboarding(client, response):
     assert onboarding.is_completed() is True
 
 
-def test_create_onboarding(client, response):
+def test_create_onboarding(oauth_client, response):
     """Create onboarding."""
     response.post('https://api.mollie.com/v2/onboarding/me', 'empty', 204)
 
@@ -32,16 +32,16 @@ def test_create_onboarding(client, response):
         }
     }
 
-    onboarding = client.onboarding.create(resource_id='me', data=data)
+    onboarding = oauth_client.onboarding.create(resource_id='me', data=data)
     assert isinstance(onboarding, Onboarding)
 
 
-def test_onboarding_get_organization(client, response):
+def test_onboarding_get_organization(oauth_client, response):
     """Retrieve organization related to onboarding."""
     response.get('https://api.mollie.com/v2/onboarding/me', 'onboarding_me')
     response.get('https://api.mollie.com/v2/organization/%s' % ORGANIZATION_ID, 'organization_single')
 
-    onboarding = client.onboarding.get('me')
+    onboarding = oauth_client.onboarding.get('me')
     organization = onboarding.organization
     assert isinstance(organization, Organization)
     assert organization.id == ORGANIZATION_ID

@@ -5,19 +5,19 @@ from .utils import assert_list_object
 INVOICE_ID = 'inv_xBEbP9rvAq'
 
 
-def test_list_invoices(client, response):
+def test_list_invoices(oauth_client, response):
     """Retrieve a list of existing invoices."""
     response.get('https://api.mollie.com/v2/invoices', 'invoices_list')
 
-    invoices = client.invoices.list()
+    invoices = oauth_client.invoices.list()
     assert_list_object(invoices, Invoice)
 
 
-def test_get_invoice(client, response):
+def test_get_invoice(oauth_client, response):
     """Retrieve a single invoice."""
     response.get('https://api.mollie.com/v2/invoices/%s' % INVOICE_ID, 'invoice_single')
 
-    invoice = client.invoices.get(INVOICE_ID)
+    invoice = oauth_client.invoices.get(INVOICE_ID)
     assert isinstance(invoice, Invoice)
     assert invoice.id == INVOICE_ID
     assert invoice.resource == 'invoice'

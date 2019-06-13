@@ -218,6 +218,12 @@ class Client(object):
             response = self.oauth.request(
                 http_method,
                 url,
+                headers={
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                    'User-Agent': self.user_agent,
+                    'X-Mollie-Client-Info': self.UNAME,
+                },
                 params=params,
                 data=data,
             )

@@ -1,0 +1,7 @@
+{
+    "access_token": "access_46EUJ6x8jFJZZeAvhNH4JVeybOgUs",
+    "refresh_token": "refresh_FS4xc3Mgci2xQ5s5DzaLXh3HhbOgUs",
+    "expires_in": 3600,
+    "token_type": "bearer",
+    "scope": "organizations.read"
+}

@@ -31,7 +31,7 @@ test: develop
 	$(PYTHON) -m pyflakes examples mollie tests
 	$(PYTHON) -m pycodestyle examples mollie tests
 	$(PYTHON) -m isort --recursive --check-only --diff examples mollie tests
-	$(PYTHON) -m safety check --ignore 36810  # travis has vulnerable numpy==1.15.4 pre-installed that we don't use
+	$(PYTHON) -m safety check --bare --ignore 36810  # travis has vulnerable numpy==1.15.4 pre-installed that we don't use
 
 
 .PHONY: clean

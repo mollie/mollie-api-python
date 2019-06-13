@@ -9,26 +9,26 @@ from .utils import assert_list_object
 PROFILE_ID = 'pfl_v9hTwCvYqw'
 
 
-def test_profile_resource_class(client, response):
+def test_profile_resource_class(oauth_client, response):
     response.get('https://api.mollie.com/v2/profiles/%s' % PROFILE_ID, 'profile_single')
-    client.profiles.get(PROFILE_ID)
+    oauth_client.profiles.get(PROFILE_ID)
 
-    assert isinstance(Profile.get_resource_class(client), Profiles)
+    assert isinstance(Profile.get_resource_class(oauth_client), Profiles)
 
 
-def test_profiles_get_raises_identifier_error(client, response):
+def test_profiles_get_raises_identifier_error(oauth_client, response):
     response.get('https://api.mollie.com/v2/profiles/%s' % PROFILE_ID, 'profile_single')
-    client.profiles.get(PROFILE_ID)
+    oauth_client.profiles.get(PROFILE_ID)
 
     with pytest.raises(IdentifierError):
-        Profiles(client).get(None)
+        Profiles(oauth_client).get(None)
 
 
-def test_create_profile(client, response):
+def test_create_profile(oauth_client, response):
     """Create a new profile."""
     response.post('https://api.mollie.com/v2/profiles', 'profile_new')
 
-    profile = client.profiles.create({
+    profile = oauth_client.profiles.create({
       'name': 'My website name',
       'website': 'https://www.mywebsite.com',
       'email': 'info@mywebsite.com',
@@ -40,11 +40,11 @@ def test_create_profile(client, response):
     assert profile.id == PROFILE_ID
 
 
-def test_update_profile(client, response):
+def test_update_profile(oauth_client, response):
     """Update an existing profile."""
     response.patch('https://api.mollie.com/v2/profiles/%s' % PROFILE_ID, 'profile_updated')
 
-    updated_profile = client.profiles.update(PROFILE_ID, {
+    updated_profile = oauth_client.profiles.update(PROFILE_ID, {
         'name': 'My website name updated',
         'email': 'updated-profile@example.org',
     })
@@ -53,23 +53,23 @@ def test_update_profile(client, response):
     assert updated_profile.email == 'updated-profile@example.org'
 
 
-def test_delete_profile(client, response):
+def test_delete_profile(oauth_client, response):
     """Delete a profile."""
     response.delete('https://api.mollie.com/v2/profiles/%s' % PROFILE_ID, 'empty')
 
-    deleted_profile = client.profiles.delete('pfl_v9hTwCvYqw')
+    deleted_profile = oauth_client.profiles.delete('pfl_v9hTwCvYqw')
     assert deleted_profile == {}
 
 
-def test_list_profiles(client, response):
+def test_list_profiles(oauth_client, response):
     """Retrieve a list of existing profiles."""
     response.get('https://api.mollie.com/v2/profiles', 'profiles_list')
 
-    profiles = client.profiles.list()
+    profiles = oauth_client.profiles.list()
     assert_list_object(profiles, Profile)
 
 
-def test_get_profile(client, response):
+def test_get_profile(oauth_client, response):
     """Retrieve a single profile."""
     response.get('https://api.mollie.com/v2/profiles/%s' % PROFILE_ID, 'profile_single')
     response.get('https://api.mollie.com/v2/chargebacks?profileId=%s' % PROFILE_ID, 'chargebacks_list')
@@ -77,11 +77,11 @@ def test_get_profile(client, response):
     response.get('https://api.mollie.com/v2/payments?profileId=%s' % PROFILE_ID, 'payments_list')
     response.get('https://api.mollie.com/v2/refunds?profileId=%s' % PROFILE_ID, 'refunds_list')
 
-    profile = client.profiles.get(PROFILE_ID)
-    chargebacks = client.profile_chargebacks.with_parent_id(PROFILE_ID).list()
-    methods = client.profile_methods.with_parent_id(PROFILE_ID).list()
-    payments = client.profile_payments.with_parent_id(PROFILE_ID).list()
-    refunds = client.profile_refunds.with_parent_id(PROFILE_ID).list()
+    profile = oauth_client.profiles.get(PROFILE_ID)
+    chargebacks = oauth_client.profile_chargebacks.with_parent_id(PROFILE_ID).list()
+    methods = oauth_client.profile_methods.with_parent_id(PROFILE_ID).list()
+    payments = oauth_client.profile_payments.with_parent_id(PROFILE_ID).list()
+    refunds = oauth_client.profile_refunds.with_parent_id(PROFILE_ID).list()
 
     assert isinstance(profile, Profile)
     assert profile.id == PROFILE_ID
@@ -105,22 +105,22 @@ def test_get_profile(client, response):
     assert profile.is_blocked() is False
 
 
-def test_profile_enable_payment_method(client, response):
+def test_profile_enable_payment_method(oauth_client, response):
     response.get('https://api.mollie.com/v2/profiles/%s' % PROFILE_ID, 'profile_new')
     response.post(
         'https://api.mollie.com/v2/profiles/%s/methods/%s' % (PROFILE_ID, 'bancontact'),
         'profile_enable_payment_method'
     )
 
-    profile = client.profiles.get(PROFILE_ID)
-    method = client.profile_methods.on(profile, 'bancontact').create()
+    profile = oauth_client.profiles.get(PROFILE_ID)
+    method = oauth_client.profile_methods.on(profile, 'bancontact').create()
     assert method.id == 'bancontact'
 
 
-def test_profile_disable_payment_method(client, response):
+def test_profile_disable_payment_method(oauth_client, response):
     response.get('https://api.mollie.com/v2/profiles/%s' % PROFILE_ID, 'profile_new')
     response.delete('https://api.mollie.com/v2/profiles/%s/methods/%s' % (PROFILE_ID, 'bancontact'), 'empty', 204)
 
-    profile = client.profiles.get(PROFILE_ID)
-    method = client.profile_methods.on(profile, 'bancontact').delete()
+    profile = oauth_client.profiles.get(PROFILE_ID)
+    method = oauth_client.profile_methods.on(profile, 'bancontact').delete()
     assert method == {}
