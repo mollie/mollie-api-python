@@ -34,3 +34,11 @@ def test_method_get_missing_images(client, response):
     assert method.image_svg is None
     assert method.image_size1x is None
     assert method.image_size2x is None
+
+
+def test_list_all_methods(client, response):
+    """List all payment methods that Mollie is offering, including inactive methods."""
+    response.get('https://api.mollie.com/v2/methods/all', 'methods_list')
+
+    methods = client.methods.all()
+    assert_list_object(methods, Method)
