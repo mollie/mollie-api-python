@@ -24,3 +24,13 @@ def test_method_get(client, response):
     assert method.image_svg == 'https://www.mollie.com/external/icons/payment-methods/ideal.svg'
     assert method.image_size1x == 'https://www.mollie.com/external/icons/payment-methods/ideal.png'
     assert method.image_size2x == 'https://www.mollie.com/external/icons/payment-methods/ideal%402x.png'
+
+
+def test_method_get_missing_images(client, response):
+    """Ensure that retrieving image URLs doesn't break when URLs are missing."""
+    response.get('https://api.mollie.com/v2/methods/ideal', 'method_get_ideal_wrong_images')
+
+    method = client.methods.get('ideal')
+    assert method.image_svg is None
+    assert method.image_size1x is None
+    assert method.image_size2x is None

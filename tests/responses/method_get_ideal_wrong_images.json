@@ -1,0 +1,26 @@
+{
+  "_links": {
+    "documentation": {
+      "href": "https://docs.mollie.com/reference/v2/methods-api/get-method",
+      "type": "text/html"
+    },
+    "self": {
+      "href": "https://api.mollie.com/v2/methods/ideal",
+      "type": "application/hal+json"
+    }
+  },
+  "description": "iDEAL",
+  "id": "ideal",
+  "minimumAmount": {
+    "value": "0.01",
+    "currency": "EUR"
+  },
+  "maximumAmount": {
+    "value": "50000.00",
+    "currency": "EUR"
+  },
+  "image": {
+    "jpeg": "https://www.mollie.com/external/icons/payment-methods/ideal.jpg"
+  },
+  "resource": "method"
+}
