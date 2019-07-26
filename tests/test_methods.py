@@ -18,7 +18,19 @@ def test_method_get(client, response):
     method = client.methods.get('ideal')
     assert isinstance(method, Method)
     assert method.id == Method.IDEAL
+    assert method.minimum_amount == {'currency': 'EUR', 'value': '0.01'}
+    assert method.maximum_amount == {'currency': 'EUR', 'value': '50000.00'}
     assert method.description == 'iDEAL'
     assert method.image_svg == 'https://www.mollie.com/external/icons/payment-methods/ideal.svg'
     assert method.image_size1x == 'https://www.mollie.com/external/icons/payment-methods/ideal.png'
     assert method.image_size2x == 'https://www.mollie.com/external/icons/payment-methods/ideal%402x.png'
+
+
+def test_method_get_missing_images(client, response):
+    """Ensure that retrieving image URLs doesn't break when URLs are missing."""
+    response.get('https://api.mollie.com/v2/methods/ideal', 'method_get_ideal_wrong_images')
+
+    method = client.methods.get('ideal')
+    assert method.image_svg is None
+    assert method.image_size1x is None
+    assert method.image_size2x is None
