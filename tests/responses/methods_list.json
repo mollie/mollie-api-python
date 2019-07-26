@@ -5,6 +5,14 @@
         "resource": "method",
         "id": "ideal",
         "description": "iDEAL",
+        "minimumAmount": {
+          "value": "0.01",
+          "currency": "EUR"
+        },
+        "maximumAmount": {
+          "value": "50000.00",
+          "currency": "EUR"
+        },
         "image": {
           "size1x": "https://www.mollie.com/images/payscreen/methods/ideal.png",
           "size2x": "https://www.mollie.com/images/payscreen/methods/ideal%402x.png"
@@ -20,6 +28,14 @@
         "resource": "method",
         "id": "creditcard",
         "description": "Credit card",
+        "minimumAmount": {
+          "value": "0.01",
+          "currency": "EUR"
+        },
+        "maximumAmount": {
+          "value": "50000.00",
+          "currency": "EUR"
+        },
         "image": {
           "size1x": "https://www.mollie.com/images/payscreen/methods/creditcard.png",
           "size2x": "https://www.mollie.com/images/payscreen/methods/creditcard%402x.png"
@@ -35,6 +51,14 @@
         "resource": "method",
         "id": "paypal",
         "description": "PayPal",
+        "minimumAmount": {
+          "value": "0.01",
+          "currency": "EUR"
+        },
+        "maximumAmount": {
+          "value": "50000.00",
+          "currency": "EUR"
+        },
         "image": {
           "size1x": "https://www.mollie.com/images/payscreen/methods/paypal.png",
           "size2x": "https://www.mollie.com/images/payscreen/methods/paypal%402x.png"
@@ -50,6 +74,14 @@
         "resource": "method",
         "id": "bancontact",
         "description": "Bancontact",
+        "minimumAmount": {
+          "value": "0.01",
+          "currency": "EUR"
+        },
+        "maximumAmount": {
+          "value": "50000.00",
+          "currency": "EUR"
+        },
         "image": {
           "size1x": "https://www.mollie.com/images/payscreen/methods/mistercash.png",
           "size2x": "https://www.mollie.com/images/payscreen/methods/mistercash%402x.png"
@@ -65,6 +97,14 @@
         "resource": "method",
         "id": "banktransfer",
         "description": "Bank transfer",
+        "minimumAmount": {
+          "value": "0.01",
+          "currency": "EUR"
+        },
+        "maximumAmount": {
+          "value": "50000.00",
+          "currency": "EUR"
+        },
         "image": {
           "size1x": "https://www.mollie.com/images/payscreen/methods/banktransfer.png",
           "size2x": "https://www.mollie.com/images/payscreen/methods/banktransfer%402x.png"
@@ -80,6 +120,14 @@
         "resource": "method",
         "id": "sofort",
         "description": "SOFORT Banking",
+        "minimumAmount": {
+          "value": "0.01",
+          "currency": "EUR"
+        },
+        "maximumAmount": {
+          "value": "50000.00",
+          "currency": "EUR"
+        },
         "image": {
           "size1x": "https://www.mollie.com/images/payscreen/methods/sofort.png",
           "size2x": "https://www.mollie.com/images/payscreen/methods/sofort%402x.png"
@@ -95,6 +143,14 @@
         "resource": "method",
         "id": "kbc",
         "description": "KBC/CBC Payment Button",
+        "minimumAmount": {
+          "value": "0.01",
+          "currency": "EUR"
+        },
+        "maximumAmount": {
+          "value": "50000.00",
+          "currency": "EUR"
+        },
         "image": {
           "size1x": "https://www.mollie.com/images/payscreen/methods/kbc.png",
           "size2x": "https://www.mollie.com/images/payscreen/methods/kbc%402x.png"
@@ -110,6 +166,14 @@
         "resource": "method",
         "id": "belfius",
         "description": "Belfius Pay Button",
+        "minimumAmount": {
+          "value": "0.01",
+          "currency": "EUR"
+        },
+        "maximumAmount": {
+          "value": "50000.00",
+          "currency": "EUR"
+        },
         "image": {
           "size1x": "https://www.mollie.com/images/payscreen/methods/belfius.png",
           "size2x": "https://www.mollie.com/images/payscreen/methods/belfius%402x.png"
@@ -125,6 +189,14 @@
         "resource": "method",
         "id": "inghomepay",
         "description": "ING Home 'Pay",
+        "minimumAmount": {
+          "value": "0.01",
+          "currency": "EUR"
+        },
+        "maximumAmount": {
+          "value": "50000.00",
+          "currency": "EUR"
+        },
         "image": {
           "size1x": "https://www.mollie.com/images/payscreen/methods/inghomepay.png",
           "size2x": "https://www.mollie.com/images/payscreen/methods/inghomepay%402x.png"
@@ -140,6 +212,14 @@
         "resource": "method",
         "id": "giftcard",
         "description": "Gift cards",
+        "minimumAmount": {
+          "value": "0.01",
+          "currency": "EUR"
+        },
+        "maximumAmount": {
+          "value": "50000.00",
+          "currency": "EUR"
+        },
         "image": {
           "size1x": "https://www.mollie.com/images/payscreen/methods/giftcard.png",
           "size2x": "https://www.mollie.com/images/payscreen/methods/giftcard%402x.png"

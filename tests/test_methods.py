@@ -18,6 +18,8 @@ def test_method_get(client, response):
     method = client.methods.get('ideal')
     assert isinstance(method, Method)
     assert method.id == Method.IDEAL
+    assert method.minimum_amount == {'currency': 'EUR', 'value': '0.01'}
+    assert method.maximum_amount == {'currency': 'EUR', 'value': '50000.00'}
     assert method.description == 'iDEAL'
     assert method.image_svg == 'https://www.mollie.com/external/icons/payment-methods/ideal.svg'
     assert method.image_size1x == 'https://www.mollie.com/external/icons/payment-methods/ideal.png'

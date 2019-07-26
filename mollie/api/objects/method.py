@@ -38,6 +38,14 @@ class Method(Base):
         return self._get_property('id')
 
     @property
+    def minimum_amount(self):
+        return self._get_property('minimumAmount')
+
+    @property
+    def maximum_amount(self):
+        return self._get_property('maximumAmount')
+
+    @property
     def image_svg(self):
         try:
             images = self._get_property('image')
