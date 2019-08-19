@@ -15,10 +15,10 @@ class ProfileMethods(Methods):
         path = self.get_resource_name()
         return self.perform_api_call(self.REST_DELETE, path, None)
 
-    def with_parent_id(self, profile_id):
+    def with_parent_id(self, profile_id, method=None):
+        self.method_id = method
         self.profile_id = profile_id
         return self
 
     def on(self, profile, method=None):
-        self.method_id = method
-        return self.with_parent_id(profile.id)
+        return self.with_parent_id(profile.id, method)
