@@ -92,15 +92,21 @@ def test_create_order_refund(client, response):
         "lines": [
             {
                 "id": "odl_dgtxyl",
-                "quantity": 1
+                "quantity": 1,
             }
         ],
-        "description": "Required quantity not in stock, refunding one photo book."
+        "description": "Required quantity not in stock, refunding one photo book.",
+        "metadata": {
+            "bookkeeping_id": 12345,
+        }
     }
 
     order = client.orders.get(ORDER_ID)
     refund = order.create_refund(data)
     assert isinstance(refund, Refund)
+    assert refund.status == Refund.STATUS_PENDING
+    assert refund.description == "Required quantity not in stock, refunding one photo book."
+    assert refund.metadata == {"bookkeeping_id": 12345}
 
 
 def test_create_order(client, response):

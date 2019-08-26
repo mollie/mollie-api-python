@@ -24,6 +24,7 @@ def test_get_refund(client, response):
     assert refund.amount == {'currency': 'EUR', 'value': '5.95'}
     assert refund.settlement_amount == {'currency': 'EUR', 'value': '10.00'}
     assert refund.description == 'Required quantity not in stock, refunding one photo book.'
+    assert refund.metadata == {'bookkeeping_id': 12345}
     assert refund.status == Refund.STATUS_PENDING
     assert_list_object(refund.lines, OrderLine)
     assert refund.payment_id == PAYMENT_ID
