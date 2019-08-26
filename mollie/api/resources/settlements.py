@@ -1,5 +1,4 @@
-import re
-
+from ..compat import SETTLEMENT_BANK_REFERENCE_REGEX
 from ..error import IdentifierError
 from ..objects.settlement import Settlement
 from .base import Base
@@ -8,7 +7,7 @@ from .base import Base
 class Settlements(Base):
     RESOURCE_ID_PREFIX = 'stl_'
 
-    BANK_REFERENCE_REGEX = re.compile(r'^\d{4,7}\.\d{4}\.\d{2}$', re.ASCII)
+    BANK_REFERENCE_REGEX = SETTLEMENT_BANK_REFERENCE_REGEX
 
     def get_resource_object(self, result):
         return Settlement(result, self.client)
