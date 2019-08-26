@@ -7,6 +7,11 @@ from .base import Base
 class Settlements(Base):
     RESOURCE_ID_PREFIX = 'stl_'
 
+    # According to Mollie, the bank reference is formatted as:
+    # - The Mollie customer ID, 4 to 7 digits.
+    # - The year and month, 4 digits
+    # - The sequence number of the settlement in that month, 2 digits
+    # The components are separated by a dot.
     BANK_REFERENCE_REGEX = SETTLEMENT_BANK_REFERENCE_REGEX
 
     def get_resource_object(self, result):
