@@ -13,4 +13,4 @@ elif PY3:
 if PY2:
     from urllib import urlencode
 elif PY3:
-    from urllib.parse import urlencode  # noqa: F401
+    from urllib.parse import urlencode

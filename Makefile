@@ -27,10 +27,11 @@ develop: virtualenv
 
 .PHONY: test
 test: develop
-	$(PYTHON) -m pip install pytest pytest-cov responses mock pyflakes pycodestyle isort safety
+	$(PYTHON) -m pip install pytest pytest-cov responses mock flake8 isort safety
 	$(PYTHON) -m pytest
-	$(PYTHON) -m pyflakes examples mollie tests
-	$(PYTHON) -m pycodestyle examples mollie tests
+	$(PYTHON) -m flake8 examples mollie tests
+# 	$(PYTHON) -m pyflakes examples mollie tests
+# 	$(PYTHON) -m pycodestyle examples mollie tests
 	$(PYTHON) -m isort --recursive --check-only --diff examples mollie tests
 	$(PYTHON) -m safety check --bare --ignore 36810  # travis has vulnerable numpy==1.15.4 pre-installed that we don't use
 
