@@ -28,6 +28,7 @@ class Method(Base):
     KLARNAPAYLATER = 'klarnapaylater'
     KLARNASLICEIT = 'klarnasliceit'
     PRZELEWY24 = 'przelewy24'
+    MYBANK = 'mybank'
 
     @property
     def description(self):
