@@ -9,3 +9,8 @@ if PY2:
     SETTLEMENT_BANK_REFERENCE_REGEX = re.compile(r'^\d{4,7}\.\d{4}\.\d{2}$')
 elif PY3:
     SETTLEMENT_BANK_REFERENCE_REGEX = re.compile(r'^\d{4,7}\.\d{4}\.\d{2}$', re.ASCII)
+
+if PY2:
+    from urllib import urlencode
+elif PY3:
+    from urllib.parse import urlencode  # noqa: F401

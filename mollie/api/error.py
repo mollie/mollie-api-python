@@ -1,4 +1,4 @@
-import sys
+from .compat import PY2
 
 
 class Error(Exception):
@@ -16,7 +16,7 @@ class Error(Exception):
 
         We can't have string representation containing unicode characters in Python 2.
         """
-        if sys.version_info.major == 2:
+        if PY2:
             return self.message.encode('ascii', errors='ignore')
         else:
             return super(Error, self).__str__()

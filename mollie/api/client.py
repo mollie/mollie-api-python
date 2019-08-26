@@ -10,6 +10,7 @@ from collections import OrderedDict
 import requests
 from requests_oauthlib import OAuth2Session
 
+from .compat import urlencode
 from .error import RemovedIn23Warning, RequestError, RequestSetupError
 from .resources.captures import Captures
 from .resources.chargebacks import Chargebacks
@@ -39,12 +40,6 @@ from .resources.settlement_refunds import SettlementRefunds
 from .resources.settlements import Settlements
 from .resources.subscription_payments import SubscriptionPayments
 from .version import VERSION
-
-try:
-    from urllib.parse import urlencode
-except ImportError:
-    # support python 2
-    from urllib import urlencode
 
 
 class Client(object):
