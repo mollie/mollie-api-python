@@ -151,7 +151,7 @@ def test_settlement_get_next(oauth_client, response):
 
 
 def test_settlement_get_open(oauth_client, response):
-    """Retrieve the details of the open balance of the organization. """
+    """Retrieve the details of the open balance of the organization."""
     response.get('https://api.mollie.com/v2/settlements/open', 'settlement_open')
 
     settlement = oauth_client.settlements.get('open')
@@ -171,11 +171,13 @@ def test_settlement_get_open(oauth_client, response):
         ("next", None),  # Valid
         ("open", None),  # Valid
         (SETTLEMENT_ID, None),  # Valid
+        ("1234567.1234.12", None)  # Valid
     ]
 )
 def test_validate_settlement_id(input, expected):
+    """Ensure that we only accept correctly formatted settlement IDs."""
     if expected == IdentifierError:
         with pytest.raises(IdentifierError):
-            Settlements.validate_settlement_id(Settlements.RESOURCE_ID_PREFIX, input)
+            Settlements.validate_settlement_id(input)
     else:
-        assert Settlements.validate_settlement_id(Settlements.RESOURCE_ID_PREFIX, input) is expected
+        assert Settlements.validate_settlement_id(input) is expected
