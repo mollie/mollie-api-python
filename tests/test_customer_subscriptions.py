@@ -14,7 +14,7 @@ SUBSCRIPTION_ID = 'sub_rVKGtNd6s3'
 
 def test_list_customer_subscriptions(client, response):
     """Retrieve a list of subscriptions."""
-    response.get('https://api.mollie.com/v2/customers/%s/subscriptions' % CUSTOMER_ID, 'subscriptions_list')
+    response.get('https://api.mollie.com/v2/customers/%s/subscriptions' % CUSTOMER_ID, 'subscriptions_customer_list')
 
     subscriptions = client.customer_subscriptions.with_parent_id(CUSTOMER_ID).list()
     assert_list_object(subscriptions, Subscription)
@@ -52,7 +52,7 @@ def test_list_customer_subscriptions_by_customer_object(client, response):
     """Retrieve a list of subscriptions related to customer."""
     response.get('https://api.mollie.com/v2/customers/%s' % CUSTOMER_ID, 'customer_single')
     response.get('https://api.mollie.com/v2/customers/%s/subscriptions' % CUSTOMER_ID,
-                 'subscriptions_list')
+                 'subscriptions_customer_list')
 
     customer = client.customers.get(CUSTOMER_ID)
     subscriptions = client.customer_subscriptions.on(customer).list()

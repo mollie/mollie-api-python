@@ -53,7 +53,7 @@ def test_list_customers(client, response):
 def test_get_customer(client, response):
     """Retrieve a single customer."""
     response.get('https://api.mollie.com/v2/customers/%s' % CUSTOMER_ID, 'customer_new')
-    response.get('https://api.mollie.com/v2/customers/%s/subscriptions' % CUSTOMER_ID, 'subscriptions_list')
+    response.get('https://api.mollie.com/v2/customers/%s/subscriptions' % CUSTOMER_ID, 'subscriptions_customer_list')
     response.get('https://api.mollie.com/v2/customers/%s/mandates' % CUSTOMER_ID, 'customer_mandates_list')
     response.get('https://api.mollie.com/v2/customers/%s/payments' % CUSTOMER_ID, 'customer_payments_multiple')
 
@@ -86,7 +86,7 @@ def test_customer_get_related_subscriptions(client, response):
     """Retrieve related subscriptions for a customer."""
     response.get('https://api.mollie.com/v2/customers/%s' % CUSTOMER_ID, 'customer_single')
     response.get('https://api.mollie.com/v2/customers/%s/subscriptions' % CUSTOMER_ID,
-                 'subscriptions_list')
+                 'subscriptions_customer_list')
 
     customer = client.customers.get(CUSTOMER_ID)
     subscriptions = customer.subscriptions
