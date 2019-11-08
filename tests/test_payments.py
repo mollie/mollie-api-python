@@ -212,3 +212,18 @@ def test_payment_get_related_customer(client, response):
     customer = payment.customer
     assert isinstance(customer, Customer)
     assert customer.id == CUSTOMER_ID
+
+
+def test_update_payment(client, response):
+    """Update an existing payment."""
+    response.patch('https://api.mollie.com/v2/payments/%s' % PAYMENT_ID, 'payment_updated')
+
+    data = {
+        'description': 'Order #12346',
+        'redirectUrl': 'https://webshop.example.org/order/12346/',
+        'webhookUrl': 'https://webshop.example.org/payments/webhook/',
+        'metadata': {"order_id": "12346"},
+    }
+    updated_payment = client.payments.update(PAYMENT_ID, data)
+    assert isinstance(updated_payment, Payment)
+    assert updated_payment.description == 'Order #12346'
