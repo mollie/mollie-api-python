@@ -1,0 +1,78 @@
+{
+  "resource": "payment",
+  "id": "tr_7UhSN1zuXS",
+  "mode": "test",
+  "createdAt": "2018-03-20T09:13:37+00:00",
+  "amount": {
+    "value": "10.00",
+    "currency": "EUR"
+  },
+  "description": "Order #12346",
+  "method": "ideal",
+  "metadata": {
+    "order_id": "12346"
+  },
+  "orderId": "ord_kEn1PlbGa",
+  "status": "open",
+  "isCancelable": false,
+  "expiresAt": "2018-03-20T09:28:37+00:00",
+  "details": null,
+  "profileId": "pfl_QkEhN94Ba",
+  "customerId": "cst_8wmqcHMN4U",
+  "settlementId": "stl_jDk30akdN",
+  "settlementAmount": {
+    "currency": "EUR",
+    "value": "39.75"
+  },
+  "sequenceType": "recurring",
+  "redirectUrl": "https://webshop.example.org/order/12346/",
+  "webhookUrl": "https://webshop.example.org/payments/webhook/",
+  "mandateId": "mdt_h3gAaD5zP",
+  "subscriptionId": "sub_rVKGtNd6s3",
+  "_links": {
+    "self": {
+      "href": "https://api.mollie.com/v2/payments/tr_7UhSN1zuXS",
+      "type": "application/hal+json"
+    },
+    "checkout": {
+      "href": "https://www.mollie.com/payscreen/select-method/7UhSN1zuXS",
+      "type": "text/html"
+    },
+    "chargebacks": {
+      "href": "https://api.mollie.com/v2/payments/tr_7UhSN1zuXS/chargebacks",
+      "type": "application/hal+json"
+    },
+    "captures": {
+      "href": "https://api.mollie.com/v2/payments/tr_7UhSN1zuXS/captures",
+      "type": "application/hal+json"
+    },
+    "refunds": {
+      "href": "https://api.mollie.com/v2/payments/tr_7UhSN1zuXS/refunds",
+      "type": "application/hal+json"
+    },
+    "customer": {
+      "href": "https://api.mollie.com/v2/customers/cst_8wmqcHMN4U",
+      "type": "application/hal+json"
+    },
+    "mandate": {
+      "href": "https://api.mollie.com/v2/customers/cst_8wmqcHMN4U/mandates/mdt_h3gAaD5zP",
+      "type": "application/hal+json"
+    },
+    "subscription": {
+      "href": "https://api.mollie.com/v2/customers/cst_8wmqcHMN4U/subscriptions/sub_rVKGtNd6s3",
+      "type": "application/hal+json"
+    },
+    "order": {
+      "href": "https://api.mollie.com/v2/orders/ord_kEn1PlbGa",
+      "type": "application/hal+json"
+    },
+    "settlement": {
+      "href": "https://api.mollie.com/v2/settlements/stl_jDk30akdN",
+      "type": "application/hal+json"
+    },
+    "documentation": {
+      "href": "https://docs.mollie.com/reference/v2/payments-api/create-payment",
+      "type": "text/html"
+    }
+  }
+}
