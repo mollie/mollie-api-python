@@ -2,7 +2,6 @@ import platform
 import sys
 import ssl
 import re
-import pkg_resources
 
 import requests
 
@@ -57,12 +56,6 @@ class Client(object):
     def setApiKey(self, api_key):
         self.api_key = self.validateApiKey(api_key)
 
-    def getCACert(self):
-        cacert = pkg_resources.resource_filename('Mollie.API', 'cacert.pem')
-        if not cacert or len(cacert) < 1:
-            raise Error('Unable to load cacert.pem')
-        return cacert
-
     def performHttpCall(self, http_method, path, data=None, params=None):
         if not self.api_key:
             raise Error('You have not set an API key. Please use setApiKey() to set the API key.')
@@ -72,7 +65,7 @@ class Client(object):
         try:
             response = requests.request(
                 http_method, url,
-                verify=self.getCACert(),
+                verify=True,
                 headers={
                     'Accept': 'application/json',
                     'Authorization': 'Bearer ' + self.api_key,
