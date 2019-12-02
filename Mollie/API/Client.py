@@ -10,7 +10,7 @@ from . import Resource
 
 
 class Client(object):
-    CLIENT_VERSION = '1.2.1'
+    CLIENT_VERSION = '1.4.5'
     API_ENDPOINT   = 'https://api.mollie.nl'
     API_VERSION    = 'v1'
     UNAME          = ' '.join(platform.uname())
