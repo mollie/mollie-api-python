@@ -185,6 +185,8 @@ refund = mollie_client.refunds.on(payment).create({
 })
 ```
 
+For a working example, see [Example 11 - Refund payment](https://github.com/mollie/mollie-api-python/blob/master/examples/11-refund-payment.py).
+
 ## Oauth2 ##
 
 At https://docs.mollie.com/oauth/getting-started the oauth process is explained. Please read this first.
@@ -258,8 +260,6 @@ mollie_client.setup_oauth_authorization_response(authorization_response)
 
 mollie_client.organizations.get('me')
 ```
-
-For a working example, see [Example 11 - Refund payment](https://github.com/mollie/mollie-api-python/blob/master/examples/11-refund-payment.py).
 
 ## API documentation ##
 If you wish to learn more about our API, please visit the [Mollie Developer Portal](https://www.mollie.com/en/developers). API Documentation is available in English.
