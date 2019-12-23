@@ -17,7 +17,7 @@ To use the Mollie API client, the following things are required:
 + Create a new [Website profile](https://www.mollie.com/dashboard/settings/profiles) to generate API keys and setup your webhook.
 + Now you're ready to use the Mollie API client in test mode.
 + Follow [a few steps](https://www.mollie.com/dashboard/?modal=onboarding) to enable payment methods in live mode, and let us handle the rest.
-+ Python >= 2.7
++ Python >= 3.5
 + Up-to-date OpenSSL (or other SSL/TLS toolkit)
 + Mollie API client for Python has a dependency on [Requests](http://docs.python-requests.org/en/master/) and [Requests-OAuthlib](https://requests-oauthlib.readthedocs.io/en/latest/)
 
@@ -30,12 +30,12 @@ $ pip install mollie-api-python
 ```
 You may also git checkout or [download all the files](https://github.com/mollie/mollie-api-python/archive/master.zip), and include the Mollie API client manually.
 
-Create and activate a Python >= 2.7 virtual environment (inside a git checkout or downloaded archive).
+Create and activate a Python >= 3.5 virtual environment (inside a git checkout or downloaded archive).
 
 ```
 $ cd mollie-api-python
-$ python -m virtualenv env
-$ source env/bin/activate
+$ python -m venv .venv
+$ source .venv/bin/activate
 ```
 
 Install the additional requirements for the examples, then install the Mollie API client itself.

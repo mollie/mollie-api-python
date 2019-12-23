@@ -1,4 +1,5 @@
-from ..compat import compile_ascii
+import re
+
 from ..error import IdentifierError
 from ..objects.settlement import Settlement
 from .base import Base
@@ -12,7 +13,7 @@ class Settlements(Base):
     # - The year and month, 4 digits
     # - The sequence number of the settlement in that month, 2 digits
     # The components are separated by a dot.
-    BANK_REFERENCE_REGEX = compile_ascii(r'^\d{4,7}\.\d{4}\.\d{2}$')
+    BANK_REFERENCE_REGEX = re.compile(r'^\d{4,7}\.\d{4}\.\d{2}$', re.ASCII)
 
     def get_resource_object(self, result):
         return Settlement(result, self.client)
@@ -33,4 +34,4 @@ class Settlements(Base):
     def get(self, settlement_id, **params):
         self.validate_settlement_id(settlement_id)
         """Verify the settlement ID and retrieve the settlement from the API."""
-        return super(Settlements, self).get(settlement_id, **params)
+        return super().get(settlement_id, **params)

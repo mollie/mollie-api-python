@@ -15,4 +15,4 @@ class Invoices(Base):
                 "Invalid invoice ID: '{id}'. A invoice ID should start with '{prefix}'.".format(
                     id=invoice_id, prefix=self.RESOURCE_ID_PREFIX)
             )
-        return super(Invoices, self).get(invoice_id, **params)
+        return super().get(invoice_id, **params)

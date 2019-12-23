@@ -15,7 +15,7 @@ class Orders(Base):
                 "Invalid order ID: '{id}'. An order ID should start with '{prefix}'.".format(
                     id=order_id, prefix=self.RESOURCE_ID_PREFIX)
             )
-        return super(Orders, self).get(order_id, **params)
+        return super().get(order_id, **params)
 
     def delete(self, order_id, data=None):
         """Cancel order and return the order object.
@@ -28,5 +28,5 @@ class Orders(Base):
                 "Invalid order ID: '{id}'. An order ID should start with '{prefix}'.".format(
                     id=order_id, prefix=self.RESOURCE_ID_PREFIX)
             )
-        result = super(Orders, self).delete(order_id, data)
+        result = super().delete(order_id, data)
         return self.get_resource_object(result)

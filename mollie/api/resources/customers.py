@@ -15,4 +15,4 @@ class Customers(Base):
                 "Invalid customer ID: '{id}'. A customer ID should start with '{prefix}'.".format(
                     id=customer_id, prefix=self.RESOURCE_ID_PREFIX)
             )
-        return super(Customers, self).get(customer_id, **params)
+        return super().get(customer_id, **params)

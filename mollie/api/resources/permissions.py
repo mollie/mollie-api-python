@@ -19,4 +19,4 @@ class Permissions(Base):
 
     def get(self, permission_id, **params):
         self.validate_permission_id(permission_id)
-        return super(Permissions, self).get(permission_id, **params)
+        return super().get(permission_id, **params)

@@ -1,25 +1,7 @@
-from .compat import PY2
-
-
 class Error(Exception):
     """Base exception."""
 
-    def __init__(self, message):
-        Exception.__init__(self, message)
-
-        # Avoid warnings about BaseException.message being deprecated.
-        self.message = message
-
-    def __str__(self):
-        """
-        Customize string representation in Python 2.
-
-        We can't have string representation containing unicode characters in Python 2.
-        """
-        if PY2:
-            return self.message.encode('ascii', errors='ignore')
-        else:
-            return super(Error, self).__str__()
+    pass
 
 
 class RequestError(Error):
@@ -54,15 +36,14 @@ class ResponseError(Error):
 
     def __init__(self, resp=None):
         message = resp['detail']
-        super(ResponseError, self).__init__(message)
+        super().__init__(message)
         self.status = resp['status']
         if 'field' in resp:
             self.field = resp['field']
 
     @staticmethod
     def factory(resp):
-        """
-        Return a ResponseError subclass based on the API payload.
+        """Return a ResponseError subclass based on the API payload.
 
         All errors are documented: https://docs.mollie.com/guides/handling-errors#all-possible-status-codes
         More exceptions should be added here when appropriate, and when useful examples of API errors are available.
@@ -92,8 +73,7 @@ class NotFoundError(ResponseError):
 
 
 class UnprocessableEntityError(ResponseError):
-    """
-    We could not process your request due to another reason than the ones listed above.
+    """We could not process your request due to another reason than the ones listed above.
 
     The response usually contains a field property to indicate which field is causing the issue.
     """
@@ -102,11 +82,11 @@ class UnprocessableEntityError(ResponseError):
 
 
 class DataConsistencyError(Error):
-    """
-    We could not process the API response due to an inconsistency.
+    """We could not process the API response due to an inconsistency.
 
     We received different data than expected from the API.
     """
+
     pass
 
 

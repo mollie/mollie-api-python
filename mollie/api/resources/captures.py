@@ -19,7 +19,7 @@ class Captures(Base):
                 "Invalid capture ID: '{id}'. A capture ID should start with '{prefix}'.".format(
                     id=capture_id, prefix=self.RESOURCE_ID_PREFIX)
             )
-        return super(Captures, self).get(capture_id, **params)
+        return super().get(capture_id, **params)
 
     def with_parent_id(self, payment_id):
         self.payment_id = payment_id

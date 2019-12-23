@@ -16,4 +16,4 @@ class Chargebacks(Base):
                 "Invalid chargeback ID: '{id}'. A chargeback ID should start with '{prefix}'.".format(
                     id=chargeback_id, prefix=self.RESOURCE_ID_PREFIX)
             )
-        return super(Chargebacks, self).get(chargeback_id, **params)
+        return super().get(chargeback_id, **params)
