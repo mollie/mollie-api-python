@@ -3,7 +3,6 @@
 #
 # In this example we retrieve the order stored in the database.
 #
-from __future__ import print_function
 
 import os
 

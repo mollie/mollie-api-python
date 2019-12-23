@@ -1,16 +1,14 @@
-# coding=utf-8
-
 import json
 import platform
 import re
 import ssl
 import warnings
 from collections import OrderedDict
+from urllib.parse import urlencode
 
 import requests
 from requests_oauthlib import OAuth2Session
 
-from .compat import urlencode
 from .error import RemovedIn23Warning, RequestError, RequestSetupError
 from .resources.captures import Captures
 from .resources.chargebacks import Chargebacks

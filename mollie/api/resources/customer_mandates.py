@@ -16,7 +16,7 @@ class CustomerMandates(Base):
                 "Invalid mandate ID: '{id}'. A mandate ID should start with '{prefix}'.".format(
                     id=mandate_id, prefix=self.RESOURCE_ID_PREFIX)
             )
-        return super(CustomerMandates, self).get(mandate_id, **params)
+        return super().get(mandate_id, **params)
 
     def get_resource_name(self):
         return 'customers/{id}/mandates'.format(id=self.customer_id)

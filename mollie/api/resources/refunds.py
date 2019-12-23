@@ -15,4 +15,4 @@ class Refunds(Base):
                 "Invalid refund ID: '{id}'. A refund ID should start with '{prefix}'.".format(
                     id=refund_id, prefix=self.RESOURCE_ID_PREFIX)
             )
-        return super(Refunds, self).get(refund_id, **params)
+        return super().get(refund_id, **params)

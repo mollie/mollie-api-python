@@ -6,7 +6,7 @@ ifdef WORKON_HOME
 	VIRTUALENV = $(WORKON_HOME)/mollie-api-python
 endif
 ifndef VIRTUALENV
-	VIRTUALENV = $(PWD)/venv
+	VIRTUALENV = $(PWD)/.venv
 endif
 
 PYTHON_VERSION = 3.7
@@ -16,7 +16,7 @@ PYTHON = $(VIRTUALENV)/bin/python
 .PHONY: virtualenv
 virtualenv: $(VIRTUALENV)  # alias
 $(VIRTUALENV):
-	virtualenv -p $(shell which python$(PYTHON_VERSION)) $(VIRTUALENV)
+	$(shell which python$(PYTHON_VERSION)) -m venv $(VIRTUALENV)
 	$(PYTHON) -m pip install --upgrade pip setuptools
 
 

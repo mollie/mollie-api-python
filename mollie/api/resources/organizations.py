@@ -19,4 +19,4 @@ class Organizations(Base):
                     id=organization_id,
                     prefix=self.RESOURCE_ID_PREFIX)
             )
-        return super(Organizations, self).get(organization_id, **params)
+        return super().get(organization_id, **params)

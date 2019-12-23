@@ -1,6 +1,3 @@
-# -*- coding: utf-8 -*-
-from __future__ import unicode_literals
-
 import re
 import sys
 import time
@@ -104,8 +101,7 @@ def test_client_api_key_during_init_deprecated(recwarn):
 
 
 def test_client_broken_cert_bundle(monkeypatch):
-    """
-    A request should raise an error when the certificate bundle is not available.
+    """A request should raise an error when the certificate bundle is not available.
 
     Under circumstances it could be possible that the certifi package is not correctly installed, broken,
     or just plain too old. Connecting to the Mollie API should fail with an error when the certificate
@@ -124,8 +120,7 @@ def test_client_broken_cert_bundle(monkeypatch):
 
 
 def test_client_generic_request_error(response):
-    """
-    When the remote server refuses connections or other request issues arise, an error should be raised.
+    """When the remote server refuses connections or other request issues arise, an error should be raised.
 
     The 'response' fixture blocks all outgoing connections, also when no actual responses are configured.
     """
@@ -218,8 +213,7 @@ def test_client_delete_received_error_response(client, response, resp_payload, r
 
 
 def test_client_response_404_but_no_payload(response):
-    """
-    An error response from the API should raise an error.
+    """An error response from the API should raise an error.
 
     When the response returns an error, but no valid error data is available in the response,
     we should still raise an error. The API v1 formatted error in the test is missing the required 'status' field.
@@ -249,21 +243,6 @@ def test_client_error_including_field_response(client, response):
     with pytest.raises(UnprocessableEntityError, match='The amount is higher than the maximum') as excinfo:
         client.payments.create(**params)
     assert excinfo.value.field == 'amount'
-
-
-@pytest.mark.skipif(sys.version_info.major != 2, reason='output differs for python 2')
-def test_client_unicode_error_py2(client, response):
-    """An error response containing Unicode characters should also be processed correctly."""
-    response.post('https://api.mollie.com/v2/orders', 'order_error', status=422)
-    with pytest.raises(UnprocessableEntityError) as err:
-        # actual POST data for creating an order can be found in test_orders.py
-        client.orders.create({})
-
-    # handling the error should work even when utf-8 characters (€) are in the response.
-    exception = err.value
-    expected = 'Order line 1 is invalid. VAT amount is off. ' \
-               'Expected VAT amount to be 3.47 (21.00% over 20.00), got 3.10'
-    assert str(exception) == expected
 
 
 @pytest.mark.skipif(sys.version_info.major == 2, reason='output differs for python 2')
@@ -323,7 +302,6 @@ def test_client_data_consistency_error(client, response):
 
 def test_client_default_user_agent(client, response):
     """Default user-agent should contain some known values."""
-
     regex = re.compile(r'^Mollie/[\d\.]+ Python/[\w\.\+]+ OpenSSL/[\w\.]+$')
     assert re.match(regex, client.user_agent)
 
@@ -336,7 +314,6 @@ def test_client_default_user_agent(client, response):
 
 def test_oauth_client_default_user_agent(oauth_client, response):
     """Default user-agent should contain some known values."""
-
     regex = re.compile(r'^Mollie/[\d\.]+ Python/[\w\.\+]+ OpenSSL/[\w\.]+ OAuth/2.0$')
     assert re.match(regex, oauth_client.user_agent)
 
@@ -423,7 +400,6 @@ def test_client_update_user_agent_component():
 
 def test_oauth_client_will_refresh_token_automatically(oauth_token, response):
     """Initializing the client with an expired token will trigger a token refresh automatically."""
-
     # expire the token: set expiration time in the past.
     oauth_token["expires_at"] = time.time() - 5
 

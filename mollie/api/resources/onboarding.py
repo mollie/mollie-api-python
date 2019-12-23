@@ -14,7 +14,7 @@ class Onboarding(Base):
                 "Invalid onboarding ID: '{id}'. A onboarding ID should be 'me'.".format(
                     id=onboarding_id)
             )
-        return super(Onboarding, self).get(onboarding_id, **params)
+        return super().get(onboarding_id, **params)
 
     def create(self, resource_id, data=None, **params):
         path = self.get_resource_name() + '/' + str(resource_id)

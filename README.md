@@ -17,7 +17,7 @@ To use the Mollie API client, the following things are required:
 + Create a new [Website profile](https://www.mollie.com/dashboard/settings/profiles) to generate API keys and setup your webhook.
 + Now you're ready to use the Mollie API client in test mode.
 + Follow [a few steps](https://www.mollie.com/dashboard/?modal=onboarding) to enable payment methods in live mode, and let us handle the rest.
-+ Python >= 2.7
++ Python >= 3.5
 + Up-to-date OpenSSL (or other SSL/TLS toolkit)
 + Mollie API client for Python has a dependency on [Requests](http://docs.python-requests.org/en/master/) and [Requests-OAuthlib](https://requests-oauthlib.readthedocs.io/en/latest/)
 
@@ -30,12 +30,12 @@ $ pip install mollie-api-python
 ```
 You may also git checkout or [download all the files](https://github.com/mollie/mollie-api-python/archive/master.zip), and include the Mollie API client manually.
 
-Create and activate a Python >= 2.7 virtual environment (inside a git checkout or downloaded archive).
+Create and activate a Python >= 3.5 virtual environment (inside a git checkout or downloaded archive).
 
 ```
 $ cd mollie-api-python
-$ python -m virtualenv env
-$ source env/bin/activate
+$ python -m venv .venv
+$ source .venv/bin/activate
 ```
 
 Install the additional requirements for the examples, then install the Mollie API client itself.
@@ -185,6 +185,8 @@ refund = mollie_client.refunds.on(payment).create({
 })
 ```
 
+For a working example, see [Example 11 - Refund payment](https://github.com/mollie/mollie-api-python/blob/master/examples/11-refund-payment.py).
+
 ## Oauth2 ##
 
 At https://docs.mollie.com/oauth/getting-started the oauth process is explained. Please read this first.
@@ -259,8 +261,6 @@ mollie_client.setup_oauth_authorization_response(authorization_response)
 mollie_client.organizations.get('me')
 ```
 
-For a working example, see [Example 11 - Refund payment](https://github.com/mollie/mollie-api-python/blob/master/examples/11-refund-payment.py).
-
 ## API documentation ##
 If you wish to learn more about our API, please visit the [Mollie Developer Portal](https://www.mollie.com/en/developers). API Documentation is available in English.
 
@@ -270,7 +270,7 @@ Want to help us make our API client even better? We take [pull requests](https:/
 
 ## License ##
 [BSD (Berkeley Software Distribution) License](https://opensource.org/licenses/bsd-license.php).
-Copyright (c) 2014-2018, Mollie B.V.
+Copyright (c) 2014-2020, Mollie B.V.
 
 ## Support ##
 Contact: [www.mollie.com](https://www.mollie.com) — info@mollie.com — +31 20 820 20 70

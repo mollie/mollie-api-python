@@ -1,8 +1,5 @@
-# coding=utf-8
-#
 # Example: Handle an order status change using the Mollie API.
 #
-from __future__ import print_function
 
 import os
 

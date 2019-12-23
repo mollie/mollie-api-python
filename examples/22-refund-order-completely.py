@@ -1,8 +1,5 @@
-# coding=utf-8
-#
 # Example: Refund all eligible items for an order using the Mollie API.
 #
-from __future__ import print_function
 
 import os
 

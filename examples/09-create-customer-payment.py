@@ -1,8 +1,5 @@
-# coding=utf-8
-#
 #  Example: Creating a payment for a customer
 #
-from __future__ import print_function
 
 import os
 import time

@@ -19,4 +19,4 @@ class Profiles(Base):
                     id=profile_id,
                     prefix=self.RESOURCE_ID_PREFIX)
             )
-        return super(Profiles, self).get(profile_id, **params)
+        return super().get(profile_id, **params)

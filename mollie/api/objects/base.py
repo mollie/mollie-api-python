@@ -3,7 +3,7 @@ class Base(dict):
         """
         Create a new object from API result data.
         """
-        super(Base, self).__init__(data)
+        super().__init__(data)
         self.client = client
 
     def _get_property(self, name):

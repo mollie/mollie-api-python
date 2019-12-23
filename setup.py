@@ -7,26 +7,15 @@ ROOT_DIR = os.path.abspath(os.path.dirname(__file__))
 
 
 def get_long_description():
-    try:
-        readme = open(os.path.join(ROOT_DIR, 'README.md'), encoding='utf-8')
-    except TypeError:
-        # support python 2
-        readme = open(os.path.join(ROOT_DIR, 'README.md'))
-    long_description = readme.read()
-    return long_description
+    return open(os.path.join(ROOT_DIR, 'README.md'), encoding='utf-8').read()
 
 
 def get_version():
-    """
-    Read the version from a file (mollie/api/version.py) in the repository.
+    """Read the version from a file (mollie/api/version.py) in the repository.
 
     We can't import here since we might import from an installed version.
     """
-    try:
-        version_file = open(os.path.join(ROOT_DIR, 'mollie', 'api', 'version.py'), encoding='utf=8')
-    except TypeError:
-        # support python 2
-        version_file = open(os.path.join(ROOT_DIR, 'mollie', 'api', 'version.py'))
+    version_file = open(os.path.join(ROOT_DIR, 'mollie', 'api', 'version.py'), encoding='utf=8')
     contents = version_file.read()
     match = re.search(r'VERSION = [\'"]([^\'"]+)', contents)
     if match:
@@ -61,7 +50,6 @@ setup(
     ],
     classifiers=[
         'Programming Language :: Python',
-        'Programming Language :: Python :: 2',
         'Programming Language :: Python :: 3',
         'Development Status :: 5 - Production/Stable',
         'Intended Audience :: Developers',
