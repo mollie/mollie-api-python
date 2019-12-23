@@ -94,7 +94,7 @@ class DataConsistencyError(Error):
 Deprecation policy
 
 When a minor version release will be done, remove all code that triggers the DeprecationWarning subclass.
-Then rename the DeprecationWarning subclass to the next minor version (RemovedIn23Warning => RemovedIn24Warning).
+Then rename the DeprecationWarning subclass to the next minor version (RemovedIn24Warning => RemovedIn25Warning).
 and rename the PendingDeprecation subclass below also.
 
 This will make all existing PendingDeprecationWarnings change to DeprecationWarnings.
@@ -104,13 +104,13 @@ See https://www.django-rest-framework.org/community/release-notes/#deprecation-p
 """
 
 
-class RemovedIn23Warning(DeprecationWarning):
-    """Deprecation warning for features that will be removed in version 2.3.0."""
+class RemovedIn24Warning(DeprecationWarning):
+    """Deprecation warning for features that will be removed in version 2.4.0."""
 
     pass
 
 
-class RemovedIn24Warning(PendingDeprecationWarning):
-    """Pending deprecation warning for features that will be removed in version 2.4.0."""
+class RemovedIn25Warning(PendingDeprecationWarning):
+    """Pending deprecation warning for features that will be removed in version 2.5.0."""
 
     pass
