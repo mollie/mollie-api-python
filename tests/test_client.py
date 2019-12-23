@@ -98,10 +98,8 @@ def test_client_broken_cert_bundle(monkeypatch):
     Under circumstances it could be possible that the certifi package is not correctly installed, broken,
     or just plain too old. Connecting to the Mollie API should fail with an error when the certificate
     cannot be verified.
-
-    We monkeypatch requests with a non-existent path at the location where certifi normally sets the correct path.
     """
-    monkeypatch.setattr(requests.adapters, 'DEFAULT_CA_BUNDLE_PATH', '/does/not/exist')
+    monkeypatch.setenv("REQUESTS_CA_BUNDLE", "/does/not/exist")
 
     client = Client()
     client.set_api_key('test_test')
