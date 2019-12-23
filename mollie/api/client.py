@@ -193,7 +193,7 @@ class Client(object):
                 data=data,
                 timeout=self.timeout,
             )
-        except Exception as err:
+        except requests.exceptions.RequestException as err:
             raise RequestError('Unable to communicate with Mollie: {error}'.format(error=err))
         return response
 
@@ -212,7 +212,7 @@ class Client(object):
                 params=params,
                 data=data,
             )
-        except Exception as err:
+        except requests.exceptions.RequestException as err:
             raise RequestError('Unable to communicate with Mollie: {error}'.format(error=err))
         return response
 

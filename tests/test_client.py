@@ -105,10 +105,9 @@ def test_client_broken_cert_bundle(monkeypatch):
 
     client = Client()
     client.set_api_key('test_test')
-    with pytest.raises(
-            RequestError,
-            match='Could not find a suitable TLS CA certificate bundle, invalid path: /does/not/exist'):
+    with pytest.raises(OSError) as excinfo:
         client.customers.list()
+    assert 'Could not find a suitable TLS CA certificate bundle, invalid path: /does/not/exist' in str(excinfo.value)
 
 
 def test_client_generic_request_error(response):
