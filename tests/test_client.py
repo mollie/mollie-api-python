@@ -92,14 +92,6 @@ def test_client_invalid_api_key():
         client.set_access_token('test_123')
 
 
-def test_client_api_key_during_init_deprecated(recwarn):
-    """Setting the api key during init should work but raise a warning."""
-    with pytest.warns(DeprecationWarning,
-                      match='Setting the API key during init will be removed in the future'):
-        client = Client(api_key='test_123')
-    assert client.api_key == 'test_123'
-
-
 def test_client_broken_cert_bundle(monkeypatch):
     """A request should raise an error when the certificate bundle is not available.
 
