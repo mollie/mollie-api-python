@@ -47,6 +47,10 @@ class Method(Base):
         return self._get_property('maximumAmount')
 
     @property
+    def pricing(self):
+        return self._get_property('pricing')
+
+    @property
     def image_svg(self):
         try:
             images = self._get_property('image')

@@ -24,5 +24,15 @@
     "size2x": "https://www.mollie.com/external/icons/payment-methods/ideal%402x.png",
     "svg": "https://www.mollie.com/external/icons/payment-methods/ideal.svg"
   },
+  "pricing": [
+    {
+      "description": "The Netherlands",
+      "fixed": {
+        "value": "0.29",
+        "currency": "EUR"
+      },
+      "variable": "0"
+    }
+  ],
   "resource": "method"
 }
