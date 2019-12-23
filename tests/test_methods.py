@@ -24,6 +24,11 @@ def test_method_get(client, response):
     assert method.image_svg == 'https://www.mollie.com/external/icons/payment-methods/ideal.svg'
     assert method.image_size1x == 'https://www.mollie.com/external/icons/payment-methods/ideal.png'
     assert method.image_size2x == 'https://www.mollie.com/external/icons/payment-methods/ideal%402x.png'
+    assert method.pricing == [{
+        'description': 'The Netherlands',
+        'fixed': {'value': '0.29', 'currency': 'EUR'},
+        'variable': '0'
+    }]
 
 
 def test_method_get_missing_images(client, response):
