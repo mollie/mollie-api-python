@@ -2,7 +2,6 @@
 #
 # Example: How to create a new customer with the Mollie API.
 #
-from __future__ import print_function
 
 import os
 

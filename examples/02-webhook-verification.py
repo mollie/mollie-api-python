@@ -1,7 +1,6 @@
 #
 # Example: How to verify Mollie API Payments in a webhook.
 #
-from __future__ import print_function
 
 import os
 

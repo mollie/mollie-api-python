@@ -2,7 +2,6 @@
 #
 # Example: How to prepare an iDEAL payment with the Mollie API.
 #
-from __future__ import print_function
 
 import os
 import time

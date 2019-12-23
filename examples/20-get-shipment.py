@@ -2,7 +2,6 @@
 #
 # Example: Retrieve a shipment using the Mollie API.
 #
-from __future__ import print_function
 
 import os
 

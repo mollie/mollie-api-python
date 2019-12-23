@@ -2,7 +2,6 @@
 #
 # Example: How to prepare a new refund with the Mollie API.
 #
-from __future__ import print_function
 
 import os
 

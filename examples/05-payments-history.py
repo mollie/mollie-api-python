@@ -2,7 +2,6 @@
 #
 # Example: How to retrieve your payments history.
 #
-from __future__ import print_function
 
 import os
 

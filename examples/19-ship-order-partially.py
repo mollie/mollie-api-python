@@ -2,7 +2,6 @@
 #
 # Example: Create a shipment for part of an order using the Mollie API.
 #
-from __future__ import print_function
 
 import os
 
