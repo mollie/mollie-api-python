@@ -1,5 +1,3 @@
-# coding=utf-8
-#
 # Example: List orders using the Mollie API.
 #
 

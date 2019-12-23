@@ -1,5 +1,3 @@
-# coding=utf-8
-#
 #  Example: How to get the currently activated payment methods.
 #
 

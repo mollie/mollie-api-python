@@ -1,5 +1,3 @@
-# coding=utf-8
-#
 # Example: Refund all eligible items for an order using the Mollie API.
 #
 

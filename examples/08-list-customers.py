@@ -1,5 +1,3 @@
-# coding=utf-8
-#
 # Example: Retrieving all of your customers with offset and count
 #
 

@@ -1,5 +1,3 @@
-# coding=utf-8
-#
 #  Example: Retrieving the payment history for a customer
 #
 

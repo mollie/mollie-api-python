@@ -1,5 +1,3 @@
-# coding=utf-8
-#
 # Example: How to prepare a new payment with the Mollie API.
 #
 

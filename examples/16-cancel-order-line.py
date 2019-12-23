@@ -1,5 +1,3 @@
-# coding=utf-8
-#
 # Example: Cancel an order line using the Mollie API.
 #
 

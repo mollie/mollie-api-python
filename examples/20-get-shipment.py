@@ -1,5 +1,3 @@
-# coding=utf-8
-#
 # Example: Retrieve a shipment using the Mollie API.
 #
 

@@ -1,5 +1,3 @@
-# coding=utf-8
-#
 # Example: How to prepare a new refund with the Mollie API.
 #
 

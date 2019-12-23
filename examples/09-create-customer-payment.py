@@ -1,5 +1,3 @@
-# coding=utf-8
-#
 #  Example: Creating a payment for a customer
 #
 

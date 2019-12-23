@@ -1,5 +1,3 @@
-# coding=utf-8
-#
 # Example: How to create a new customer with the Mollie API.
 #
 

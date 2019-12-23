@@ -1,5 +1,3 @@
-# coding=utf-8
-
 from mollie.api.error import Error
 
 

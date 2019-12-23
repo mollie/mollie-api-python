@@ -1,5 +1,3 @@
-# coding=utf-8
-#
 # Example: Create a shipment for part of an order using the Mollie API.
 #
 

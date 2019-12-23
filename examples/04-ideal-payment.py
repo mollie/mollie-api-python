@@ -1,5 +1,3 @@
-# coding=utf-8
-#
 # Example: How to prepare an iDEAL payment with the Mollie API.
 #
 

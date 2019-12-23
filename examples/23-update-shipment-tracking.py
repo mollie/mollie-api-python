@@ -1,5 +1,3 @@
-# coding=utf-8
-#
 # Example: Update shipment tracking information using the Mollie API.
 #
 
