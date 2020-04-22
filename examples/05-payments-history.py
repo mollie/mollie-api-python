@@ -33,7 +33,7 @@ def main():
 
         for payment in payments:
             body += "{curr} {value}, status: '{status}'<br>".format(
-                curr=payment.amount['currency'], value=payment.amount['currency'], status=payment.status)
+                curr=payment.amount['currency'], value=payment.amount['value'], status=payment.status)
 
         return body
 
