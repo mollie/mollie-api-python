@@ -115,7 +115,8 @@ def test_settlement_get(oauth_client, response):
                                 "value": "0.6050"
                             }
                         }
-                    ]
+                    ],
+                    "invoiceId": "inv_FrvewDA3Pr"
                 }
             }
         }"""
