@@ -39,3 +39,4 @@ def test_get_current_organization(oauth_client, response):
         'postalCode': '1016 EE',
         'streetAndNumber': 'Keizersgracht 313'
     }
+    assert organization.dashboard == 'https://mollie.com/dashboard/org_12345678'

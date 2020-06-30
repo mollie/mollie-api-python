@@ -44,6 +44,10 @@
              "href": "https://api.mollie.com/v2/settlements",
              "type": "application/hal+json"
          },
+         "dashboard": {
+           "href": "https://mollie.com/dashboard/org_12345678",
+           "type": "text/html"
+         },
          "documentation": {
              "href": "https://docs.mollie.com/reference/v2/organizations-api/current-organization",
              "type": "text/html"
