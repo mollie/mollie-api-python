@@ -22,6 +22,7 @@ class Method(Base):
     KBC = 'kbc'
     KLARNAPAYLATER = 'klarnapaylater'
     KLARNASLICEIT = 'klarnasliceit'
+    MEALVOUCHER = 'mealvoucher'
     MISTERCASH = 'mistercash'
     MYBANK = 'mybank'
     PAYPAL = 'paypal'
