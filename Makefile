@@ -27,7 +27,7 @@ develop: virtualenv
 
 .PHONY: test
 test: develop
-	$(PYTHON) -m pip install pytest pytest-cov responses mock flake8 isort safety
+	$(PYTHON) -m pip install -r test_requirements.txt
 	$(PYTHON) -m pytest
 	$(PYTHON) -m flake8 examples mollie tests
 # 	$(PYTHON) -m pyflakes examples mollie tests
