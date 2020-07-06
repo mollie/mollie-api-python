@@ -27,13 +27,14 @@ develop: virtualenv
 
 .PHONY: test
 test: develop
-	$(PYTHON) -m pip install pytest pytest-cov responses mock flake8 isort safety
+	$(PYTHON) -m pip uninstall --yes pipenv numpy  # travis has some packages preinstalled that are marked vulnerable by saferty, and we don't use them
+	$(PYTHON) -m pip install -r test_requirements.txt
 	$(PYTHON) -m pytest
 	$(PYTHON) -m flake8 examples mollie tests
 # 	$(PYTHON) -m pyflakes examples mollie tests
 # 	$(PYTHON) -m pycodestyle examples mollie tests
 	$(PYTHON) -m isort --recursive --check-only --diff examples mollie tests
-	$(PYTHON) -m safety check --bare --ignore 36810  # travis has vulnerable numpy==1.15.4 pre-installed that we don't use
+	$(PYTHON) -m safety check
 
 
 .PHONY: clean
