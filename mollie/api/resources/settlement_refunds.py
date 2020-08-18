@@ -5,7 +5,7 @@ class SettlementRefunds(Refunds):
     settlement_id = None
 
     def get_resource_name(self):
-        return 'settlement/{id}/refunds'.format(id=self.settlement_id)
+        return 'settlements/{id}/refunds'.format(id=self.settlement_id)
 
     def with_parent_id(self, settlement_id):
         self.settlement_id = settlement_id
