@@ -22,8 +22,8 @@ def test_settlement_get(oauth_client, response):
     """Retrieve a single settlement method by ID."""
     response.get('https://api.mollie.com/v2/settlements/%s' % SETTLEMENT_ID, 'settlement_single')
     response.get('https://api.mollie.com/v2/settlements/%s/chargebacks' % SETTLEMENT_ID, 'chargebacks_list')
-    response.get('https://api.mollie.com/v2/settlement/%s/payments' % SETTLEMENT_ID, 'settlement_payments_multiple')
-    response.get('https://api.mollie.com/v2/settlement/%s/refunds' % SETTLEMENT_ID, 'refunds_list')
+    response.get('https://api.mollie.com/v2/settlements/%s/payments' % SETTLEMENT_ID, 'settlement_payments_multiple')
+    response.get('https://api.mollie.com/v2/settlements/%s/refunds' % SETTLEMENT_ID, 'refunds_list')
 
     settlement = oauth_client.settlements.get(SETTLEMENT_ID)
     chargebacks = oauth_client.settlement_chargebacks.with_parent_id(SETTLEMENT_ID).list()
