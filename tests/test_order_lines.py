@@ -43,6 +43,7 @@ def test_get_order_lines(client, response):
     assert line.image_url == 'https://sh-s7-live-s.legocdn.com/is/image//LEGO/42083_alt1?$main$'
     assert line.product_url == 'https://shop.lego.com/nl-NL/Bugatti-Chiron-42083'
     assert line.created_at == '2018-08-02T09:29:56+00:00'
+    assert line.metadata == {'brickwatch_url': 'https://www.brickwatch.net/nl-NL/set/42083/Bugatti-Chiron.html'}
     assert line.is_created() is True
     assert line.is_authorized() is False
     assert line.is_paid() is False

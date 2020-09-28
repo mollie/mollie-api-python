@@ -82,6 +82,10 @@ class Subscription(Base):
         return self._get_property('webhookUrl')
 
     @property
+    def metadata(self):
+        return self._get_property('metadata')
+
+    @property
     def customer(self):
         """Return the customer for this subscription."""
         url = self._get_link('customer')

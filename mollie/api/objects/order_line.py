@@ -122,6 +122,10 @@ class OrderLine(Base):
     def created_at(self):
         return self._get_property('createdAt')
 
+    @property
+    def metadata(self):
+        return self._get_property('metadata')
+
     # additional methods
 
     def is_created(self):
