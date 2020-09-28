@@ -114,3 +114,13 @@ class RemovedIn25Warning(PendingDeprecationWarning):
     """Pending deprecation warning for features that will be removed in version 2.5.0."""
 
     pass
+
+
+class APIDeprecationWarning(DeprecationWarning):
+    """
+    Features that are deprecated in the Mollie API.
+
+    This library cannot control when an API feature will be removed. We can only label it as 'deprecated'
+    using this warning, and hope that library users stop using the feature before the removal.
+    """
+    pass
