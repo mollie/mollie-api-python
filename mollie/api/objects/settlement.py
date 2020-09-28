@@ -1,3 +1,6 @@
+import warnings
+
+from ..error import APIDeprecationWarning
 from .base import Base
 
 
@@ -42,6 +45,11 @@ class Settlement(Base):
 
     @property
     def invoice_id(self):
+        warnings.warn(
+            "Using Settlement Invoice ID is deprecated, see "
+            "https://docs.mollie.com/reference/v2/settlements-api/get-settlement",
+            APIDeprecationWarning
+        )
         return self._get_property('invoiceId')
 
     # Additional methods

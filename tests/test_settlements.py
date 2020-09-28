@@ -2,7 +2,7 @@ import json
 
 import pytest
 
-from mollie.api.error import IdentifierError
+from mollie.api.error import APIDeprecationWarning, IdentifierError
 from mollie.api.objects.settlement import Settlement
 from mollie.api.resources.settlements import Settlements
 from tests.utils import assert_list_object
@@ -126,7 +126,6 @@ def test_settlement_get(oauth_client, response):
     assert settlement.created_at == '2018-04-06T06:00:01.0Z'
     assert settlement.settled_at == '2018-04-06T09:41:44.0Z'
     assert settlement.amount == {'currency': 'EUR', 'value': '39.75'}
-    assert settlement.invoice_id == 'inv_FrvewDA3Pr'
 
     assert settlement.status == settlement.STATUS_OPEN
     assert settlement.is_open() is True
@@ -182,3 +181,11 @@ def test_validate_settlement_id(input, expected):
             Settlements.validate_settlement_id(input)
     else:
         assert Settlements.validate_settlement_id(input) is expected
+
+
+def test_settlement_invoice_id_is_deprecated(oauth_client, response):
+    response.get('https://api.mollie.com/v2/settlements/%s' % SETTLEMENT_ID, 'settlement_single')
+
+    settlement = oauth_client.settlements.get(SETTLEMENT_ID)
+    with pytest.warns(APIDeprecationWarning, match='Using Settlement Invoice ID is deprecated'):
+        assert settlement.invoice_id == "inv_FrvewDA3Pr"
