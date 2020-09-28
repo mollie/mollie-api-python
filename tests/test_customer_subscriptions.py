@@ -41,6 +41,7 @@ def test_get_customer_subscription_by_id(client, response):
     assert subscription.start_date is None
     assert subscription.canceled_at is None
     assert subscription.customer is not None
+    assert subscription.metadata == {'order_id': 1337}
     assert subscription.is_active() is True
     assert subscription.is_suspended() is False
     assert subscription.is_pending() is False

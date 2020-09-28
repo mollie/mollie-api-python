@@ -13,6 +13,7 @@
   "description": "Quarterly payment",
   "method": "ideal",
   "webhookUrl": "https://webshop.example.org/payments/webhook",
+  "metadata": {"order_id": 1337},
   "_links": {
     "self": {
       "href": "https://api.mollie.com/v2/customers/cst_8wmqcHMN4U/subscriptions/sub_rVKGtNd6s3",
