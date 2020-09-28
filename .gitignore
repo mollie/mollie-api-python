@@ -7,7 +7,7 @@
 # test and local dev artifacts
 /.pytest_cache
 /.coverage
-/.venv
 /.idea
 .DS_Store
 *.pyc
+/env

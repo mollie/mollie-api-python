@@ -6,10 +6,10 @@ ifdef WORKON_HOME
 	VIRTUALENV = $(WORKON_HOME)/mollie-api-python
 endif
 ifndef VIRTUALENV
-	VIRTUALENV = $(PWD)/.venv
+	VIRTUALENV = $(PWD)/env
 endif
 
-PYTHON_VERSION = 3.7
+PYTHON_VERSION = 3.8
 PYTHON = $(VIRTUALENV)/bin/python
 
 
@@ -17,7 +17,7 @@ PYTHON = $(VIRTUALENV)/bin/python
 virtualenv: $(VIRTUALENV)  # alias
 $(VIRTUALENV):
 	$(shell which python$(PYTHON_VERSION)) -m venv $(VIRTUALENV)
-	$(PYTHON) -m pip install --upgrade pip setuptools
+	$(PYTHON) -m pip install --upgrade pip setuptools wheel
 
 
 .PHONY: develop
@@ -27,7 +27,7 @@ develop: virtualenv
 
 .PHONY: test
 test: develop
-	$(PYTHON) -m pip uninstall --yes pipenv numpy  # travis has some packages preinstalled that are marked vulnerable by saferty, and we don't use them
+	$(PYTHON) -m pip uninstall --yes pipenv numpy  # travis has some packages preinstalled that are marked vulnerable by safety, and we don't use them
 	$(PYTHON) -m pip install -r test_requirements.txt
 	$(PYTHON) -m pytest
 	$(PYTHON) -m flake8 examples mollie tests
