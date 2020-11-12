@@ -30,9 +30,6 @@ test: develop
 	$(PYTHON) -m pip uninstall --yes pipenv numpy  # travis has some packages preinstalled that are marked vulnerable by safety, and we don't use them
 	$(PYTHON) -m pip install -r test_requirements.txt
 	$(PYTHON) -m pytest
-	$(PYTHON) -m flake8 examples mollie tests
-# 	$(PYTHON) -m pyflakes examples mollie tests
-# 	$(PYTHON) -m pycodestyle examples mollie tests
 	$(PYTHON) -m safety check
 
 
