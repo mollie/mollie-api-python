@@ -33,7 +33,6 @@ test: develop
 	$(PYTHON) -m flake8 examples mollie tests
 # 	$(PYTHON) -m pyflakes examples mollie tests
 # 	$(PYTHON) -m pycodestyle examples mollie tests
-	$(PYTHON) -m isort --recursive --check-only --diff examples mollie tests
 	$(PYTHON) -m safety check
 
 
