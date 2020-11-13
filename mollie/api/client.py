@@ -7,6 +7,7 @@ from urllib.parse import urlencode
 
 import requests
 from requests_oauthlib import OAuth2Session
+from urllib3.util import Retry
 
 from .error import RequestError, RequestSetupError
 from .resources.captures import Captures
@@ -71,10 +72,11 @@ class Client(object):
                     access_token=access_token))
         return access_token
 
-    def __init__(self, api_endpoint=None, timeout=10):
+    def __init__(self, api_endpoint=None, timeout=10, retry=None):
         self.api_endpoint = self.validate_api_endpoint(api_endpoint or self.API_ENDPOINT)
         self.api_version = self.API_VERSION
         self.timeout = timeout
+        self.retry = retry
         self.api_key = None
         self._client = None
 
@@ -182,6 +184,7 @@ class Client(object):
         if not self._client:
             self._client = requests.Session()
             self._client.verify = True
+            self._setup_retry()
 
         url, data, params = self._format_request_data(path, data, params)
         try:
@@ -255,6 +258,7 @@ class Client(object):
             token_updater=set_token
         )
         self._oauth_client.verify = True
+        self._setup_retry()
 
         authorization_url = None
         if not self._oauth_client.authorized:
@@ -276,6 +280,17 @@ class Client(object):
         )
         self.set_token(self.access_token)
         return self.access_token
+
+    def _setup_retry(self):
+        """Configure a retry behaviour on the HTTP client."""
+        if self.retry:
+            retry = Retry(connect=self.retry, backoff_factor=1)
+            adapter = requests.adapters.HTTPAdapter(max_retries=retry)
+
+            if self._client:
+                self._client.mount("https://", adapter)
+            if self._oauth_client:
+                self._oauth_client.mount("https://", adapter)
 
 
 def generate_querystring(params):

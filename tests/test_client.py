@@ -275,6 +275,17 @@ def test_client_request_timed_out(mocker, client):
         client.payments.list()
 
 
+def test_client_will_propagate_retry_setting(response):
+    response.get('https://api.mollie.com/v2/methods', 'methods_list')
+
+    client = Client(retry=3)
+    client.set_api_key("test_test")
+    client.methods.list()
+
+    adapter = client._client.adapters['https://']
+    assert adapter.max_retries.connect == 3
+
+
 def test_client_data_consistency_error(client, response):
     """When the API sends us data we did not expect raise an consistency error."""
     order_id = 'ord_kEn1PlbGa'
