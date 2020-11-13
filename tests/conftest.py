@@ -56,7 +56,7 @@ def oauth_client(oauth_token):
         token=oauth_token,
         set_token=set_token,
     )
-    assert client.oauth.authorized is True
+    assert client._oauth_client.authorized is True
     return client
 
 

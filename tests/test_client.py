@@ -3,7 +3,6 @@ import sys
 import time
 from datetime import datetime
 
-import mock
 import pytest
 import requests.adapters
 
@@ -249,24 +248,28 @@ def test_client_unicode_error_py3(client, response):
     assert str(exception) == expected
 
 
-@mock.patch('mollie.api.client.requests.request')
-def test_client_request_timeout(request_mock, client):
+def test_client_request_timeout(mocker, client):
     """Mock requests.request in the client to be able to read if the timeout is in the request call args."""
-    response = mock.Mock(status_code=200)
+    mocked_request = mocker.patch("mollie.api.client.requests.Session.request")
+    # Create a mocked response for the request
+    response = mocker.Mock(status_code=200)
+    response.headers.get.return_value = "application/hal+json"
     response.json.return_value = {}
-    response.headers.get.return_value = 'application/hal+json'
-    request_mock.return_value = response
+    mocked_request.return_value = response
 
     client.set_timeout(300)
     client.payments.list()
-    assert request_mock.call_args[1]['timeout'] == 300
+    assert mocked_request.call_args[1]['timeout'] == 300
 
 
-@mock.patch('mollie.api.client.requests.request')
-def test_client_request_timed_out(request_mock, client):
+def test_client_request_timed_out(mocker, client):
     """Timeout should raise a RequestError."""
-    request_mock.side_effect = requests.exceptions.ReadTimeout(
-        "HTTPSConnectionPool(host='api.mollie.com', port=443): Read timed out. (read timeout=10)")
+    mocker.patch(
+        "mollie.api.client.requests.Session.request",
+        side_effect=requests.exceptions.ReadTimeout(
+            "HTTPSConnectionPool(host='api.mollie.com', port=443): Read timed out. (read timeout=10)"
+        )
+    )
 
     with pytest.raises(RequestError, match='Read timed out.'):
         client.payments.list()
@@ -387,12 +390,12 @@ def test_client_update_user_agent_component():
     assert 'Test/1.0.0' not in client.user_agent
 
 
-def test_oauth_client_will_refresh_token_automatically(oauth_token, response):
+def test_oauth_client_will_refresh_token_automatically(mocker, oauth_token, response):
     """Initializing the client with an expired token will trigger a token refresh automatically."""
     # expire the token: set expiration time in the past.
     oauth_token["expires_at"] = time.time() - 5
 
-    set_token_mock = mock.Mock()
+    set_token_mock = mocker.Mock()
 
     client = Client()
     client.setup_oauth(
