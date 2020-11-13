@@ -72,7 +72,7 @@ class Client(object):
                     access_token=access_token))
         return access_token
 
-    def __init__(self, api_endpoint=None, timeout=10, retry=None):
+    def __init__(self, api_endpoint=None, timeout=2, retry=None):
         self.api_endpoint = self.validate_api_endpoint(api_endpoint or self.API_ENDPOINT)
         self.api_version = self.API_VERSION
         self.timeout = timeout
