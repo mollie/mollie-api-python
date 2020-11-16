@@ -152,7 +152,7 @@ class Client(object):
         - keys are camel-cased, and cannot contain spaces.
         - values cannot contain spaces.
 
-        Note: When you set sanitize=false yuu need to make sure the formatting is correct yourself.
+        Note: When you set sanitize=false you need to make sure the formatting is correct yourself.
         """
         if sanitize:
             key = ''.join(_x.capitalize() for _x in re.findall(r'\S+', key))
