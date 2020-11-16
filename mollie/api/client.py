@@ -303,9 +303,6 @@ def generate_querystring(params):
 
     The Requests library doesn't know how to generate querystrings that encode dictionaries using square brackets:
     https://api.mollie.com/v2/methods?amount[value]=100.00&amount[currency]=USD
-
-    Note: we use `sorted()` to work around a difference in iteration behaviour between Python 2 and 3.
-    This makes the output predictable, and ordering of querystring parameters shouldn't matter.
     """
     if not params:
         return None
@@ -315,7 +312,7 @@ def generate_querystring(params):
             parts.append(urlencode({param: value}))
         else:
             # encode dictionary with square brackets
-            for key, sub_value in sorted(value.items()):
+            for key, sub_value in value.items():
                 composed = "{param}[{key}]".format(param=param, key=key)
                 parts.append(urlencode({composed: sub_value}))
     if parts:
