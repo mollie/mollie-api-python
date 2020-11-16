@@ -1,0 +1,7 @@
+# List of commits that only reformat code, without changing it
+#
+# To exclude these commits from git blame:
+# git blame --ignore-revs-file .git-blame-ignore-revs <filename>
+#
+# To make this your default git blame behavior:
+# git config blame.ignoreRevsFile .git-blame-ignore-revs
