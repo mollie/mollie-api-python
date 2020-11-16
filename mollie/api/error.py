@@ -35,11 +35,11 @@ class ResponseError(Error):
     field = None
 
     def __init__(self, resp=None):
-        message = resp['detail']
+        message = resp["detail"]
         super().__init__(message)
-        self.status = resp['status']
-        if 'field' in resp:
-            self.field = resp['field']
+        self.status = resp["status"]
+        if "field" in resp:
+            self.field = resp["field"]
 
     @staticmethod
     def factory(resp):
@@ -48,7 +48,7 @@ class ResponseError(Error):
         All errors are documented: https://docs.mollie.com/guides/handling-errors#all-possible-status-codes
         More exceptions should be added here when appropriate, and when useful examples of API errors are available.
         """
-        status = resp['status']
+        status = resp["status"]
         if status == 401:
             return UnauthorizedError(resp)
         elif status == 404:
@@ -123,4 +123,5 @@ class APIDeprecationWarning(DeprecationWarning):
     This library cannot control when an API feature will be removed. We can only label it as 'deprecated'
     using this warning, and hope that library users stop using the feature before the removal.
     """
+
     pass

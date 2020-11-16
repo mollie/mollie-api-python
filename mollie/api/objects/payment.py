@@ -5,155 +5,156 @@ class Payment(Base):
     @classmethod
     def get_resource_class(cls, client):
         from ..resources.payments import Payments
+
         return Payments(client)
 
-    STATUS_OPEN = 'open'
-    STATUS_PENDING = 'pending'
-    STATUS_CANCELED = 'canceled'
-    STATUS_EXPIRED = 'expired'
-    STATUS_FAILED = 'failed'
-    STATUS_PAID = 'paid'
-    STATUS_AUTHORIZED = 'authorized'
+    STATUS_OPEN = "open"
+    STATUS_PENDING = "pending"
+    STATUS_CANCELED = "canceled"
+    STATUS_EXPIRED = "expired"
+    STATUS_FAILED = "failed"
+    STATUS_PAID = "paid"
+    STATUS_AUTHORIZED = "authorized"
 
-    SEQUENCETYPE_ONEOFF = 'oneoff'
-    SEQUENCETYPE_FIRST = 'first'
-    SEQUENCETYPE_RECURRING = 'recurring'
+    SEQUENCETYPE_ONEOFF = "oneoff"
+    SEQUENCETYPE_FIRST = "first"
+    SEQUENCETYPE_RECURRING = "recurring"
 
     # Documented properties
 
     @property
     def resource(self):
-        return self._get_property('resource')
+        return self._get_property("resource")
 
     @property
     def id(self):
-        return self._get_property('id')
+        return self._get_property("id")
 
     @property
     def mode(self):
-        return self._get_property('mode')
+        return self._get_property("mode")
 
     @property
     def created_at(self):
-        return self._get_property('createdAt')
+        return self._get_property("createdAt")
 
     @property
     def status(self):
-        return self._get_property('status')
+        return self._get_property("status")
 
     @property
     def is_cancelable(self):
-        return self._get_property('isCancelable')
+        return self._get_property("isCancelable")
 
     @property
     def authorized_at(self):
-        return self._get_property('authorizedAt')
+        return self._get_property("authorizedAt")
 
     @property
     def paid_at(self):
-        return self._get_property('paidAt')
+        return self._get_property("paidAt")
 
     @property
     def canceled_at(self):
-        return self._get_property('canceledAt')
+        return self._get_property("canceledAt")
 
     @property
     def expires_at(self):
-        return self._get_property('expiresAt')
+        return self._get_property("expiresAt")
 
     @property
     def expired_at(self):
-        return self._get_property('expiredAt')
+        return self._get_property("expiredAt")
 
     @property
     def failed_at(self):
-        return self._get_property('failedAt')
+        return self._get_property("failedAt")
 
     @property
     def amount(self):
-        return self._get_property('amount')
+        return self._get_property("amount")
 
     @property
     def amount_refunded(self):
-        return self._get_property('amountRefunded')
+        return self._get_property("amountRefunded")
 
     @property
     def amount_remaining(self):
-        return self._get_property('amountRemaining')
+        return self._get_property("amountRemaining")
 
     @property
     def description(self):
-        return self._get_property('description')
+        return self._get_property("description")
 
     @property
     def redirect_url(self):
-        return self._get_property('redirectUrl')
+        return self._get_property("redirectUrl")
 
     @property
     def webhook_url(self):
-        return self._get_property('webhookUrl')
+        return self._get_property("webhookUrl")
 
     @property
     def method(self):
-        return self._get_property('method')
+        return self._get_property("method")
 
     @property
     def metadata(self):
-        return self._get_property('metadata')
+        return self._get_property("metadata")
 
     @property
     def locale(self):
-        return self._get_property('locale')
+        return self._get_property("locale")
 
     @property
     def country_code(self):
-        return self._get_property('countryCode')
+        return self._get_property("countryCode")
 
     @property
     def profile_id(self):
-        return self._get_property('profileId')
+        return self._get_property("profileId")
 
     @property
     def settlement_amount(self):
-        return self._get_property('settlementAmount')
+        return self._get_property("settlementAmount")
 
     @property
     def settlement_id(self):
-        return self._get_property('settlementId')
+        return self._get_property("settlementId")
 
     @property
     def customer_id(self):
-        return self._get_property('customerId')
+        return self._get_property("customerId")
 
     @property
     def sequence_type(self):
-        return self._get_property('sequenceType')
+        return self._get_property("sequenceType")
 
     @property
     def mandate_id(self):
-        return self._get_property('mandateId')
+        return self._get_property("mandateId")
 
     @property
     def subscription_id(self):
-        return self._get_property('subscriptionId')
+        return self._get_property("subscriptionId")
 
     @property
     def order_id(self):
-        return self._get_property('orderId')
+        return self._get_property("orderId")
 
     @property
     def application_fee(self):
-        return self._get_property('applicationFee')
+        return self._get_property("applicationFee")
 
     @property
     def details(self):
-        return self._get_property('details')
+        return self._get_property("details")
 
     # documented _links
 
     @property
     def checkout_url(self):
-        return self._get_link('checkout')
+        return self._get_link("checkout")
 
     @property
     def refunds(self):
@@ -196,7 +197,8 @@ class Payment(Base):
     def order(self):
         """Return the order for this payment. """
         from ..resources.orders import Order
-        url = self._get_link('order')
+
+        url = self._get_link("order")
         if url:
             resp = self.client.orders.perform_api_call(self.client.orders.REST_READ, url)
             return Order(resp, self.client)
@@ -204,34 +206,34 @@ class Payment(Base):
     # additional methods
 
     def is_open(self):
-        return self._get_property('status') == self.STATUS_OPEN
+        return self._get_property("status") == self.STATUS_OPEN
 
     def is_pending(self):
-        return self._get_property('status') == self.STATUS_PENDING
+        return self._get_property("status") == self.STATUS_PENDING
 
     def is_canceled(self):
-        return self._get_property('status') == self.STATUS_CANCELED
+        return self._get_property("status") == self.STATUS_CANCELED
 
     def is_expired(self):
-        return self._get_property('status') == self.STATUS_EXPIRED
+        return self._get_property("status") == self.STATUS_EXPIRED
 
     def is_failed(self):
-        return self._get_property('status') == self.STATUS_FAILED
+        return self._get_property("status") == self.STATUS_FAILED
 
     def is_authorized(self):
-        return self._get_property('status') == self.STATUS_AUTHORIZED
+        return self._get_property("status") == self.STATUS_AUTHORIZED
 
     def is_paid(self):
-        return self._get_property('paidAt') is not None
+        return self._get_property("paidAt") is not None
 
     def has_refunds(self):
-        return self._get_link('refunds') is not None
+        return self._get_link("refunds") is not None
 
     def can_be_refunded(self):
-        return self._get_property('amountRemaining') is not None
+        return self._get_property("amountRemaining") is not None
 
     def has_sequence_type_first(self):
-        return self._get_property('sequenceType') == self.SEQUENCETYPE_FIRST
+        return self._get_property("sequenceType") == self.SEQUENCETYPE_FIRST
 
     def has_sequence_type_recurring(self):
-        return self._get_property('sequenceType') == self.SEQUENCETYPE_RECURRING
+        return self._get_property("sequenceType") == self.SEQUENCETYPE_RECURRING

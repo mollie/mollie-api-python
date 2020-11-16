@@ -4,7 +4,7 @@ from .base import Base
 
 
 class Customers(Base):
-    RESOURCE_ID_PREFIX = 'cst_'
+    RESOURCE_ID_PREFIX = "cst_"
 
     def get_resource_object(self, result):
         return Customer(result, self.client)
@@ -13,6 +13,7 @@ class Customers(Base):
         if not customer_id or not customer_id.startswith(self.RESOURCE_ID_PREFIX):
             raise IdentifierError(
                 "Invalid customer ID: '{id}'. A customer ID should start with '{prefix}'.".format(
-                    id=customer_id, prefix=self.RESOURCE_ID_PREFIX)
+                    id=customer_id, prefix=self.RESOURCE_ID_PREFIX
+                )
             )
         return super().get(customer_id, **params)

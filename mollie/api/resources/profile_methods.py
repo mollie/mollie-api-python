@@ -6,7 +6,7 @@ class ProfileMethods(Methods):
     method_id = None
 
     def get_resource_name(self):
-        return 'profiles/{id}/methods/{method}'.format(id=self.profile_id, method=self.method_id)
+        return "profiles/{id}/methods/{method}".format(id=self.profile_id, method=self.method_id)
 
     def list(self, **params):
         return self.client.methods.list(profileId=self.profile_id)

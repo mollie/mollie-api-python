@@ -5,7 +5,7 @@ class PaymentRefunds(Refunds):
     payment_id = None
 
     def get_resource_name(self):
-        return 'payments/{id}/refunds'.format(id=self.payment_id)
+        return "payments/{id}/refunds".format(id=self.payment_id)
 
     def with_parent_id(self, payment_id):
         self.payment_id = payment_id

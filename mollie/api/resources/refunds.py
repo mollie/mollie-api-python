@@ -4,7 +4,7 @@ from .base import Base
 
 
 class Refunds(Base):
-    RESOURCE_ID_PREFIX = 're_'
+    RESOURCE_ID_PREFIX = "re_"
 
     def get_resource_object(self, result):
         return Refund(result, self.client)
@@ -13,6 +13,7 @@ class Refunds(Base):
         if not refund_id or not refund_id.startswith(self.RESOURCE_ID_PREFIX):
             raise IdentifierError(
                 "Invalid refund ID: '{id}'. A refund ID should start with '{prefix}'.".format(
-                    id=refund_id, prefix=self.RESOURCE_ID_PREFIX)
+                    id=refund_id, prefix=self.RESOURCE_ID_PREFIX
+                )
             )
         return super().get(refund_id, **params)

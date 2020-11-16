@@ -5,7 +5,7 @@ class CustomerPayments(Payments):
     customer_id = None
 
     def get_resource_name(self):
-        return 'customers/{id}/payments'.format(id=self.customer_id)
+        return "customers/{id}/payments".format(id=self.customer_id)
 
     def with_parent_id(self, customer_id):
         self.customer_id = customer_id

@@ -11,149 +11,150 @@ class Order(Base):
     @classmethod
     def get_resource_class(cls, client):
         from ..resources.orders import Orders
+
         return Orders(client)
 
-    STATUS_CREATED = 'created'
-    STATUS_PAID = 'paid'
-    STATUS_AUTHORIZED = 'authorized'
-    STATUS_CANCELED = 'canceled'
-    STATUS_SHIPPING = 'shipping'
-    STATUS_COMPLETED = 'completed'
-    STATUS_EXPIRED = 'expired'
+    STATUS_CREATED = "created"
+    STATUS_PAID = "paid"
+    STATUS_AUTHORIZED = "authorized"
+    STATUS_CANCELED = "canceled"
+    STATUS_SHIPPING = "shipping"
+    STATUS_COMPLETED = "completed"
+    STATUS_EXPIRED = "expired"
 
     @property
     def id(self):
-        return self._get_property('id')
+        return self._get_property("id")
 
     @property
     def resource(self):
-        return self._get_property('resource')
+        return self._get_property("resource")
 
     @property
     def profile_id(self):
-        return self._get_property('profileId')
+        return self._get_property("profileId")
 
     @property
     def method(self):
-        return self._get_property('method')
+        return self._get_property("method")
 
     @property
     def mode(self):
-        return self._get_property('mode')
+        return self._get_property("mode")
 
     @property
     def amount(self):
-        return self._get_property('amount')
+        return self._get_property("amount")
 
     @property
     def amount_captured(self):
-        return self._get_property('amountCaptured')
+        return self._get_property("amountCaptured")
 
     @property
     def amount_refunded(self):
-        return self._get_property('amountRefunded')
+        return self._get_property("amountRefunded")
 
     @property
     def status(self):
-        return self._get_property('status')
+        return self._get_property("status")
 
     @property
     def is_cancelable(self):
-        return self._get_property('isCancelable')
+        return self._get_property("isCancelable")
 
     @property
     def billing_address(self):
-        return self._get_property('billingAddress')
+        return self._get_property("billingAddress")
 
     @property
     def consumer_date_of_birth(self):
-        return self._get_property('consumerDateOfBirth')
+        return self._get_property("consumerDateOfBirth")
 
     @property
     def order_number(self):
-        return self._get_property('orderNumber')
+        return self._get_property("orderNumber")
 
     @property
     def shipping_address(self):
-        return self._get_property('shippingAddress')
+        return self._get_property("shippingAddress")
 
     @property
     def locale(self):
-        return self._get_property('locale')
+        return self._get_property("locale")
 
     @property
     def metadata(self):
-        return self._get_property('metadata')
+        return self._get_property("metadata")
 
     @property
     def redirect_url(self):
-        return self._get_property('redirectUrl')
+        return self._get_property("redirectUrl")
 
     @property
     def webhook_url(self):
-        return self._get_property('webhookUrl')
+        return self._get_property("webhookUrl")
 
     @property
     def created_at(self):
-        return self._get_property('createdAt')
+        return self._get_property("createdAt")
 
     @property
     def expires_at(self):
-        return self._get_property('expiresAt')
+        return self._get_property("expiresAt")
 
     @property
     def expired_at(self):
-        return self._get_property('expiredAt')
+        return self._get_property("expiredAt")
 
     @property
     def paid_at(self):
-        return self._get_property('paidAt')
+        return self._get_property("paidAt")
 
     @property
     def authorized_at(self):
-        return self._get_property('authorizedAt')
+        return self._get_property("authorizedAt")
 
     @property
     def canceled_at(self):
-        return self._get_property('canceledAt')
+        return self._get_property("canceledAt")
 
     @property
     def completed_at(self):
-        return self._get_property('completedAt')
+        return self._get_property("completedAt")
 
     # documented _links
 
     @property
     def checkout_url(self):
-        return self._get_link('checkout')
+        return self._get_link("checkout")
 
     # additional methods
 
     def is_created(self):
-        return self._get_property('status') == self.STATUS_CREATED
+        return self._get_property("status") == self.STATUS_CREATED
 
     def is_paid(self):
-        return self._get_property('status') == self.STATUS_PAID
+        return self._get_property("status") == self.STATUS_PAID
 
     def is_authorized(self):
-        return self._get_property('status') == self.STATUS_AUTHORIZED
+        return self._get_property("status") == self.STATUS_AUTHORIZED
 
     def is_canceled(self):
-        return self._get_property('status') == self.STATUS_CANCELED
+        return self._get_property("status") == self.STATUS_CANCELED
 
     def is_shipping(self):
-        return self._get_property('status') == self.STATUS_SHIPPING
+        return self._get_property("status") == self.STATUS_SHIPPING
 
     def is_completed(self):
-        return self._get_property('status') == self.STATUS_COMPLETED
+        return self._get_property("status") == self.STATUS_COMPLETED
 
     def is_expired(self):
-        return self._get_property('status') == self.STATUS_EXPIRED
+        return self._get_property("status") == self.STATUS_EXPIRED
 
     def create_refund(self, data=None, **params):
         """Create a refund for the order. When no data arg is given, a refund for all order lines is assumed."""
         if data is None:
-            data = {'lines': []}
+            data = {"lines": []}
         refund = OrderRefunds(self.client).on(self).create(data, **params)
         return refund
 
@@ -166,7 +167,7 @@ class Order(Base):
         from ..resources.order_lines import OrderLines
 
         if data is None:
-            data = {'lines': []}
+            data = {"lines": []}
         canceled = OrderLines(self.client).on(self).delete(data)
         return canceled
 
@@ -177,12 +178,12 @@ class Order(Base):
 
     @property
     def lines(self):
-        lines = self._get_property('lines') or []
+        lines = self._get_property("lines") or []
         result = {
-            '_embedded': {
-                'lines': lines,
+            "_embedded": {
+                "lines": lines,
             },
-            'count': len(lines),
+            "count": len(lines),
         }
         return List(result, OrderLine, self.client)
 
@@ -198,7 +199,7 @@ class Order(Base):
     def create_shipment(self, data=None):
         """Create a shipment for an order. When no data arg is given, a shipment for all order lines is assumed."""
         if data is None:
-            data = {'lines': []}
+            data = {"lines": []}
         return Shipments(self.client).on(self).create(data)
 
     def get_shipment(self, resource_id):

@@ -5,41 +5,43 @@ class Onboarding(Base):
     @classmethod
     def get_resource_class(cls, client):
         from ..resources.onboarding import Onboarding as OnboardingResource
+
         return OnboardingResource(client)
 
-    STATUS_NEEDS_DATA = 'needs-data'
-    STATUS_IN_REVIEW = 'in-review'  # Waiting for a valid mandate.
-    STATUS_COMPLETED = 'completed'
+    STATUS_NEEDS_DATA = "needs-data"
+    STATUS_IN_REVIEW = "in-review"  # Waiting for a valid mandate.
+    STATUS_COMPLETED = "completed"
 
     @property
     def resource(self):
-        return self._get_property('resource')
+        return self._get_property("resource")
 
     @property
     def name(self):
-        return self._get_property('name')
+        return self._get_property("name")
 
     @property
     def signed_up_at(self):
-        return self._get_property('signedUpAt')
+        return self._get_property("signedUpAt")
 
     @property
     def status(self):
-        return self._get_property('status')
+        return self._get_property("status")
 
     @property
     def can_receive_payments(self):
-        return self._get_property('canReceivePayments')
+        return self._get_property("canReceivePayments")
 
     @property
     def can_receive_settlements(self):
-        return self._get_property('canReceiveSettlements')
+        return self._get_property("canReceiveSettlements")
 
     @property
     def organization(self):
         """Retrieve organization for an onboarding."""
         from .organization import Organization
-        url = self._get_link('organization')
+
+        url = self._get_link("organization")
 
         if url:
             resp = self.client.organizations.perform_api_call(self.client.organizations.REST_READ, url)

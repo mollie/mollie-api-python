@@ -4,7 +4,7 @@ from .base import Base
 
 
 class Orders(Base):
-    RESOURCE_ID_PREFIX = 'ord_'
+    RESOURCE_ID_PREFIX = "ord_"
 
     def get_resource_object(self, result):
         return Order(result, self.client)
@@ -13,7 +13,8 @@ class Orders(Base):
         if not order_id or not order_id.startswith(self.RESOURCE_ID_PREFIX):
             raise IdentifierError(
                 "Invalid order ID: '{id}'. An order ID should start with '{prefix}'.".format(
-                    id=order_id, prefix=self.RESOURCE_ID_PREFIX)
+                    id=order_id, prefix=self.RESOURCE_ID_PREFIX
+                )
             )
         return super().get(order_id, **params)
 
@@ -26,7 +27,8 @@ class Orders(Base):
         if not order_id or not order_id.startswith(self.RESOURCE_ID_PREFIX):
             raise IdentifierError(
                 "Invalid order ID: '{id}'. An order ID should start with '{prefix}'.".format(
-                    id=order_id, prefix=self.RESOURCE_ID_PREFIX)
+                    id=order_id, prefix=self.RESOURCE_ID_PREFIX
+                )
             )
         result = super().delete(order_id, data)
         return self.get_resource_object(result)
