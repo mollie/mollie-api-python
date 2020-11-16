@@ -7,12 +7,12 @@ from mollie.api.objects.settlement import Settlement
 from mollie.api.resources.settlements import Settlements
 from tests.utils import assert_list_object
 
-SETTLEMENT_ID = 'stl_jDk30akdN'
+SETTLEMENT_ID = "stl_jDk30akdN"
 
 
 def test_list_settlements(oauth_client, response):
     """Get a list of settlements."""
-    response.get('https://api.mollie.com/v2/settlements', 'settlements_list')
+    response.get("https://api.mollie.com/v2/settlements", "settlements_list")
 
     settlements = oauth_client.settlements.list()
     assert_list_object(settlements, Settlement)
@@ -20,10 +20,10 @@ def test_list_settlements(oauth_client, response):
 
 def test_settlement_get(oauth_client, response):
     """Retrieve a single settlement method by ID."""
-    response.get('https://api.mollie.com/v2/settlements/%s' % SETTLEMENT_ID, 'settlement_single')
-    response.get('https://api.mollie.com/v2/settlements/%s/chargebacks' % SETTLEMENT_ID, 'chargebacks_list')
-    response.get('https://api.mollie.com/v2/settlements/%s/payments' % SETTLEMENT_ID, 'settlement_payments_multiple')
-    response.get('https://api.mollie.com/v2/settlements/%s/refunds' % SETTLEMENT_ID, 'refunds_list')
+    response.get("https://api.mollie.com/v2/settlements/%s" % SETTLEMENT_ID, "settlement_single")
+    response.get("https://api.mollie.com/v2/settlements/%s/chargebacks" % SETTLEMENT_ID, "chargebacks_list")
+    response.get("https://api.mollie.com/v2/settlements/%s/payments" % SETTLEMENT_ID, "settlement_payments_multiple")
+    response.get("https://api.mollie.com/v2/settlements/%s/refunds" % SETTLEMENT_ID, "refunds_list")
 
     settlement = oauth_client.settlements.get(SETTLEMENT_ID)
     chargebacks = oauth_client.settlement_chargebacks.with_parent_id(SETTLEMENT_ID).list()
@@ -122,10 +122,10 @@ def test_settlement_get(oauth_client, response):
         }"""
     )
 
-    assert settlement.reference == '1234567.1804.03'
-    assert settlement.created_at == '2018-04-06T06:00:01.0Z'
-    assert settlement.settled_at == '2018-04-06T09:41:44.0Z'
-    assert settlement.amount == {'currency': 'EUR', 'value': '39.75'}
+    assert settlement.reference == "1234567.1804.03"
+    assert settlement.created_at == "2018-04-06T06:00:01.0Z"
+    assert settlement.settled_at == "2018-04-06T09:41:44.0Z"
+    assert settlement.amount == {"currency": "EUR", "value": "39.75"}
 
     assert settlement.status == settlement.STATUS_OPEN
     assert settlement.is_open() is True
@@ -140,27 +140,27 @@ def test_settlement_get(oauth_client, response):
 
 def test_settlement_get_next(oauth_client, response):
     """Retrieve the details of the current settlement that has not yet been paid out."""
-    response.get('https://api.mollie.com/v2/settlements/next', 'settlement_next')
+    response.get("https://api.mollie.com/v2/settlements/next", "settlement_next")
 
-    settlement = oauth_client.settlements.get('next')
+    settlement = oauth_client.settlements.get("next")
 
     assert isinstance(settlement, Settlement)
-    assert settlement.created_at == '2018-04-06T06:00:01.0Z'
+    assert settlement.created_at == "2018-04-06T06:00:01.0Z"
     assert settlement.settled_at is None
-    assert settlement.amount == {'currency': 'EUR', 'value': '39.75'}
+    assert settlement.amount == {"currency": "EUR", "value": "39.75"}
 
 
 def test_settlement_get_open(oauth_client, response):
     """Retrieve the details of the open balance of the organization."""
-    response.get('https://api.mollie.com/v2/settlements/open', 'settlement_open')
+    response.get("https://api.mollie.com/v2/settlements/open", "settlement_open")
 
-    settlement = oauth_client.settlements.get('open')
+    settlement = oauth_client.settlements.get("open")
 
     assert isinstance(settlement, Settlement)
     assert settlement.reference is None
-    assert settlement.created_at == '2018-04-06T06:00:01.0Z'
+    assert settlement.created_at == "2018-04-06T06:00:01.0Z"
     assert settlement.settled_at is None
-    assert settlement.amount == {'currency': 'EUR', 'value': '39.75'}
+    assert settlement.amount == {"currency": "EUR", "value": "39.75"}
 
 
 @pytest.mark.parametrize(
@@ -171,8 +171,8 @@ def test_settlement_get_open(oauth_client, response):
         ("next", None),  # Valid
         ("open", None),  # Valid
         (SETTLEMENT_ID, None),  # Valid
-        ("1234567.1234.12", None)  # Valid
-    ]
+        ("1234567.1234.12", None),  # Valid
+    ],
 )
 def test_validate_settlement_id(input, expected):
     """Ensure that we only accept correctly formatted settlement IDs."""
@@ -184,8 +184,8 @@ def test_validate_settlement_id(input, expected):
 
 
 def test_settlement_invoice_id_is_deprecated(oauth_client, response):
-    response.get('https://api.mollie.com/v2/settlements/%s' % SETTLEMENT_ID, 'settlement_single')
+    response.get("https://api.mollie.com/v2/settlements/%s" % SETTLEMENT_ID, "settlement_single")
 
     settlement = oauth_client.settlements.get(SETTLEMENT_ID)
-    with pytest.warns(APIDeprecationWarning, match='Using Settlement Invoice ID is deprecated'):
+    with pytest.warns(APIDeprecationWarning, match="Using Settlement Invoice ID is deprecated"):
         assert settlement.invoice_id == "inv_FrvewDA3Pr"

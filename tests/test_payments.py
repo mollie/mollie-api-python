@@ -14,19 +14,19 @@ from mollie.api.objects.subscription import Subscription
 
 from .utils import assert_list_object
 
-PAYMENT_ID = 'tr_7UhSN1zuXS'
-REFUND_ID = 're_4qqhO89gsT'
-CHARGEBACK_ID = 'chb_n9z0tp'
-CUSTOMER_ID = 'cst_8wmqcHMN4U'
-SETTLEMENT_ID = 'stl_jDk30akdN'
-MANDATE_ID = 'mdt_h3gAaD5zP'
-SUBSCRIPTION_ID = 'sub_rVKGtNd6s3'
-ORDER_ID = 'ord_kEn1PlbGa'
+PAYMENT_ID = "tr_7UhSN1zuXS"
+REFUND_ID = "re_4qqhO89gsT"
+CHARGEBACK_ID = "chb_n9z0tp"
+CUSTOMER_ID = "cst_8wmqcHMN4U"
+SETTLEMENT_ID = "stl_jDk30akdN"
+MANDATE_ID = "mdt_h3gAaD5zP"
+SUBSCRIPTION_ID = "sub_rVKGtNd6s3"
+ORDER_ID = "ord_kEn1PlbGa"
 
 
 def test_list_payments(client, response):
     """Retrieve a list of payments."""
-    response.get('https://api.mollie.com/v2/payments', 'payments_list')
+    response.get("https://api.mollie.com/v2/payments", "payments_list")
 
     payments = client.payments.list()
     assert_list_object(payments, Payment)
@@ -34,81 +34,81 @@ def test_list_payments(client, response):
 
 def test_create_payment(client, response):
     """Create a new payment."""
-    response.post('https://api.mollie.com/v2/payments', 'payment_single')
+    response.post("https://api.mollie.com/v2/payments", "payment_single")
 
     payment = client.payments.create(
         {
-            'amount': {'currency': 'EUR', 'value': '10.00'},
-            'description': 'Order #12345',
-            'redirectUrl': 'https://webshop.example.org/order/12345/',
-            'webhookUrl': 'https://webshop.example.org/payments/webhook/',
-            'method': 'ideal',
-        })
+            "amount": {"currency": "EUR", "value": "10.00"},
+            "description": "Order #12345",
+            "redirectUrl": "https://webshop.example.org/order/12345/",
+            "webhookUrl": "https://webshop.example.org/payments/webhook/",
+            "method": "ideal",
+        }
+    )
     assert payment.id == PAYMENT_ID
 
 
 def test_cancel_payment(client, response):
     """Cancel existing payment."""
-    response.delete('https://api.mollie.com/v2/payments/%s' % PAYMENT_ID, 'payment_canceled', 200)
+    response.delete("https://api.mollie.com/v2/payments/%s" % PAYMENT_ID, "payment_canceled", 200)
 
     canceled_payment = client.payments.delete(PAYMENT_ID)
     assert isinstance(canceled_payment, Payment)
     assert canceled_payment.is_canceled() is True
-    assert canceled_payment.canceled_at == '2018-03-20T09:28:37+00:00'
+    assert canceled_payment.canceled_at == "2018-03-20T09:28:37+00:00"
     assert canceled_payment.id == PAYMENT_ID
 
 
 def test_cancel_payment_invalid_id(client):
     """Verify that an invalid payment id is validated and an error is raised."""
     with pytest.raises(IdentifierError):
-        client.payments.delete('invalid')
+        client.payments.delete("invalid")
 
 
 def test_get_single_payment(client, response):
     """Retrieve a single payment by payment id."""
-    response.get('https://api.mollie.com/v2/payments/%s' % PAYMENT_ID, 'payment_single')
-    response.get('https://api.mollie.com/v2/payments/%s/refunds' % PAYMENT_ID, 'refunds_list')
-    response.get('https://api.mollie.com/v2/payments/%s/chargebacks' % PAYMENT_ID,
-                 'chargebacks_list')
-    response.get('https://api.mollie.com/v2/customers/%s' % CUSTOMER_ID, 'customer_single')
-    response.get('https://api.mollie.com/v2/customers/{cust}/mandates/{man}'.format(
-        cust=CUSTOMER_ID, man=MANDATE_ID), 'customer_mandate_single')
-    response.get('https://api.mollie.com/v2/customers/{cust}/subscriptions/{sub}'.format(
-        cust=CUSTOMER_ID, sub=SUBSCRIPTION_ID), 'subscription_single')
-    response.get('https://api.mollie.com/v2/orders/{order_id}'.format(order_id=ORDER_ID),
-                 'order_single')
+    response.get("https://api.mollie.com/v2/payments/%s" % PAYMENT_ID, "payment_single")
+    response.get("https://api.mollie.com/v2/payments/%s/refunds" % PAYMENT_ID, "refunds_list")
+    response.get("https://api.mollie.com/v2/payments/%s/chargebacks" % PAYMENT_ID, "chargebacks_list")
+    response.get("https://api.mollie.com/v2/customers/%s" % CUSTOMER_ID, "customer_single")
+    response.get(
+        "https://api.mollie.com/v2/customers/{cust}/mandates/{man}".format(cust=CUSTOMER_ID, man=MANDATE_ID),
+        "customer_mandate_single",
+    )
+    response.get(
+        "https://api.mollie.com/v2/customers/{cust}/subscriptions/{sub}".format(cust=CUSTOMER_ID, sub=SUBSCRIPTION_ID),
+        "subscription_single",
+    )
+    response.get("https://api.mollie.com/v2/orders/{order_id}".format(order_id=ORDER_ID), "order_single")
 
     payment = client.payments.get(PAYMENT_ID)
     assert isinstance(payment, Payment)
     # properties
-    assert payment.resource == 'payment'
+    assert payment.resource == "payment"
     assert payment.id == PAYMENT_ID
-    assert payment.mode == 'test'
-    assert payment.created_at == '2018-03-20T09:13:37+00:00'
+    assert payment.mode == "test"
+    assert payment.created_at == "2018-03-20T09:13:37+00:00"
     assert payment.status == Payment.STATUS_OPEN
     assert payment.is_cancelable is False
     assert payment.paid_at is None
     assert payment.canceled_at is None
     assert payment.authorized_at is None
-    assert payment.expires_at == '2018-03-20T09:28:37+00:00'
+    assert payment.expires_at == "2018-03-20T09:28:37+00:00"
     assert payment.expired_at is None
     assert payment.failed_at is None
-    assert payment.amount == {'value': '10.00', 'currency': 'EUR'}
+    assert payment.amount == {"value": "10.00", "currency": "EUR"}
     assert payment.amount_refunded is None
     assert payment.amount_remaining is None
-    assert payment.description == 'Order #12345'
-    assert payment.redirect_url == 'https://webshop.example.org/order/12345/'
-    assert payment.webhook_url == 'https://webshop.example.org/payments/webhook/'
+    assert payment.description == "Order #12345"
+    assert payment.redirect_url == "https://webshop.example.org/order/12345/"
+    assert payment.webhook_url == "https://webshop.example.org/payments/webhook/"
     assert payment.method == Method.IDEAL
-    assert payment.metadata == {'order_id': '12345'}
+    assert payment.metadata == {"order_id": "12345"}
     assert payment.locale is None
     assert payment.country_code is None
-    assert payment.profile_id == 'pfl_QkEhN94Ba'
-    assert payment.settlement_amount == {
-        "currency": "EUR",
-        "value": "39.75"
-    }
-    assert payment.settlement_id == 'stl_jDk30akdN'
+    assert payment.profile_id == "pfl_QkEhN94Ba"
+    assert payment.settlement_amount == {"currency": "EUR", "value": "39.75"}
+    assert payment.settlement_id == "stl_jDk30akdN"
     assert payment.customer_id == CUSTOMER_ID
     assert payment.sequence_type == Payment.SEQUENCETYPE_RECURRING
     assert payment.mandate_id == MANDATE_ID
@@ -117,7 +117,7 @@ def test_get_single_payment(client, response):
     assert payment.application_fee is None
     assert payment.details is None
     # properties from _links
-    assert payment.checkout_url == 'https://www.mollie.com/payscreen/select-method/7UhSN1zuXS'
+    assert payment.checkout_url == "https://www.mollie.com/payscreen/select-method/7UhSN1zuXS"
     assert payment.refunds is not None
     assert payment.chargebacks is not None
     assert payment.mandate is not None
@@ -140,8 +140,8 @@ def test_get_single_payment(client, response):
 
 def test_payment_get_related_refunds(client, response):
     """Retrieve a list of refunds related to a payment."""
-    response.get('https://api.mollie.com/v2/payments/%s' % PAYMENT_ID, 'payment_single')
-    response.get('https://api.mollie.com/v2/payments/%s/refunds' % PAYMENT_ID, 'refunds_list')
+    response.get("https://api.mollie.com/v2/payments/%s" % PAYMENT_ID, "payment_single")
+    response.get("https://api.mollie.com/v2/payments/%s/refunds" % PAYMENT_ID, "refunds_list")
 
     payment = client.payments.get(PAYMENT_ID)
     refunds = payment.refunds
@@ -150,9 +150,8 @@ def test_payment_get_related_refunds(client, response):
 
 def test_payment_get_related_chargebacks(client, response):
     """Get chargebacks related to payment id."""
-    response.get('https://api.mollie.com/v2/payments/%s' % PAYMENT_ID, 'payment_single')
-    response.get('https://api.mollie.com/v2/payments/%s/chargebacks' % PAYMENT_ID,
-                 'chargebacks_list')
+    response.get("https://api.mollie.com/v2/payments/%s" % PAYMENT_ID, "payment_single")
+    response.get("https://api.mollie.com/v2/payments/%s/chargebacks" % PAYMENT_ID, "chargebacks_list")
 
     payment = client.payments.get(PAYMENT_ID)
     chargebacks = payment.chargebacks
@@ -161,8 +160,8 @@ def test_payment_get_related_chargebacks(client, response):
 
 def test_payment_get_related_captures(client, response):
     """Get captures related to payment id."""
-    response.get('https://api.mollie.com/v2/payments/%s' % PAYMENT_ID, 'payment_single')
-    response.get('https://api.mollie.com/v2/payments/%s/captures' % PAYMENT_ID, 'captures_list')
+    response.get("https://api.mollie.com/v2/payments/%s" % PAYMENT_ID, "payment_single")
+    response.get("https://api.mollie.com/v2/payments/%s/captures" % PAYMENT_ID, "captures_list")
 
     payment = client.payments.get(PAYMENT_ID)
     captures = payment.captures
@@ -171,8 +170,8 @@ def test_payment_get_related_captures(client, response):
 
 def test_payment_get_related_settlement(client, response):
     """Get the settlement related to the payment."""
-    response.get('https://api.mollie.com/v2/payments/%s' % PAYMENT_ID, 'payment_single')
-    response.get('https://api.mollie.com/v2/settlements/%s' % SETTLEMENT_ID, 'settlement_single')
+    response.get("https://api.mollie.com/v2/payments/%s" % PAYMENT_ID, "payment_single")
+    response.get("https://api.mollie.com/v2/settlements/%s" % SETTLEMENT_ID, "settlement_single")
 
     payment = client.payments.get(PAYMENT_ID)
     settlement = payment.settlement
@@ -182,9 +181,11 @@ def test_payment_get_related_settlement(client, response):
 
 def test_payment_get_related_mandate(client, response):
     """Get the mandate related to the payment."""
-    response.get('https://api.mollie.com/v2/payments/%s' % PAYMENT_ID, 'payment_single')
-    response.get('https://api.mollie.com/v2/customers/{cust}/mandates/{man}'.format(
-        cust=CUSTOMER_ID, man=MANDATE_ID), 'customer_mandate_single')
+    response.get("https://api.mollie.com/v2/payments/%s" % PAYMENT_ID, "payment_single")
+    response.get(
+        "https://api.mollie.com/v2/customers/{cust}/mandates/{man}".format(cust=CUSTOMER_ID, man=MANDATE_ID),
+        "customer_mandate_single",
+    )
 
     payment = client.payments.get(PAYMENT_ID)
     mandate = payment.mandate
@@ -193,9 +194,11 @@ def test_payment_get_related_mandate(client, response):
 
 
 def test_payment_get_related_subscription(client, response):
-    response.get('https://api.mollie.com/v2/payments/%s' % PAYMENT_ID, 'payment_single')
-    response.get('https://api.mollie.com/v2/customers/{cust}/subscriptions/{sub}'.format(
-        cust=CUSTOMER_ID, sub=SUBSCRIPTION_ID), 'subscription_single')
+    response.get("https://api.mollie.com/v2/payments/%s" % PAYMENT_ID, "payment_single")
+    response.get(
+        "https://api.mollie.com/v2/customers/{cust}/subscriptions/{sub}".format(cust=CUSTOMER_ID, sub=SUBSCRIPTION_ID),
+        "subscription_single",
+    )
 
     payment = client.payments.get(PAYMENT_ID)
     subscription = payment.subscription
@@ -205,8 +208,8 @@ def test_payment_get_related_subscription(client, response):
 
 def test_payment_get_related_customer(client, response):
     """Get customer related to payment."""
-    response.get('https://api.mollie.com/v2/payments/%s' % PAYMENT_ID, 'payment_single')
-    response.get('https://api.mollie.com/v2/customers/%s' % CUSTOMER_ID, 'customer_single')
+    response.get("https://api.mollie.com/v2/payments/%s" % PAYMENT_ID, "payment_single")
+    response.get("https://api.mollie.com/v2/customers/%s" % CUSTOMER_ID, "customer_single")
 
     payment = client.payments.get(PAYMENT_ID)
     customer = payment.customer
@@ -216,14 +219,14 @@ def test_payment_get_related_customer(client, response):
 
 def test_update_payment(client, response):
     """Update an existing payment."""
-    response.patch('https://api.mollie.com/v2/payments/%s' % PAYMENT_ID, 'payment_updated')
+    response.patch("https://api.mollie.com/v2/payments/%s" % PAYMENT_ID, "payment_updated")
 
     data = {
-        'description': 'Order #12346',
-        'redirectUrl': 'https://webshop.example.org/order/12346/',
-        'webhookUrl': 'https://webshop.example.org/payments/webhook/',
-        'metadata': {"order_id": "12346"},
+        "description": "Order #12346",
+        "redirectUrl": "https://webshop.example.org/order/12346/",
+        "webhookUrl": "https://webshop.example.org/payments/webhook/",
+        "metadata": {"order_id": "12346"},
     }
     updated_payment = client.payments.update(PAYMENT_ID, data)
     assert isinstance(updated_payment, Payment)
-    assert updated_payment.description == 'Order #12346'
+    assert updated_payment.description == "Order #12346"

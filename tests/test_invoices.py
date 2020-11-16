@@ -2,12 +2,12 @@ from mollie.api.objects.invoice import Invoice
 
 from .utils import assert_list_object
 
-INVOICE_ID = 'inv_xBEbP9rvAq'
+INVOICE_ID = "inv_xBEbP9rvAq"
 
 
 def test_list_invoices(oauth_client, response):
     """Retrieve a list of existing invoices."""
-    response.get('https://api.mollie.com/v2/invoices', 'invoices_list')
+    response.get("https://api.mollie.com/v2/invoices", "invoices_list")
 
     invoices = oauth_client.invoices.list()
     assert_list_object(invoices, Invoice)
@@ -15,12 +15,12 @@ def test_list_invoices(oauth_client, response):
 
 def test_get_invoice(oauth_client, response):
     """Retrieve a single invoice."""
-    response.get('https://api.mollie.com/v2/invoices/%s' % INVOICE_ID, 'invoice_single')
+    response.get("https://api.mollie.com/v2/invoices/%s" % INVOICE_ID, "invoice_single")
 
     invoice = oauth_client.invoices.get(INVOICE_ID)
     assert isinstance(invoice, Invoice)
     assert invoice.id == INVOICE_ID
-    assert invoice.resource == 'invoice'
+    assert invoice.resource == "invoice"
     assert invoice.id == "inv_xBEbP9rvAq"
     assert invoice.reference == "2016.10000"
     assert invoice.vat_number == "NL001234567B01"
@@ -36,11 +36,8 @@ def test_get_invoice(oauth_client, response):
             "description": "iDEAL transactiekosten",
             "count": 100,
             "vatPercentage": 21,
-            "amount": {
-                "value": "45.00",
-                "currency": "EUR"
-            }
+            "amount": {"value": "45.00", "currency": "EUR"},
         }
     ]
-    url = 'https://www.mollie.com/merchant/download/invoice/xBEbP9rvAq/2ab44d60b35b1d06090bba955fa2c602'
+    url = "https://www.mollie.com/merchant/download/invoice/xBEbP9rvAq/2ab44d60b35b1d06090bba955fa2c602"
     assert invoice.pdf == url
