@@ -1,6 +1,6 @@
 from mollie.api.error import Error
 
-INVOICE_ID = 'inv_xBEbP9rvAq'
+INVOICE_ID = "inv_xBEbP9rvAq"
 
 
 def main(client):
@@ -8,7 +8,7 @@ def main(client):
 
         # https://docs.mollie.com/reference/v2/invoices-api/list-invoices
 
-        body = '<h1>List invoices</h1>'
+        body = "<h1>List invoices</h1>"
         body += str(client.invoices.list())
 
         # https://docs.mollie.com/reference/v2/invoices-api/get-invoice
@@ -19,4 +19,4 @@ def main(client):
         return body
 
     except Error as err:
-        return 'API call failed: {error}'.format(error=err)
+        return "API call failed: {error}".format(error=err)

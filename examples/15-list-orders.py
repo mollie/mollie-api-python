@@ -14,7 +14,7 @@ def main():
         #
         # See: https://www.mollie.com/dashboard/settings/profiles
         #
-        api_key = os.environ.get('MOLLIE_API_KEY', 'test_test')
+        api_key = os.environ.get("MOLLIE_API_KEY", "test_test")
         mollie_client = Client()
         mollie_client.set_api_key(api_key)
 
@@ -23,13 +23,13 @@ def main():
         #
         # See: https://docs.mollie.com/reference/v2/orders-api/list-orders
         #
-        body = ''
+        body = ""
         orders = mollie_client.orders.list()
         if not len(orders):
-            body += '<p>You have no orders. You can create one from the examples.</p>'
+            body += "<p>You have no orders. You can create one from the examples.</p>"
             return body
 
-        body += '<p>Showing the last {num} orders for your API key.</p>'.format(num=len(orders))
+        body += "<p>Showing the last {num} orders for your API key.</p>".format(num=len(orders))
 
         body += """
             <table>
@@ -45,30 +45,32 @@ def main():
         """
 
         for order in orders:
-            body += '<tr>'
-            body += '<td>{id}</td>'.format(id=order.id)
-            body += '<td>{billing_given_name} {billing_family_name}</td>'.format(
-                billing_given_name=order.billing_address['givenName'],
-                billing_family_name=order.billing_address['familyName'])
-            body += '<td>{shipping_given_name} {shipping_family_name}</td>'.format(
-                shipping_given_name=order.shipping_address['givenName'],
-                shipping_family_name=order.shipping_address['familyName'])
-            body += '<td>{currency} {value}</td>'.format(currency=order.amount['currency'],
-                                                         value=order.amount['value'])
+            body += "<tr>"
+            body += "<td>{id}</td>".format(id=order.id)
+            body += "<td>{billing_given_name} {billing_family_name}</td>".format(
+                billing_given_name=order.billing_address["givenName"],
+                billing_family_name=order.billing_address["familyName"],
+            )
+            body += "<td>{shipping_given_name} {shipping_family_name}</td>".format(
+                shipping_given_name=order.shipping_address["givenName"],
+                shipping_family_name=order.shipping_address["familyName"],
+            )
+            body += "<td>{currency} {value}</td>".format(
+                currency=order.amount["currency"], value=order.amount["value"]
+            )
             body += '<td><a href="{checkout_url}" target="_blank">Pay order</a></td>'.format(
-                checkout_url=order.checkout_url)
-            body += '<td><a href="/14-cancel-order?order_id={id}">Cancel order</a></td>'.format(
-                id=order.id)
-            body += '<td><a href="/18-ship-order-completely?order_id={id}">Ship order</a></td>'.format(
-                id=order.id)
-            body += '</tr>'
+                checkout_url=order.checkout_url
+            )
+            body += '<td><a href="/14-cancel-order?order_id={id}">Cancel order</a></td>'.format(id=order.id)
+            body += '<td><a href="/18-ship-order-completely?order_id={id}">Ship order</a></td>'.format(id=order.id)
+            body += "</tr>"
 
         body += "</tbody></table>"
         return body
 
     except Error as err:
-        return 'API call failed: {error}'.format(error=err)
+        return "API call failed: {error}".format(error=err)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     print(main())

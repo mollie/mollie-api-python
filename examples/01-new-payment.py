@@ -18,7 +18,7 @@ def main():
         #
         # See: https://www.mollie.com/dashboard/settings/profiles
         #
-        api_key = os.environ.get('MOLLIE_API_KEY', 'test_test')
+        api_key = os.environ.get("MOLLIE_API_KEY", "test_test")
         mollie_client = Client()
         mollie_client.set_api_key(api_key)
 
@@ -36,24 +36,22 @@ def main():
         # redirectUrl   Redirect location. The customer will be redirected there after the payment.
         # metadata      Custom metadata that is stored with the payment.
         #
-        payment = mollie_client.payments.create({
-            'amount': {
-                'currency': 'EUR',
-                'value': '120.00'
-            },
-            'description': 'My first API payment',
-            'webhookUrl': '{root}02-webhook-verification'.format(root=flask.request.url_root),
-            'redirectUrl': '{root}03-return-page?my_webshop_id={id}'.format(root=flask.request.url_root,
-                                                                            id=my_webshop_id),
-            'metadata': {
-                'my_webshop_id': str(my_webshop_id)
+        payment = mollie_client.payments.create(
+            {
+                "amount": {"currency": "EUR", "value": "120.00"},
+                "description": "My first API payment",
+                "webhookUrl": "{root}02-webhook-verification".format(root=flask.request.url_root),
+                "redirectUrl": "{root}03-return-page?my_webshop_id={id}".format(
+                    root=flask.request.url_root, id=my_webshop_id
+                ),
+                "metadata": {"my_webshop_id": str(my_webshop_id)},
             }
-        })
+        )
 
         #
         # In this example we store the order with its payment status in a database.
         #
-        data = {'status': payment.status}
+        data = {"status": payment.status}
         database_write(my_webshop_id, data)
 
         #
@@ -62,8 +60,8 @@ def main():
         return flask.redirect(payment.checkout_url)
 
     except Error as err:
-        return 'API call failed: {error}'.format(error=err)
+        return "API call failed: {error}".format(error=err)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     print(main())
