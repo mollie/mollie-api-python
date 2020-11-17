@@ -6,3 +6,15 @@ target-version = ['py38']
 profile = "black"
 line_length = 119
 known_first_party = ["mollie", "app", "tests"]
+
+[tool.pytest.ini_options]
+mock_use_standalone_module = true
+addopts = """
+    --cov mollie/
+    --no-cov-on-fail
+    --cov-fail-under=80
+    --cov-report=term-missing
+    --isort
+    --flake8
+    --black
+"""
