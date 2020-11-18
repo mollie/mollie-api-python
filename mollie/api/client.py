@@ -7,6 +7,7 @@ from urllib.parse import urlencode
 
 import requests
 from requests_oauthlib import OAuth2Session
+from urllib3.util import Retry
 
 from .error import RequestError, RequestSetupError
 from .resources.captures import Captures
@@ -71,13 +72,15 @@ class Client(object):
                     access_token=access_token))
         return access_token
 
-    def __init__(self, api_endpoint=None, timeout=10):
+    def __init__(self, api_endpoint=None, timeout=2, retry=None):
         self.api_endpoint = self.validate_api_endpoint(api_endpoint or self.API_ENDPOINT)
         self.api_version = self.API_VERSION
         self.timeout = timeout
+        self.retry = retry
         self.api_key = None
+        self._client = None
 
-        self.oauth = None
+        self._oauth_client = None
         self.client_secret = None
         self.access_token = None
         self.set_token = None
@@ -177,11 +180,17 @@ class Client(object):
     def _perform_http_call_apikey(self, http_method, path, data=None, params=None):
         if not self.api_key:
             raise RequestSetupError('You have not set an API key. Please use set_api_key() to set the API key.')
+
+        if not self._client:
+            self._client = requests.Session()
+            self._client.verify = True
+            self._setup_retry()
+
         url, data, params = self._format_request_data(path, data, params)
         try:
-            response = requests.request(
-                http_method, url,
-                verify=True,
+            response = self._client.request(
+                method=http_method,
+                url=url,
                 headers={
                     'Accept': 'application/json',
                     'Authorization': 'Bearer {api_key}'.format(api_key=self.api_key),
@@ -200,9 +209,9 @@ class Client(object):
     def _perform_http_call_oauth(self, http_method, path, data=None, params=None):
         url, data, params = self._format_request_data(path, data, params)
         try:
-            response = self.oauth.request(
-                http_method,
-                url,
+            response = self._oauth_client.request(
+                method=http_method,
+                url=url,
                 headers={
                     'Accept': 'application/json',
                     'Content-Type': 'application/json',
@@ -211,13 +220,14 @@ class Client(object):
                 },
                 params=params,
                 data=data,
+                timeout=self.timeout,
             )
         except requests.exceptions.RequestException as err:
             raise RequestError('Unable to communicate with Mollie: {error}'.format(error=err))
         return response
 
     def perform_http_call(self, http_method, path, data=None, params=None):
-        if self.oauth:
+        if self._oauth_client:
             return self._perform_http_call_oauth(http_method, path, data=data, params=params)
         else:
             return self._perform_http_call_apikey(http_method, path, data=data, params=params)
@@ -235,7 +245,7 @@ class Client(object):
         self.set_user_agent_component('OAuth', '2.0', sanitize=False)  # keep spelling equal to the PHP client
         self.set_token = set_token
         self.client_secret = client_secret
-        self.oauth = OAuth2Session(
+        self._oauth_client = OAuth2Session(
             client_id,
             auto_refresh_kwargs={
                 'client_id': client_id,
@@ -247,12 +257,15 @@ class Client(object):
             token=token,
             token_updater=set_token
         )
+        self._oauth_client.verify = True
+        self._setup_retry()
+
         authorization_url = None
-        if not self.oauth.authorized:
-            authorization_url, state = self.oauth.authorization_url(self.OAUTH_AUTHORIZATION_URL)
+        if not self._oauth_client.authorized:
+            authorization_url, state = self._oauth_client.authorization_url(self.OAUTH_AUTHORIZATION_URL)
 
         # The merchant should visit this url to authorize access.
-        return self.oauth.authorized, authorization_url
+        return self._oauth_client.authorized, authorization_url
 
     def setup_oauth_authorization_response(self, authorization_response):
         """
@@ -260,13 +273,24 @@ class Client(object):
         :return: None
         """
         # Fetch an access token from the provider using the authorization code obtained during user authorization.
-        self.access_token = self.oauth.fetch_token(
+        self.access_token = self._oauth_client.fetch_token(
             self.OAUTH_TOKEN_URL,
             authorization_response=authorization_response,
             client_secret=self.client_secret,
         )
         self.set_token(self.access_token)
         return self.access_token
+
+    def _setup_retry(self):
+        """Configure a retry behaviour on the HTTP client."""
+        if self.retry:
+            retry = Retry(connect=self.retry, backoff_factor=1)
+            adapter = requests.adapters.HTTPAdapter(max_retries=retry)
+
+            if self._client:
+                self._client.mount("https://", adapter)
+            if self._oauth_client:
+                self._oauth_client.mount("https://", adapter)
 
 
 def generate_querystring(params):
