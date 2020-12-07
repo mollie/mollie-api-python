@@ -46,6 +46,7 @@ setup(
     url='https://github.com/mollie/mollie-api-python',
     install_requires=[
         'requests',
+        'urllib3',
         'requests_oauthlib',
     ],
     classifiers=[
