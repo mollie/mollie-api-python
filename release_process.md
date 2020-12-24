@@ -5,4 +5,4 @@ To create a release there are a few steps you should follow:
 - Update the version number in `version.py` and push this to master.
 - Create a new tag with the new version number in the following way: `git tag v<major.minor.patch>`.
 - Push the tag by using `git push --tags`.
-- Create a release on [GitHub](https://github.com/mollie/mollie-api-python/releases/new) with a summary of changes.
+- The build process will create a package on PYPI and a draft release on [GitHub](https://github.com/mollie/mollie-api-python/releases/). Edit the draft release, type a summary of all changes and remove the draft status.
