@@ -232,7 +232,7 @@ class Client(object):
         else:
             return self._perform_http_call_apikey(http_method, path, data=data, params=params)
 
-    def setup_oauth(self, client_id, client_secret, redirect_uri, scope, token, set_token):
+    def init_oauth_client(self, client_id, client_secret, redirect_uri, scope, token, set_token):
         """
         :param client_id: (string)
         :param client_secret: (string)
@@ -259,6 +259,18 @@ class Client(object):
         )
         self._oauth_client.verify = True
         self._setup_retry()
+
+    def setup_oauth(self, client_id, client_secret, redirect_uri, scope, token, set_token):
+        """
+        :param client_id: (string)
+        :param client_secret: (string)
+        :param redirect_uri: (string)
+        :param scope: Mollie connect permissions (list)
+        :param token: The stored token (dict)
+        :param set_token: Callable that stores a token (dict)
+        :return: authorization url (url)
+        """
+        self.init_oauth_client(client_id, client_secret, redirect_uri, scope, token, set_token)
 
         authorization_url = None
         if not self._oauth_client.authorized:
