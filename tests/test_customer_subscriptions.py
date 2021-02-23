@@ -138,7 +138,7 @@ def test_customer_subscription_get_related_payments(client, response):
     response.get('https://api.mollie.com/v2/customers/%s/subscriptions/%s' % (CUSTOMER_ID, SUBSCRIPTION_ID),
                  'subscription_single')
     response.get('https://api.mollie.com/v2/customers/%s' % CUSTOMER_ID, 'customer_single')
-    response.get('https://api.mollie.com/v2/customers/%s/subscription/%s/payments' % (CUSTOMER_ID, SUBSCRIPTION_ID),
+    response.get('https://api.mollie.com/v2/customers/%s/subscriptions/%s/payments' % (CUSTOMER_ID, SUBSCRIPTION_ID),
                  'payments_list')
     subscription = client.customer_subscriptions.with_parent_id(CUSTOMER_ID).get(SUBSCRIPTION_ID)
     payments = subscription.payments
