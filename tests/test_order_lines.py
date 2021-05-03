@@ -62,6 +62,7 @@ def test_update_order_line(client, response):
         "productUrl": "https://shop.lego.com/en-GB/product/Hogwarts-Castle-71043",
         "imageUrl": "https://sh-s7-live-s.legocdn.com/is/image//LEGO/71043_alt1?$main$",
         "quantity": 2,
+        "sku": "335596985",
         "vatRate": "21.00",
         "unitPrice": {
             "currency": "EUR",
