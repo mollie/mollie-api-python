@@ -72,7 +72,15 @@ class Client(object):
                     access_token=access_token))
         return access_token
 
-    def __init__(self, api_endpoint=None, timeout=2, retry=None):
+    def __init__(self, api_endpoint=None, timeout=(2, 10), retry=None):
+        """Initialize a new Mollie API client.
+
+        :param api_endpoint: The API endpoint to communicate to, this default to the production environment (string)
+        :param timeout: The timeouts used for the HTTP requests to the API, the default specifies both connect and
+            read timeout (integer or tuple)
+        :param retry: The number of retries that the client should perform in case of failed requests. Note that only
+            connect errors trigger a retry, errors reponses from the API don't (integer).
+        """
         self.api_endpoint = self.validate_api_endpoint(api_endpoint or self.API_ENDPOINT)
         self.api_version = self.API_VERSION
         self.timeout = timeout
