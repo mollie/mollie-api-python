@@ -72,7 +72,7 @@ class Client(object):
                     access_token=access_token))
         return access_token
 
-    def __init__(self, api_endpoint=None, timeout=(2, 10), retry=None):
+    def __init__(self, api_endpoint=None, timeout=(2, 10), retry=3):
         """Initialize a new Mollie API client.
 
         :param api_endpoint: The API endpoint to communicate to, this default to the production environment (string)
