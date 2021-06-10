@@ -1,6 +1,6 @@
 import pytest
 
-from mollie.api.error import IdentifierError
+from mollie.api.error import IdentifierError, RequestError
 from mollie.api.objects.profile import Profile
 from mollie.api.resources.profiles import Profiles
 
@@ -123,4 +123,43 @@ def test_profile_disable_payment_method(oauth_client, response):
 
     profile = oauth_client.profiles.get(PROFILE_ID)
     method = oauth_client.profile_methods.on(profile, 'bancontact').delete()
+    assert method == {}
+
+
+@pytest.mark.parametrize('method', ['giftcard', 'voucher'])
+def test_profile_enable_giftcard_no_resource_id(oauth_client, response, method):
+    response.get('https://api.mollie.com/v2/profiles/%s' % PROFILE_ID, 'profile_new')
+
+    profile = oauth_client.profiles.get(PROFILE_ID)
+
+    with pytest.raises(RequestError):
+        oauth_client.profile_methods.on(profile, method).create()
+
+
+@pytest.mark.parametrize('method', ['giftcard', 'voucher'])
+def test_profile_enable_giftcard(oauth_client, response, method):
+    response.get('https://api.mollie.com/v2/profiles/%s' % PROFILE_ID, 'profile_new')
+    response.post(
+        'https://api.mollie.com/v2/profiles/%s/methods/%s/issuers/%s' % (PROFILE_ID, method, 'festivalcadeau'),
+        'profile_enable_gift_card_issuer'
+    )
+
+    profile = oauth_client.profiles.get(PROFILE_ID)
+    method = oauth_client.profile_methods.on(profile, method).create('festivalcadeau')
+
+    assert method.id == 'festivalcadeau'
+
+
+@pytest.mark.parametrize('method', ['giftcard', 'voucher'])
+def test_profile_disable_giftcard(oauth_client, response, method):
+    response.get('https://api.mollie.com/v2/profiles/%s' % PROFILE_ID, 'profile_new')
+    response.delete(
+        'https://api.mollie.com/v2/profiles/%s/methods/%s/issuers/%s' % (PROFILE_ID, method, 'festivalcadeau'),
+        'empty',
+        204
+    )
+
+    profile = oauth_client.profiles.get(PROFILE_ID)
+    method = oauth_client.profile_methods.on(profile, method).delete('festivalcadeau')
+
     assert method == {}
