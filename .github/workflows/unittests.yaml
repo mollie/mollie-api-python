@@ -26,7 +26,12 @@ jobs:
           python -m pip install -r test_requirements.txt
 
       - name: Run unittests
+        run: python -m pytest --black
+        if: ${{ !contains(matrix.python_version, 'pypy') }}
+
+      - name: Run unittests (without black)
         run: python -m pytest
+        if: ${{ contains(matrix.python_version, 'pypy') }}
 
       - name: Verify dependencies
         run: safety check
