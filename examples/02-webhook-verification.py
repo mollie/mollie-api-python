@@ -18,50 +18,50 @@ def main():
         #
         # See: https://www.mollie.com/dashboard/settings/profiles
         #
-        api_key = os.environ.get('MOLLIE_API_KEY', 'test_test')
+        api_key = os.environ.get("MOLLIE_API_KEY", "test_test")
         mollie_client = Client()
         mollie_client.set_api_key(api_key)
 
         #
         # Retrieve the payment's current state.
         #
-        if 'id' not in flask.request.form:
-            flask.abort(404, 'Unknown payment id')
+        if "id" not in flask.request.form:
+            flask.abort(404, "Unknown payment id")
 
-        payment_id = flask.request.form['id']
+        payment_id = flask.request.form["id"]
         payment = mollie_client.payments.get(payment_id)
-        my_webshop_id = payment.metadata['my_webshop_id']
+        my_webshop_id = payment.metadata["my_webshop_id"]
 
         #
         # Update the order in the database.
         #
-        data = {'status': payment.status}
+        data = {"status": payment.status}
         database_write(my_webshop_id, data)
 
         if payment.is_paid():
             #
             # At this point you'd probably want to start the process of delivering the product to the customer.
             #
-            return 'Paid'
+            return "Paid"
         elif payment.is_pending():
             #
             # The payment has started but is not complete yet.
             #
-            return 'Pending'
+            return "Pending"
         elif payment.is_open():
             #
             # The payment has not started yet. Wait for it.
             #
-            return 'Open'
+            return "Open"
         else:
             #
             # The payment isn't paid, pending nor open. We can assume it was aborted.
             #
-            return 'Cancelled'
+            return "Cancelled"
 
     except Error as err:
-        return 'API call failed: {error}'.format(error=err)
+        return "API call failed: {error}".format(error=err)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     print(main())

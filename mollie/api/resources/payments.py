@@ -4,7 +4,7 @@ from .base import Base
 
 
 class Payments(Base):
-    RESOURCE_ID_PREFIX = 'tr_'
+    RESOURCE_ID_PREFIX = "tr_"
 
     def get_resource_object(self, result):
         return Payment(result, self.client)
@@ -13,7 +13,8 @@ class Payments(Base):
         if not payment_id or not payment_id.startswith(self.RESOURCE_ID_PREFIX):
             raise IdentifierError(
                 "Invalid payment ID: '{id}'. A payment ID should start with '{prefix}'.".format(
-                    id=payment_id, prefix=self.RESOURCE_ID_PREFIX)
+                    id=payment_id, prefix=self.RESOURCE_ID_PREFIX
+                )
             )
         return super().get(payment_id, **params)
 
@@ -26,7 +27,8 @@ class Payments(Base):
         if not payment_id or not payment_id.startswith(self.RESOURCE_ID_PREFIX):
             raise IdentifierError(
                 "Invalid payment ID: '{id}'. A payment ID should start with '{prefix}'.".format(
-                    id=payment_id, prefix=self.RESOURCE_ID_PREFIX)
+                    id=payment_id, prefix=self.RESOURCE_ID_PREFIX
+                )
             )
         result = super().delete(payment_id, data)
         return self.get_resource_object(result)

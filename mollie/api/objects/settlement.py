@@ -5,66 +5,67 @@ from .base import Base
 
 
 class Settlement(Base):
-    STATUS_OPEN = 'open'
-    STATUS_PENDING = 'pending'
-    STATUS_PAIDOUT = 'paidout'
-    STATUS_FAILED = 'failed'
+    STATUS_OPEN = "open"
+    STATUS_PENDING = "pending"
+    STATUS_PAIDOUT = "paidout"
+    STATUS_FAILED = "failed"
 
     @classmethod
     def get_resource_class(cls, client):
         from ..resources.settlements import Settlements
+
         return Settlements(client)
 
     @property
     def id(self):
-        return self._get_property('id')
+        return self._get_property("id")
 
     @property
     def reference(self):
-        return self._get_property('reference')
+        return self._get_property("reference")
 
     @property
     def created_at(self):
-        return self._get_property('createdAt')
+        return self._get_property("createdAt")
 
     @property
     def settled_at(self):
-        return self._get_property('settledAt')
+        return self._get_property("settledAt")
 
     @property
     def status(self):
-        return self._get_property('status')
+        return self._get_property("status")
 
     @property
     def amount(self):
-        return self._get_property('amount')
+        return self._get_property("amount")
 
     @property
     def periods(self):
-        return self._get_property('periods')
+        return self._get_property("periods")
 
     @property
     def invoice_id(self):
         warnings.warn(
             "Using Settlement Invoice ID is deprecated, see "
             "https://docs.mollie.com/reference/v2/settlements-api/get-settlement",
-            APIDeprecationWarning
+            APIDeprecationWarning,
         )
-        return self._get_property('invoiceId')
+        return self._get_property("invoiceId")
 
     # Additional methods
 
     def is_open(self):
-        return self._get_property('status') == self.STATUS_OPEN
+        return self._get_property("status") == self.STATUS_OPEN
 
     def is_pending(self):
-        return self._get_property('status') == self.STATUS_PENDING
+        return self._get_property("status") == self.STATUS_PENDING
 
     def is_canceled(self):
-        return self._get_property('status') == self.STATUS_PAIDOUT
+        return self._get_property("status") == self.STATUS_PAIDOUT
 
     def is_failed(self):
-        return self._get_property('status') == self.STATUS_FAILED
+        return self._get_property("status") == self.STATUS_FAILED
 
     @property
     def payments(self):

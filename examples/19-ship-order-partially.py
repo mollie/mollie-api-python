@@ -13,7 +13,7 @@ def main():
         # Initialize the Mollie API library with your API key.
         #
         #
-        api_key = os.environ.get('MOLLIE_API_KEY', 'test_test')
+        api_key = os.environ.get("MOLLIE_API_KEY", "test_test")
         mollie_client = Client()
         mollie_client.set_api_key(api_key)
 
@@ -23,29 +23,30 @@ def main():
         # See: https://docs.mollie.com/reference/v2/shipments-api/create-shipment
         #
 
-        body = '<p>Attempting to retrieve the first page of orders and grabbing the first.</p>'
+        body = "<p>Attempting to retrieve the first page of orders and grabbing the first.</p>"
         order = next(mollie_client.orders.list())
         line = next(order.lines)
         data = {
-            'lines': [
+            "lines": [
                 {
-                    'id': line.id,
+                    "id": line.id,
                 }
             ],
-            'tracking': {
-                'carrier': 'PostNL',
-                'code': '3SKABA000000000',
-                'url': 'http://postnl.nl/tracktrace/?B=3SKABA000000000&P=1016EE&D=NL&T=C'
+            "tracking": {
+                "carrier": "PostNL",
+                "code": "3SKABA000000000",
+                "url": "http://postnl.nl/tracktrace/?B=3SKABA000000000&P=1016EE&D=NL&T=C",
             },
         }
         shipment = order.create_shipment(data)
-        body += 'A shipment with ID {shipment_id} has been created for your order with ID {order_id}'.format(
-            shipment_id=shipment.id, order_id=order.id)
+        body += "A shipment with ID {shipment_id} has been created for your order with ID {order_id}".format(
+            shipment_id=shipment.id, order_id=order.id
+        )
 
         return body
     except Error as err:
-        return 'API call failed: {error}'.format(error=err)
+        return "API call failed: {error}".format(error=err)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     print(main())

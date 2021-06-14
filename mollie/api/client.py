@@ -43,33 +43,36 @@ from .version import VERSION
 
 class Client(object):
     CLIENT_VERSION = VERSION
-    API_ENDPOINT = 'https://api.mollie.com'
-    API_VERSION = 'v2'
-    UNAME = ' '.join(platform.uname())
+    API_ENDPOINT = "https://api.mollie.com"
+    API_VERSION = "v2"
+    UNAME = " ".join(platform.uname())
 
-    OAUTH_AUTHORIZATION_URL = 'https://www.mollie.com/oauth2/authorize'
-    OAUTH_AUTO_REFRESH_URL = API_ENDPOINT + '/oauth2/tokens'
-    OAUTH_TOKEN_URL = API_ENDPOINT + '/oauth2/tokens'
+    OAUTH_AUTHORIZATION_URL = "https://www.mollie.com/oauth2/authorize"
+    OAUTH_AUTO_REFRESH_URL = API_ENDPOINT + "/oauth2/tokens"
+    OAUTH_TOKEN_URL = API_ENDPOINT + "/oauth2/tokens"
 
     @staticmethod
     def validate_api_endpoint(api_endpoint):
-        return api_endpoint.strip().rstrip('/')
+        return api_endpoint.strip().rstrip("/")
 
     @staticmethod
     def validate_api_key(api_key):
         api_key = api_key.strip()
-        if not re.compile(r'^(live|test)_\w+$').match(api_key):
+        if not re.compile(r"^(live|test)_\w+$").match(api_key):
             raise RequestSetupError(
-                "Invalid API key: '{api_key}'. An API key must start with 'test_' or 'live_'.".format(api_key=api_key))
+                "Invalid API key: '{api_key}'. An API key must start with 'test_' or 'live_'.".format(api_key=api_key)
+            )
         return api_key
 
     @staticmethod
     def validate_access_token(access_token):
         access_token = access_token.strip()
-        if not access_token.startswith('access_'):
+        if not access_token.startswith("access_"):
             raise RequestSetupError(
                 "Invalid access token: '{access_token}'. An access token must start with 'access_'.".format(
-                    access_token=access_token))
+                    access_token=access_token
+                )
+            )
         return access_token
 
     def __init__(self, api_endpoint=None, timeout=(2, 10), retry=3):
@@ -125,10 +128,11 @@ class Client(object):
 
         # compose base user agent string
         self.user_agent_components = OrderedDict()
-        self.set_user_agent_component('Mollie', self.CLIENT_VERSION)
-        self.set_user_agent_component('Python', platform.python_version())
-        self.set_user_agent_component('OpenSSL', ssl.OPENSSL_VERSION.split(' ')[1],
-                                      sanitize=False)  # keep legacy formatting of this component
+        self.set_user_agent_component("Mollie", self.CLIENT_VERSION)
+        self.set_user_agent_component("Python", platform.python_version())
+        self.set_user_agent_component(
+            "OpenSSL", ssl.OPENSSL_VERSION.split(" ")[1], sanitize=False
+        )  # keep legacy formatting of this component
 
     def set_api_endpoint(self, api_endpoint):
         self.api_endpoint = self.validate_api_endpoint(api_endpoint)
@@ -138,7 +142,7 @@ class Client(object):
 
     def set_access_token(self, access_token):
         self.api_key = self.validate_access_token(access_token)
-        self.set_user_agent_component('OAuth', '2.0', sanitize=False)  # keep spelling equal to the PHP client
+        self.set_user_agent_component("OAuth", "2.0", sanitize=False)  # keep spelling equal to the PHP client
 
     def set_timeout(self, timeout):
         self.timeout = timeout
@@ -155,9 +159,9 @@ class Client(object):
         Note: When you set sanitize=false you need to make sure the formatting is correct yourself.
         """
         if sanitize:
-            key = ''.join(_x.capitalize() for _x in re.findall(r'\S+', key))
-            if re.search(r'\s+', value):
-                value = '_'.join(re.findall(r'\S+', value))
+            key = "".join(_x.capitalize() for _x in re.findall(r"\S+", key))
+            if re.search(r"\s+", value):
+                value = "_".join(re.findall(r"\S+", value))
         self.user_agent_components[key] = value
 
     @property
@@ -167,10 +171,10 @@ class Client(object):
         return " ".join(components)
 
     def _format_request_data(self, path, data, params):
-        if path.startswith('%s/%s' % (self.api_endpoint, self.api_version)):
+        if path.startswith("%s/%s" % (self.api_endpoint, self.api_version)):
             url = path
         else:
-            url = '%s/%s/%s' % (self.api_endpoint, self.api_version, path)
+            url = "%s/%s/%s" % (self.api_endpoint, self.api_version, path)
 
         if data is not None:
             try:
@@ -180,14 +184,14 @@ class Client(object):
 
         querystring = generate_querystring(params)
         if querystring:
-            url += '?' + querystring
+            url += "?" + querystring
             params = None
 
         return url, data, params
 
     def _perform_http_call_apikey(self, http_method, path, data=None, params=None):
         if not self.api_key:
-            raise RequestSetupError('You have not set an API key. Please use set_api_key() to set the API key.')
+            raise RequestSetupError("You have not set an API key. Please use set_api_key() to set the API key.")
 
         if not self._client:
             self._client = requests.Session()
@@ -200,18 +204,18 @@ class Client(object):
                 method=http_method,
                 url=url,
                 headers={
-                    'Accept': 'application/json',
-                    'Authorization': 'Bearer {api_key}'.format(api_key=self.api_key),
-                    'Content-Type': 'application/json',
-                    'User-Agent': self.user_agent,
-                    'X-Mollie-Client-Info': self.UNAME,
+                    "Accept": "application/json",
+                    "Authorization": "Bearer {api_key}".format(api_key=self.api_key),
+                    "Content-Type": "application/json",
+                    "User-Agent": self.user_agent,
+                    "X-Mollie-Client-Info": self.UNAME,
                 },
                 params=params,
                 data=data,
                 timeout=self.timeout,
             )
         except requests.exceptions.RequestException as err:
-            raise RequestError('Unable to communicate with Mollie: {error}'.format(error=err))
+            raise RequestError("Unable to communicate with Mollie: {error}".format(error=err))
         return response
 
     def _perform_http_call_oauth(self, http_method, path, data=None, params=None):
@@ -221,17 +225,17 @@ class Client(object):
                 method=http_method,
                 url=url,
                 headers={
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json',
-                    'User-Agent': self.user_agent,
-                    'X-Mollie-Client-Info': self.UNAME,
+                    "Accept": "application/json",
+                    "Content-Type": "application/json",
+                    "User-Agent": self.user_agent,
+                    "X-Mollie-Client-Info": self.UNAME,
                 },
                 params=params,
                 data=data,
                 timeout=self.timeout,
             )
         except requests.exceptions.RequestException as err:
-            raise RequestError('Unable to communicate with Mollie: {error}'.format(error=err))
+            raise RequestError("Unable to communicate with Mollie: {error}".format(error=err))
         return response
 
     def perform_http_call(self, http_method, path, data=None, params=None):
@@ -250,20 +254,20 @@ class Client(object):
         :param set_token: Callable that stores a token (dict)
         :return: authorization url (url)
         """
-        self.set_user_agent_component('OAuth', '2.0', sanitize=False)  # keep spelling equal to the PHP client
+        self.set_user_agent_component("OAuth", "2.0", sanitize=False)  # keep spelling equal to the PHP client
         self.set_token = set_token
         self.client_secret = client_secret
         self._oauth_client = OAuth2Session(
             client_id,
             auto_refresh_kwargs={
-                'client_id': client_id,
-                'client_secret': self.client_secret,
+                "client_id": client_id,
+                "client_secret": self.client_secret,
             },
             auto_refresh_url=self.OAUTH_AUTO_REFRESH_URL,
             redirect_uri=redirect_uri,
             scope=scope,
             token=token,
-            token_updater=set_token
+            token_updater=set_token,
         )
         self._oauth_client.verify = True
         self._setup_retry()
@@ -320,7 +324,7 @@ def generate_querystring(params):
         else:
             # encode dictionary with square brackets
             for key, sub_value in sorted(value.items()):
-                composed = '{param}[{key}]'.format(param=param, key=key)
+                composed = "{param}[{key}]".format(param=param, key=key)
                 parts.append(urlencode({composed: sub_value}))
     if parts:
-        return '&'.join(parts)
+        return "&".join(parts)

@@ -7,7 +7,7 @@ class OrderLines(Base):
     order_id = None
 
     def get_resource_name(self):
-        return 'orders/{order_id}/lines'.format(order_id=self.order_id)
+        return "orders/{order_id}/lines".format(order_id=self.order_id)
 
     def get_resource_object(self, result):
         return OrderLine(result, self.client)
@@ -39,10 +39,10 @@ class OrderLines(Base):
 
         If you wish to retrieve the order object, you can do so by using the order_id property of the orderline.
         """
-        path = self.get_resource_name() + '/' + str(resource_id)
+        path = self.get_resource_name() + "/" + str(resource_id)
         result = self.perform_api_call(self.REST_UPDATE, path, data=data)
 
-        for line in result['lines']:
-            if line['id'] == resource_id:
+        for line in result["lines"]:
+            if line["id"] == resource_id:
                 return self.get_resource_object(line)
-        raise DataConsistencyError('Line id {resource_id} not found in response.'.format(resource_id=resource_id))
+        raise DataConsistencyError("Line id {resource_id} not found in response.".format(resource_id=resource_id))

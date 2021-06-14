@@ -18,19 +18,19 @@ def main():
         #
         # See: https://www.mollie.com/dashboard/settings/profiles
         #
-        api_key = os.environ.get('MOLLIE_API_KEY', 'test_test')
+        api_key = os.environ.get("MOLLIE_API_KEY", "test_test")
         mollie_client = Client()
         mollie_client.set_api_key(api_key)
 
         #
         # First, let the customer pick the bank in a simple HTML form. This step is actually optional.
         #
-        if 'issuer' not in flask.request.form:
+        if "issuer" not in flask.request.form:
             body = '<form method="post">Select your bank: <select name="issuer">'
-            for issuer in mollie_client.methods.get('ideal', include='issuers').issuers:
+            for issuer in mollie_client.methods.get("ideal", include="issuers").issuers:
                 body += '<option value="{id}">{issuer}</option>'.format(id=issuer.id, issuer=issuer.name)
             body += '<option value="">or select later</option>'
-            body += '</select><button>OK</button></form>'
+            body += "</select><button>OK</button></form>"
             return body
 
         else:
@@ -39,8 +39,8 @@ def main():
             #
             issuer_id = None
 
-            if flask.request.form['issuer']:
-                issuer_id = str(flask.request.form['issuer'])
+            if flask.request.form["issuer"]:
+                issuer_id = str(flask.request.form["issuer"])
 
         #
         # Generate a unique webshop order id for this example. It is important to include this unique attribute
@@ -58,26 +58,26 @@ def main():
         # method        Payment method "ideal".
         # issuer        The customer's bank. If empty the customer can select it later.
         #
-        payment = mollie_client.payments.create({
-            'amount': {
-                'currency': 'EUR',
-                'value': '10.00'
-            },
-            'description': 'My first API payment',
-            'webhookUrl': '{root}02-webhook-verification'.format(root=flask.request.url_root),
-            'redirectUrl': '{root}03-return-page?my_webshop_id={id}'.format(
-                root=flask.request.url_root, id=my_webshop_id),
-            'metadata': {
-                'my_webshop_id': str(my_webshop_id),
-            },
-            'method': 'ideal',
-            'issuer': issuer_id,
-        })
+        payment = mollie_client.payments.create(
+            {
+                "amount": {"currency": "EUR", "value": "10.00"},
+                "description": "My first API payment",
+                "webhookUrl": "{root}02-webhook-verification".format(root=flask.request.url_root),
+                "redirectUrl": "{root}03-return-page?my_webshop_id={id}".format(
+                    root=flask.request.url_root, id=my_webshop_id
+                ),
+                "metadata": {
+                    "my_webshop_id": str(my_webshop_id),
+                },
+                "method": "ideal",
+                "issuer": issuer_id,
+            }
+        )
 
         #
         # In this example we store the order with its payment status in a database.
         #
-        data = {'status': payment.status}
+        data = {"status": payment.status}
         database_write(my_webshop_id, data)
 
         #
@@ -86,8 +86,8 @@ def main():
         return flask.redirect(payment.checkout_url)
 
     except Error as err:
-        return 'API call failed: {error}'.format(error=err)
+        return "API call failed: {error}".format(error=err)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     print(main())

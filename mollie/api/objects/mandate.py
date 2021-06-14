@@ -5,43 +5,44 @@ class Mandate(Base):
     @classmethod
     def get_resource_class(cls, client):
         from ..resources.customer_mandates import CustomerMandates
+
         return CustomerMandates(client)
 
-    STATUS_PENDING = 'pending'
-    STATUS_VALID = 'valid'
-    STATUS_INVALID = 'invalid'
+    STATUS_PENDING = "pending"
+    STATUS_VALID = "valid"
+    STATUS_INVALID = "invalid"
 
     @property
     def id(self):
-        return self._get_property('id')
+        return self._get_property("id")
 
     @property
     def resource(self):
-        return self._get_property('resource')
+        return self._get_property("resource")
 
     @property
     def status(self):
-        return self._get_property('status')
+        return self._get_property("status")
 
     @property
     def method(self):
-        return self._get_property('method')
+        return self._get_property("method")
 
     @property
     def details(self):
-        return self._get_property('details')
+        return self._get_property("details")
 
     @property
     def mandate_reference(self):
-        return self._get_property('mandateReference')
+        return self._get_property("mandateReference")
 
     @property
     def signature_date(self):
-        return self._get_property('signatureDate')
+        return self._get_property("signatureDate")
 
     @property
     def created_at(self):
-        return self._get_property('createdAt')
+        return self._get_property("createdAt")
 
     def is_pending(self):
         """Check if the mandate is pending."""
@@ -59,7 +60,8 @@ class Mandate(Base):
     def customer(self):
         """Return the customer for this mandate."""
         from .customer import Customer  # work around circular imports
-        url = self._get_link('customer')
+
+        url = self._get_link("customer")
         if url:
             resp = self.client.customers.perform_api_call(self.client.customers.REST_READ, url)
             return Customer(resp)
