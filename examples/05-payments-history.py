@@ -14,7 +14,7 @@ def main():
         #
         # See: https://www.mollie.com/dashboard/settings/profiles
         #
-        api_key = os.environ.get('MOLLIE_API_KEY', 'test_test')
+        api_key = os.environ.get("MOLLIE_API_KEY", "test_test")
         mollie_client = Client()
         mollie_client.set_api_key(api_key)
 
@@ -23,23 +23,24 @@ def main():
         #
         payments = mollie_client.payments.list()
 
-        body = ''
+        body = ""
 
         if not len(payments):
-            body += '<p>You have no payments. You can create one from the examples.</p>'
+            body += "<p>You have no payments. You can create one from the examples.</p>"
             return body
 
-        body += '<p>Showing the first page of payments for this API key</p>'
+        body += "<p>Showing the first page of payments for this API key</p>"
 
         for payment in payments:
             body += "{curr} {value}, status: '{status}'<br>".format(
-                curr=payment.amount['currency'], value=payment.amount['value'], status=payment.status)
+                curr=payment.amount["currency"], value=payment.amount["value"], status=payment.status
+            )
 
         return body
 
     except Error as err:
-        return 'API call failed: {error}'.format(error=err)
+        return "API call failed: {error}".format(error=err)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     print(main())

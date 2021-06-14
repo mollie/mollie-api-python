@@ -6,18 +6,18 @@ from mollie.api.resources.profiles import Profiles
 
 from .utils import assert_list_object
 
-PROFILE_ID = 'pfl_v9hTwCvYqw'
+PROFILE_ID = "pfl_v9hTwCvYqw"
 
 
 def test_profile_resource_class(oauth_client, response):
-    response.get('https://api.mollie.com/v2/profiles/%s' % PROFILE_ID, 'profile_single')
+    response.get("https://api.mollie.com/v2/profiles/%s" % PROFILE_ID, "profile_single")
     oauth_client.profiles.get(PROFILE_ID)
 
     assert isinstance(Profile.get_resource_class(oauth_client), Profiles)
 
 
 def test_profiles_get_raises_identifier_error(oauth_client, response):
-    response.get('https://api.mollie.com/v2/profiles/%s' % PROFILE_ID, 'profile_single')
+    response.get("https://api.mollie.com/v2/profiles/%s" % PROFILE_ID, "profile_single")
     oauth_client.profiles.get(PROFILE_ID)
 
     with pytest.raises(IdentifierError):
@@ -26,44 +26,49 @@ def test_profiles_get_raises_identifier_error(oauth_client, response):
 
 def test_create_profile(oauth_client, response):
     """Create a new profile."""
-    response.post('https://api.mollie.com/v2/profiles', 'profile_new')
+    response.post("https://api.mollie.com/v2/profiles", "profile_new")
 
-    profile = oauth_client.profiles.create({
-      'name': 'My website name',
-      'website': 'https://www.mywebsite.com',
-      'email': 'info@mywebsite.com',
-      'phone': '+31208202070',
-      'categoryCode': '5399',
-      'mode': 'live',
-    })
+    profile = oauth_client.profiles.create(
+        {
+            "name": "My website name",
+            "website": "https://www.mywebsite.com",
+            "email": "info@mywebsite.com",
+            "phone": "+31208202070",
+            "categoryCode": "5399",
+            "mode": "live",
+        }
+    )
     assert isinstance(profile, Profile)
     assert profile.id == PROFILE_ID
 
 
 def test_update_profile(oauth_client, response):
     """Update an existing profile."""
-    response.patch('https://api.mollie.com/v2/profiles/%s' % PROFILE_ID, 'profile_updated')
+    response.patch("https://api.mollie.com/v2/profiles/%s" % PROFILE_ID, "profile_updated")
 
-    updated_profile = oauth_client.profiles.update(PROFILE_ID, {
-        'name': 'My website name updated',
-        'email': 'updated-profile@example.org',
-    })
+    updated_profile = oauth_client.profiles.update(
+        PROFILE_ID,
+        {
+            "name": "My website name updated",
+            "email": "updated-profile@example.org",
+        },
+    )
     assert isinstance(updated_profile, Profile)
-    assert updated_profile.name == 'My website name updated'
-    assert updated_profile.email == 'updated-profile@example.org'
+    assert updated_profile.name == "My website name updated"
+    assert updated_profile.email == "updated-profile@example.org"
 
 
 def test_delete_profile(oauth_client, response):
     """Delete a profile."""
-    response.delete('https://api.mollie.com/v2/profiles/%s' % PROFILE_ID, 'empty')
+    response.delete("https://api.mollie.com/v2/profiles/%s" % PROFILE_ID, "empty")
 
-    deleted_profile = oauth_client.profiles.delete('pfl_v9hTwCvYqw')
+    deleted_profile = oauth_client.profiles.delete("pfl_v9hTwCvYqw")
     assert deleted_profile == {}
 
 
 def test_list_profiles(oauth_client, response):
     """Retrieve a list of existing profiles."""
-    response.get('https://api.mollie.com/v2/profiles', 'profiles_list')
+    response.get("https://api.mollie.com/v2/profiles", "profiles_list")
 
     profiles = oauth_client.profiles.list()
     assert_list_object(profiles, Profile)
@@ -71,11 +76,11 @@ def test_list_profiles(oauth_client, response):
 
 def test_get_profile(oauth_client, response):
     """Retrieve a single profile."""
-    response.get('https://api.mollie.com/v2/profiles/%s' % PROFILE_ID, 'profile_single')
-    response.get('https://api.mollie.com/v2/chargebacks?profileId=%s' % PROFILE_ID, 'chargebacks_list')
-    response.get('https://api.mollie.com/v2/methods?profileId=%s' % PROFILE_ID, 'methods_list')
-    response.get('https://api.mollie.com/v2/payments?profileId=%s' % PROFILE_ID, 'payments_list')
-    response.get('https://api.mollie.com/v2/refunds?profileId=%s' % PROFILE_ID, 'refunds_list')
+    response.get("https://api.mollie.com/v2/profiles/%s" % PROFILE_ID, "profile_single")
+    response.get("https://api.mollie.com/v2/chargebacks?profileId=%s" % PROFILE_ID, "chargebacks_list")
+    response.get("https://api.mollie.com/v2/methods?profileId=%s" % PROFILE_ID, "methods_list")
+    response.get("https://api.mollie.com/v2/payments?profileId=%s" % PROFILE_ID, "payments_list")
+    response.get("https://api.mollie.com/v2/refunds?profileId=%s" % PROFILE_ID, "refunds_list")
 
     profile = oauth_client.profiles.get(PROFILE_ID)
     chargebacks = oauth_client.profile_chargebacks.with_parent_id(PROFILE_ID).list()
@@ -85,17 +90,17 @@ def test_get_profile(oauth_client, response):
 
     assert isinstance(profile, Profile)
     assert profile.id == PROFILE_ID
-    assert profile.name == 'My website name'
-    assert profile.email == 'info@mywebsite.com'
-    assert profile.mode == 'live'
-    assert profile.resource == 'profile'
-    assert profile.created_at == '2018-03-20T09:28:37+00:00'
-    assert profile.website == 'https://www.mywebsite.com'
-    assert profile.phone == '+31208202070'
+    assert profile.name == "My website name"
+    assert profile.email == "info@mywebsite.com"
+    assert profile.mode == "live"
+    assert profile.resource == "profile"
+    assert profile.created_at == "2018-03-20T09:28:37+00:00"
+    assert profile.website == "https://www.mywebsite.com"
+    assert profile.phone == "+31208202070"
     assert profile.category_code == 5399
-    assert profile.status == 'verified'
+    assert profile.status == "verified"
     assert profile.review == {"status": "pending"}
-    assert profile.checkout_preview_url == 'https://www.mollie.com/payscreen/preview/pfl_v9hTwCvYqw'
+    assert profile.checkout_preview_url == "https://www.mollie.com/payscreen/preview/pfl_v9hTwCvYqw"
     assert profile.chargebacks == chargebacks
     assert profile.methods == methods
     assert profile.payments == payments
@@ -106,29 +111,29 @@ def test_get_profile(oauth_client, response):
 
 
 def test_profile_enable_payment_method(oauth_client, response):
-    response.get('https://api.mollie.com/v2/profiles/%s' % PROFILE_ID, 'profile_new')
+    response.get("https://api.mollie.com/v2/profiles/%s" % PROFILE_ID, "profile_new")
     response.post(
-        'https://api.mollie.com/v2/profiles/%s/methods/%s' % (PROFILE_ID, 'bancontact'),
-        'profile_enable_payment_method'
+        "https://api.mollie.com/v2/profiles/%s/methods/%s" % (PROFILE_ID, "bancontact"),
+        "profile_enable_payment_method",
     )
 
     profile = oauth_client.profiles.get(PROFILE_ID)
-    method = oauth_client.profile_methods.on(profile, 'bancontact').create()
-    assert method.id == 'bancontact'
+    method = oauth_client.profile_methods.on(profile, "bancontact").create()
+    assert method.id == "bancontact"
 
 
 def test_profile_disable_payment_method(oauth_client, response):
-    response.get('https://api.mollie.com/v2/profiles/%s' % PROFILE_ID, 'profile_new')
-    response.delete('https://api.mollie.com/v2/profiles/%s/methods/%s' % (PROFILE_ID, 'bancontact'), 'empty', 204)
+    response.get("https://api.mollie.com/v2/profiles/%s" % PROFILE_ID, "profile_new")
+    response.delete("https://api.mollie.com/v2/profiles/%s/methods/%s" % (PROFILE_ID, "bancontact"), "empty", 204)
 
     profile = oauth_client.profiles.get(PROFILE_ID)
-    method = oauth_client.profile_methods.on(profile, 'bancontact').delete()
+    method = oauth_client.profile_methods.on(profile, "bancontact").delete()
     assert method == {}
 
 
-@pytest.mark.parametrize('method', ['giftcard', 'voucher'])
+@pytest.mark.parametrize("method", ["giftcard", "voucher"])
 def test_profile_enable_giftcard_no_resource_id(oauth_client, response, method):
-    response.get('https://api.mollie.com/v2/profiles/%s' % PROFILE_ID, 'profile_new')
+    response.get("https://api.mollie.com/v2/profiles/%s" % PROFILE_ID, "profile_new")
 
     profile = oauth_client.profiles.get(PROFILE_ID)
 
@@ -136,30 +141,30 @@ def test_profile_enable_giftcard_no_resource_id(oauth_client, response, method):
         oauth_client.profile_methods.on(profile, method).create()
 
 
-@pytest.mark.parametrize('method', ['giftcard', 'voucher'])
+@pytest.mark.parametrize("method", ["giftcard", "voucher"])
 def test_profile_enable_giftcard(oauth_client, response, method):
-    response.get('https://api.mollie.com/v2/profiles/%s' % PROFILE_ID, 'profile_new')
+    response.get("https://api.mollie.com/v2/profiles/%s" % PROFILE_ID, "profile_new")
     response.post(
-        'https://api.mollie.com/v2/profiles/%s/methods/%s/issuers/%s' % (PROFILE_ID, method, 'festivalcadeau'),
-        'profile_enable_gift_card_issuer'
+        "https://api.mollie.com/v2/profiles/%s/methods/%s/issuers/%s" % (PROFILE_ID, method, "festivalcadeau"),
+        "profile_enable_gift_card_issuer",
     )
 
     profile = oauth_client.profiles.get(PROFILE_ID)
-    method = oauth_client.profile_methods.on(profile, method).create('festivalcadeau')
+    method = oauth_client.profile_methods.on(profile, method).create("festivalcadeau")
 
-    assert method.id == 'festivalcadeau'
+    assert method.id == "festivalcadeau"
 
 
-@pytest.mark.parametrize('method', ['giftcard', 'voucher'])
+@pytest.mark.parametrize("method", ["giftcard", "voucher"])
 def test_profile_disable_giftcard(oauth_client, response, method):
-    response.get('https://api.mollie.com/v2/profiles/%s' % PROFILE_ID, 'profile_new')
+    response.get("https://api.mollie.com/v2/profiles/%s" % PROFILE_ID, "profile_new")
     response.delete(
-        'https://api.mollie.com/v2/profiles/%s/methods/%s/issuers/%s' % (PROFILE_ID, method, 'festivalcadeau'),
-        'empty',
-        204
+        "https://api.mollie.com/v2/profiles/%s/methods/%s/issuers/%s" % (PROFILE_ID, method, "festivalcadeau"),
+        "empty",
+        204,
     )
 
     profile = oauth_client.profiles.get(PROFILE_ID)
-    method = oauth_client.profile_methods.on(profile, method).delete('festivalcadeau')
+    method = oauth_client.profile_methods.on(profile, method).delete("festivalcadeau")
 
     assert method == {}

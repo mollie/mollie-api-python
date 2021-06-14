@@ -14,24 +14,22 @@ def main():
         #
         # See: https://www.mollie.com/dashboard/settings/profiles
         #
-        api_key = os.environ.get('MOLLIE_API_KEY', 'test_test')
+        api_key = os.environ.get("MOLLIE_API_KEY", "test_test")
         mollie_client = Client()
         mollie_client.set_api_key(api_key)
 
         #
         # See: https://www.mollie.com/nl/docs/reference/customers/create
         #
-        customer = mollie_client.customers.create({
-            'name': 'Mr. First Customer',
-            'email': 'first.customer@example.com',
-            'locale': 'nl_NL'
-        })
+        customer = mollie_client.customers.create(
+            {"name": "Mr. First Customer", "email": "first.customer@example.com", "locale": "nl_NL"}
+        )
 
         return "Created new customer '{name}' ({email})".format(name=customer.name, email=customer.email)
 
     except Error as err:
-        return 'API call failed: {error}'.format(error=err)
+        return "API call failed: {error}".format(error=err)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     print(main())

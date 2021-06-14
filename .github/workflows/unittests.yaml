@@ -9,7 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python_version: ["3.6", "3.7", "3.8", "3.9", "pypy-3.6", "pypy-3.7"]
+        python_version: ["3.6", "3.7", "3.8", "3.9", "pypy-3.7"]
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -26,7 +26,12 @@ jobs:
           python -m pip install -r test_requirements.txt
 
       - name: Run unittests
+        run: python -m pytest --black
+        if: ${{ !contains(matrix.python_version, 'pypy') }}
+
+      - name: Run unittests (without black)
         run: python -m pytest
+        if: ${{ contains(matrix.python_version, 'pypy') }}
 
       - name: Verify dependencies
         run: safety check

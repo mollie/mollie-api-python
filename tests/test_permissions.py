@@ -6,12 +6,12 @@ from mollie.api.resources.permissions import Permissions
 
 from .utils import assert_list_object
 
-PERMISSION_ID = 'payments.read'
+PERMISSION_ID = "payments.read"
 
 
 def test_list_permissions(oauth_client, response):
     """Retrieve a list of existing permissions."""
-    response.get('https://api.mollie.com/v2/permissions', 'permissions_list')
+    response.get("https://api.mollie.com/v2/permissions", "permissions_list")
 
     permissions = oauth_client.permissions.list()
     assert_list_object(permissions, Permission)
@@ -19,12 +19,12 @@ def test_list_permissions(oauth_client, response):
 
 def test_get_permission(oauth_client, response):
     """Retrieve a single permission."""
-    response.get('https://api.mollie.com/v2/permissions/%s' % PERMISSION_ID, 'permission_single')
+    response.get("https://api.mollie.com/v2/permissions/%s" % PERMISSION_ID, "permission_single")
 
     permission = oauth_client.permissions.get(PERMISSION_ID)
     assert isinstance(permission, Permission)
     assert permission.id == PERMISSION_ID
-    assert permission.resource == 'permission'
+    assert permission.resource == "permission"
     assert permission.description == "View your payments"
     assert permission.granted is True
 
@@ -42,7 +42,7 @@ def test_get_permission(oauth_client, response):
         ("foo.bar1", IdentifierError),
         ("foo1.bar", IdentifierError),
         ("foo.bar", None),  # Valid
-    ]
+    ],
 )
 def test_validate_permission_id(input, expected):
     if expected == IdentifierError:

@@ -7,66 +7,67 @@ class Refund(Base):
     @classmethod
     def get_resource_class(cls, client):
         from ..resources.refunds import Refunds
+
         return Refunds(client)
 
-    STATUS_QUEUED = 'queued'
-    STATUS_PENDING = 'pending'
-    STATUS_PROCESSING = 'processing'
-    STATUS_REFUNDED = 'refunded'
+    STATUS_QUEUED = "queued"
+    STATUS_PENDING = "pending"
+    STATUS_PROCESSING = "processing"
+    STATUS_REFUNDED = "refunded"
 
     # documented properties
 
     @property
     def resource(self):
-        return self._get_property('resource')
+        return self._get_property("resource")
 
     @property
     def id(self):
-        return self._get_property('id')
+        return self._get_property("id")
 
     @property
     def amount(self):
-        return self._get_property('amount')
+        return self._get_property("amount")
 
     @property
     def settlement_amount(self):
-        return self._get_property('settlementAmount')
+        return self._get_property("settlementAmount")
 
     @property
     def description(self):
-        return self._get_property('description')
+        return self._get_property("description")
 
     @property
     def status(self):
-        return self._get_property('status')
+        return self._get_property("status")
 
     @property
     def lines(self):
         """Return the lines for this refund."""
-        lines = self._get_property('lines') or []
+        lines = self._get_property("lines") or []
         result = {
-            '_embedded': {
-                'lines': lines,
+            "_embedded": {
+                "lines": lines,
             },
-            'count': len(lines),
+            "count": len(lines),
         }
         return List(result, OrderLine, self.client)
 
     @property
     def payment_id(self):
-        return self._get_property('paymentId')
+        return self._get_property("paymentId")
 
     @property
     def order_id(self):
-        return self._get_property('orderId')
+        return self._get_property("orderId")
 
     @property
     def created_at(self):
-        return self._get_property('createdAt')
+        return self._get_property("createdAt")
 
     @property
     def metadata(self):
-        return self._get_property('metadata')
+        return self._get_property("metadata")
 
     # documented _links
 

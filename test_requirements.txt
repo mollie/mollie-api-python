@@ -1,4 +1,5 @@
 pytest>=5.4.3
+pytest-black;implementation_name != 'pypy'
 pytest-cov>=2.10.0
 pytest-isort
 pytest-flake8
