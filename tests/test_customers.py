@@ -25,7 +25,7 @@ def test_create_customer(client, response):
 
 def test_update_customer(client, response):
     """Update an existing customer."""
-    response.patch("https://api.mollie.com/v2/customers/%s" % CUSTOMER_ID, "customer_updated")
+    response.patch(f"https://api.mollie.com/v2/customers/{CUSTOMER_ID}", "customer_updated")
 
     updated_customer = client.customers.update(
         CUSTOMER_ID,
@@ -41,7 +41,7 @@ def test_update_customer(client, response):
 
 def test_delete_customer(client, response):
     """Delete a customer."""
-    response.delete("https://api.mollie.com/v2/customers/%s" % CUSTOMER_ID, "empty")
+    response.delete(f"https://api.mollie.com/v2/customers/{CUSTOMER_ID}", "empty")
 
     deleted_customer = client.customers.delete("cst_8wmqcHMN4U")
     assert deleted_customer == {}
@@ -57,10 +57,10 @@ def test_list_customers(client, response):
 
 def test_get_customer(client, response):
     """Retrieve a single customer."""
-    response.get("https://api.mollie.com/v2/customers/%s" % CUSTOMER_ID, "customer_new")
-    response.get("https://api.mollie.com/v2/customers/%s/subscriptions" % CUSTOMER_ID, "subscriptions_customer_list")
-    response.get("https://api.mollie.com/v2/customers/%s/mandates" % CUSTOMER_ID, "customer_mandates_list")
-    response.get("https://api.mollie.com/v2/customers/%s/payments" % CUSTOMER_ID, "customer_payments_multiple")
+    response.get(f"https://api.mollie.com/v2/customers/{CUSTOMER_ID}", "customer_new")
+    response.get(f"https://api.mollie.com/v2/customers/{CUSTOMER_ID}/subscriptions", "subscriptions_customer_list")
+    response.get(f"https://api.mollie.com/v2/customers/{CUSTOMER_ID}/mandates", "customer_mandates_list")
+    response.get(f"https://api.mollie.com/v2/customers/{CUSTOMER_ID}/payments", "customer_payments_multiple")
 
     customer = client.customers.get(CUSTOMER_ID)
     assert isinstance(customer, Customer)
@@ -79,8 +79,8 @@ def test_get_customer(client, response):
 
 def test_customer_get_related_mandates(client, response):
     """Retrieve related mandates for a customer."""
-    response.get("https://api.mollie.com/v2/customers/%s" % CUSTOMER_ID, "customer_updated")
-    response.get("https://api.mollie.com/v2/customers/%s/mandates" % CUSTOMER_ID, "customer_mandates_list")
+    response.get(f"https://api.mollie.com/v2/customers/{CUSTOMER_ID}", "customer_updated")
+    response.get(f"https://api.mollie.com/v2/customers/{CUSTOMER_ID}/mandates", "customer_mandates_list")
 
     customer = client.customers.get(CUSTOMER_ID)
     mandates = customer.mandates
@@ -89,8 +89,8 @@ def test_customer_get_related_mandates(client, response):
 
 def test_customer_get_related_subscriptions(client, response):
     """Retrieve related subscriptions for a customer."""
-    response.get("https://api.mollie.com/v2/customers/%s" % CUSTOMER_ID, "customer_single")
-    response.get("https://api.mollie.com/v2/customers/%s/subscriptions" % CUSTOMER_ID, "subscriptions_customer_list")
+    response.get(f"https://api.mollie.com/v2/customers/{CUSTOMER_ID}", "customer_single")
+    response.get(f"https://api.mollie.com/v2/customers/{CUSTOMER_ID}/subscriptions", "subscriptions_customer_list")
 
     customer = client.customers.get(CUSTOMER_ID)
     subscriptions = customer.subscriptions
@@ -99,8 +99,8 @@ def test_customer_get_related_subscriptions(client, response):
 
 def test_customer_get_related_payments(client, response):
     """Retrieve related payments for a customer."""
-    response.get("https://api.mollie.com/v2/customers/%s" % CUSTOMER_ID, "customer_new")
-    response.get("https://api.mollie.com/v2/customers/%s/payments" % CUSTOMER_ID, "customer_payments_multiple")
+    response.get(f"https://api.mollie.com/v2/customers/{CUSTOMER_ID}", "customer_new")
+    response.get(f"https://api.mollie.com/v2/customers/{CUSTOMER_ID}/payments", "customer_payments_multiple")
 
     customer = client.customers.get(CUSTOMER_ID)
     payments = customer.payments

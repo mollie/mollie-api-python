@@ -19,7 +19,7 @@ def test_list_permissions(oauth_client, response):
 
 def test_get_permission(oauth_client, response):
     """Retrieve a single permission."""
-    response.get("https://api.mollie.com/v2/permissions/%s" % PERMISSION_ID, "permission_single")
+    response.get(f"https://api.mollie.com/v2/permissions/{PERMISSION_ID}", "permission_single")
 
     permission = oauth_client.permissions.get(PERMISSION_ID)
     assert isinstance(permission, Permission)

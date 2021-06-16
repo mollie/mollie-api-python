@@ -20,10 +20,10 @@ def test_list_settlements(oauth_client, response):
 
 def test_settlement_get(oauth_client, response):
     """Retrieve a single settlement method by ID."""
-    response.get("https://api.mollie.com/v2/settlements/%s" % SETTLEMENT_ID, "settlement_single")
-    response.get("https://api.mollie.com/v2/settlements/%s/chargebacks" % SETTLEMENT_ID, "chargebacks_list")
-    response.get("https://api.mollie.com/v2/settlements/%s/payments" % SETTLEMENT_ID, "settlement_payments_multiple")
-    response.get("https://api.mollie.com/v2/settlements/%s/refunds" % SETTLEMENT_ID, "refunds_list")
+    response.get(f"https://api.mollie.com/v2/settlements/{SETTLEMENT_ID}", "settlement_single")
+    response.get(f"https://api.mollie.com/v2/settlements/{SETTLEMENT_ID}/chargebacks", "chargebacks_list")
+    response.get(f"https://api.mollie.com/v2/settlements/{SETTLEMENT_ID}/payments", "settlement_payments_multiple")
+    response.get(f"https://api.mollie.com/v2/settlements/{SETTLEMENT_ID}/refunds", "refunds_list")
 
     settlement = oauth_client.settlements.get(SETTLEMENT_ID)
     chargebacks = oauth_client.settlement_chargebacks.with_parent_id(SETTLEMENT_ID).list()
@@ -184,7 +184,7 @@ def test_validate_settlement_id(input, expected):
 
 
 def test_settlement_invoice_id_is_deprecated(oauth_client, response):
-    response.get("https://api.mollie.com/v2/settlements/%s" % SETTLEMENT_ID, "settlement_single")
+    response.get(f"https://api.mollie.com/v2/settlements/{SETTLEMENT_ID}", "settlement_single")
 
     settlement = oauth_client.settlements.get(SETTLEMENT_ID)
     with pytest.warns(APIDeprecationWarning, match="Using Settlement Invoice ID is deprecated"):

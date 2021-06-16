@@ -35,7 +35,7 @@ def test_create_onboarding(oauth_client, response):
 def test_onboarding_get_organization(oauth_client, response):
     """Retrieve organization related to onboarding."""
     response.get("https://api.mollie.com/v2/onboarding/me", "onboarding_me")
-    response.get("https://api.mollie.com/v2/organization/%s" % ORGANIZATION_ID, "organization_single")
+    response.get(f"https://api.mollie.com/v2/organization/{ORGANIZATION_ID}", "organization_single")
 
     onboarding = oauth_client.onboarding.get("me")
     organization = onboarding.organization

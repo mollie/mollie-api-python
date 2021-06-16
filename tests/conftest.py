@@ -45,7 +45,7 @@ def oauth_client(oauth_token):
     scope = ("organizations.read",)
 
     def set_token(x):
-        logger.info("Storing token: %s", x)
+        logger.info(f"Storing token: {x}")
 
     client = Client()
     client.setup_oauth(
@@ -85,7 +85,7 @@ class ImprovedRequestsMock(responses.RequestsMock):
 
     def _get_body(self, filename):
         """Read the response fixture file and return it."""
-        file = os.path.join(os.path.dirname(__file__), "responses", "%s.json" % filename)
+        file = os.path.join(os.path.dirname(__file__), "responses", f"{filename}.json")
         return open(file).read()
 
 
