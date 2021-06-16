@@ -1,3 +1,4 @@
+from ..error import EmbedNotFound
 from ..resources.order_lines import OrderLines
 from ..resources.order_payments import OrderPayments
 from ..resources.order_refunds import OrderRefunds
@@ -5,6 +6,7 @@ from ..resources.shipments import Shipments
 from .base import Base
 from .list import List
 from .order_line import OrderLine
+from .payment import Payment
 
 
 class Order(Base):
@@ -209,6 +211,21 @@ class Order(Base):
     def update_shipment(self, resource_id, data):
         """Update the tracking information of a shipment."""
         return Shipments(self.client).on(self).update(resource_id, data)
+
+    @property
+    def payments(self):
+        try:
+            payments = self["_embedded"]["payments"]
+        except KeyError:
+            raise EmbedNotFound("payments")
+
+        result = {
+            "_embedded": {
+                "payments": payments,
+            },
+            "count": len(payments),
+        }
+        return List(result, Payment, self.client)
 
     def create_payment(self, data):
         """Creates a new payment object for an order."""
