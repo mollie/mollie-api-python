@@ -10,9 +10,9 @@ ORDER_ID = "ord_kEn1PlbGa"
 
 def test_get_order(client, response):
     """Retrieve a single order by order ID."""
-    response.get("https://api.mollie.com/v2/orders/{order_id}".format(order_id=ORDER_ID), "order_single")
-    response.get("https://api.mollie.com/v2/orders/{order_id}/shipments".format(order_id=ORDER_ID), "shipments_list")
-    response.get("https://api.mollie.com/v2/orders/{order_id}/refunds".format(order_id=ORDER_ID), "order_refunds_list")
+    response.get(f"https://api.mollie.com/v2/orders/{ORDER_ID}", "order_single")
+    response.get(f"https://api.mollie.com/v2/orders/{ORDER_ID}/shipments", "shipments_list")
+    response.get(f"https://api.mollie.com/v2/orders/{ORDER_ID}/refunds", "order_refunds_list")
 
     order = client.orders.get(ORDER_ID)
     assert isinstance(order, Order)
@@ -85,8 +85,8 @@ def test_list_orders(client, response):
 
 def test_create_order_refund(client, response):
     """Create an order refund of an order."""
-    response.get("https://api.mollie.com/v2/orders/{order_id}".format(order_id=ORDER_ID), "order_single")
-    response.post("https://api.mollie.com/v2/orders/{order_id}/refunds".format(order_id=ORDER_ID), "refund_single")
+    response.get(f"https://api.mollie.com/v2/orders/{ORDER_ID}", "order_single")
+    response.post(f"https://api.mollie.com/v2/orders/{ORDER_ID}/refunds", "refund_single")
 
     data = {
         "lines": [
@@ -165,7 +165,7 @@ def test_create_order(client, response):
 
 def test_update_order(client, response):
     """Update an existing order."""
-    response.patch("https://api.mollie.com/v2/orders/{order_id}".format(order_id=ORDER_ID), "order_updated")
+    response.patch(f"https://api.mollie.com/v2/orders/{ORDER_ID}", "order_updated")
 
     data = {
         "billingAddress": {
@@ -188,7 +188,7 @@ def test_update_order(client, response):
 
 def test_cancel_order(client, response):
     """Cancel an existing order."""
-    response.delete("https://api.mollie.com/v2/orders/{order_id}".format(order_id=ORDER_ID), "order_canceled", 200)
+    response.delete(f"https://api.mollie.com/v2/orders/{ORDER_ID}", "order_canceled", 200)
 
     canceled_order = client.orders.delete(ORDER_ID)
     assert isinstance(canceled_order, Order)
@@ -198,8 +198,8 @@ def test_cancel_order(client, response):
 
 def test_cancel_order_lines(client, response):
     """Cancel a line of an order."""
-    response.get("https://api.mollie.com/v2/orders/{order_id}".format(order_id=ORDER_ID), "order_single")
-    response.delete("https://api.mollie.com/v2/orders/{order_id}/lines".format(order_id=ORDER_ID), "empty", 204)
+    response.get(f"https://api.mollie.com/v2/orders/{ORDER_ID}", "order_single")
+    response.delete(f"https://api.mollie.com/v2/orders/{ORDER_ID}/lines", "empty", 204)
 
     order = client.orders.get(ORDER_ID)
     line = next(order.lines)
@@ -210,8 +210,8 @@ def test_cancel_order_lines(client, response):
 
 def test_create_order_payment(client, response):
     """Create a payment for an order."""
-    response.get("https://api.mollie.com/v2/orders/{order_id}".format(order_id=ORDER_ID), "order_single")
-    response.post("https://api.mollie.com/v2/orders/{order_id}/payments".format(order_id=ORDER_ID), "payment_single")
+    response.get(f"https://api.mollie.com/v2/orders/{ORDER_ID}", "order_single")
+    response.post(f"https://api.mollie.com/v2/orders/{ORDER_ID}/payments", "payment_single")
 
     order = client.orders.get(ORDER_ID)
     data = {"method": "ideal"}

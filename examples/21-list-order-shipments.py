@@ -26,7 +26,7 @@ def main():
         order = next(mollie_client.orders.list())
         shipments = order.shipments
 
-        body += "Shipments for order with ID {order_id}:".format(order_id=order.id)
+        body += f"Shipments for order with ID {order.id}:"
         body += """
             <table>
                 <thead>
@@ -40,16 +40,16 @@ def main():
         """
         for shipment in shipments:
             body += "<tr>"
-            body += "<td>{id}</td>".format(id=shipment.id)
-            body += "<td>{url}</td>".format(url=shipment.tracking_url)
-            body += "<td>{created}</td>".format(created=shipment.created_at)
+            body += f"<td>{shipment.id}</td>"
+            body += f"<td>{shipment.tracking_url}</td>"
+            body += f"<td>{shipment.created_at}</td>"
             body += "</tr>"
 
         body += "</tbody></table>"
 
         return body
     except Error as err:
-        return "API call failed: {error}".format(error=err)
+        return f"API call failed: {err}"
 
 
 if __name__ == "__main__":

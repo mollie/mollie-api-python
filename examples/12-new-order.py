@@ -57,10 +57,8 @@ def main():
                 "consumerDateOfBirth": "1958-01-31",
                 "locale": "nl_NL",
                 "orderNumber": "1337",
-                "redirectUrl": "{root}17-order-return-page?my_webshop_id={id}".format(
-                    root=flask.request.url_root, id=my_webshop_id
-                ),
-                "webhookUrl": "{root}13-order-webhook-verification".format(root=flask.request.url_root),
+                "redirectUrl": f"{flask.request.url_root}17-order-return-page?my_webshop_id={my_webshop_id}",
+                "webhookUrl": f"{flask.request.url_root}13-order-webhook-verification",
                 "lines": [
                     {
                         "type": "physical",
@@ -87,7 +85,7 @@ def main():
         return flask.redirect(order.checkout_url)
 
     except Error as err:
-        return "API call failed: {error}".format(error=err)
+        return f"API call failed: {err}"
 
 
 if __name__ == "__main__":

@@ -10,15 +10,13 @@ class Captures(Base):
         return Capture(result, self.client)
 
     def get_resource_name(self):
-        return "payments/{id}/captures".format(id=self.payment_id)
+        return f"payments/{self.payment_id}/captures"
 
     def get(self, capture_id, **params):
         """Verify the capture ID and retrieve the capture from the API."""
         if not capture_id or not capture_id.startswith(self.RESOURCE_ID_PREFIX):
             raise IdentifierError(
-                "Invalid capture ID: '{id}'. A capture ID should start with '{prefix}'.".format(
-                    id=capture_id, prefix=self.RESOURCE_ID_PREFIX
-                )
+                f"Invalid capture ID: '{capture_id}'. A capture ID should start with '{self.RESOURCE_ID_PREFIX}'."
             )
         return super().get(capture_id, **params)
 

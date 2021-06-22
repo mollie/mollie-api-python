@@ -27,11 +27,11 @@ def main():
         order = next(mollie_client.orders.list())
         refund = order.create_refund()
 
-        body += "Refund {refund_id} was created for order {order_id}:".format(refund_id=refund.id, order_id=order.id)
+        body += f"Refund {refund.id} was created for order {order.id}:"
 
         return body
     except Error as err:
-        return "API call failed: {error}".format(error=err)
+        return f"API call failed: {err}"
 
 
 if __name__ == "__main__":

@@ -14,7 +14,7 @@ class Organizations(Base):
             not organization_id.startswith(self.RESOURCE_ID_PREFIX) and not organization_id == "me"
         ):
             raise IdentifierError(
-                "Invalid organization ID: '{id}'. A organization ID should start with '{prefix}' "
-                "or it should be 'me'.".format(id=organization_id, prefix=self.RESOURCE_ID_PREFIX)
+                f"Invalid organization ID: '{organization_id}'. A organization ID should start "
+                f"with '{self.RESOURCE_ID_PREFIX}' or it should be 'me'."
             )
         return super().get(organization_id, **params)

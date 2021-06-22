@@ -28,19 +28,17 @@ def main():
             }
         }
         methods = mollie_client.methods.list(**params)
-        body = "Your API key has {num} activated payment methods:<br>".format(num=len(methods))
+        body = f"Your API key has {len(methods)} activated payment methods:<br>"
 
         for method in methods:
             body += '<div style="line-height:40px; vertical-align:top">'
-            body += '<img src="{url}"> {desc} ({id})'.format(
-                url=method.image_svg, desc=method.description, id=method.id
-            )
+            body += f'<img src="{method.image_svg}"> {method.desciption} ({method.id})'
             body += "</div>"
 
         return body
 
     except Error as err:
-        return "API call failed: {error}".format(error=err)
+        return f"API call failed: {err}"
 
 
 if __name__ == "__main__":

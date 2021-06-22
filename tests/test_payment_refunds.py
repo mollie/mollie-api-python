@@ -14,7 +14,7 @@ def test_get_refund(client, response):
     """Retrieve a specific refund of a payment."""
     response.get(f"https://api.mollie.com/v2/payments/{PAYMENT_ID}/refunds/{REFUND_ID}", "refund_single")
     response.get(f"https://api.mollie.com/v2/payments/{PAYMENT_ID}", "payment_single")
-    response.get("https://api.mollie.com/v2/orders/{order_id}".format(order_id=ORDER_ID), "order_single")
+    response.get(f"https://api.mollie.com/v2/orders/{ORDER_ID}", "order_single")
 
     refund = client.payment_refunds.with_parent_id(PAYMENT_ID).get(REFUND_ID)
     assert isinstance(refund, Refund)

@@ -90,7 +90,7 @@ def index():
 
     if not authorized:
         body = "<h1>Your applications config panel</h1>"
-        body += '<a href="{authorization_url}">{authorization_url}</a>'.format(authorization_url=authorization_url)
+        body += f'<a href="{authorization_url}">{authorization_url}</a>'
         return body
     return redirect(url_for("examples_view"))
 
@@ -110,7 +110,7 @@ def callback(*args, **kwargs):
 def examples_view():
     body = "<h1>Examples</h1><ul>"
     for example in examples:
-        body += '<li><a href="/{example}">{example}</a></li>'.format(example=example)
+        body += f'<li><a href="/{example}">{example}</a></li>'
     body += "</ul>"
     return body
 

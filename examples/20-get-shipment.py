@@ -30,16 +30,14 @@ def main():
             return body
 
         shipment = next(order.shipments)
-        body += "Shipment with ID {shipment_id} for order with ID {order_id}".format(
-            shipment_id=shipment.id, order_id=order.id
-        )
+        body += f"Shipment with ID {shipment.id} for order with ID {order.id}"
 
         for line in shipment.lines:
-            body += "{name} Status: <b>{status}</b>".format(name=line.name, status=line.status)
+            body += f"{line.name} Status: <b>{line.status}</b>"
 
         return body
     except Error as err:
-        return "API call failed: {error}".format(error=err)
+        return f"API call failed: {err}"
 
 
 if __name__ == "__main__":

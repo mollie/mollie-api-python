@@ -60,7 +60,7 @@ def main():
             return "Cancelled"
 
     except Error as err:
-        return "API call failed: {error}".format(error=err)
+        return f"API call failed: {err}"
 
 
 if __name__ == "__main__":

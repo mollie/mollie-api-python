@@ -39,14 +39,12 @@ def main():
         ):
             data = {"amount": {"value": "2.00", "currency": "EUR"}}
             refund = mollie_client.payment_refunds.with_parent_id(payment_id).create(data)
-            body += "<p>{curr} {value} of payment {id} refunded</p>".format(
-                curr=refund.amount["currency"], value=refund.amount["value"], id=payment_id
-            )
+            body += f'<p>{refund.amount["currency"]} {refund.amount["value"]} of payment {payment_id} refunded</p>'
         else:
-            body += "<p>Payment {id} can not be refunded</p>".format(id=payment_id)
+            body += f"<p>Payment {payment_id} can not be refunded</p>"
         return body
     except Error as err:
-        return "API call failed: {error}".format(error=err)
+        return f"API call failed: {err}"
 
 
 if __name__ == "__main__":

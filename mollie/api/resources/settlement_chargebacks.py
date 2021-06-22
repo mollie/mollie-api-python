@@ -5,7 +5,7 @@ class SettlementChargebacks(Chargebacks):
     settlement_id = None
 
     def get_resource_name(self):
-        return "settlements/{id}/chargebacks".format(id=self.settlement_id)
+        return f"settlements/{self.settlement_id}/chargebacks"
 
     def with_parent_id(self, settlement_id):
         self.settlement_id = settlement_id

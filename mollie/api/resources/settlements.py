@@ -26,10 +26,9 @@ class Settlements(Base):
             and not cls.BANK_REFERENCE_REGEX.match(settlement_id)
         ):
             raise IdentifierError(
-                "Invalid settlement ID: '{id}'. A settlement ID should start with '{prefix}' "
-                ", be 'next' or 'open' or contain a valid bank reference.".format(
-                    id=settlement_id, prefix=cls.RESOURCE_ID_PREFIX
-                )
+                f"Invalid settlement ID: '{settlement_id}'. A settlement ID should "
+                f"start with '{cls.RESOURCE_ID_PREFIX}' "
+                ", be 'next' or 'open' or contain a valid bank reference."
             )
 
     def get(self, settlement_id, **params):

@@ -32,14 +32,11 @@ def main():
         body += "<p>Showing the first page of payments for this API key</p>"
 
         for payment in payments:
-            body += "{curr} {value}, status: '{status}'<br>".format(
-                curr=payment.amount["currency"], value=payment.amount["value"], status=payment.status
-            )
-
+            body += f'{payment.amount["currency"]} {payment.amount["value"]}, status: \'{payment.status}\'<br>'
         return body
 
     except Error as err:
-        return "API call failed: {error}".format(error=err)
+        return f"API call failed: {err}"
 
 
 if __name__ == "__main__":

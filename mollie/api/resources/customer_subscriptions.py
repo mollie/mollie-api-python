@@ -13,9 +13,8 @@ class CustomerSubscriptions(Base):
     def get(self, subscription_id, **params):
         if not subscription_id or not subscription_id.startswith(self.RESOURCE_ID_PREFIX):
             raise IdentifierError(
-                "Invalid subscription ID: '{id}'. A subscription ID should start with '{prefix}'.".format(
-                    id=subscription_id, prefix=self.RESOURCE_ID_PREFIX
-                )
+                f"Invalid subscription ID: '{subscription_id}'. A subscription ID "
+                f"should start with '{self.RESOURCE_ID_PREFIX}'."
             )
         return super().get(subscription_id, **params)
 
@@ -27,15 +26,14 @@ class CustomerSubscriptions(Base):
         """
         if not subscription_id or not subscription_id.startswith(self.RESOURCE_ID_PREFIX):
             raise IdentifierError(
-                "Invalid subscription ID: '{id}'. A subscription ID should start with '{prefix}'.".format(
-                    id=subscription_id, prefix=self.RESOURCE_ID_PREFIX
-                )
+                f"Invalid subscription ID: '{subscription_id}'. A subscription ID "
+                f"should start with '{self.RESOURCE_ID_PREFIX}'."
             )
         result = super().delete(subscription_id, data)
         return self.get_resource_object(result)
 
     def get_resource_name(self):
-        return "customers/{id}/subscriptions".format(id=self.customer_id)
+        return f"customers/{self.customer_id}/subscriptions"
 
     def with_parent_id(self, customer_id):
         self.customer_id = customer_id

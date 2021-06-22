@@ -8,7 +8,7 @@ def main(client):
 
         body = "<h1>Get onboarding status</h1>"
         onboarding = client.onboarding.get("me")
-        body += "Status: <b>{onboarding.status}</b>".format(onboarding=onboarding)
+        body += f"Status: <b>{onboarding.status}</b>"
 
         # https://docs.mollie.com/reference/v2/onboarding-api/submit-onboarding-data
 
@@ -20,4 +20,4 @@ def main(client):
         return body
 
     except Error as err:
-        return "API call failed: {error}".format(error=err)
+        return f"API call failed: {err}"
