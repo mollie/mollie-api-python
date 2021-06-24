@@ -69,7 +69,6 @@ def test_get_order(client, response):
     assert order.checkout_url == "https://www.mollie.com/payscreen/order/checkout/kEn1PlbGa"
     assert_list_object(order.shipments, Shipment)
     assert_list_object(order.refunds, Refund)
-
     assert order.is_created() is True
     assert order.is_paid() is False
     assert order.is_authorized() is False
@@ -100,6 +99,18 @@ def test_get_order_with_payments_embed_error(client, response):
     with pytest.raises(EmbedNotFound) as excinfo:
         order.payments
     assert 'Please specify embed="payments" when requesting the data.' in str(excinfo.value)
+
+
+def test_get_order_with_payments_empty_embed(client, response):
+    response.add(
+        response.GET,
+        f"https://api.mollie.com/v2/orders/{ORDER_ID}?embed=payments",
+        body=response._get_body("order_single"),
+        match_querystring=True,
+    )
+
+    order = client.orders.get(ORDER_ID, embed="payments")
+    assert_list_object(order.payments, Payment, 0)
 
 
 def test_list_orders(client, response):

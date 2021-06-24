@@ -10,6 +10,17 @@ from .payment import Payment
 
 
 class Order(Base):
+    requested_embeds = None
+
+    def __init__(self, data, client=None, requested_embeds=None):
+        super().__init__(data, client)
+        self.requested_embeds = requested_embeds
+
+    def _has_embed(self, embed_name):
+        if self.requested_embeds and embed_name in self.requested_embeds:
+            return True
+        return False
+
     @classmethod
     def get_resource_class(cls, client):
         from ..resources.orders import Orders
@@ -214,10 +225,14 @@ class Order(Base):
 
     @property
     def payments(self):
+        if not self._has_embed("payments"):
+            raise EmbedNotFound("payments")
+
         try:
             payments = self["_embedded"]["payments"]
         except KeyError:
-            raise EmbedNotFound("payments")
+            # No data available at API
+            payments = []
 
         result = {
             "_embedded": {

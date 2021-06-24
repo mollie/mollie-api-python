@@ -16,7 +16,14 @@ class Orders(Base):
                     id=order_id, prefix=self.RESOURCE_ID_PREFIX
                 )
             )
-        return super().get(order_id, **params)
+
+        result_order = super().get(order_id, **params)
+
+        requested_embeds = self.extract_embed(params)
+        if requested_embeds:
+            result_order.requested_embeds = requested_embeds
+
+        return result_order
 
     def delete(self, order_id, data=None):
         """Cancel order and return the order object.

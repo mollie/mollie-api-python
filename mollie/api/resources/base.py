@@ -66,3 +66,10 @@ class Base(object):
                     "(status code: {status}): '{response}'.".format(status=resp.status_code, response=resp.text)
                 )
         return result
+
+    @staticmethod
+    def extract_embed(params):
+        """Extract and parse the embed parameter from the request."""
+        if "embed" not in params:
+            return
+        return params["embed"].split(",")
