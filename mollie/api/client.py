@@ -171,10 +171,10 @@ class Client(object):
         return " ".join(components)
 
     def _format_request_data(self, path, data, params):
-        if path.startswith("%s/%s" % (self.api_endpoint, self.api_version)):
+        if path.startswith(f"{self.api_endpoint}/{self.api_version}"):
             url = path
         else:
-            url = "%s/%s/%s" % (self.api_endpoint, self.api_version, path)
+            url = f"{self.api_endpoint}/{self.api_version}/{path}"
 
         if data is not None:
             try:

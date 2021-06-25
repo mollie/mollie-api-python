@@ -10,14 +10,14 @@ PROFILE_ID = "pfl_v9hTwCvYqw"
 
 
 def test_profile_resource_class(oauth_client, response):
-    response.get("https://api.mollie.com/v2/profiles/%s" % PROFILE_ID, "profile_single")
+    response.get(f"https://api.mollie.com/v2/profiles/{PROFILE_ID}", "profile_single")
     oauth_client.profiles.get(PROFILE_ID)
 
     assert isinstance(Profile.get_resource_class(oauth_client), Profiles)
 
 
 def test_profiles_get_raises_identifier_error(oauth_client, response):
-    response.get("https://api.mollie.com/v2/profiles/%s" % PROFILE_ID, "profile_single")
+    response.get(f"https://api.mollie.com/v2/profiles/{PROFILE_ID}", "profile_single")
     oauth_client.profiles.get(PROFILE_ID)
 
     with pytest.raises(IdentifierError):
@@ -44,7 +44,7 @@ def test_create_profile(oauth_client, response):
 
 def test_update_profile(oauth_client, response):
     """Update an existing profile."""
-    response.patch("https://api.mollie.com/v2/profiles/%s" % PROFILE_ID, "profile_updated")
+    response.patch(f"https://api.mollie.com/v2/profiles/{PROFILE_ID}", "profile_updated")
 
     updated_profile = oauth_client.profiles.update(
         PROFILE_ID,
@@ -60,7 +60,7 @@ def test_update_profile(oauth_client, response):
 
 def test_delete_profile(oauth_client, response):
     """Delete a profile."""
-    response.delete("https://api.mollie.com/v2/profiles/%s" % PROFILE_ID, "empty")
+    response.delete(f"https://api.mollie.com/v2/profiles/{PROFILE_ID}", "empty")
 
     deleted_profile = oauth_client.profiles.delete("pfl_v9hTwCvYqw")
     assert deleted_profile == {}
@@ -76,11 +76,11 @@ def test_list_profiles(oauth_client, response):
 
 def test_get_profile(oauth_client, response):
     """Retrieve a single profile."""
-    response.get("https://api.mollie.com/v2/profiles/%s" % PROFILE_ID, "profile_single")
-    response.get("https://api.mollie.com/v2/chargebacks?profileId=%s" % PROFILE_ID, "chargebacks_list")
-    response.get("https://api.mollie.com/v2/methods?profileId=%s" % PROFILE_ID, "methods_list")
-    response.get("https://api.mollie.com/v2/payments?profileId=%s" % PROFILE_ID, "payments_list")
-    response.get("https://api.mollie.com/v2/refunds?profileId=%s" % PROFILE_ID, "refunds_list")
+    response.get(f"https://api.mollie.com/v2/profiles/{PROFILE_ID}", "profile_single")
+    response.get(f"https://api.mollie.com/v2/chargebacks?profileId={PROFILE_ID}", "chargebacks_list")
+    response.get(f"https://api.mollie.com/v2/methods?profileId={PROFILE_ID}", "methods_list")
+    response.get(f"https://api.mollie.com/v2/payments?profileId={PROFILE_ID}", "payments_list")
+    response.get(f"https://api.mollie.com/v2/refunds?profileId={PROFILE_ID}", "refunds_list")
 
     profile = oauth_client.profiles.get(PROFILE_ID)
     chargebacks = oauth_client.profile_chargebacks.with_parent_id(PROFILE_ID).list()
@@ -111,9 +111,9 @@ def test_get_profile(oauth_client, response):
 
 
 def test_profile_enable_payment_method(oauth_client, response):
-    response.get("https://api.mollie.com/v2/profiles/%s" % PROFILE_ID, "profile_new")
+    response.get(f"https://api.mollie.com/v2/profiles/{PROFILE_ID}", "profile_new")
     response.post(
-        "https://api.mollie.com/v2/profiles/%s/methods/%s" % (PROFILE_ID, "bancontact"),
+        f"https://api.mollie.com/v2/profiles/{PROFILE_ID}/methods/bancontact",
         "profile_enable_payment_method",
     )
 
@@ -123,8 +123,8 @@ def test_profile_enable_payment_method(oauth_client, response):
 
 
 def test_profile_disable_payment_method(oauth_client, response):
-    response.get("https://api.mollie.com/v2/profiles/%s" % PROFILE_ID, "profile_new")
-    response.delete("https://api.mollie.com/v2/profiles/%s/methods/%s" % (PROFILE_ID, "bancontact"), "empty", 204)
+    response.get(f"https://api.mollie.com/v2/profiles/{PROFILE_ID}", "profile_new")
+    response.delete(f"https://api.mollie.com/v2/profiles/{PROFILE_ID}/methods/bancontact", "empty", 204)
 
     profile = oauth_client.profiles.get(PROFILE_ID)
     method = oauth_client.profile_methods.on(profile, "bancontact").delete()
@@ -133,7 +133,7 @@ def test_profile_disable_payment_method(oauth_client, response):
 
 @pytest.mark.parametrize("method", ["giftcard", "voucher"])
 def test_profile_enable_giftcard_no_resource_id(oauth_client, response, method):
-    response.get("https://api.mollie.com/v2/profiles/%s" % PROFILE_ID, "profile_new")
+    response.get(f"https://api.mollie.com/v2/profiles/{PROFILE_ID}", "profile_new")
 
     profile = oauth_client.profiles.get(PROFILE_ID)
 
@@ -143,9 +143,9 @@ def test_profile_enable_giftcard_no_resource_id(oauth_client, response, method):
 
 @pytest.mark.parametrize("method", ["giftcard", "voucher"])
 def test_profile_enable_giftcard(oauth_client, response, method):
-    response.get("https://api.mollie.com/v2/profiles/%s" % PROFILE_ID, "profile_new")
+    response.get(f"https://api.mollie.com/v2/profiles/{PROFILE_ID}", "profile_new")
     response.post(
-        "https://api.mollie.com/v2/profiles/%s/methods/%s/issuers/%s" % (PROFILE_ID, method, "festivalcadeau"),
+        f"https://api.mollie.com/v2/profiles/{PROFILE_ID}/methods/{method}/issuers/festivalcadeau",
         "profile_enable_gift_card_issuer",
     )
 
@@ -157,9 +157,9 @@ def test_profile_enable_giftcard(oauth_client, response, method):
 
 @pytest.mark.parametrize("method", ["giftcard", "voucher"])
 def test_profile_disable_giftcard(oauth_client, response, method):
-    response.get("https://api.mollie.com/v2/profiles/%s" % PROFILE_ID, "profile_new")
+    response.get(f"https://api.mollie.com/v2/profiles/{PROFILE_ID}", "profile_new")
     response.delete(
-        "https://api.mollie.com/v2/profiles/%s/methods/%s/issuers/%s" % (PROFILE_ID, method, "festivalcadeau"),
+        f"https://api.mollie.com/v2/profiles/{PROFILE_ID}/methods/{method}/issuers/festivalcadeau",
         "empty",
         204,
     )

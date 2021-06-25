@@ -14,7 +14,7 @@ SUBSCRIPTION_ID = "sub_rVKGtNd6s3"
 
 def test_list_customer_subscriptions(client, response):
     """Retrieve a list of subscriptions."""
-    response.get("https://api.mollie.com/v2/customers/%s/subscriptions" % CUSTOMER_ID, "subscriptions_customer_list")
+    response.get(f"https://api.mollie.com/v2/customers/{CUSTOMER_ID}/subscriptions", "subscriptions_customer_list")
 
     subscriptions = client.customer_subscriptions.with_parent_id(CUSTOMER_ID).list()
     assert_list_object(subscriptions, Subscription)
@@ -23,10 +23,10 @@ def test_list_customer_subscriptions(client, response):
 def test_get_customer_subscription_by_id(client, response):
     """Retrieve a single subscription by ID."""
     response.get(
-        "https://api.mollie.com/v2/customers/%s/subscriptions/%s" % (CUSTOMER_ID, SUBSCRIPTION_ID),
+        f"https://api.mollie.com/v2/customers/{CUSTOMER_ID}/subscriptions/{SUBSCRIPTION_ID}",
         "subscription_single",
     )
-    response.get("https://api.mollie.com/v2/customers/%s" % CUSTOMER_ID, "customer_single")
+    response.get(f"https://api.mollie.com/v2/customers/{CUSTOMER_ID}", "customer_single")
 
     subscription = client.customer_subscriptions.with_parent_id(CUSTOMER_ID).get(SUBSCRIPTION_ID)
     assert subscription.resource == "subscription"
@@ -53,8 +53,8 @@ def test_get_customer_subscription_by_id(client, response):
 
 def test_list_customer_subscriptions_by_customer_object(client, response):
     """Retrieve a list of subscriptions related to customer."""
-    response.get("https://api.mollie.com/v2/customers/%s" % CUSTOMER_ID, "customer_single")
-    response.get("https://api.mollie.com/v2/customers/%s/subscriptions" % CUSTOMER_ID, "subscriptions_customer_list")
+    response.get(f"https://api.mollie.com/v2/customers/{CUSTOMER_ID}", "customer_single")
+    response.get(f"https://api.mollie.com/v2/customers/{CUSTOMER_ID}/subscriptions", "subscriptions_customer_list")
 
     customer = client.customers.get(CUSTOMER_ID)
     subscriptions = client.customer_subscriptions.on(customer).list()
@@ -64,10 +64,10 @@ def test_list_customer_subscriptions_by_customer_object(client, response):
 def test_get_customer_subscription_by_customer_object(client, response):
     """Retrieve specific subscription related to customer."""
     response.get(
-        "https://api.mollie.com/v2/customers/%s/subscriptions/%s" % (CUSTOMER_ID, SUBSCRIPTION_ID),
+        f"https://api.mollie.com/v2/customers/{CUSTOMER_ID}/subscriptions/{SUBSCRIPTION_ID}",
         "subscription_single",
     )
-    response.get("https://api.mollie.com/v2/customers/%s" % CUSTOMER_ID, "customer_single")
+    response.get(f"https://api.mollie.com/v2/customers/{CUSTOMER_ID}", "customer_single")
 
     customer = client.customers.get(CUSTOMER_ID)
     subscription = client.customer_subscriptions.on(customer).get(SUBSCRIPTION_ID)
@@ -78,10 +78,10 @@ def test_get_customer_subscription_by_customer_object(client, response):
 def test_customer_subscription_get_related_customer(client, response):
     """Retrieve a related customer object from a subscription."""
     response.get(
-        "https://api.mollie.com/v2/customers/%s/subscriptions/%s" % (CUSTOMER_ID, SUBSCRIPTION_ID),
+        f"https://api.mollie.com/v2/customers/{CUSTOMER_ID}/subscriptions/{SUBSCRIPTION_ID}",
         "subscription_single",
     )
-    response.get("https://api.mollie.com/v2/customers/%s" % CUSTOMER_ID, "customer_single")
+    response.get(f"https://api.mollie.com/v2/customers/{CUSTOMER_ID}", "customer_single")
 
     subscription = client.customer_subscriptions.with_parent_id(CUSTOMER_ID).get(SUBSCRIPTION_ID)
     assert isinstance(subscription.customer, Customer)
@@ -91,7 +91,7 @@ def test_customer_subscription_get_related_customer(client, response):
 def test_cancel_customer_subscription(client, response):
     """Cancel a subscription by customer ID and subscription ID."""
     response.delete(
-        "https://api.mollie.com/v2/customers/%s/subscriptions/%s" % (CUSTOMER_ID, SUBSCRIPTION_ID),
+        f"https://api.mollie.com/v2/customers/{CUSTOMER_ID}/subscriptions/{SUBSCRIPTION_ID}",
         "subscription_canceled",
         200,
     )
@@ -110,7 +110,7 @@ def test_cancel_customer_subscription_invalid_id(client):
 
 def test_create_customer_subscription(client, response):
     """Create a subscription with customer object."""
-    response.post("https://api.mollie.com/v2/customers/%s/subscriptions" % CUSTOMER_ID, "subscription_single")
+    response.post(f"https://api.mollie.com/v2/customers/{CUSTOMER_ID}/subscriptions", "subscription_single")
 
     data = {
         "amount": {"currency": "EUR", "value": "25.00"},
@@ -127,7 +127,7 @@ def test_create_customer_subscription(client, response):
 def test_update_customer_subscription(client, response):
     """Update existing subscription of a customer."""
     response.patch(
-        "https://api.mollie.com/v2/customers/%s/subscriptions/%s" % (CUSTOMER_ID, SUBSCRIPTION_ID),
+        f"https://api.mollie.com/v2/customers/{CUSTOMER_ID}/subscriptions/{SUBSCRIPTION_ID}",
         "subscription_updated",
     )
 
@@ -146,12 +146,12 @@ def test_update_customer_subscription(client, response):
 def test_customer_subscription_get_related_payments(client, response):
     """Retrieve a list of payments related to the subscription."""
     response.get(
-        "https://api.mollie.com/v2/customers/%s/subscriptions/%s" % (CUSTOMER_ID, SUBSCRIPTION_ID),
+        f"https://api.mollie.com/v2/customers/{CUSTOMER_ID}/subscriptions/{SUBSCRIPTION_ID}",
         "subscription_single",
     )
-    response.get("https://api.mollie.com/v2/customers/%s" % CUSTOMER_ID, "customer_single")
+    response.get(f"https://api.mollie.com/v2/customers/{CUSTOMER_ID}", "customer_single")
     response.get(
-        "https://api.mollie.com/v2/customers/%s/subscriptions/%s/payments" % (CUSTOMER_ID, SUBSCRIPTION_ID),
+        f"https://api.mollie.com/v2/customers/{CUSTOMER_ID}/subscriptions/{SUBSCRIPTION_ID}/payments",
         "payments_list",
     )
     subscription = client.customer_subscriptions.with_parent_id(CUSTOMER_ID).get(SUBSCRIPTION_ID)

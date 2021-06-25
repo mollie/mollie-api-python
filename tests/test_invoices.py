@@ -15,7 +15,7 @@ def test_list_invoices(oauth_client, response):
 
 def test_get_invoice(oauth_client, response):
     """Retrieve a single invoice."""
-    response.get("https://api.mollie.com/v2/invoices/%s" % INVOICE_ID, "invoice_single")
+    response.get(f"https://api.mollie.com/v2/invoices/{INVOICE_ID}", "invoice_single")
 
     invoice = oauth_client.invoices.get(INVOICE_ID)
     assert isinstance(invoice, Invoice)

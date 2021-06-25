@@ -50,7 +50,7 @@ def test_create_payment(client, response):
 
 def test_cancel_payment(client, response):
     """Cancel existing payment."""
-    response.delete("https://api.mollie.com/v2/payments/%s" % PAYMENT_ID, "payment_canceled", 200)
+    response.delete(f"https://api.mollie.com/v2/payments/{PAYMENT_ID}", "payment_canceled", 200)
 
     canceled_payment = client.payments.delete(PAYMENT_ID)
     assert isinstance(canceled_payment, Payment)
@@ -67,10 +67,10 @@ def test_cancel_payment_invalid_id(client):
 
 def test_get_single_payment(client, response):
     """Retrieve a single payment by payment id."""
-    response.get("https://api.mollie.com/v2/payments/%s" % PAYMENT_ID, "payment_single")
-    response.get("https://api.mollie.com/v2/payments/%s/refunds" % PAYMENT_ID, "refunds_list")
-    response.get("https://api.mollie.com/v2/payments/%s/chargebacks" % PAYMENT_ID, "chargebacks_list")
-    response.get("https://api.mollie.com/v2/customers/%s" % CUSTOMER_ID, "customer_single")
+    response.get(f"https://api.mollie.com/v2/payments/{PAYMENT_ID}", "payment_single")
+    response.get(f"https://api.mollie.com/v2/payments/{PAYMENT_ID}/refunds", "refunds_list")
+    response.get(f"https://api.mollie.com/v2/payments/{PAYMENT_ID}/chargebacks", "chargebacks_list")
+    response.get(f"https://api.mollie.com/v2/customers/{CUSTOMER_ID}", "customer_single")
     response.get(
         "https://api.mollie.com/v2/customers/{cust}/mandates/{man}".format(cust=CUSTOMER_ID, man=MANDATE_ID),
         "customer_mandate_single",
@@ -140,8 +140,8 @@ def test_get_single_payment(client, response):
 
 def test_payment_get_related_refunds(client, response):
     """Retrieve a list of refunds related to a payment."""
-    response.get("https://api.mollie.com/v2/payments/%s" % PAYMENT_ID, "payment_single")
-    response.get("https://api.mollie.com/v2/payments/%s/refunds" % PAYMENT_ID, "refunds_list")
+    response.get(f"https://api.mollie.com/v2/payments/{PAYMENT_ID}", "payment_single")
+    response.get(f"https://api.mollie.com/v2/payments/{PAYMENT_ID}/refunds", "refunds_list")
 
     payment = client.payments.get(PAYMENT_ID)
     refunds = payment.refunds
@@ -150,8 +150,8 @@ def test_payment_get_related_refunds(client, response):
 
 def test_payment_get_related_chargebacks(client, response):
     """Get chargebacks related to payment id."""
-    response.get("https://api.mollie.com/v2/payments/%s" % PAYMENT_ID, "payment_single")
-    response.get("https://api.mollie.com/v2/payments/%s/chargebacks" % PAYMENT_ID, "chargebacks_list")
+    response.get(f"https://api.mollie.com/v2/payments/{PAYMENT_ID}", "payment_single")
+    response.get(f"https://api.mollie.com/v2/payments/{PAYMENT_ID}/chargebacks", "chargebacks_list")
 
     payment = client.payments.get(PAYMENT_ID)
     chargebacks = payment.chargebacks
@@ -160,8 +160,8 @@ def test_payment_get_related_chargebacks(client, response):
 
 def test_payment_get_related_captures(client, response):
     """Get captures related to payment id."""
-    response.get("https://api.mollie.com/v2/payments/%s" % PAYMENT_ID, "payment_single")
-    response.get("https://api.mollie.com/v2/payments/%s/captures" % PAYMENT_ID, "captures_list")
+    response.get(f"https://api.mollie.com/v2/payments/{PAYMENT_ID}", "payment_single")
+    response.get(f"https://api.mollie.com/v2/payments/{PAYMENT_ID}/captures", "captures_list")
 
     payment = client.payments.get(PAYMENT_ID)
     captures = payment.captures
@@ -170,8 +170,8 @@ def test_payment_get_related_captures(client, response):
 
 def test_payment_get_related_settlement(client, response):
     """Get the settlement related to the payment."""
-    response.get("https://api.mollie.com/v2/payments/%s" % PAYMENT_ID, "payment_single")
-    response.get("https://api.mollie.com/v2/settlements/%s" % SETTLEMENT_ID, "settlement_single")
+    response.get(f"https://api.mollie.com/v2/payments/{PAYMENT_ID}", "payment_single")
+    response.get(f"https://api.mollie.com/v2/settlements/{SETTLEMENT_ID}", "settlement_single")
 
     payment = client.payments.get(PAYMENT_ID)
     settlement = payment.settlement
@@ -181,7 +181,7 @@ def test_payment_get_related_settlement(client, response):
 
 def test_payment_get_related_mandate(client, response):
     """Get the mandate related to the payment."""
-    response.get("https://api.mollie.com/v2/payments/%s" % PAYMENT_ID, "payment_single")
+    response.get(f"https://api.mollie.com/v2/payments/{PAYMENT_ID}", "payment_single")
     response.get(
         "https://api.mollie.com/v2/customers/{cust}/mandates/{man}".format(cust=CUSTOMER_ID, man=MANDATE_ID),
         "customer_mandate_single",
@@ -194,7 +194,7 @@ def test_payment_get_related_mandate(client, response):
 
 
 def test_payment_get_related_subscription(client, response):
-    response.get("https://api.mollie.com/v2/payments/%s" % PAYMENT_ID, "payment_single")
+    response.get(f"https://api.mollie.com/v2/payments/{PAYMENT_ID}", "payment_single")
     response.get(
         "https://api.mollie.com/v2/customers/{cust}/subscriptions/{sub}".format(cust=CUSTOMER_ID, sub=SUBSCRIPTION_ID),
         "subscription_single",
@@ -208,8 +208,8 @@ def test_payment_get_related_subscription(client, response):
 
 def test_payment_get_related_customer(client, response):
     """Get customer related to payment."""
-    response.get("https://api.mollie.com/v2/payments/%s" % PAYMENT_ID, "payment_single")
-    response.get("https://api.mollie.com/v2/customers/%s" % CUSTOMER_ID, "customer_single")
+    response.get(f"https://api.mollie.com/v2/payments/{PAYMENT_ID}", "payment_single")
+    response.get(f"https://api.mollie.com/v2/customers/{CUSTOMER_ID}", "customer_single")
 
     payment = client.payments.get(PAYMENT_ID)
     customer = payment.customer
@@ -219,7 +219,7 @@ def test_payment_get_related_customer(client, response):
 
 def test_update_payment(client, response):
     """Update an existing payment."""
-    response.patch("https://api.mollie.com/v2/payments/%s" % PAYMENT_ID, "payment_updated")
+    response.patch(f"https://api.mollie.com/v2/payments/{PAYMENT_ID}", "payment_updated")
 
     data = {
         "description": "Order #12346",

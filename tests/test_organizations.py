@@ -5,7 +5,7 @@ ORGANIZATION_ID = "org_12345678"
 
 def test_get_organization(oauth_client, response):
     """Retrieve a single organization."""
-    response.get("https://api.mollie.com/v2/organizations/%s" % ORGANIZATION_ID, "organization_single")
+    response.get(f"https://api.mollie.com/v2/organizations/{ORGANIZATION_ID}", "organization_single")
 
     organization = oauth_client.organizations.get(ORGANIZATION_ID)
     assert isinstance(organization, Organization)

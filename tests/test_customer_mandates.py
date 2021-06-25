@@ -9,7 +9,7 @@ MANDATE_ID = "mdt_h3gAaD5zP"
 
 def test_list_customer_mandates(client, response):
     """Retrieve a list of mandates."""
-    response.get("https://api.mollie.com/v2/customers/%s/mandates" % CUSTOMER_ID, "customer_mandates_list")
+    response.get(f"https://api.mollie.com/v2/customers/{CUSTOMER_ID}/mandates", "customer_mandates_list")
     mandates = client.customer_mandates.with_parent_id(CUSTOMER_ID).list()
     assert_list_object(mandates, Mandate)
 
@@ -17,10 +17,10 @@ def test_list_customer_mandates(client, response):
 def test_get_customer_mandate_by_id(client, response):
     """Retrieve a single mandate by ID."""
     response.get(
-        "https://api.mollie.com/v2/customers/%s/mandates/%s" % (CUSTOMER_ID, MANDATE_ID),
+        f"https://api.mollie.com/v2/customers/{CUSTOMER_ID}/mandates/{MANDATE_ID}",
         "customer_mandate_single",
     )
-    response.get("https://api.mollie.com/v2/customers/%s" % CUSTOMER_ID, "customer_new")
+    response.get(f"https://api.mollie.com/v2/customers/{CUSTOMER_ID}", "customer_new")
 
     mandate = client.customer_mandates.with_parent_id(CUSTOMER_ID).get(MANDATE_ID)
     assert isinstance(mandate, Mandate)
@@ -44,10 +44,10 @@ def test_get_customer_mandate_by_id(client, response):
 
 def test_get_customer_mandate_by_customer(client, response):
     """Retrieve a customer by customer object."""
-    response.get("https://api.mollie.com/v2/customers/%s" % CUSTOMER_ID, "customer_new")
-    response.get("https://api.mollie.com/v2/customers/%s/mandates" % CUSTOMER_ID, "customer_mandates_list")
+    response.get(f"https://api.mollie.com/v2/customers/{CUSTOMER_ID}", "customer_new")
+    response.get(f"https://api.mollie.com/v2/customers/{CUSTOMER_ID}/mandates", "customer_mandates_list")
     response.get(
-        "https://api.mollie.com/v2/customers/%s/mandates/%s" % (CUSTOMER_ID, MANDATE_ID),
+        f"https://api.mollie.com/v2/customers/{CUSTOMER_ID}/mandates/{MANDATE_ID}",
         "customer_mandate_single",
     )
     customer = client.customers.get(CUSTOMER_ID)
@@ -63,10 +63,10 @@ def test_get_customer_mandate_by_customer(client, response):
 def test_customer_mandate_get_related_customer(client, response):
     """Retrieve a related customer object from a mandate."""
     response.get(
-        "https://api.mollie.com/v2/customers/%s/mandates/%s" % (CUSTOMER_ID, MANDATE_ID),
+        f"https://api.mollie.com/v2/customers/{CUSTOMER_ID}/mandates/{MANDATE_ID}",
         "customer_mandate_single",
     )
-    response.get("https://api.mollie.com/v2/customers/%s" % CUSTOMER_ID, "customer_new")
+    response.get(f"https://api.mollie.com/v2/customers/{CUSTOMER_ID}", "customer_new")
 
     mandate = client.customer_mandates.with_parent_id(CUSTOMER_ID).get(MANDATE_ID)
     assert isinstance(mandate.customer, Customer)
@@ -75,7 +75,7 @@ def test_customer_mandate_get_related_customer(client, response):
 
 def test_customer_mandates_create_mandate(client, response):
     """Create a new customer mandate."""
-    response.post("https://api.mollie.com/v2/customers/%s/mandates" % CUSTOMER_ID, "customer_mandate_single")
+    response.post(f"https://api.mollie.com/v2/customers/{CUSTOMER_ID}/mandates", "customer_mandate_single")
 
     data = {
         "method": "directdebit",
@@ -92,7 +92,7 @@ def test_customer_mandates_create_mandate(client, response):
 
 def test_update_customer_mandate(client, response):
     response.patch(
-        "https://api.mollie.com/v2/customers/%s/mandates/%s" % (CUSTOMER_ID, MANDATE_ID), "customer_mandate_updated"
+        f"https://api.mollie.com/v2/customers/{CUSTOMER_ID}/mandates/{MANDATE_ID}", "customer_mandate_updated"
     )
 
     data = {
@@ -109,7 +109,11 @@ def test_update_customer_mandate(client, response):
 
 
 def test_revoke_customer_mandate(client, response):
-    response.delete("https://api.mollie.com/v2/customers/%s/mandates/%s" % (CUSTOMER_ID, MANDATE_ID), "empty", 204)
+    response.delete(
+        f"https://api.mollie.com/v2/customers/{CUSTOMER_ID}/mandates/{MANDATE_ID}",
+        "empty",
+        204,
+    )
 
     resp = client.customer_mandates.with_parent_id(CUSTOMER_ID).delete(MANDATE_ID)
     assert resp == {}

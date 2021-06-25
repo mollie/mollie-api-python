@@ -7,7 +7,7 @@ SETTLEMENT_ID = "stl_jDk30akdN"
 
 def test_list_customer_payments(oauth_client, response):
     """Retrieve a list of payments related to a settlement id."""
-    response.get("https://api.mollie.com/v2/settlements/%s/payments" % SETTLEMENT_ID, "settlement_payments_multiple")
+    response.get(f"https://api.mollie.com/v2/settlements/{SETTLEMENT_ID}/payments", "settlement_payments_multiple")
 
     payments = oauth_client.settlement_payments.with_parent_id(SETTLEMENT_ID).list()
     assert_list_object(payments, Payment)
