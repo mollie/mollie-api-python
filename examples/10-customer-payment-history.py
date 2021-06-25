@@ -51,18 +51,14 @@ def main():
         }
         payments = mollie_client.customer_payments.with_parent_id(customer.id).list(**params)
 
-        body += '<p>Showing the last {num} payments for customer "{cust}"</p>'.format(
-            num=len(payments), cust=customer.id
-        )
+        body += f'<p>Showing the last {len(payments)} payments for customer "{customer.id}"</p>'
 
         for payment in payments:
-            body += "<p>Payment {id} ({value}) {curr}</p>".format(
-                id=payment.id, value=payment.amount["value"], curr=payment.amount["currency"]
-            )
+            body += f'<p>Payment {payment.id} ({payment.amount["value"]}) {payment.amount["currency"]}</p>'
         return body
 
     except Error as err:
-        return "API call failed: {error}".format(error=err)
+        return f"API call failed: {err}"
 
 
 if __name__ == "__main__":

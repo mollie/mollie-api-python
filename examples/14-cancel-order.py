@@ -37,15 +37,15 @@ def main():
 
         if order.is_cancelable:
             mollie_client.orders.delete(order.id)
-            body += "Your order {order_id} has been canceled".format(order_id=order.id)
+            body += f"Your order {order.id} has been canceled"
 
         else:
-            body += "Unable to cancel your order {order_id}".format(order_id=order.id)
+            body += f"Unable to cancel your order {order.id}"
 
         return body
 
     except Error as err:
-        return "API call failed: {error}".format(error=err)
+        return f"API call failed: {err}"
 
 
 if __name__ == "__main__":

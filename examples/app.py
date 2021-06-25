@@ -35,7 +35,7 @@ examples = [
 def show_list():
     body = ""
     for example in examples:
-        body += '<a href="/{example}">{example}</a><br>'.format(example=example)
+        body += f'<a href="/{example}">{example}</a><br>'
     return body
 
 
@@ -59,17 +59,13 @@ if __name__ == "__main__":
 
 def database_write(my_webshop_id, data):
     my_webshop_id = int(my_webshop_id)
-    file = os.path.join(
-        os.path.dirname(os.path.abspath(__file__)), "orders", "order-{nr}.json".format(nr=my_webshop_id)
-    )
+    file = os.path.join(os.path.dirname(os.path.abspath(__file__)), "orders", f"order-{my_webshop_id}.json")
     database = open(file, "w")
     database.write(json.dumps(data))
 
 
 def database_read(my_webshop_id):
     my_webshop_id = int(my_webshop_id)
-    file = os.path.join(
-        os.path.dirname(os.path.abspath(__file__)), "orders", "order-{nr}.json".format(nr=my_webshop_id)
-    )
+    file = os.path.join(os.path.dirname(os.path.abspath(__file__)), "orders", f"order-{my_webshop_id}.json")
     database = open(file, "r")
     return json.loads(database.read())

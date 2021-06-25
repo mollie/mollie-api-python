@@ -36,15 +36,13 @@ def main():
         order = mollie_client.orders.get(order_id) if order_id else next(mollie_client.orders.list())
 
         shipment = order.create_shipment()
-        body += "A shipment with ID {shipment_id} has been created for your order with ID {order_id}".format(
-            shipment_id=shipment.id, order_id=order.id
-        )
+        body += f"A shipment with ID {shipment.id} has been created for your order with ID {order.id}"
         for line in shipment.lines:
-            body += "{name} Status: <b>{status}</b>".format(name=line.name, status=line.status)
+            body += f"{line.name} Status: <b>{line.status}</b>"
 
         return body
     except Error as err:
-        return "API call failed: {error}".format(error=err)
+        return f"API call failed: {err}"
 
 
 if __name__ == "__main__":

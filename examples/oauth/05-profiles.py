@@ -66,4 +66,4 @@ def main(client):
         return body
 
     except Error as err:
-        return "API call failed: {error}".format(error=err)
+        return f"API call failed: {err}"

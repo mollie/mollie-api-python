@@ -59,9 +59,7 @@ class Client(object):
     def validate_api_key(api_key):
         api_key = api_key.strip()
         if not re.compile(r"^(live|test)_\w+$").match(api_key):
-            raise RequestSetupError(
-                "Invalid API key: '{api_key}'. An API key must start with 'test_' or 'live_'.".format(api_key=api_key)
-            )
+            raise RequestSetupError(f"Invalid API key: '{api_key}'. An API key must start with 'test_' or 'live_'.")
         return api_key
 
     @staticmethod
@@ -69,9 +67,7 @@ class Client(object):
         access_token = access_token.strip()
         if not access_token.startswith("access_"):
             raise RequestSetupError(
-                "Invalid access token: '{access_token}'. An access token must start with 'access_'.".format(
-                    access_token=access_token
-                )
+                f"Invalid access token: '{access_token}'. An access token must start with 'access_'."
             )
         return access_token
 
@@ -180,7 +176,7 @@ class Client(object):
             try:
                 data = json.dumps(data)
             except Exception as err:
-                raise RequestSetupError("Error encoding parameters into JSON: '{error}'.".format(error=err))
+                raise RequestSetupError(f"Error encoding parameters into JSON: '{err}'.")
 
         querystring = generate_querystring(params)
         if querystring:
@@ -205,7 +201,7 @@ class Client(object):
                 url=url,
                 headers={
                     "Accept": "application/json",
-                    "Authorization": "Bearer {api_key}".format(api_key=self.api_key),
+                    "Authorization": f"Bearer {self.api_key}",
                     "Content-Type": "application/json",
                     "User-Agent": self.user_agent,
                     "X-Mollie-Client-Info": self.UNAME,
@@ -215,7 +211,7 @@ class Client(object):
                 timeout=self.timeout,
             )
         except requests.exceptions.RequestException as err:
-            raise RequestError("Unable to communicate with Mollie: {error}".format(error=err))
+            raise RequestError(f"Unable to communicate with Mollie: {err}")
         return response
 
     def _perform_http_call_oauth(self, http_method, path, data=None, params=None):
@@ -235,7 +231,7 @@ class Client(object):
                 timeout=self.timeout,
             )
         except requests.exceptions.RequestException as err:
-            raise RequestError("Unable to communicate with Mollie: {error}".format(error=err))
+            raise RequestError(f"Unable to communicate with Mollie: {err}")
         return response
 
     def perform_http_call(self, http_method, path, data=None, params=None):
@@ -324,7 +320,7 @@ def generate_querystring(params):
         else:
             # encode dictionary with square brackets
             for key, sub_value in sorted(value.items()):
-                composed = "{param}[{key}]".format(param=param, key=key)
+                composed = f"{param}[{key}]"
                 parts.append(urlencode({composed: sub_value}))
     if parts:
         return "&".join(parts)

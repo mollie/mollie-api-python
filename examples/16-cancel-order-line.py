@@ -33,17 +33,15 @@ def main():
             order.cancel_lines(data)
 
             order = mollie_client.orders.get(order.id)
-            body += "Your order {order_id} was updated:".format(order_id=order.id)
+            body += f"Your order {order.id} was updated:"
             for line in order.lines:
-                body += "{name} Status: <b>{status}</b>".format(name=line.name, status=line.status)
+                body += f"{line.name} Status: <b>{line.status}</b>"
         else:
-            body += "Unable to cancel line {line_id} for your order {order_id}".format(
-                line_id=line.id, order_id=order.id
-            )
+            body += f"Unable to cancel line {line.id} for your order {order.id}"
         return body
 
     except Error as err:
-        return "API call failed: {error}".format(error=err)
+        return f"API call failed: {err}"
 
 
 if __name__ == "__main__":

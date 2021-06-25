@@ -12,8 +12,6 @@ class Refunds(Base):
     def get(self, refund_id, **params):
         if not refund_id or not refund_id.startswith(self.RESOURCE_ID_PREFIX):
             raise IdentifierError(
-                "Invalid refund ID: '{id}'. A refund ID should start with '{prefix}'.".format(
-                    id=refund_id, prefix=self.RESOURCE_ID_PREFIX
-                )
+                f"Invalid refund ID: '{refund_id}'. A refund ID should start with '{self.RESOURCE_ID_PREFIX}'."
             )
         return super().get(refund_id, **params)

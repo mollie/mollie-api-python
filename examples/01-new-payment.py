@@ -40,10 +40,8 @@ def main():
             {
                 "amount": {"currency": "EUR", "value": "120.00"},
                 "description": "My first API payment",
-                "webhookUrl": "{root}02-webhook-verification".format(root=flask.request.url_root),
-                "redirectUrl": "{root}03-return-page?my_webshop_id={id}".format(
-                    root=flask.request.url_root, id=my_webshop_id
-                ),
+                "webhookUrl": f"{flask.request.url_root}02-webhook-verification",
+                "redirectUrl": f"{flask.request.url_root}03-return-page?my_webshop_id={my_webshop_id}",
                 "metadata": {"my_webshop_id": str(my_webshop_id)},
             }
         )
@@ -60,7 +58,7 @@ def main():
         return flask.redirect(payment.checkout_url)
 
     except Error as err:
-        return "API call failed: {error}".format(error=err)
+        return f"API call failed: {err}"
 
 
 if __name__ == "__main__":

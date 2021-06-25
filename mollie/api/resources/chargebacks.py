@@ -13,8 +13,7 @@ class Chargebacks(Base):
         """Verify the chargeback ID and retrieve the chargeback from the API."""
         if not chargeback_id or not chargeback_id.startswith(self.RESOURCE_ID_PREFIX):
             raise IdentifierError(
-                "Invalid chargeback ID: '{id}'. A chargeback ID should start with '{prefix}'.".format(
-                    id=chargeback_id, prefix=self.RESOURCE_ID_PREFIX
-                )
+                f"Invalid chargeback ID: '{chargeback_id}'. "
+                f"A chargeback ID should start with '{self.RESOURCE_ID_PREFIX}'."
             )
         return super().get(chargeback_id, **params)

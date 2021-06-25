@@ -71,15 +71,11 @@ def test_get_single_payment(client, response):
     response.get(f"https://api.mollie.com/v2/payments/{PAYMENT_ID}/refunds", "refunds_list")
     response.get(f"https://api.mollie.com/v2/payments/{PAYMENT_ID}/chargebacks", "chargebacks_list")
     response.get(f"https://api.mollie.com/v2/customers/{CUSTOMER_ID}", "customer_single")
+    response.get(f"https://api.mollie.com/v2/customers/{CUSTOMER_ID}/mandates/{MANDATE_ID}", "customer_mandate_single")
     response.get(
-        "https://api.mollie.com/v2/customers/{cust}/mandates/{man}".format(cust=CUSTOMER_ID, man=MANDATE_ID),
-        "customer_mandate_single",
+        f"https://api.mollie.com/v2/customers/{CUSTOMER_ID}/subscriptions/{SUBSCRIPTION_ID}", "subscription_single"
     )
-    response.get(
-        "https://api.mollie.com/v2/customers/{cust}/subscriptions/{sub}".format(cust=CUSTOMER_ID, sub=SUBSCRIPTION_ID),
-        "subscription_single",
-    )
-    response.get("https://api.mollie.com/v2/orders/{order_id}".format(order_id=ORDER_ID), "order_single")
+    response.get(f"https://api.mollie.com/v2/orders/{ORDER_ID}", "order_single")
 
     payment = client.payments.get(PAYMENT_ID)
     assert isinstance(payment, Payment)
@@ -182,10 +178,7 @@ def test_payment_get_related_settlement(client, response):
 def test_payment_get_related_mandate(client, response):
     """Get the mandate related to the payment."""
     response.get(f"https://api.mollie.com/v2/payments/{PAYMENT_ID}", "payment_single")
-    response.get(
-        "https://api.mollie.com/v2/customers/{cust}/mandates/{man}".format(cust=CUSTOMER_ID, man=MANDATE_ID),
-        "customer_mandate_single",
-    )
+    response.get(f"https://api.mollie.com/v2/customers/{CUSTOMER_ID}/mandates/{MANDATE_ID}", "customer_mandate_single")
 
     payment = client.payments.get(PAYMENT_ID)
     mandate = payment.mandate
@@ -196,8 +189,7 @@ def test_payment_get_related_mandate(client, response):
 def test_payment_get_related_subscription(client, response):
     response.get(f"https://api.mollie.com/v2/payments/{PAYMENT_ID}", "payment_single")
     response.get(
-        "https://api.mollie.com/v2/customers/{cust}/subscriptions/{sub}".format(cust=CUSTOMER_ID, sub=SUBSCRIPTION_ID),
-        "subscription_single",
+        f"https://api.mollie.com/v2/customers/{CUSTOMER_ID}/subscriptions/{SUBSCRIPTION_ID}", "subscription_single"
     )
 
     payment = client.payments.get(PAYMENT_ID)

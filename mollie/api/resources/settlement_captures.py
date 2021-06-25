@@ -2,10 +2,10 @@ from .captures import Captures
 
 
 class SettlementCaptures(Captures):
-    settlementt_id = None
+    settlement_id = None
 
     def get_resource_name(self):
-        return "settlements/{id}/captures".format(id=self.settlement_id)
+        return f"settlements/{self.settlement_id}/captures"
 
     def with_parent_id(self, settlement_id):
         self.settlement_id = settlement_id

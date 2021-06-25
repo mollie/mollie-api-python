@@ -5,7 +5,7 @@ class OrderRefunds(Refunds):
     order_id = None
 
     def get_resource_name(self):
-        return "orders/{id}/refunds".format(id=self.order_id)
+        return f"orders/{self.order_id}/refunds"
 
     def with_parent_id(self, order_id):
         self.order_id = order_id

@@ -54,22 +54,20 @@ def main():
             {
                 "amount": {"currency": "EUR", "value": "100.00"},
                 "description": "My first API payment",
-                "webhookUrl": "{root}02-webhook-verification".format(root=flask.request.url_root),
-                "redirectUrl": "{root}03-return-page?my_webshop_id={id}".format(
-                    root=flask.request.url_root, id=my_webshop_id
-                ),
+                "webhookUrl": f"{flask.request.url_root}02-webhook-verification",
+                "redirectUrl": f"{flask.request.url_root}03-return-page?my_webshop_id={my_webshop_id}",
                 "metadata": {"my_webshop_id": str(my_webshop_id)},
             }
         )
         data = {"status": payment.status}
         database_write(my_webshop_id, data)
 
-        return "<p>Created payment of {curr} {value} for {cust} ({id})<p>".format(
-            curr=payment.amount["currency"], value=payment.amount["value"], cust=customer.name, id=customer.id
+        return (
+            f'<p>Created payment of {payment.amount["currency"]} {payment.amount["value"]} '
+            f"for {customer.name} ({customer.id})<p>"
         )
-
     except Error as err:
-        return "API call failed: {error}".format(error=err)
+        return f"API call failed: {err}"
 
 
 if __name__ == "__main__":

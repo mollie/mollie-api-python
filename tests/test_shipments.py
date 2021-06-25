@@ -10,13 +10,8 @@ SHIPMENT_ID = "shp_3wmsgCJN4U"
 
 def test_get_shipment(client, response):
     """Retrieve a single shipment by a shipment's ID."""
-    response.get("https://api.mollie.com/v2/orders/{order_id}".format(order_id=ORDER_ID), "order_single")
-    response.get(
-        "https://api.mollie.com/v2/orders/{order_id}/shipments/{shipment_id}".format(
-            order_id=ORDER_ID, shipment_id=SHIPMENT_ID
-        ),
-        "shipment_single",
-    )
+    response.get(f"https://api.mollie.com/v2/orders/{ORDER_ID}", "order_single")
+    response.get(f"https://api.mollie.com/v2/orders/{ORDER_ID}/shipments/{SHIPMENT_ID}", "shipment_single")
 
     order = client.orders.get(ORDER_ID)
     shipment = order.get_shipment(SHIPMENT_ID)
@@ -39,8 +34,8 @@ def test_get_shipment(client, response):
 
 def test_create_shipment(client, response):
     """Create a shipment of an order object"""
-    response.get("https://api.mollie.com/v2/orders/{order_id}".format(order_id=ORDER_ID), "order_single")
-    response.post("https://api.mollie.com/v2/orders/ord_kEn1PlbGa/shipments", "shipment_single")
+    response.get(f"https://api.mollie.com/v2/orders/{ORDER_ID}", "order_single")
+    response.post(f"https://api.mollie.com/v2/orders/{ORDER_ID}/shipments", "shipment_single")
 
     data = {
         "lines": [{"id": "odl_dgtxyl", "quantity": 1}, {"id": "odl_dgtxyb"}],
@@ -57,13 +52,8 @@ def test_create_shipment(client, response):
 
 def test_update_shipment(client, response):
     """Update the tracking information of a shipment"""
-    response.get("https://api.mollie.com/v2/orders/{order_id}".format(order_id=ORDER_ID), "order_single")
-    response.patch(
-        "https://api.mollie.com/v2/orders/{order_id}/shipments/{shipment_id}".format(
-            order_id=ORDER_ID, shipment_id=SHIPMENT_ID
-        ),
-        "shipment_single",
-    )
+    response.get(f"https://api.mollie.com/v2/orders/{ORDER_ID}", "order_single")
+    response.patch(f"https://api.mollie.com/v2/orders/{ORDER_ID}/shipments/{SHIPMENT_ID}", "shipment_single")
 
     order = client.orders.get(ORDER_ID)
     data = {

@@ -21,7 +21,8 @@ class Base(dict):
 
     @classmethod
     def get_object_name(cls):
-        return "{name}s".format(name=cls.__name__.lower())
+        name = cls.__name__.lower()
+        return f"{name}s"
 
     @classmethod
     def get_resource_class(cls, client):

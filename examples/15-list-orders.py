@@ -29,7 +29,7 @@ def main():
             body += "<p>You have no orders. You can create one from the examples.</p>"
             return body
 
-        body += "<p>Showing the last {num} orders for your API key.</p>".format(num=len(orders))
+        body += f"<p>Showing the last {len(orders)} orders for your API key.</p>"
 
         body += """
             <table>
@@ -46,30 +46,20 @@ def main():
 
         for order in orders:
             body += "<tr>"
-            body += "<td>{id}</td>".format(id=order.id)
-            body += "<td>{billing_given_name} {billing_family_name}</td>".format(
-                billing_given_name=order.billing_address["givenName"],
-                billing_family_name=order.billing_address["familyName"],
-            )
-            body += "<td>{shipping_given_name} {shipping_family_name}</td>".format(
-                shipping_given_name=order.shipping_address["givenName"],
-                shipping_family_name=order.shipping_address["familyName"],
-            )
-            body += "<td>{currency} {value}</td>".format(
-                currency=order.amount["currency"], value=order.amount["value"]
-            )
-            body += '<td><a href="{checkout_url}" target="_blank">Pay order</a></td>'.format(
-                checkout_url=order.checkout_url
-            )
-            body += '<td><a href="/14-cancel-order?order_id={id}">Cancel order</a></td>'.format(id=order.id)
-            body += '<td><a href="/18-ship-order-completely?order_id={id}">Ship order</a></td>'.format(id=order.id)
+            body += f"<td>{order.id}</td>"
+            body += f'<td>{order.billing_address["givenName"]} {order.billing_address["familyName"]}</td>'
+            body += f'<td>{order.shipping_address["givenName"]} {order.shipping_address["familyName"]}</td>'
+            body += f'<td>{order.amount["currency"]} {order.amount["value"]}</td>'
+            body += f'<td><a href="{order.checkout_url}" target="_blank">Pay order</a></td>'
+            body += f'<td><a href="/14-cancel-order?order_id={order.id}">Cancel order</a></td>'
+            body += f'<td><a href="/18-ship-order-completely?order_id={order.id}">Ship order</a></td>'
             body += "</tr>"
 
         body += "</tbody></table>"
         return body
 
     except Error as err:
-        return "API call failed: {error}".format(error=err)
+        return f"API call failed: {err}"
 
 
 if __name__ == "__main__":

@@ -3,7 +3,7 @@ from mollie.api.objects.list import List
 
 def assert_list_object(obj, object_type):
     """Assert that a List object is correctly working, and has sane contents."""
-    assert isinstance(obj, List), "Object {obj} is not a List instance.".format(obj=obj)
+    assert isinstance(obj, List), f"Object {obj} is not a List instance."
     assert isinstance(obj.count, int), "List count is not an integer."
     assert obj.count > 0
 

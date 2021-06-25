@@ -36,7 +36,7 @@ def main():
             body += "<p>You have no customers. You can create one from the examples.</p>"
             return body
 
-        body += "<p>Showing the last {num} customers for your API key.</p>".format(num=len(customers))
+        body += f"<p>Showing the last {len(customers)} customers for your API key.</p>"
 
         body += """
             <table>
@@ -54,16 +54,14 @@ def main():
 
         for customer in customers:
             body += "<tr>"
-            body += "<td>{id}</td>".format(id=customer.id)
-            body += "<td>{name}</td>".format(name=customer.name)
-            body += "<td>{email}</td>".format(email=customer.email)
+            body += f"<td>{customer.id}</td>"
+            body += f"<td>{customer.name}</td>"
+            body += f"<td>{customer.email}</td>"
             body += (
-                '<td><a href="/09-create-customer-payment?customer_id={id}">'
-                "Create payment for customer</a></td>".format(id=customer.id)
+                f'<td><a href="/09-create-customer-payment?customer_id={customer.id}">'
+                "Create payment for customer</a></td>"
             )
-            body += '<td><a href="/10-customer-payment-history?customer_id={id}">Show payment history</a>'.format(
-                id=customer.id
-            )
+            body += f'<td><a href="/10-customer-payment-history?customer_id={customer.id}">Show payment history</a>'
             body += "</tr>"
 
         body += "</tbody></table>"
@@ -71,7 +69,7 @@ def main():
         return body
 
     except Error as err:
-        return "API call failed: {error}".format(error=err)
+        return f"API call failed: {err}"
 
 
 if __name__ == "__main__":

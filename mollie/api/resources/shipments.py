@@ -9,7 +9,7 @@ class Shipments(Base):
         return Shipment(result, self.client)
 
     def get_resource_name(self):
-        return "orders/{id}/shipments".format(id=self.order_id)
+        return f"orders/{self.order_id}/shipments"
 
     def with_parent_id(self, order_id):
         self.order_id = order_id

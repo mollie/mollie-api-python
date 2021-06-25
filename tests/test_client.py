@@ -310,13 +310,8 @@ def test_client_data_consistency_error(client, response):
     """When the API sends us data we did not expect raise an consistency error."""
     order_id = "ord_kEn1PlbGa"
     line_id = "odl_12345"
-    response.get("https://api.mollie.com/v2/orders/{order_id}".format(order_id=order_id), "order_single")
-    response.patch(
-        "https://api.mollie.com/v2/orders/{order_id}/lines/{order_line_id}".format(
-            order_id=order_id, order_line_id=line_id
-        ),
-        "order_single",
-    )
+    response.get(f"https://api.mollie.com/v2/orders/{order_id}", "order_single")
+    response.patch(f"https://api.mollie.com/v2/orders/{order_id}/lines/{line_id}", "order_single")
 
     order = client.orders.get(order_id)
     data = {
@@ -391,7 +386,7 @@ def test_client_set_user_agent_component_correct_key_syntax(key, expected):
     """When we receive UA component keys that don't adhere to the proposed syntax, they are corrected."""
     client = Client()
     client.set_user_agent_component(key, "1.0.0")
-    assert "{expected}/1.0.0".format(expected=expected) in client.user_agent
+    assert f"{expected}/1.0.0" in client.user_agent
 
 
 @pytest.mark.parametrize(
@@ -410,7 +405,7 @@ def test_client_set_user_agent_component_correct_value_syntax(value, expected):
     """When we receive UA component values that don't adhere to the proposed syntax, they are corrected."""
     client = Client()
     client.set_user_agent_component("Something", value)
-    assert "Something/{expected}".format(expected=expected) in client.user_agent
+    assert f"Something/{expected}" in client.user_agent
 
 
 def test_client_update_user_agent_component():

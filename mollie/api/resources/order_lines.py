@@ -7,7 +7,7 @@ class OrderLines(Base):
     order_id = None
 
     def get_resource_name(self):
-        return "orders/{order_id}/lines".format(order_id=self.order_id)
+        return f"orders/{self.order_id}/lines"
 
     def get_resource_object(self, result):
         return OrderLine(result, self.client)
@@ -45,4 +45,4 @@ class OrderLines(Base):
         for line in result["lines"]:
             if line["id"] == resource_id:
                 return self.get_resource_object(line)
-        raise DataConsistencyError("Line id {resource_id} not found in response.".format(resource_id=resource_id))
+        raise DataConsistencyError(f"Line id {resource_id} not found in response.")

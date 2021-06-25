@@ -12,8 +12,6 @@ class Invoices(Base):
     def get(self, invoice_id, **params):
         if not invoice_id or not invoice_id.startswith(self.RESOURCE_ID_PREFIX):
             raise IdentifierError(
-                "Invalid invoice ID: '{id}'. A invoice ID should start with '{prefix}'.".format(
-                    id=invoice_id, prefix=self.RESOURCE_ID_PREFIX
-                )
+                f"Invalid invoice ID: '{invoice_id}'. An invoice ID should start with '{self.RESOURCE_ID_PREFIX}'."
             )
         return super().get(invoice_id, **params)

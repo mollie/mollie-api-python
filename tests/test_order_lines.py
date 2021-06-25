@@ -8,7 +8,7 @@ LINE_ID = "odl_dgtxyl"
 
 def test_get_order_lines(client, response):
     """Retrieve lines of a single order by order ID."""
-    response.get("https://api.mollie.com/v2/orders/{order_id}".format(order_id=ORDER_ID), "order_single")
+    response.get(f"https://api.mollie.com/v2/orders/{ORDER_ID}", "order_single")
 
     order = client.orders.get(ORDER_ID)
     lines = order.lines
@@ -54,13 +54,8 @@ def test_get_order_lines(client, response):
 
 def test_update_order_line(client, response):
     """Update a line by id through an order object."""
-    response.get("https://api.mollie.com/v2/orders/{order_id}".format(order_id=ORDER_ID), "order_single")
-    response.patch(
-        "https://api.mollie.com/v2/orders/{order_id}/lines/{order_line_id}".format(
-            order_id=ORDER_ID, order_line_id=LINE_ID
-        ),
-        "order_single",
-    )
+    response.get(f"https://api.mollie.com/v2/orders/{ORDER_ID}", "order_single")
+    response.patch(f"https://api.mollie.com/v2/orders/{ORDER_ID}/lines/{LINE_ID}", "order_single")
     data = {
         "name": "LEGO 71043 Hogwarts Castle",
         "productUrl": "https://shop.lego.com/en-GB/product/Hogwarts-Castle-71043",

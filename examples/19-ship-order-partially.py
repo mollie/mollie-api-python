@@ -39,13 +39,11 @@ def main():
             },
         }
         shipment = order.create_shipment(data)
-        body += "A shipment with ID {shipment_id} has been created for your order with ID {order_id}".format(
-            shipment_id=shipment.id, order_id=order.id
-        )
+        body += f"A shipment with ID {shipment.id} has been created for your order with ID {order.id}"
 
         return body
     except Error as err:
-        return "API call failed: {error}".format(error=err)
+        return f"API call failed: {err}"
 
 
 if __name__ == "__main__":

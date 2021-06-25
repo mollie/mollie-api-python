@@ -6,10 +6,7 @@ class SubscriptionPayments(Payments):
     subscription_id = None
 
     def get_resource_name(self):
-        return "customers/{customer_id}/subscriptions/{subscription_id}/payments".format(
-            customer_id=self.customer_id,
-            subscription_id=self.subscription_id,
-        )
+        return f"customers/{self.customer_id}/subscriptions/{self.subscription_id}/payments"
 
     def with_parent_id(self, customer_id, subscription_id):
         self.customer_id = customer_id

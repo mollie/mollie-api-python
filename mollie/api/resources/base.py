@@ -52,9 +52,7 @@ class Base(object):
             result = resp.json() if resp.status_code != 204 else {}
         except Exception:
             raise ResponseHandlingError(
-                "Unable to decode Mollie API response (status code: {status}): '{response}'.".format(
-                    status=resp.status_code, response=resp.text
-                )
+                f"Unable to decode Mollie API response (status code: {resp.status_code}): '{resp.text}'."
             )
         if resp.status_code < 200 or resp.status_code > 299:
             if "status" in result and (result["status"] < 200 or result["status"] > 299):
@@ -63,6 +61,6 @@ class Base(object):
             else:
                 raise ResponseHandlingError(
                     "Received HTTP error from Mollie API, but no status in payload "
-                    "(status code: {status}): '{response}'.".format(status=resp.status_code, response=resp.text)
+                    f"(status code: {resp.status_code}): '{resp.text}'."
                 )
         return result
