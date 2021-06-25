@@ -90,6 +90,22 @@ class DataConsistencyError(Error):
     pass
 
 
+class EmbedNotFound(Error):
+    """We could not access requested data with an object because the required embed was missing.
+
+    Some data within an object is only available after it is explicitly requested using an embed query parameter.
+    You tried to access data which is available from an embed, but the data is missing: apparently you forgot
+    to set the related embed parameter.
+    """
+
+    def __init__(self, embed_name):
+        msg = (
+            "You tried to access embedded data, but did not request to embed this data in the request. "
+            f'Please specify embed="{embed_name}" when requesting the data.'
+        )
+        super().__init__(msg)
+
+
 """
 Deprecation policy
 

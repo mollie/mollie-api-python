@@ -1,3 +1,4 @@
+from ..error import EmbedNotFound
 from ..resources.order_lines import OrderLines
 from ..resources.order_payments import OrderPayments
 from ..resources.order_refunds import OrderRefunds
@@ -5,9 +6,21 @@ from ..resources.shipments import Shipments
 from .base import Base
 from .list import List
 from .order_line import OrderLine
+from .payment import Payment
 
 
 class Order(Base):
+    requested_embeds = None
+
+    def __init__(self, data, client=None, requested_embeds=None):
+        super().__init__(data, client)
+        self.requested_embeds = requested_embeds
+
+    def _has_embed(self, embed_name):
+        if self.requested_embeds and embed_name in self.requested_embeds:
+            return True
+        return False
+
     @classmethod
     def get_resource_class(cls, client):
         from ..resources.orders import Orders
@@ -209,6 +222,25 @@ class Order(Base):
     def update_shipment(self, resource_id, data):
         """Update the tracking information of a shipment."""
         return Shipments(self.client).on(self).update(resource_id, data)
+
+    @property
+    def payments(self):
+        if not self._has_embed("payments"):
+            raise EmbedNotFound("payments")
+
+        try:
+            payments = self["_embedded"]["payments"]
+        except KeyError:
+            # No data available at API
+            payments = []
+
+        result = {
+            "_embedded": {
+                "payments": payments,
+            },
+            "count": len(payments),
+        }
+        return List(result, Payment, self.client)
 
     def create_payment(self, data):
         """Creates a new payment object for an order."""
