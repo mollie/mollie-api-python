@@ -22,6 +22,7 @@ from .resources.onboarding import Onboarding
 from .resources.orders import Orders
 from .resources.organizations import Organizations
 from .resources.payment_chargebacks import PaymentChargebacks
+from .resources.payment_links import PaymentLinks
 from .resources.payment_refunds import PaymentRefunds
 from .resources.payments import Payments
 from .resources.permissions import Permissions
@@ -94,6 +95,7 @@ class Client(object):
 
         # add endpoint resources
         self.payments = Payments(self)
+        self.payment_links = PaymentLinks(self)
         self.payment_refunds = PaymentRefunds(self)
         self.payment_chargebacks = PaymentChargebacks(self)
         self.profiles = Profiles(self)
