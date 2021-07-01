@@ -4,4 +4,4 @@
 # processed by python imports and by regular expressions. The version is defined as a string in the
 # regular semantic versioning scheme (major,minor,patch).
 
-VERSION = "2.8.0"
+VERSION = "2.9.0"
