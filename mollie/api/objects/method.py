@@ -19,7 +19,6 @@ class Method(Base):
     GIFTCARD = "giftcard"
     GIROPAY = "giropay"
     IDEAL = "ideal"
-    INGHOMEPAY = "inghomepay"
     KBC = "kbc"
     KLARNAPAYLATER = "klarnapaylater"
     KLARNASLICEIT = "klarnasliceit"

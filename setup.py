@@ -68,7 +68,6 @@ setup(
         "vvv giftcard",
         "webshop giftcard",
         "nationale entertainment card",
-        "ing homepay",
         "klarna pay later",
         "klarna slice it",
         "przelewy24",
