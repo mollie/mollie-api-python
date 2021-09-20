@@ -30,8 +30,6 @@ class List(ObjectBase):
             self.current = None
             raise StopIteration
 
-    next = __next__  # support python2 iterator interface
-
     @property
     def count(self):
         if "count" not in self:
