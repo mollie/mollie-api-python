@@ -30,6 +30,15 @@ class List(ObjectBase):
             self.current = None
             raise StopIteration
 
+    def __getitem__(self, key):
+        """Implement Sequence interface."""
+        if isinstance(key, int):
+            # Return an index-based search from the "_embedded" dataset
+            item = self["_embedded"][self.object_type.get_object_name()][key]
+            return self.object_type(item, self.client)
+
+        return super().__getitem__(key)
+
     @property
     def count(self):
         if "count" not in self:

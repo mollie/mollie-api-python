@@ -1,3 +1,5 @@
+import pytest
+
 from mollie.api.objects.list import List
 from mollie.api.objects.method import Method
 
@@ -99,3 +101,18 @@ def test_list_multiple_api_calls(client, response):
     assert (
         forward_first_id == reverse_last_id
     ), "Expected the first customer of the first page to be stable, but it wasn't"
+
+
+def test_list_supports_integer_sequences(client, response):
+    response.get("https://api.mollie.com/v2/customers", "customers_list")
+
+    customers = client.customers.list()
+    first_customer = customers[1]
+    assert first_customer.id == "cst_8wmqcHMN4y", "Getting a customer by index should be possible"
+
+    last_customer = customers[-1]
+    assert last_customer.id == "cst_8wmqcHMN4x", "Getting a customer by negative index should be possible"
+
+    with pytest.raises(IndexError) as excinfo:
+        customers[1000]
+    assert str(excinfo.value) == "list index out of range", "A non-existent index should raise an IndexError"
