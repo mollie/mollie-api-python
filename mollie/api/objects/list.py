@@ -32,10 +32,25 @@ class List(ObjectBase):
 
     def __getitem__(self, key):
         """Implement Sequence interface."""
+        object_name = self.object_type.get_object_name()
         if isinstance(key, int):
             # Return an index-based search from the "_embedded" dataset
-            item = self["_embedded"][self.object_type.get_object_name()][key]
+            item = self["_embedded"][object_name][key]
             return self.object_type(item, self.client)
+
+        if isinstance(key, slice):
+            _start = key.start or 0
+            _stop = key.stop or self["count"]
+            _step = key.step or 1
+            sliced_data = [self["_embedded"][object_name][x] for x in range(_start, _stop, _step)]
+            # Now we mock a result based on the sliced data
+            sliced_result = {
+                "_embedded": {
+                    object_name: sliced_data,
+                },
+                "count": len(sliced_data),
+            }
+            return List(sliced_result, self.object_type, self.client)
 
         return super().__getitem__(key)
 

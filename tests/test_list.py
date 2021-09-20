@@ -3,6 +3,8 @@ import pytest
 from mollie.api.objects.list import List
 from mollie.api.objects.method import Method
 
+from .utils import assert_list_object
+
 
 def test_list_iterator_behaviour(client, response):
     """Verify the behaviour of the List object in iterator circumstances."""
@@ -116,3 +118,42 @@ def test_list_supports_integer_sequences(client, response):
     with pytest.raises(IndexError) as excinfo:
         customers[1000]
     assert str(excinfo.value) == "list index out of range", "A non-existent index should raise an IndexError"
+
+
+def test_list_supports_slice_sequences(client, response):
+    response.get("https://api.mollie.com/v2/methods", "methods_list")
+
+    methods = client.methods.list()
+    # Baseline for result checks
+    assert [x.id for x in methods] == [
+        "ideal",
+        "creditcard",
+        "paypal",
+        "bancontact",
+        "banktransfer",
+        "sofort",
+        "kbc",
+        "belfius",
+        "inghomepay",
+        "giftcard",
+    ]
+
+    sliced = methods[1:3]
+    assert_list_object(sliced, Method, 2), "Slicing should be possible"
+    assert [x.id for x in sliced] == ["creditcard", "paypal"]
+
+    slice_forward = methods[5:]
+    assert_list_object(slice_forward, Method, 5), "Slicing forward should possible"
+    assert [x.id for x in slice_forward] == ["sofort", "kbc", "belfius", "inghomepay", "giftcard"]
+
+    slice_backwards = methods[:3]
+    assert_list_object(slice_backwards, Method, 3), "Slicing backwards should be possible"
+    assert [x.id for x in slice_backwards] == ["ideal", "creditcard", "paypal"]
+
+    slice_stepped = methods[0:5:2]
+    assert_list_object(slice_stepped, Method, 3), "Slicing with a step value should be possble"
+    assert [x.id for x in slice_stepped] == ["ideal", "paypal", "banktransfer"]
+
+    slice_step_only = methods[::3]
+    assert_list_object(slice_step_only, Method, 4), "Slicing with only a step value should be possible"
+    assert [x.id for x in slice_step_only] == ["ideal", "bancontact", "kbc", "giftcard"]
