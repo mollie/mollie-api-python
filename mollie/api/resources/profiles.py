@@ -1,9 +1,9 @@
 from ..error import IdentifierError
 from ..objects.profile import Profile
-from .base import Base
+from .base import ResourceBase
 
 
-class Profiles(Base):
+class Profiles(ResourceBase):
     RESOURCE_ID_PREFIX = "pfl_"
 
     def get_resource_object(self, result):

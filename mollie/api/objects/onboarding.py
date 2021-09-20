@@ -1,7 +1,7 @@
-from .base import Base
+from .base import ObjectBase
 
 
-class Onboarding(Base):
+class Onboarding(ObjectBase):
     @classmethod
     def get_resource_class(cls, client):
         from ..resources.onboarding import Onboarding as OnboardingResource

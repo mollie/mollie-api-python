@@ -2,7 +2,7 @@ from ..error import ResponseError, ResponseHandlingError
 from ..objects.list import List
 
 
-class Base(object):
+class ResourceBase(object):
     REST_CREATE = "POST"
     REST_UPDATE = "PATCH"
     REST_READ = "GET"

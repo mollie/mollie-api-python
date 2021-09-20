@@ -1,7 +1,7 @@
-from .base import Base
+from .base import ObjectBase
 
 
-class Chargeback(Base):
+class Chargeback(ObjectBase):
     @classmethod
     def get_resource_class(cls, client):
         from ..resources.chargebacks import Chargebacks

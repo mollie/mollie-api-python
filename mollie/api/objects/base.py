@@ -1,4 +1,4 @@
-class Base(dict):
+class ObjectBase(dict):
     def __init__(self, data, client=None):
         """
         Create a new object from API result data.

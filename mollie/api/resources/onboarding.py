@@ -1,9 +1,9 @@
 from ..error import IdentifierError
 from ..objects.onboarding import Onboarding as OnboardingObject
-from .base import Base
+from .base import ResourceBase
 
 
-class Onboarding(Base):
+class Onboarding(ResourceBase):
     def get_resource_object(self, result):
         return OnboardingObject(result, self.client)
 

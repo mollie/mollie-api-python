@@ -1,9 +1,9 @@
-from .base import Base
+from .base import ObjectBase
 from .list import List
 from .order_line import OrderLine
 
 
-class Shipment(Base):
+class Shipment(ObjectBase):
     @property
     def resource(self):
         return self._get_property("resource")

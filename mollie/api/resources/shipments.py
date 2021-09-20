@@ -1,8 +1,8 @@
 from ..objects.shipment import Shipment
-from .base import Base
+from .base import ResourceBase
 
 
-class Shipments(Base):
+class Shipments(ResourceBase):
     order_id = None
 
     def get_resource_object(self, result):

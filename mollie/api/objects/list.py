@@ -1,7 +1,7 @@
-from .base import Base
+from .base import ObjectBase
 
 
-class List(Base):
+class List(ObjectBase):
     current = None
 
     def __init__(self, result, object_type, client=None):

@@ -1,7 +1,7 @@
-from .base import Base
+from .base import ObjectBase
 
 
-class Mandate(Base):
+class Mandate(ObjectBase):
     @classmethod
     def get_resource_class(cls, client):
         from ..resources.customer_mandates import CustomerMandates

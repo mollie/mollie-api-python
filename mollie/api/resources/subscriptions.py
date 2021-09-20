@@ -1,8 +1,8 @@
 from ..objects.subscription import Subscription
-from .base import Base
+from .base import ResourceBase
 
 
-class Subscriptions(Base):
+class Subscriptions(ResourceBase):
     def get_resource_object(self, result):
         return Subscription(result, self.client)
 

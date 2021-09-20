@@ -2,10 +2,10 @@ import re
 
 from ..error import IdentifierError
 from ..objects.settlement import Settlement
-from .base import Base
+from .base import ResourceBase
 
 
-class Settlements(Base):
+class Settlements(ResourceBase):
     RESOURCE_ID_PREFIX = "stl_"
 
     # According to Mollie, the bank reference is formatted as:

@@ -1,9 +1,9 @@
 from ..error import IdentifierError
 from ..objects.refund import Refund
-from .base import Base
+from .base import ResourceBase
 
 
-class Refunds(Base):
+class Refunds(ResourceBase):
     RESOURCE_ID_PREFIX = "re_"
 
     def get_resource_object(self, result):

@@ -1,9 +1,9 @@
 from ..objects.list import List
 from ..objects.method import Method
-from .base import Base
+from .base import ResourceBase
 
 
-class Methods(Base):
+class Methods(ResourceBase):
     def get_resource_object(self, result):
         return Method(result)
 
