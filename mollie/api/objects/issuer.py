@@ -1,7 +1,7 @@
-from .base import Base
+from .base import ObjectBase
 
 
-class Issuer(Base):
+class Issuer(ObjectBase):
     @property
     def resource(self):
         return self._get_property("resource")

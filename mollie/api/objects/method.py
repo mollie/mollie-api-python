@@ -1,9 +1,9 @@
-from .base import Base
+from .base import ObjectBase
 from .issuer import Issuer
 from .list import List
 
 
-class Method(Base):
+class Method(ObjectBase):
     @classmethod
     def get_resource_class(cls, client):
         from ..resources.methods import Methods

@@ -1,9 +1,9 @@
-from .base import Base
+from .base import ObjectBase
 from .list import List
 from .order_line import OrderLine
 
 
-class Refund(Base):
+class Refund(ObjectBase):
     @classmethod
     def get_resource_class(cls, client):
         from ..resources.refunds import Refunds

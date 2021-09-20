@@ -3,13 +3,13 @@ from ..resources.order_lines import OrderLines
 from ..resources.order_payments import OrderPayments
 from ..resources.order_refunds import OrderRefunds
 from ..resources.shipments import Shipments
-from .base import Base
+from .base import ObjectBase
 from .list import List
 from .order_line import OrderLine
 from .payment import Payment
 
 
-class Order(Base):
+class Order(ObjectBase):
     requested_embeds = None
 
     def __init__(self, data, client=None, requested_embeds=None):

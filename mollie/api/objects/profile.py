@@ -1,7 +1,7 @@
-from .base import Base
+from .base import ObjectBase
 
 
-class Profile(Base):
+class Profile(ObjectBase):
     STATUS_UNVERIFIED = "unverified"
     STATUS_VERIFIED = "verified"
     STATUS_BLOCKED = "blocked"

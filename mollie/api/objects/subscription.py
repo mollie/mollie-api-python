@@ -1,8 +1,8 @@
-from .base import Base
+from .base import ObjectBase
 from .customer import Customer
 
 
-class Subscription(Base):
+class Subscription(ObjectBase):
     @classmethod
     def get_resource_class(cls, client):
         from ..resources.customer_subscriptions import CustomerSubscriptions

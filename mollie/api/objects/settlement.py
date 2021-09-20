@@ -1,10 +1,10 @@
 import warnings
 
 from ..error import APIDeprecationWarning
-from .base import Base
+from .base import ObjectBase
 
 
-class Settlement(Base):
+class Settlement(ObjectBase):
     STATUS_OPEN = "open"
     STATUS_PENDING = "pending"
     STATUS_PAIDOUT = "paidout"

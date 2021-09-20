@@ -1,9 +1,9 @@
 from ..error import IdentifierError
 from ..objects.payment_link import PaymentLink
-from .base import Base
+from .base import ResourceBase
 
 
-class PaymentLinks(Base):
+class PaymentLinks(ResourceBase):
     RESOURCE_ID_PREFIX = "pl_"
 
     def get_resource_object(self, result):

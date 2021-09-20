@@ -1,7 +1,7 @@
-from .base import Base
+from .base import ObjectBase
 
 
-class OrderLine(Base):
+class OrderLine(ObjectBase):
     @classmethod
     def get_resource_class(cls, client):
         from ..resources.order_lines import OrderLines

@@ -2,10 +2,10 @@ import re
 
 from ..error import IdentifierError
 from ..objects.permission import Permission
-from .base import Base
+from .base import ResourceBase
 
 
-class Permissions(Base):
+class Permissions(ResourceBase):
     def get_resource_object(self, result):
         return Permission(result, self.client)
 

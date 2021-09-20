@@ -1,9 +1,9 @@
 from ..error import DataConsistencyError
 from ..objects.order_line import OrderLine
-from .base import Base
+from .base import ResourceBase
 
 
-class OrderLines(Base):
+class OrderLines(ResourceBase):
     order_id = None
 
     def get_resource_name(self):

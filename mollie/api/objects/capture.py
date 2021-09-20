@@ -1,7 +1,7 @@
-from .base import Base
+from .base import ObjectBase
 
 
-class Capture(Base):
+class Capture(ObjectBase):
     @classmethod
     def get_resource_class(cls, client):
         from ..resources.captures import Captures

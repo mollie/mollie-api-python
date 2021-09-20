@@ -1,7 +1,7 @@
-from .base import Base
+from .base import ObjectBase
 
 
-class PaymentLink(Base):
+class PaymentLink(ObjectBase):
     @classmethod
     def get_resource_class(cls, client):
         from ..resources.payment_links import PaymentLinks

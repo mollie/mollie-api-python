@@ -1,7 +1,7 @@
-from .base import Base
+from .base import ObjectBase
 
 
-class Invoice(Base):
+class Invoice(ObjectBase):
     @classmethod
     def get_resource_class(cls, client):
         from ..resources.invoices import Invoices

@@ -1,9 +1,9 @@
 from ..error import IdentifierError
 from ..objects.mandate import Mandate
-from .base import Base
+from .base import ResourceBase
 
 
-class CustomerMandates(Base):
+class CustomerMandates(ResourceBase):
     RESOURCE_ID_PREFIX = "mdt_"
     customer_id = None
 
