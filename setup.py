@@ -69,6 +69,7 @@ setup(
         "webshop giftcard",
         "nationale entertainment card",
         "klarna pay later",
+        "klarna pay now",
         "klarna slice it",
         "przelewy24",
     ],

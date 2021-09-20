@@ -21,6 +21,7 @@ class Method(Base):
     IDEAL = "ideal"
     KBC = "kbc"
     KLARNAPAYLATER = "klarnapaylater"
+    KLARNAPAYNOW = "klarnapaynow"
     KLARNASLICEIT = "klarnasliceit"
     MEALVOUCHER = "mealvoucher"
     MISTERCASH = "mistercash"
