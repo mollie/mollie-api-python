@@ -76,6 +76,7 @@ def test_get_single_payment(client, response):
         f"https://api.mollie.com/v2/customers/{CUSTOMER_ID}/subscriptions/{SUBSCRIPTION_ID}", "subscription_single"
     )
     response.get(f"https://api.mollie.com/v2/orders/{ORDER_ID}", "order_single")
+    response.get(f"https://api.mollie.com/v2/payments/{PAYMENT_ID}/captures", "captures_list")
 
     payment = client.payments.get(PAYMENT_ID)
     assert isinstance(payment, Payment)
@@ -95,6 +96,7 @@ def test_get_single_payment(client, response):
     assert payment.amount == {"value": "10.00", "currency": "EUR"}
     assert payment.amount_refunded is None
     assert payment.amount_remaining is None
+    assert payment.amount_captured == {"currency": "EUR", "value": "1.00"}
     assert payment.amount_chargedback == {"value": "5.00", "currency": "EUR"}
     assert payment.description == "Order #12345"
     assert payment.redirect_url == "https://webshop.example.org/order/12345/"
@@ -120,6 +122,7 @@ def test_get_single_payment(client, response):
     assert payment.mandate is not None
     assert payment.subscription is not None
     assert payment.customer is not None
+    assert payment.captures is not None
     assert isinstance(payment.order, Order)
     # additional methods
     assert payment.is_open() is True
@@ -131,6 +134,7 @@ def test_get_single_payment(client, response):
     assert payment.is_authorized() is False
     assert payment.has_refunds() is True
     assert payment.has_chargebacks() is True
+    assert payment.has_captures() is True
     assert payment.can_be_refunded() is False
     assert payment.has_sequence_type_first() is False
     assert payment.has_sequence_type_recurring() is True

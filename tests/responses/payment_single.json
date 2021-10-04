@@ -15,6 +15,10 @@
   "orderId": "ord_kEn1PlbGa",
   "status": "open",
   "isCancelable": false,
+  "amountCaptured": {
+    "value": "1.00",
+    "currency": "EUR"
+  },
   "amountChargedBack": {
     "value": "5.00",
     "currency": "EUR"
