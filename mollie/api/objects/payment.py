@@ -83,6 +83,10 @@ class Payment(ObjectBase):
         return self._get_property("amountRemaining")
 
     @property
+    def amount_chargedback(self):
+        return self._get_property("amountChargedBack")
+
+    @property
     def description(self):
         return self._get_property("description")
 
@@ -226,6 +230,9 @@ class Payment(ObjectBase):
 
     def has_refunds(self):
         return self._get_link("refunds") is not None
+
+    def has_chargebacks(self):
+        return self._get_link("chargebacks") is not None
 
     def can_be_refunded(self):
         return self._get_property("amountRemaining") is not None

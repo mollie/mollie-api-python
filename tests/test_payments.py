@@ -95,6 +95,7 @@ def test_get_single_payment(client, response):
     assert payment.amount == {"value": "10.00", "currency": "EUR"}
     assert payment.amount_refunded is None
     assert payment.amount_remaining is None
+    assert payment.amount_chargedback == {"value": "5.00", "currency": "EUR"}
     assert payment.description == "Order #12345"
     assert payment.redirect_url == "https://webshop.example.org/order/12345/"
     assert payment.webhook_url == "https://webshop.example.org/payments/webhook/"
@@ -129,6 +130,7 @@ def test_get_single_payment(client, response):
     assert payment.is_failed() is False
     assert payment.is_authorized() is False
     assert payment.has_refunds() is True
+    assert payment.has_chargebacks() is True
     assert payment.can_be_refunded() is False
     assert payment.has_sequence_type_first() is False
     assert payment.has_sequence_type_recurring() is True
