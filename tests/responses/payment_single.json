@@ -37,6 +37,32 @@
   "webhookUrl": "https://webshop.example.org/payments/webhook/",
   "mandateId": "mdt_h3gAaD5zP",
   "subscriptionId": "sub_rVKGtNd6s3",
+  "routing": [
+    {
+      "resource": "route",
+      "id": "rt_k6cjd01h",
+      "amount": {
+        "value": "2.50",
+        "currency": "EUR"
+      },
+      "destination": {
+        "type": "organization",
+        "organizationId": "me"
+      }
+    },
+    {
+      "resource": "route",
+      "id": "rt_9dk4al1n",
+      "amount": {
+        "value": "7.50",
+        "currency": "EUR"
+      },
+      "destination": {
+        "type": "organization",
+        "organizationId": "org_23456"
+      }
+    }
+  ],
   "_links": {
     "self": {
       "href": "https://api.mollie.com/v2/payments/tr_7UhSN1zuXS",

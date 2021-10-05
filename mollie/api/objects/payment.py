@@ -158,6 +158,10 @@ class Payment(ObjectBase):
     def details(self):
         return self._get_property("details")
 
+    @property
+    def routing(self):
+        return self._get_property("routing")
+
     # documented _links
 
     @property
@@ -240,6 +244,9 @@ class Payment(ObjectBase):
 
     def has_captures(self):
         return self._get_link("captures") is not None
+
+    def has_split_payments(self):
+        return self._get_property("routing") is not None
 
     def can_be_refunded(self):
         return self._get_property("amountRemaining") is not None
