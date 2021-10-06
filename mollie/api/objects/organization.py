@@ -37,5 +37,9 @@ class Organization(ObjectBase):
         return self._get_property("vatNumber")
 
     @property
+    def vat_regulation(self):
+        return self._get_property("vatRegulation")
+
+    @property
     def dashboard(self):
         return self._get_link("dashboard")

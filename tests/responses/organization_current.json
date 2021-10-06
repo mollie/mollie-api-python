@@ -3,6 +3,7 @@
      "id": "org_12345678",
      "name": "Mollie B.V.",
      "email": "info@mollie.com",
+     "locale": "nl_NL",
      "address": {
         "streetAndNumber" : "Keizersgracht 313",
         "postalCode": "1016 EE",
@@ -11,6 +12,7 @@
      },
      "registrationNumber": "30204462",
      "vatNumber": "NL815839091B01",
+     "vatRegulation": "dutch",
      "_links": {
          "self": {
              "href": "https://api.mollie.com/v2/organizations/me",
