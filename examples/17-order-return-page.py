@@ -22,7 +22,7 @@ def main():
 
     data = database_read(flask.request.args["my_webshop_id"])
 
-    order = mollie_client.orders.get(data["order.id"])
+    order = mollie_client.orders.get(data["order_id"])
 
     if order.is_paid():
         return f"The payment for your order {order.id} has been processed"
