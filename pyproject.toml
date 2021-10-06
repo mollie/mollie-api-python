@@ -16,4 +16,15 @@ addopts = """
     --cov-report=term-missing
     --isort
     --flake8
+    --mypy
 """
+
+[tool.mypy]
+warn_unused_configs = true
+
+[[tool.mypy.overrides]]
+module = [
+    "requests_oauthlib",
+    "urllib3.util"
+]
+ignore_missing_imports = true

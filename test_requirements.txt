@@ -3,7 +3,11 @@ pytest-black;implementation_name != 'pypy'
 pytest-cov>=2.10.0
 pytest-isort
 pytest-flake8
+pytest-mypy
 pytest-mock
 mock
 responses
 safety
+types-flask
+types-requests
+types-setuptools
