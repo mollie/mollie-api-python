@@ -109,7 +109,7 @@ def test_client_broken_cert_bundle(monkeypatch):
     assert "Could not find a suitable TLS CA certificate bundle, invalid path: /does/not/exist" in str(excinfo.value)
 
 
-def test_client_generic_request_error(response):
+def test_client_generic_request_error(response, oauth_client):
     """When the remote server refuses connections or other request issues arise, an error should be raised.
 
     The 'response' fixture blocks all outgoing connections, also when no actual responses are configured.
@@ -119,6 +119,10 @@ def test_client_generic_request_error(response):
     client.set_api_endpoint("https://api.mollie.invalid/")
     with pytest.raises(RequestError, match="Unable to communicate with Mollie: Connection refused"):
         client.customers.list()
+
+    # Same test, but for oauth-based requests
+    with pytest.raises(RequestError, match="Unable to communicate with Mollie: Connection refused"):
+        oauth_client.organizations.get("me")
 
 
 def test_client_invalid_create_data(client):
