@@ -457,3 +457,22 @@ def test_oauth_client_will_refresh_token_automatically(mocker, oauth_token, resp
     set_token_mock.assert_called_once()
     args, kwargs = set_token_mock.call_args
     assert isinstance(args[0], dict), "set_token() did not receive a dictionary."
+
+
+def test_unauthorized_oauth_client_should_return_authorization_url(mocker, response):
+    set_token_mock = mocker.Mock()
+
+    client = Client()
+    is_authorized, authorization_url = client.setup_oauth(
+        client_id="client_id",
+        client_secret="client_secret",
+        redirect_uri="https://example.com/callback",
+        scope=("organizations.read",),
+        token=None,
+        set_token=set_token_mock,
+    )
+
+    assert not is_authorized, "A client without initial token should not be authorized"
+    assert authorization_url.startswith(
+        client.OAUTH_AUTHORIZATION_URL
+    ), "A client without initial token should return a correct authorization url"
