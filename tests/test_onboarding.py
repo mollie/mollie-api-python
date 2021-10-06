@@ -11,6 +11,7 @@ def test_get_onboarding(oauth_client, response):
     onboarding = oauth_client.onboarding.get("me")
     assert isinstance(onboarding, Onboarding)
 
+    assert onboarding.resource == "onboarding"
     assert onboarding.name == "Mollie B.V."
     assert onboarding.signed_up_at == "2018-12-20T10:49:08+00:00"
     assert onboarding.status == "completed"
