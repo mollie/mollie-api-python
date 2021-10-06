@@ -1,3 +1,5 @@
+import json
+
 from mollie.api.objects.order import Order
 from mollie.api.objects.order_line import OrderLine
 from mollie.api.objects.shipment import Shipment
@@ -48,6 +50,22 @@ def test_create_shipment(client, response):
     order = client.orders.get(ORDER_ID)
     new_shipment = order.create_shipment(data)
     assert isinstance(new_shipment, Shipment)
+
+
+def test_create_shipment_all_lines(client, response):
+    response.get(f"https://api.mollie.com/v2/orders/{ORDER_ID}", "order_single")
+    response.post(f"https://api.mollie.com/v2/orders/{ORDER_ID}/shipments", "shipment_single")
+
+    order = client.orders.get(ORDER_ID)
+    new_shipment = order.create_shipment()
+    assert isinstance(new_shipment, Shipment)
+
+    # Inspect the request that was made
+    request = response.calls[-1].request
+    assert request.url == f"https://api.mollie.com/v2/orders/{ORDER_ID}/shipments"
+    assert json.loads(request.body) == {
+        "lines": []
+    }, "An empty list of lines should be generated, so all lines will be shipped."
 
 
 def test_update_shipment(client, response):

@@ -1,3 +1,5 @@
+import json
+
 import pytest
 
 from mollie.api.error import EmbedNotFound
@@ -147,6 +149,22 @@ def test_create_order_refund(client, response):
     assert refund.metadata == {"bookkeeping_id": 12345}
 
 
+def test_create_order_refund_all_lines(client, response):
+    response.get(f"https://api.mollie.com/v2/orders/{ORDER_ID}", "order_single")
+    response.post(f"https://api.mollie.com/v2/orders/{ORDER_ID}/refunds", "refund_single")
+
+    order = client.orders.get(ORDER_ID)
+    refund = order.create_refund()
+    assert isinstance(refund, Refund)
+
+    # Inspect the request that was made
+    request = response.calls[-1].request
+    assert request.url == f"https://api.mollie.com/v2/orders/{ORDER_ID}/refunds"
+    assert json.loads(request.body) == {
+        "lines": []
+    }, "An empty list of lines should be generated, so all lines will be refunded."
+
+
 def test_create_order(client, response):
     """Create an order."""
     response.post("https://api.mollie.com/v2/orders", "order_single")
@@ -244,6 +262,22 @@ def test_cancel_order_lines(client, response):
     data = {"lines": [{"id": line.id, "quantity": line.quantity}]}
     canceled = order.cancel_lines(data)
     assert canceled == {}
+
+
+def test_cancel_order_all_lines(client, response):
+    response.get(f"https://api.mollie.com/v2/orders/{ORDER_ID}", "order_single")
+    response.delete(f"https://api.mollie.com/v2/orders/{ORDER_ID}/lines", "empty", 204)
+
+    order = client.orders.get(ORDER_ID)
+    canceled = order.cancel_lines()
+    assert canceled == {}
+
+    # Inspect the request that was made
+    request = response.calls[-1].request
+    assert request.url == f"https://api.mollie.com/v2/orders/{ORDER_ID}/lines"
+    assert json.loads(request.body) == {
+        "lines": []
+    }, "An empty list of lines should be generated, so all lines will be cancelled."
 
 
 def test_create_order_payment(client, response):
