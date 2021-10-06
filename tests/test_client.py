@@ -1,5 +1,4 @@
 import re
-import sys
 import time
 from datetime import datetime
 
@@ -251,8 +250,7 @@ def test_client_error_including_field_response(client, response):
     assert excinfo.value.field == "amount"
 
 
-@pytest.mark.skipif(sys.version_info.major == 2, reason="output differs for python 2")
-def test_client_unicode_error_py3(client, response):
+def test_client_unicode_error(client, response):
     """An error response containing Unicode characters should also be processed correctly."""
     response.post("https://api.mollie.com/v2/orders", "order_error", status=422)
     with pytest.raises(UnprocessableEntityError) as err:
