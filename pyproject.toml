@@ -16,4 +16,35 @@ addopts = """
     --cov-report=term-missing
     --isort
     --flake8
+    --mypy
 """
+
+[tool.mypy]
+warn_unused_configs = true
+warn_redundant_casts = true
+
+[[tool.mypy.overrides]]
+module = [
+    "requests_oauthlib",
+    "urllib3.util"
+]
+ignore_missing_imports = true
+
+[[tool.mypy.overrides]]
+module = [
+    "mollie.api.client",
+    "mollie.api.error",
+    "mollie.api.objects.*"
+]
+disallow_any_generics = true
+disallow_subclassing_any = true
+disallow_untyped_calls = true
+disallow_untyped_defs = true
+disallow_incomplete_defs = true
+check_untyped_defs = true
+disallow_untyped_decorators = true
+no_implicit_optional = true
+warn_unused_ignores = true
+warn_return_any = true
+no_implicit_reexport = true
+strict_equality = true
