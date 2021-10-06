@@ -9,7 +9,7 @@ ifndef VIRTUALENV
 	VIRTUALENV = $(PWD)/env
 endif
 
-PYTHON_VERSION = 3.8
+PYTHON_VERSION = 3.9
 PYTHON = $(VIRTUALENV)/bin/python
 
 
