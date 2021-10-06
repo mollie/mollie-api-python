@@ -6,7 +6,7 @@ from collections import OrderedDict
 from urllib.parse import urlencode
 
 import requests
-from requests_oauthlib import OAuth2Session
+import requests_oauthlib
 from urllib3.util import Retry
 
 from .error import RequestError, RequestSetupError
@@ -219,6 +219,11 @@ class Client(object):
         return response
 
     def _perform_http_call_oauth(self, http_method, path, data=None, params=None):
+        if not self._oauth_client:
+            raise RequestSetupError(
+                "You have not setup the oauth client. Please use setup_oauth() before performing an oauth request."
+            )
+
         url, data, params = self._format_request_data(path, data, params)
         try:
             response = self._oauth_client.request(
@@ -249,7 +254,7 @@ class Client(object):
         :param client_id: (string)
         :param client_secret: (string)
         :param redirect_uri: (string)
-        :param scope: Mollie connect permissions (list)
+        :param scope: Mollie connect permissions (tuple)
         :param token: The stored token (dict)
         :param set_token: Callable that stores a token (dict)
         :return: authorization url (url)
@@ -257,7 +262,7 @@ class Client(object):
         self.set_user_agent_component("OAuth", "2.0", sanitize=False)  # keep spelling equal to the PHP client
         self.set_token = set_token
         self.client_secret = client_secret
-        self._oauth_client = OAuth2Session(
+        self._oauth_client = requests_oauthlib.OAuth2Session(
             client_id,
             auto_refresh_kwargs={
                 "client_id": client_id,
@@ -284,14 +289,21 @@ class Client(object):
         :param authorization_response: The full callback URL (string)
         :return: None
         """
+        if not self._oauth_client or not self.set_token:
+            raise RequestSetupError(
+                "You have not setup the oauth client. Please use setup_oauth() before performing an oauth request."
+            )
+
         # Fetch an access token from the provider using the authorization code obtained during user authorization.
-        self.access_token = self._oauth_client.fetch_token(
+        access_token = self._oauth_client.fetch_token(
             self.OAUTH_TOKEN_URL,
             authorization_response=authorization_response,
             client_secret=self.client_secret,
         )
-        self.set_token(self.access_token)
-        return self.access_token
+
+        self.set_token(access_token)
+        self.access_token = access_token
+        return access_token
 
     def _setup_retry(self):
         """Configure a retry behaviour on the HTTP client."""
@@ -328,3 +340,5 @@ def generate_querystring(params):
                 parts.append(urlencode({composed: sub_value}))
     if parts:
         return "&".join(parts)
+    else:
+        return None

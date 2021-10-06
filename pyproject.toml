@@ -18,6 +18,11 @@ addopts = """
     --flake8
 """
 
+[tool.coverage.run]
+omit = [
+    "mollie/api/typing.py"
+]
+
 [tool.mypy]
 warn_unused_configs = true
 warn_redundant_casts = true
