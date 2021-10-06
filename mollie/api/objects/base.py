@@ -26,4 +26,4 @@ class ObjectBase(dict):
 
     @classmethod
     def get_resource_class(cls, client):
-        raise NotImplementedError
+        raise NotImplementedError  # pragma: no cover

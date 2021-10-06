@@ -14,7 +14,7 @@ class ResourceBase(object):
         self.client = client
 
     def get_resource_object(self, result):
-        raise NotImplementedError()
+        raise NotImplementedError()  # pragma: no cover
 
     def get_resource_name(self):
         return self.__class__.__name__.lower()
