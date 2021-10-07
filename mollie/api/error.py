@@ -34,7 +34,7 @@ class ResponseError(Error):
     status = None
     field = None
 
-    def __init__(self, resp=None):
+    def __init__(self, resp):
         message = resp["detail"]
         super().__init__(message)
         self.status = resp["status"]
