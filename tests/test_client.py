@@ -184,6 +184,11 @@ def test_client_get_payment_related_invalid_id(client, endpoint, errorstr):
         getattr(client, endpoint).with_parent_id("tr_12345").get("invalid")
 
 
+def test_client_delete_order_invalid_id(client):
+    with pytest.raises(IdentifierError, match="Invalid order ID: 'invalid'. An order ID should start with 'ord_'."):
+        client.orders.delete("invalid")
+
+
 def test_client_invalid_json_response(client, response):
     """An invalid json response should raise an error."""
     response.get("https://api.mollie.com/v2/customers", "invalid_json")
