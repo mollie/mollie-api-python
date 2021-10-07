@@ -26,7 +26,7 @@ mollie_api_python.egg-info: virtualenv
 
 .PHONY: test
 test: develop
-	$(PYTHON) -m pytest --black
+	$(PYTHON) -m pytest --black --mypy
 	$(PYTHON) -m safety check
 
 
