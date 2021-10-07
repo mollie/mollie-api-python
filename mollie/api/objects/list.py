@@ -1,7 +1,7 @@
 from .base import ObjectBase
 
 
-class List(ObjectBase):
+class Collection(ObjectBase):
     current = None
 
     def __init__(self, result, object_type, client=None):
@@ -50,7 +50,7 @@ class List(ObjectBase):
                 },
                 "count": len(sliced_data),
             }
-            return List(sliced_result, self.object_type, self.client)
+            return Collection(sliced_result, self.object_type, self.client)
 
         return super().__getitem__(key)
 
@@ -73,11 +73,11 @@ class List(ObjectBase):
         url = self._get_link("next")
         resource = self.object_type.get_resource_class(self.client)
         resp = resource.perform_api_call(resource.REST_READ, url)
-        return List(resp, self.object_type, self.client)
+        return Collection(resp, self.object_type, self.client)
 
     def get_previous(self):
         """Return the previous set of objects in a list"""
         url = self._get_link("previous")
         resource = self.object_type.get_resource_class(self.client)
         resp = resource.perform_api_call(resource.REST_READ, url)
-        return List(resp, self.object_type, self.client)
+        return Collection(resp, self.object_type, self.client)

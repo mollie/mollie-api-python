@@ -1,14 +1,14 @@
-from mollie.api.objects.list import List
+from mollie.api.objects.list import Collection
 
 
 def assert_list_object(obj, object_type, count=None):
     """Assert that a List object is correctly working, and has sane contents."""
-    assert isinstance(obj, List), f"Object {obj} is not a List instance."
-    assert isinstance(obj.count, int), "List count is not an integer."
+    assert isinstance(obj, Collection), f"Object {obj} is not a Collection instance."
+    assert isinstance(obj.count, int), "Collection count is not an integer."
     if count is not None:
-        assert obj.count == count, "List does not contain the expected number of items."
+        assert obj.count == count, "Collection does not contain the expected number of items."
     else:
-        assert obj.count > 0, "List has no items."
+        assert obj.count > 0, "Collection has no items."
 
     # verify items in list
     items = []
@@ -17,5 +17,5 @@ def assert_list_object(obj, object_type, count=None):
         assert item.id is not None
         items.append(item.id)
 
-    assert len(items) == obj.count, "Items in list don't match list count."
-    assert len(set(items)) == obj.count, "Not all object ids in the list are unique."
+    assert len(items) == obj.count, "Items in Collection don't match list count."
+    assert len(set(items)) == obj.count, "Not all object ids in the Collection are unique."

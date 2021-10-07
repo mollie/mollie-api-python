@@ -1,5 +1,5 @@
 from ..error import ResponseError, ResponseHandlingError
-from ..objects.list import List
+from ..objects.list import Collection
 
 
 class ResourceBase(object):
@@ -41,7 +41,7 @@ class ResourceBase(object):
     def list(self, **params):
         path = self.get_resource_name()
         result = self.perform_api_call(self.REST_LIST, path, params=params)
-        return List(result, self.get_resource_object({}).__class__, self.client)
+        return Collection(result, self.get_resource_object({}).__class__, self.client)
 
     def perform_api_call(self, http_method, path, data=None, params=None):
         resp = self.client.perform_http_call(http_method, path, data, params)

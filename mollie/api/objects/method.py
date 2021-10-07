@@ -1,6 +1,6 @@
 from .base import ObjectBase
 from .issuer import Issuer
-from .list import List
+from .list import Collection
 
 
 class Method(ObjectBase):
@@ -86,4 +86,4 @@ class Method(ObjectBase):
             },
             "count": len(issuers),
         }
-        return List(result, Issuer)
+        return Collection(result, Issuer)
