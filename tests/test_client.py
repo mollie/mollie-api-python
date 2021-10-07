@@ -147,6 +147,7 @@ def test_client_invalid_update_data(client):
         ("refunds", "Invalid refund ID: 'invalid'. A refund ID should start with 're_'."),
         ("orders", "Invalid order ID: 'invalid'. An order ID should start with 'ord_'."),
         ("captures", "Invalid capture ID: 'invalid'. A capture ID should start with 'cpt_'."),
+        ("invoices", "Invalid invoice ID: 'invalid'. An invoice ID should start with 'inv_'."),
     ],
 )
 def test_client_get_invalid_id(client, endpoint, errorstr):
