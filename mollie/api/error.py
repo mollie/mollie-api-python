@@ -1,3 +1,6 @@
+from typing import Dict, Union
+
+
 class Error(Exception):
     """Base exception."""
 
@@ -31,10 +34,10 @@ class ResponseHandlingError(Error):
 class ResponseError(Error):
     """Errors reported by the API."""
 
-    status = None
-    field = None
+    status: Union[int, None] = None
+    field: Union[str, None] = None
 
-    def __init__(self, resp=None):
+    def __init__(self, resp: Dict) -> None:
         message = resp["detail"]
         super().__init__(message)
         self.status = resp["status"]
@@ -42,7 +45,7 @@ class ResponseError(Error):
             self.field = resp["field"]
 
     @staticmethod
-    def factory(resp):
+    def factory(resp: dict) -> Exception:
         """Return a ResponseError subclass based on the API payload.
 
         All errors are documented: https://docs.mollie.com/guides/handling-errors#all-possible-status-codes
@@ -98,7 +101,7 @@ class EmbedNotFound(Error):
     to set the related embed parameter.
     """
 
-    def __init__(self, embed_name):
+    def __init__(self, embed_name: str) -> None:
         msg = (
             "You tried to access embedded data, but did not request to embed this data in the request. "
             f'Please specify embed="{embed_name}" when requesting the data.'
