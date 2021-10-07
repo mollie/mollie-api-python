@@ -16,7 +16,6 @@ addopts = """
     --cov-report=term-missing
     --isort
     --flake8
-    --mypy
 """
 
 [tool.mypy]

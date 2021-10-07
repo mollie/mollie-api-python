@@ -29,7 +29,7 @@ develop: virtualenv
 test: develop
 	$(PYTHON) -m pip uninstall --yes pipenv numpy  # travis has some packages preinstalled that are marked vulnerable by safety, and we don't use them
 	$(PYTHON) -m pip install -r test_requirements.txt
-	$(PYTHON) -m pytest --black
+	$(PYTHON) -m pytest --black --mypy
 	$(PYTHON) -m safety check
 
 
