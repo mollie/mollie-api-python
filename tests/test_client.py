@@ -148,6 +148,7 @@ def test_client_invalid_update_data(client):
         ("orders", "Invalid order ID: 'invalid'. An order ID should start with 'ord_'."),
         ("captures", "Invalid capture ID: 'invalid'. A capture ID should start with 'cpt_'."),
         ("invoices", "Invalid invoice ID: 'invalid'. An invoice ID should start with 'inv_'."),
+        ("onboarding", "Invalid onboarding ID: 'invalid'. The onboarding ID should be 'me'."),
     ],
 )
 def test_client_get_invalid_id(client, endpoint, errorstr):

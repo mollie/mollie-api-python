@@ -9,7 +9,7 @@ class Onboarding(ResourceBase):
 
     def get(self, onboarding_id, **params):
         if not onboarding_id or not onboarding_id == "me":
-            raise IdentifierError(f"Invalid onboarding ID: '{onboarding_id}'. An onboarding ID should be 'me'.")
+            raise IdentifierError(f"Invalid onboarding ID: '{onboarding_id}'. The onboarding ID should be 'me'.")
         return super().get(onboarding_id, **params)
 
     def create(self, resource_id, data=None, **params):
