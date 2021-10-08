@@ -1,5 +1,4 @@
 import re
-import sys
 import time
 from datetime import datetime
 
@@ -110,7 +109,7 @@ def test_client_broken_cert_bundle(monkeypatch):
     assert "Could not find a suitable TLS CA certificate bundle, invalid path: /does/not/exist" in str(excinfo.value)
 
 
-def test_client_generic_request_error(response):
+def test_client_generic_request_error(response, oauth_client):
     """When the remote server refuses connections or other request issues arise, an error should be raised.
 
     The 'response' fixture blocks all outgoing connections, also when no actual responses are configured.
@@ -120,6 +119,10 @@ def test_client_generic_request_error(response):
     client.set_api_endpoint("https://api.mollie.invalid/")
     with pytest.raises(RequestError, match="Unable to communicate with Mollie: Connection refused"):
         client.customers.list()
+
+    # Same test, but for oauth-based requests
+    with pytest.raises(RequestError, match="Unable to communicate with Mollie: Connection refused"):
+        oauth_client.organizations.get("me")
 
 
 def test_client_invalid_create_data(client):
@@ -143,6 +146,13 @@ def test_client_invalid_update_data(client):
         ("payments", "Invalid payment ID: 'invalid'. A payment ID should start with 'tr_'."),
         ("refunds", "Invalid refund ID: 'invalid'. A refund ID should start with 're_'."),
         ("orders", "Invalid order ID: 'invalid'. An order ID should start with 'ord_'."),
+        ("captures", "Invalid capture ID: 'invalid'. A capture ID should start with 'cpt_'."),
+        ("invoices", "Invalid invoice ID: 'invalid'. An invoice ID should start with 'inv_'."),
+        ("onboarding", "Invalid onboarding ID: 'invalid'. The onboarding ID should be 'me'."),
+        (
+            "organizations",
+            "Invalid organization ID: 'invalid'. A organization ID should start with 'org_' or it should be 'me'.",
+        ),
     ],
 )
 def test_client_get_invalid_id(client, endpoint, errorstr):
@@ -176,6 +186,16 @@ def test_client_get_payment_related_invalid_id(client, endpoint, errorstr):
     """An invalid formatted object ID should raise an error."""
     with pytest.raises(IdentifierError, match=errorstr):
         getattr(client, endpoint).with_parent_id("tr_12345").get("invalid")
+
+
+def test_client_delete_order_invalid_id(client):
+    with pytest.raises(IdentifierError, match="Invalid order ID: 'invalid'. An order ID should start with 'ord_'."):
+        client.orders.delete("invalid")
+
+
+def test_client_delete_profile_method_misses_method_id(client):
+    with pytest.raises(RequestError, match="resource_id is required when disabling a giftcard."):
+        client.profile_methods.with_parent_id("pfl_v9hTwCvYqw", "giftcard").delete()
 
 
 def test_client_invalid_json_response(client, response):
@@ -251,8 +271,7 @@ def test_client_error_including_field_response(client, response):
     assert excinfo.value.field == "amount"
 
 
-@pytest.mark.skipif(sys.version_info.major == 2, reason="output differs for python 2")
-def test_client_unicode_error_py3(client, response):
+def test_client_unicode_error(client, response):
     """An error response containing Unicode characters should also be processed correctly."""
     response.post("https://api.mollie.com/v2/orders", "order_error", status=422)
     with pytest.raises(UnprocessableEntityError) as err:
@@ -455,3 +474,22 @@ def test_oauth_client_will_refresh_token_automatically(mocker, oauth_token, resp
     set_token_mock.assert_called_once()
     args, kwargs = set_token_mock.call_args
     assert isinstance(args[0], dict), "set_token() did not receive a dictionary."
+
+
+def test_unauthorized_oauth_client_should_return_authorization_url(mocker, response):
+    set_token_mock = mocker.Mock()
+
+    client = Client()
+    is_authorized, authorization_url = client.setup_oauth(
+        client_id="client_id",
+        client_secret="client_secret",
+        redirect_uri="https://example.com/callback",
+        scope=("organizations.read",),
+        token=None,
+        set_token=set_token_mock,
+    )
+
+    assert not is_authorized, "A client without initial token should not be authorized"
+    assert authorization_url.startswith(
+        client.OAUTH_AUTHORIZATION_URL
+    ), "A client without initial token should return a correct authorization url"

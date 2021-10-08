@@ -25,6 +25,7 @@ def test_list_iterator_behaviour(client, response):
             break
 
     assert iterated == methods.count
+    assert iterated == len(methods)
 
     # use for loop as iterator
     iterated = 0

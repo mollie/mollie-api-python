@@ -20,14 +20,14 @@ class ProfileMethods(Methods):
 
     def delete(self, resource_id=None, *args, **kwargs):
         if self.method_id in self.RESOURCE_REQUIRED_METHODS and resource_id is None:
-            raise RequestError(f"resource_id is required when disabling a {self.method_id}")
+            raise RequestError(f"resource_id is required when disabling a {self.method_id}.")
         self.resource_id = resource_id
         path = self.get_resource_name()
         return self.perform_api_call(self.REST_DELETE, path, None)
 
     def create(self, resource_id=None, data=None, **params):
         if self.method_id in self.RESOURCE_REQUIRED_METHODS and resource_id is None:
-            raise RequestError(f"resource_id is required when enabling a {self.method_id}")
+            raise RequestError(f"resource_id is required when enabling a {self.method_id}.")
         self.resource_id = resource_id
         path = self.get_resource_name()
         result = self.perform_api_call(self.REST_CREATE, path, data=data, params=params)

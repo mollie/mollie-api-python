@@ -12,7 +12,9 @@ def test_get_organization(oauth_client, response):
     assert organization.id == ORGANIZATION_ID
     assert organization.name == "Mollie B.V."
     assert organization.email == "info@mollie.com"
+    assert organization.locale == "nl_NL"
     assert organization.vat_number == "NL815839091B01"
+    assert organization.vat_regulation == "dutch"
     assert organization.registration_number == "30204462"
     assert organization.address == {
         "city": "Amsterdam",
@@ -31,7 +33,9 @@ def test_get_current_organization(oauth_client, response):
     assert organization.id == ORGANIZATION_ID
     assert organization.name == "Mollie B.V."
     assert organization.email == "info@mollie.com"
+    assert organization.locale == "nl_NL"
     assert organization.vat_number == "NL815839091B01"
+    assert organization.vat_regulation == "dutch"
     assert organization.registration_number == "30204462"
     assert organization.address == {
         "city": "Amsterdam",
