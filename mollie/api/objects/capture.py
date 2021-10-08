@@ -48,7 +48,7 @@ class Capture(ObjectBase):
     @property
     def shipment(self):
         """Return the shipment for this capture."""
-        from .shipment import Shipment
+        from .shipment import Shipment  # savoid circular import
 
         url = self._get_link("shipment")
 

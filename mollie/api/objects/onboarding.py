@@ -39,7 +39,7 @@ class Onboarding(ObjectBase):
     @property
     def organization(self):
         """Retrieve organization for an onboarding."""
-        from .organization import Organization
+        from .organization import Organization  # avoid circular import
 
         url = self._get_link("organization")
 
