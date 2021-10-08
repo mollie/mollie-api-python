@@ -1,3 +1,5 @@
+from typing import Dict, List, Union
+
 from ..error import ResponseError, ResponseHandlingError
 from ..objects.list import ObjectList
 
@@ -74,8 +76,8 @@ class ResourceBase(object):
         return self.get_resource_object(result)
 
     @staticmethod
-    def extract_embed(params):
+    def extract_embed(params: Dict) -> Union[List, None]:
         """Extract and parse the embed parameter from the request."""
         if "embed" not in params:
-            return
+            return None
         return params["embed"].split(",")

@@ -188,6 +188,7 @@ class Order(ObjectBase):
 
     @property
     def refunds(self):
+        # TODO: refactor to use embedded data when available
         if not self.has_refunds():
             return ObjectList({}, None)
         return OrderRefunds(self.client).on(self).list()
@@ -228,6 +229,7 @@ class Order(ObjectBase):
 
     @property
     def payments(self):
+        # TODO: refactor to use embedded data when available, warn about doing additional API calls
         if not self._has_embed("payments"):
             raise EmbedNotFound("payments")
 

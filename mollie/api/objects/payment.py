@@ -180,6 +180,7 @@ class Payment(ObjectBase):
     @property
     def refunds(self):
         """Return the refunds related to this payment."""
+        # TODO: refactor to use embedded data when available
         if not self.has_refunds():
             return ObjectList({}, None)
         return self.client.payment_refunds.on(self).list()
@@ -187,6 +188,7 @@ class Payment(ObjectBase):
     @property
     def chargebacks(self):
         """Return the chargebacks related to this payment."""
+        # TODO: refactor to use embedded data when available
         if not self.has_chargebacks():
             return ObjectList({}, None)
         return self.client.payment_chargebacks.on(self).list()
@@ -196,7 +198,6 @@ class Payment(ObjectBase):
         """Return the captures related to this payment"""
         if not self.has_captures():
             return ObjectList({}, None)
-
         return self.client.captures.on(self).list()
 
     @property
@@ -204,24 +205,28 @@ class Payment(ObjectBase):
         """Return the settlement for this payment."""
         if self.settlement_id:
             return self.client.settlements.get(self.settlement_id)
+        return None
 
     @property
     def mandate(self):
         """Return the mandate for this payment."""
         if self.customer_id and self.mandate_id:
             return self.client.customer_mandates.with_parent_id(self.customer_id).get(self.mandate_id)
+        return None
 
     @property
     def subscription(self):
         """Return the subscription for this payment."""
         if self.customer_id and self.subscription_id:
             return self.client.customer_subscriptions.with_parent_id(self.customer_id).get(self.subscription_id)
+        return None
 
     @property
     def customer(self):
         """Return the customer for this payment."""
         if self.customer_id:
             return self.client.customers.get(self.customer_id)
+        return None
 
     @property
     def order(self):
@@ -229,6 +234,7 @@ class Payment(ObjectBase):
         url = self._get_link("order")
         if url:
             return self.client.orders.from_url(url)
+        return None
 
     # additional methods
 

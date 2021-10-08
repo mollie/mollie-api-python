@@ -52,6 +52,7 @@ class Capture(ObjectBase):
         url = self._get_link("shipment")
         if url:
             return self.client.shipments.from_url(url)
+        return None
 
     @property
     def settlement(self):

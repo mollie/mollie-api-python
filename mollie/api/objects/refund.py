@@ -78,6 +78,7 @@ class Refund(ObjectBase):
     @property
     def payment(self):
         """Return the payment for this refund."""
+        # TODO refactor this to use the embedded data if possible
         return self.client.payments.get(self.payment_id)
 
     @property
