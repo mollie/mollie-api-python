@@ -27,7 +27,7 @@ jobs:
 
       - name: Run unittests
         run: python -m pytest --black --mypy
-        if: ${{ !contains(matrix.python_version, 'pypy') }}
+        if: ${{ !(contains(matrix.python_version, 'pypy') || matrix.python_version == '3.6') }}
 
       - name: Run unittests (without black/mypy)
         run: python -m pytest
