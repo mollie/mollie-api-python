@@ -86,7 +86,8 @@ class ImprovedRequestsMock(responses.RequestsMock):
     def _get_body(self, filename):
         """Read the response fixture file and return it."""
         file = os.path.join(os.path.dirname(__file__), "responses", f"{filename}.json")
-        return open(file).read()
+        with open(file, encoding="utf-8") as f:
+            return f.read()
 
 
 @pytest.fixture
