@@ -24,6 +24,7 @@ def test_get_single_payment_chargeback(client, response):
     assert chargeback.amount == {"currency": "USD", "value": "43.38"}
     assert chargeback.settlement_amount == {"currency": "EUR", "value": "-35.07"}
     assert chargeback.created_at == "2018-03-14T17:00:52.0Z"
+    assert chargeback.reason is None
     assert chargeback.reversed_at == "2018-03-14T17:00:55.0Z"
     assert chargeback.payment_id == PAYMENT_ID
 

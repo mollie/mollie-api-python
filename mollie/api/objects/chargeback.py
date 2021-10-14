@@ -25,6 +25,10 @@ class Chargeback(ObjectBase):
         return self._get_property("createdAt")
 
     @property
+    def reason(self):
+        return self._get_property("reason")
+
+    @property
     def reversed_at(self):
         return self._get_property("reversedAt")
 
