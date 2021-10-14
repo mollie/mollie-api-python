@@ -164,6 +164,9 @@ class Order(ObjectBase):
     def is_expired(self):
         return self._get_property("status") == self.STATUS_EXPIRED
 
+    def has_refunds(self):
+        return self.amount_refunded is not None
+
     def create_refund(self, data=None, **params):
         """Create a refund for the order. When no data arg is given, a refund for all order lines is assumed."""
         if data is None:
@@ -186,8 +189,9 @@ class Order(ObjectBase):
 
     @property
     def refunds(self):
-        refunds = OrderRefunds(self.client).on(self).list()
-        return refunds
+        if not self.has_refunds():
+            return ObjectList({}, None)
+        return OrderRefunds(self.client).on(self).list()
 
     @property
     def lines(self):

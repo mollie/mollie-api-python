@@ -17,7 +17,6 @@ def test_get_order(client, response):
     """Retrieve a single order by order ID."""
     response.get(f"https://api.mollie.com/v2/orders/{ORDER_ID}", "order_single")
     response.get(f"https://api.mollie.com/v2/orders/{ORDER_ID}/shipments", "shipments_list")
-    response.get(f"https://api.mollie.com/v2/orders/{ORDER_ID}/refunds", "order_refunds_list")
 
     order = client.orders.get(ORDER_ID)
     assert isinstance(order, Order)
@@ -70,7 +69,7 @@ def test_get_order(client, response):
     assert order.completed_at is None
     assert order.checkout_url == "https://www.mollie.com/payscreen/order/checkout/kEn1PlbGa"
     assert_list_object(order.shipments, Shipment)
-    assert_list_object(order.refunds, Refund)
+    assert_list_object(order.refunds, Refund, 0)
     assert order.is_created() is True
     assert order.is_paid() is False
     assert order.is_authorized() is False
