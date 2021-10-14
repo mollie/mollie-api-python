@@ -90,7 +90,9 @@ class Refund(ObjectBase):
     @property
     def order(self):
         """Return the order for this refund."""
-        return self.client.orders.get(self.order_id)
+        if self.order_id:
+            return self.client.orders.get(self.order_id)
+        return None
 
     # additional methods
 
