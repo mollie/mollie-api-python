@@ -1,5 +1,4 @@
 from .base import ObjectBase
-from .customer import Customer
 
 
 class Subscription(ObjectBase):
@@ -59,6 +58,10 @@ class Subscription(ObjectBase):
         return int(self._get_property("times"))
 
     @property
+    def times_remaining(self):
+        return int(self._get_property("timesRemaining"))
+
+    @property
     def interval(self):
         return self._get_property("interval")
 
@@ -67,12 +70,20 @@ class Subscription(ObjectBase):
         return self._get_property("startDate")
 
     @property
+    def next_payment_date(self):
+        return self._get_property("nextPaymentDate")
+
+    @property
     def description(self):
         return self._get_property("description")
 
     @property
     def method(self):
         return self._get_property("method")
+
+    @property
+    def mandate_id(self):
+        return self._get_property("mandateId")
 
     @property
     def canceled_at(self):
@@ -87,15 +98,31 @@ class Subscription(ObjectBase):
         return self._get_property("metadata")
 
     @property
+    def application_fee(self):
+        return self._get_property("applicationFee")
+
+    @property
     def customer(self):
         """Return the customer for this subscription."""
         url = self._get_link("customer")
-        if url:
-            resp = self.client.customers.perform_api_call(self.client.customers.REST_READ, url)
-            return Customer(resp)
+        return self.client.customers.from_url(url)
+
+    @property
+    def profile(self):
+        """Return the profile related to this subscription."""
+        url = self._get_link("profile")
+        if not url:
+            return None
+        return self.client.profiles.from_url(url)
 
     @property
     def payments(self):
         """Return a list of payments for this subscription."""
         payments = self.client.subscription_payments.on(self).list()
         return payments
+
+    # TODO: Implement this property.
+    # Payload from API is missing customerId or a _links['mandate'] field to do this efficiently.
+    # @property
+    # def mandate(self):
+    #     pass

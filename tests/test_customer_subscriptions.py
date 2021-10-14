@@ -4,11 +4,13 @@ from mollie.api.error import IdentifierError
 from mollie.api.objects.customer import Customer
 from mollie.api.objects.method import Method
 from mollie.api.objects.payment import Payment
+from mollie.api.objects.profile import Profile
 from mollie.api.objects.subscription import Subscription
 
 from .utils import assert_list_object
 
 CUSTOMER_ID = "cst_8wmqcHMN4U"
+PROFILE_ID = "pfl_v9hTwCvYqw"
 SUBSCRIPTION_ID = "sub_rVKGtNd6s3"
 
 
@@ -35,15 +37,19 @@ def test_get_customer_subscription_by_id(client, response):
     assert subscription.created_at == "2016-06-01T12:23:34+00:00"
     assert subscription.amount == {"value": "25.00", "currency": "EUR"}
     assert subscription.times == 4
+    assert subscription.times_remaining == 4
     assert subscription.interval == "3 months"
     assert subscription.description == "Quarterly payment"
     assert subscription.method == Method.IDEAL
+    assert subscription.mandate_id == "mdt_38HS4fsS"
     assert subscription.webhook_url == "https://webshop.example.org/payments/webhook"
     assert subscription.status == Subscription.STATUS_ACTIVE
-    assert subscription.start_date is None
+    assert subscription.start_date == "2016-06-01"
+    assert subscription.next_payment_date == "2016-09-01"
     assert subscription.canceled_at is None
     assert subscription.customer is not None
     assert subscription.metadata == {"order_id": 1337}
+    assert subscription.application_fee is None
     assert subscription.is_active() is True
     assert subscription.is_suspended() is False
     assert subscription.is_pending() is False
@@ -86,6 +92,19 @@ def test_customer_subscription_get_related_customer(client, response):
     subscription = client.customer_subscriptions.with_parent_id(CUSTOMER_ID).get(SUBSCRIPTION_ID)
     assert isinstance(subscription.customer, Customer)
     assert subscription.customer.id == CUSTOMER_ID
+
+
+def test_customer_subscription_get_related_profile(client, response):
+    response.get(
+        f"https://api.mollie.com/v2/customers/{CUSTOMER_ID}/subscriptions/{SUBSCRIPTION_ID}",
+        "subscription_single",
+    )
+    response.get(f"https://api.mollie.com/v2/profiles/{PROFILE_ID}", "profile_single")
+
+    subscription = client.customer_subscriptions.with_parent_id(CUSTOMER_ID).get(SUBSCRIPTION_ID)
+    profile = subscription.profile
+    assert isinstance(profile, Profile)
+    assert profile.id == PROFILE_ID
 
 
 def test_cancel_customer_subscription(client, response):

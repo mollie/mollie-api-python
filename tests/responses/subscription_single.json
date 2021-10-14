@@ -9,9 +9,13 @@
     "currency": "EUR"
   },
   "times": 4,
+  "timesRemaining": 4,
   "interval": "3 months",
+  "startDate": "2016-06-01",
+  "nextPaymentDate": "2016-09-01",
   "description": "Quarterly payment",
   "method": "ideal",
+  "mandateId": "mdt_38HS4fsS",
   "webhookUrl": "https://webshop.example.org/payments/webhook",
   "metadata": {"order_id": 1337},
   "_links": {
@@ -21,6 +25,10 @@
     },
     "customer": {
       "href": "https://api.mollie.com/v2/customers/cst_8wmqcHMN4U",
+      "type": "application/hal+json"
+    },
+    "profile": {
+      "href": "https://api.mollie.com/v2/profiles/pfl_v9hTwCvYqw",
       "type": "application/hal+json"
     },
     "documentation": {
