@@ -1,3 +1,6 @@
+import warnings
+
+from ..error import APIDeprecationWarning
 from .base import ObjectBase
 
 
@@ -41,7 +44,15 @@ class Profile(ObjectBase):
         return self._get_property("phone")
 
     @property
+    def business_category(self):
+        return self._get_property("businessCategory")
+
+    @property
     def category_code(self):
+        warnings.warn(
+            "Using categoryCode is deprecated, see https://docs.mollie.com/reference/v2/profiles-api/get-profile",
+            APIDeprecationWarning,
+        )
         return self._get_property("categoryCode")
 
     @property
