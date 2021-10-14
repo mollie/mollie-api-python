@@ -7,7 +7,7 @@ class Chargebacks(ResourceBase):
     RESOURCE_ID_PREFIX = "chb_"
 
     def get_resource_object(self, result):
-        return Chargeback(result)
+        return Chargeback(result, self.client)
 
     def get(self, chargeback_id, **params):
         """Verify the chargeback ID and retrieve the chargeback from the API."""
