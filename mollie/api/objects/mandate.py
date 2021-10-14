@@ -59,7 +59,7 @@ class Mandate(ObjectBase):
     @property
     def customer(self):
         """Return the customer for this mandate."""
-        from .customer import Customer  # work around circular imports
+        from .customer import Customer  # avoid circular import
 
         url = self._get_link("customer")
         if url:

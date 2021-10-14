@@ -206,7 +206,7 @@ class Payment(ObjectBase):
     @property
     def order(self):
         """Return the order for this payment."""
-        from ..resources.orders import Order
+        from .order import Order  # avoid circular import
 
         url = self._get_link("order")
         if url:
