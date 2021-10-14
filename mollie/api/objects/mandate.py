@@ -1,3 +1,6 @@
+import re
+
+from ..error import DataConsistencyError
 from .base import ObjectBase
 
 
@@ -59,9 +62,14 @@ class Mandate(ObjectBase):
     @property
     def customer(self):
         """Return the customer for this mandate."""
-        from .customer import Customer  # avoid circular import
-
         url = self._get_link("customer")
-        if url:
-            resp = self.client.customers.perform_api_call(self.client.customers.REST_READ, url)
-            return Customer(resp)
+        if not url:
+            return None
+
+        match = re.search(r"customers/(cst_[a-zA-Z0-9]+)$", url)
+        if not match:
+            # This should never happen
+            raise DataConsistencyError("Unable to extract the customerId from customer URL.")  # pragma: no cover
+
+        customer_id = match.group(1)
+        return self.client.customers.get(customer_id)
