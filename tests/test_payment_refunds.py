@@ -2,12 +2,14 @@ from mollie.api.objects.order import Order
 from mollie.api.objects.order_line import OrderLine
 from mollie.api.objects.payment import Payment
 from mollie.api.objects.refund import Refund
+from mollie.api.objects.settlement import Settlement
 
 from .utils import assert_list_object
 
 PAYMENT_ID = "tr_7UhSN1zuXS"
 REFUND_ID = "re_4qqhO89gsT"
 ORDER_ID = "ord_kEn1PlbGa"
+SETTLEMENT_ID = "stl_jDk30akdN"
 
 
 def test_get_refund(client, response):
@@ -15,6 +17,7 @@ def test_get_refund(client, response):
     response.get(f"https://api.mollie.com/v2/payments/{PAYMENT_ID}/refunds/{REFUND_ID}", "refund_single")
     response.get(f"https://api.mollie.com/v2/payments/{PAYMENT_ID}", "payment_single")
     response.get(f"https://api.mollie.com/v2/orders/{ORDER_ID}", "order_single")
+    response.get(f"https://api.mollie.com/v2/settlements/{SETTLEMENT_ID}", "settlement_single")
 
     refund = client.payment_refunds.with_parent_id(PAYMENT_ID).get(REFUND_ID)
     assert isinstance(refund, Refund)
@@ -22,6 +25,7 @@ def test_get_refund(client, response):
     assert refund.resource == "refund"
     assert refund.id == REFUND_ID
     assert refund.amount == {"currency": "EUR", "value": "5.95"}
+    assert refund.settlement_id == SETTLEMENT_ID
     assert refund.settlement_amount == {"currency": "EUR", "value": "10.00"}
     assert refund.description == "Required quantity not in stock, refunding one photo book."
     assert refund.metadata == {"bookkeeping_id": 12345}
@@ -33,6 +37,8 @@ def test_get_refund(client, response):
     # properties from _links
     assert refund.payment is not None
     assert isinstance(refund.order, Order)
+    assert isinstance(refund.settlement, Settlement)
+
     # additional methods
     assert refund.is_queued() is False
     assert refund.is_pending() is True
@@ -49,6 +55,16 @@ def test_refund_get_related_payment(client, response):
     payment = refund.payment
     assert isinstance(payment, Payment)
     assert payment.id == PAYMENT_ID
+
+
+def test_refund_get_related_settlement(client, response):
+    response.get(f"https://api.mollie.com/v2/payments/{PAYMENT_ID}/refunds/{REFUND_ID}", "refund_single")
+    response.get(f"https://api.mollie.com/v2/settlements/{SETTLEMENT_ID}", "settlement_single")
+
+    refund = client.payment_refunds.with_parent_id(PAYMENT_ID).get(REFUND_ID)
+    settlement = refund.settlement
+    assert isinstance(settlement, Settlement)
+    assert settlement.id == SETTLEMENT_ID
 
 
 def test_create_refund(client, response):

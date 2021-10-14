@@ -30,6 +30,10 @@ class Refund(ObjectBase):
         return self._get_property("amount")
 
     @property
+    def settlement_id(self):
+        return self._get_property("settlementId")
+
+    @property
     def settlement_amount(self):
         return self._get_property("settlementAmount")
 
@@ -76,14 +80,12 @@ class Refund(ObjectBase):
         """Return the payment for this refund."""
         return self.client.payments.get(self.payment_id)
 
-    # @property
-    # def settlement(self):
-    #     """
-    #     Return the settlement for this refund.
-
-    #     TODO: Before we can return an Settlement object, we need to implement the Setlement API.
-    #     """
-    #     pass
+    @property
+    def settlement(self):
+        """Return the settlement for this refund."""
+        if self.settlement_id:
+            return self.client.settlements.get(self.settlement_id)
+        return None
 
     @property
     def order(self):
