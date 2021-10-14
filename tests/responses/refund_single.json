@@ -5,6 +5,7 @@
     "currency": "EUR",
     "value": "5.95"
   },
+  "settlementId": "stl_jDk30akdN",
   "settlementAmount": {
     "value": "10.00",
     "currency": "EUR"
@@ -68,6 +69,10 @@
     },
     "order": {
       "href": "https://api.mollie.com/v2/orders/ord_kEn1PlbGa",
+      "type": "application/hal+json"
+    },
+    "settlement": {
+      "href": "https://api.mollie.com/v2/settlements/stl_jDk30akdN",
       "type": "application/hal+json"
     },
     "documentation": {
