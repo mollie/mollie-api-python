@@ -1,6 +1,6 @@
 import pytest
 
-from mollie.api.error import IdentifierError, RequestError
+from mollie.api.error import APIDeprecationWarning, IdentifierError, RequestError
 from mollie.api.objects.profile import Profile
 from mollie.api.resources.profiles import Profiles
 
@@ -97,6 +97,7 @@ def test_get_profile(oauth_client, response):
     assert profile.created_at == "2018-03-20T09:28:37+00:00"
     assert profile.website == "https://www.mywebsite.com"
     assert profile.phone == "+31208202070"
+    assert profile.business_category == "AMUSEMENT_PARKS"
     assert profile.category_code == 5399
     assert profile.status == "verified"
     assert profile.review == {"status": "pending"}
@@ -168,3 +169,11 @@ def test_profile_disable_giftcard(oauth_client, response, method):
     method = oauth_client.profile_methods.on(profile, method).delete("festivalcadeau")
 
     assert method == {}
+
+
+def test_profile_category_code_is_deprecated(client, response):
+    response.get(f"https://api.mollie.com/v2/profiles/{PROFILE_ID}", "profile_single")
+
+    profile = client.profiles.get(PROFILE_ID)
+    with pytest.warns(APIDeprecationWarning, match="Using categoryCode is deprecated"):
+        profile.category_code == 0
