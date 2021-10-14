@@ -3,11 +3,13 @@ import json
 import pytest
 
 from mollie.api.error import APIDeprecationWarning, IdentifierError
+from mollie.api.objects.invoice import Invoice
 from mollie.api.objects.settlement import Settlement
 from mollie.api.resources.settlements import Settlements
 from tests.utils import assert_list_object
 
 SETTLEMENT_ID = "stl_jDk30akdN"
+INVOICE_ID = "inv_FrvewDA3Pr"
 
 
 def test_list_settlements(oauth_client, response):
@@ -24,11 +26,14 @@ def test_settlement_get(oauth_client, response):
     response.get(f"https://api.mollie.com/v2/settlements/{SETTLEMENT_ID}/chargebacks", "chargebacks_list")
     response.get(f"https://api.mollie.com/v2/settlements/{SETTLEMENT_ID}/payments", "settlement_payments_multiple")
     response.get(f"https://api.mollie.com/v2/settlements/{SETTLEMENT_ID}/refunds", "refunds_list")
+    response.get(f"https://api.mollie.com/v2/settlements/{SETTLEMENT_ID}/captures", "captures_list")
+    response.get(f"https://api.mollie.com/v2/invoices/{INVOICE_ID}", "invoice_single")
 
     settlement = oauth_client.settlements.get(SETTLEMENT_ID)
     chargebacks = oauth_client.settlement_chargebacks.with_parent_id(SETTLEMENT_ID).list()
     payments = oauth_client.settlement_payments.with_parent_id(SETTLEMENT_ID).list()
     refunds = oauth_client.settlement_refunds.with_parent_id(SETTLEMENT_ID).list()
+    captures = oauth_client.settlement_captures.with_parent_id(SETTLEMENT_ID).list()
 
     assert isinstance(settlement, Settlement)
 
@@ -136,6 +141,8 @@ def test_settlement_get(oauth_client, response):
     assert settlement.chargebacks == chargebacks
     assert settlement.payments == payments
     assert settlement.refunds == refunds
+    assert settlement.captures == captures
+    assert isinstance(settlement.invoice, Invoice)
 
 
 def test_settlement_get_next(oauth_client, response):

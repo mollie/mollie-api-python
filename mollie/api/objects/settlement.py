@@ -81,3 +81,14 @@ class Settlement(ObjectBase):
     def chargebacks(self):
         """Return the chargebacks related to this settlement."""
         return self.client.settlement_chargebacks.on(self).list()
+
+    @property
+    def captures(self):
+        """Return the captures related to this settlement."""
+        return self.client.settlement_captures.on(self).list()
+
+    @property
+    def invoice(self):
+        """Return the invoice related to this settlement."""
+        url = self._get_link("invoice")
+        return self.client.invoices.from_url(url)
