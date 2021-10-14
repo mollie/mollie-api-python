@@ -14,10 +14,8 @@ SETTLEMENT_ID = "stl_jDk30akdN"
 
 def test_get_refund(client, response):
     """Retrieve a specific refund of a payment."""
-    response.get(f"https://api.mollie.com/v2/payments/{PAYMENT_ID}/refunds/{REFUND_ID}", "refund_single")
+    response.get(f"https://api.mollie.com/v2/payments/{PAYMENT_ID}/refunds/{REFUND_ID}", "refund_single_no_links")
     response.get(f"https://api.mollie.com/v2/payments/{PAYMENT_ID}", "payment_single")
-    response.get(f"https://api.mollie.com/v2/orders/{ORDER_ID}", "order_single")
-    response.get(f"https://api.mollie.com/v2/settlements/{SETTLEMENT_ID}", "settlement_single")
 
     refund = client.payment_refunds.with_parent_id(PAYMENT_ID).get(REFUND_ID)
     assert isinstance(refund, Refund)
@@ -25,19 +23,19 @@ def test_get_refund(client, response):
     assert refund.resource == "refund"
     assert refund.id == REFUND_ID
     assert refund.amount == {"currency": "EUR", "value": "5.95"}
-    assert refund.settlement_id == SETTLEMENT_ID
-    assert refund.settlement_amount == {"currency": "EUR", "value": "10.00"}
+    assert refund.settlement_id is None
+    assert refund.settlement_amount is None
     assert refund.description == "Required quantity not in stock, refunding one photo book."
     assert refund.metadata == {"bookkeeping_id": 12345}
     assert refund.status == Refund.STATUS_PENDING
     assert_list_object(refund.lines, OrderLine)
     assert refund.payment_id == PAYMENT_ID
-    assert refund.order_id == ORDER_ID
+    assert refund.order_id is None
     assert refund.created_at == "2018-03-14T17:09:02.0Z"
     # properties from _links
     assert refund.payment is not None
-    assert isinstance(refund.order, Order)
-    assert isinstance(refund.settlement, Settlement)
+    assert refund.settlement is None
+    assert refund.order is None
 
     # additional methods
     assert refund.is_queued() is False
@@ -62,9 +60,22 @@ def test_refund_get_related_settlement(client, response):
     response.get(f"https://api.mollie.com/v2/settlements/{SETTLEMENT_ID}", "settlement_single")
 
     refund = client.payment_refunds.with_parent_id(PAYMENT_ID).get(REFUND_ID)
+    assert refund.settlement_id == SETTLEMENT_ID
+    assert refund.settlement_amount == {"currency": "EUR", "value": "10.00"}
     settlement = refund.settlement
     assert isinstance(settlement, Settlement)
     assert settlement.id == SETTLEMENT_ID
+
+
+def test_refund_get_related_order(client, response):
+    response.get(f"https://api.mollie.com/v2/payments/{PAYMENT_ID}/refunds/{REFUND_ID}", "refund_single")
+    response.get(f"https://api.mollie.com/v2/orders/{ORDER_ID}", "order_single")
+
+    refund = client.payment_refunds.with_parent_id(PAYMENT_ID).get(REFUND_ID)
+    assert refund.order_id == ORDER_ID
+    order = refund.order
+    assert isinstance(order, Order)
+    assert order.id == ORDER_ID
 
 
 def test_create_refund(client, response):
