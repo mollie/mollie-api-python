@@ -46,6 +46,7 @@ class Capture(ObjectBase):
     @property
     def payment(self):
         """Return the payment for this capture."""
+        # TODO Use the embedded payment data, if avalable.
         return self.client.payments.get(self.payment_id)
 
     @property

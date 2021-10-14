@@ -58,9 +58,6 @@ def test_list_customers(client, response):
 def test_get_customer(client, response):
     """Retrieve a single customer."""
     response.get(f"https://api.mollie.com/v2/customers/{CUSTOMER_ID}", "customer_new")
-    response.get(f"https://api.mollie.com/v2/customers/{CUSTOMER_ID}/subscriptions", "subscriptions_customer_list")
-    response.get(f"https://api.mollie.com/v2/customers/{CUSTOMER_ID}/mandates", "customer_mandates_list")
-    response.get(f"https://api.mollie.com/v2/customers/{CUSTOMER_ID}/payments", "customer_payments_multiple")
 
     customer = client.customers.get(CUSTOMER_ID)
     assert isinstance(customer, Customer)
@@ -99,7 +96,7 @@ def test_customer_get_related_subscriptions(client, response):
 
 def test_customer_get_related_payments(client, response):
     """Retrieve related payments for a customer."""
-    response.get(f"https://api.mollie.com/v2/customers/{CUSTOMER_ID}", "customer_new")
+    response.get(f"https://api.mollie.com/v2/customers/{CUSTOMER_ID}", "customer_updated")
     response.get(f"https://api.mollie.com/v2/customers/{CUSTOMER_ID}/payments", "customer_payments_multiple")
 
     customer = client.customers.get(CUSTOMER_ID)
