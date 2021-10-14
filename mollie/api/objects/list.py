@@ -1,16 +1,32 @@
 from .base import ObjectBase
 
 
+class UnknownObject(ObjectBase):
+    """Mock object for empty lists."""
+
+    @classmethod
+    def get_object_name(cls):
+        return "unknown"
+
+
 class ObjectList(ObjectBase):
     current = None
 
     def __init__(self, result, object_type, client=None):
+        # If an empty dataset was injected, we mock the structure that the remainder of the clas expects.
+        # TODO: it would be better if the ObjectList was initiated with a list of results, rather than with
+        # the full datastructure as it is now, so we can remove all this mucking around with fake data,
+        # mocked result objects, and loads of lengthy accessor workarounds everywhere in the ObjectList.
+        if result == {}:
+            result = {"_embedded": {"unknown": []}, "count": 0}
+            object_type = UnknownObject
+
         super().__init__(result, client)
         self.object_type = object_type
 
     def __len__(self):
         """Return the count field."""
-        return int(self["count"])
+        return self.count
 
     def __iter__(self):
         """Implement iterator interface."""
