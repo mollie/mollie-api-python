@@ -59,9 +59,6 @@ class Mandate(ObjectBase):
     @property
     def customer(self):
         """Return the customer for this mandate."""
-        from .customer import Customer  # avoid circular import
-
         url = self._get_link("customer")
         if url:
-            resp = self.client.customers.perform_api_call(self.client.customers.REST_READ, url)
-            return Customer(resp)
+            return self.client.customers.from_url(url)

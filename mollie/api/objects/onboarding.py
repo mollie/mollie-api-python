@@ -39,13 +39,9 @@ class Onboarding(ObjectBase):
     @property
     def organization(self):
         """Retrieve organization for an onboarding."""
-        from .organization import Organization  # avoid circular import
-
         url = self._get_link("organization")
-
         if url:
-            resp = self.client.organizations.perform_api_call(self.client.organizations.REST_READ, url)
-            return Organization(resp)
+            return self.client.organizations.from_url(url)
 
     def is_needs_data(self):
         return self.status == self.STATUS_NEEDS_DATA

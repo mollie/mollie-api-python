@@ -206,12 +206,9 @@ class Payment(ObjectBase):
     @property
     def order(self):
         """Return the order for this payment."""
-        from .order import Order  # avoid circular import
-
         url = self._get_link("order")
         if url:
-            resp = self.client.orders.perform_api_call(self.client.orders.REST_READ, url)
-            return Order(resp, self.client)
+            return self.client.orders.from_url(url)
 
     # additional methods
 
