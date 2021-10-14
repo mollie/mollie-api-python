@@ -4,7 +4,7 @@ from ..resources.order_payments import OrderPayments
 from ..resources.order_refunds import OrderRefunds
 from ..resources.shipments import Shipments
 from .base import ObjectBase
-from .list import List
+from .list import ObjectList
 from .order_line import OrderLine
 from .payment import Payment
 
@@ -198,7 +198,7 @@ class Order(ObjectBase):
             },
             "count": len(lines),
         }
-        return List(result, OrderLine, self.client)
+        return ObjectList(result, OrderLine, self.client)
 
     def update_line(self, resource_id, data):
         """Update a line for an order."""
@@ -240,7 +240,7 @@ class Order(ObjectBase):
             },
             "count": len(payments),
         }
-        return List(result, Payment, self.client)
+        return ObjectList(result, Payment, self.client)
 
     def create_payment(self, data):
         """Creates a new payment object for an order."""

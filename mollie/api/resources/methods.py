@@ -1,4 +1,4 @@
-from ..objects.list import List
+from ..objects.list import ObjectList
 from ..objects.method import Method
 from .base import ResourceBase
 
@@ -11,4 +11,4 @@ class Methods(ResourceBase):
         """List all mollie payment methods, including methods that aren't activated in your profile."""
         path = "methods/all"
         result = self.perform_api_call(self.REST_LIST, path, params=params)
-        return List(result, self.get_resource_object({}).__class__, self.client)
+        return ObjectList(result, self.get_resource_object({}).__class__, self.client)

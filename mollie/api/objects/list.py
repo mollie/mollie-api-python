@@ -1,7 +1,7 @@
 from .base import ObjectBase
 
 
-class List(ObjectBase):
+class ObjectList(ObjectBase):
     current = None
 
     def __init__(self, result, object_type, client=None):
@@ -50,7 +50,7 @@ class List(ObjectBase):
                 },
                 "count": len(sliced_data),
             }
-            return List(sliced_result, self.object_type, self.client)
+            return ObjectList(sliced_result, self.object_type, self.client)
 
         return super().__getitem__(key)
 
@@ -61,23 +61,23 @@ class List(ObjectBase):
         return int(self["count"])
 
     def has_next(self):
-        """Return True if the list contains an url for the next set"""
+        """Return True if the ObjectList contains an url for the next set."""
         return self._get_link("next") is not None
 
     def has_previous(self):
-        """Return True if the list contains an url for the previous set"""
+        """Return True if the ObjectList contains an url for the previous set."""
         return self._get_link("previous") is not None
 
     def get_next(self):
-        """Return the next set of objects in a list"""
+        """Return the next set of objects in an ObjectList."""
         url = self._get_link("next")
         resource = self.object_type.get_resource_class(self.client)
         resp = resource.perform_api_call(resource.REST_READ, url)
-        return List(resp, self.object_type, self.client)
+        return ObjectList(resp, self.object_type, self.client)
 
     def get_previous(self):
-        """Return the previous set of objects in a list"""
+        """Return the previous set of objects in an ObjectList."""
         url = self._get_link("previous")
         resource = self.object_type.get_resource_class(self.client)
         resp = resource.perform_api_call(resource.REST_READ, url)
-        return List(resp, self.object_type, self.client)
+        return ObjectList(resp, self.object_type, self.client)

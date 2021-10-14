@@ -1,5 +1,5 @@
 from .base import ObjectBase
-from .list import List
+from .list import ObjectList
 from .order_line import OrderLine
 
 
@@ -38,7 +38,7 @@ class Shipment(ObjectBase):
             },
             "count": len(lines),
         }
-        return List(result, OrderLine, self.client)
+        return ObjectList(result, OrderLine, self.client)
 
     @property
     def order(self):
