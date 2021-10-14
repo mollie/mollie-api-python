@@ -65,6 +65,14 @@ class ResourceBase(object):
                 )
         return result
 
+    def from_url(self, url, data=None, params=None):
+        """Utility method to return an object from a full URL (such as from _links).
+
+        This method always does a GET request and returns a single Object.
+        """
+        result = self.perform_api_call(self.REST_READ, url, data, params)
+        return self.get_resource_object(result)
+
     @staticmethod
     def extract_embed(params):
         """Extract and parse the embed parameter from the request."""

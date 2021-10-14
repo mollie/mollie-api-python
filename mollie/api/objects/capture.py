@@ -1,6 +1,3 @@
-import re
-
-from ..error import DataConsistencyError
 from .base import ObjectBase
 
 
@@ -52,18 +49,9 @@ class Capture(ObjectBase):
     @property
     def shipment(self):
         """Return the shipment for this capture."""
-        # Dev note: this would be a lot cleaner if we had access to the orderId directly.
         url = self._get_link("shipment")
-        if not url:
-            return None
-
-        match = re.search(r"orders/(ord_[a-zA-Z0-9]+)/shipments", url)
-        if not match:
-            # This should never happen
-            raise DataConsistencyError("Unable to extract the orderId from shipment URL.")  # pragma: no cover
-
-        order_id = match.group(1)
-        return self.client.shipments.with_parent_id(order_id).get(self.shipment_id)
+        if url:
+            return self.client.shipments.from_url(url)
 
     @property
     def settlement(self):
