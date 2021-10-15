@@ -98,7 +98,6 @@ def test_get_profile(oauth_client, response):
     assert profile.website == "https://www.mywebsite.com"
     assert profile.phone == "+31208202070"
     assert profile.business_category == "AMUSEMENT_PARKS"
-    assert profile.category_code == 5399
     assert profile.status == "verified"
     assert profile.review == {"status": "pending"}
     assert profile.checkout_preview_url == "https://www.mollie.com/payscreen/preview/pfl_v9hTwCvYqw"
