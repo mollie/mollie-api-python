@@ -105,6 +105,8 @@ def test_get_single_payment(client, response):
     assert payment.routing is not None
     # properties from _links
     assert payment.checkout_url == "https://www.mollie.com/payscreen/select-method/7UhSN1zuXS"
+    assert payment.changepaymentstate_url is None
+    assert payment.payonline_url is None
     assert payment.refunds is not None
     assert payment.chargebacks is not None
     assert payment.mandate is None
