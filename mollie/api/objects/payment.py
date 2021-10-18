@@ -170,6 +170,14 @@ class Payment(ObjectBase):
         return self._get_link("checkout")
 
     @property
+    def changepaymentstate_url(self):
+        return self._get_link("changePaymentState")
+
+    @property
+    def payonline_url(self):
+        return self._get_link("payOnline")
+
+    @property
     def refunds(self):
         """Return the refunds related to this payment."""
         if not self.has_refunds():
