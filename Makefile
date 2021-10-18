@@ -1,7 +1,4 @@
 # use virtualenv or virtualenv-wrapper location based on availability
-ifdef TRAVIS
-	VIRTUALENV := $(VIRTUAL_ENV)
-endif
 ifdef WORKON_HOME
 	VIRTUALENV = $(WORKON_HOME)/mollie-api-python
 endif
@@ -21,19 +18,37 @@ $(VIRTUALENV):
 
 
 .PHONY: develop
-develop: virtualenv
-	$(PYTHON) -m pip install .
+develop: mollie_api_python.egg-info virtualenv # alias
+mollie_api_python.egg-info:
+	$(PYTHON) -m pip install -r test_requirements.txt
+	$(PYTHON) -m pip install -e .
 
 
 .PHONY: test
 test: develop
-	$(PYTHON) -m pip uninstall --yes pipenv numpy  # travis has some packages preinstalled that are marked vulnerable by safety, and we don't use them
-	$(PYTHON) -m pip install -r test_requirements.txt
 	$(PYTHON) -m pytest --black
 	$(PYTHON) -m safety check
 
 
+dist/mollie_api_python-*-py3-none-any.whl: virtualenv
+	$(PYTHON) -m pip install --upgrade build
+	$(PYTHON) -m build --wheel
+
+
+dist/mollie-api-python-*.tar.gz: virtualenv
+	$(PYTHON) -m pip install --upgrade build
+	$(PYTHON) -m build --sdist
+
+
+.PHONY: build
+build: dist/mollie_api_python-*-py3-none-any.whl dist/mollie-api-python-*.tar.gz
+
+
 .PHONY: clean
 clean:
-	rm -f -r $(VIRTUALENV)
 	rm -f -r build/ dist/ .eggs/ mollie_api_python.egg-info .pytest_cache
+
+
+.PHONY: realclean
+realclean: clean
+	rm -f -r $(VIRTUALENV)
