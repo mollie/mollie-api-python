@@ -25,28 +25,36 @@ To use the Mollie API client, the following things are required:
 **Please note:** If you are looking to install the v1 version of the Mollie API client, please refer to the [v1-develop branch](https://github.com/mollie/mollie-api-python/tree/v1-develop) for installation instructions.
 
 By far the easiest way to install the Mollie API client is to install it with [pip](https://pip.pypa.io). The command below will install the latest released version of the client.
-```
+```shell
 $ pip install mollie-api-python
 ```
 You may also git checkout or [download all the files](https://github.com/mollie/mollie-api-python/archive/master.zip), and include the Mollie API client manually.
 
 Create and activate a Python >= 3.6 virtual environment (inside a git checkout or downloaded archive).
 
-```
+```shell
 $ cd mollie-api-python
 $ python -m venv .venv
 $ source .venv/bin/activate
 ```
 
 Install the additional requirements for the examples, then install the Mollie API client itself.
-```
+```shell
 $ pip install flask
 $ pip install -e .
 ```
 
 Run the examples.
-```
+```shell
 export MOLLIE_API_KEY=test_YourApiKey
+$ python examples/app.py
+```
+
+If you are working from a development machine, you should use a tool like [ngrok.com](https://ngrok.com/) to get a publicly available URL that can be used in callback and redirect URLs. Start the service and expose the forwarding URL (https) to the mollie example code:
+
+```shell
+export MOLLIE_API_KEY=test_YourApiKey
+export MOLLIE_PUBLIC_URL=https://some.ngrok.url.io
 $ python examples/app.py
 ```
 
@@ -195,12 +203,11 @@ Oauth authentication process redirects back to your application. Therefore you s
 
 Run the oauth2 examples:
 
-```
-FLASK_APP=examples/oauth/app.py \
-CLIENT_ID=your_client_id \
-CLIENT_SECRET=your_client_secret \
-REDIRECT_URI=https://your_domain.tld/callback \
-flask run
+```shell
+export MOLLIE_CLIENT_ID=your_client_id
+export MOLLIE_CLIENT_SECRET=your_client_secret
+export MOLLIE_PUBLIC_URL=https://some.ngrok.url.io
+python examples/oauth/app.py
 ```
 
 The Authorize endpoint is the endpoint on the Mollie web site where the merchant logs in, and grants authorization to your client application. E.g. when the merchant clicks on the Connect with Mollie button, you should redirect the merchant to the Authorize endpoint.

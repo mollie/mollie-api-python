@@ -42,15 +42,16 @@ examples = [
 def index():
     """
     FLASK_APP=examples/oauth/app.py \
-    CLIENT_ID=your_client_id \
-    CLIENT_SECRET=your_client_secret \
-    REDIRECT_URI=https://your_domain.tld/callback \
+    MOLLIE_CLIENT_ID=your_client_id \
+    MOLLIE_CLIENT_SECRET=your_client_secret \
+    MOLLIE_PUBLIC_URL=https://your_domain.tld \
     flask run
     """
 
-    client_id = os.environ.get("CLIENT_ID")
-    client_secret = os.environ.get("CLIENT_SECRET")
-    redirect_uri = os.environ.get("REDIRECT_URI")
+    client_id = os.environ.get("MOLLIE_CLIENT_ID")
+    client_secret = os.environ.get("MOLLIE_CLIENT_SECRET")
+    public_url = os.environ.get("MOLLIE_PUBLIC_URL")
+    redirect_uri = f"{public_url}/callback"
 
     scope = [
         "payments.read",
@@ -120,3 +121,8 @@ def run_example(example=None):
     if example not in examples:
         flask.abort(404, "Example does not exist")
     return __import__(example).main(client)
+
+
+if __name__ == "__main__":
+    app.debug = True
+    app.run()

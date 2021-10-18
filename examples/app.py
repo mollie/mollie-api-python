@@ -46,11 +46,6 @@ def run_example(example=None):
     return __import__(example).main()
 
 
-if __name__ == "__main__":
-    app.debug = True
-    app.run()
-
-
 #
 # NOTE: This example uses json files as a "database".
 # Please use a real database like MySQL in production.
@@ -69,3 +64,29 @@ def database_read(my_webshop_id):
     file = os.path.join(os.path.dirname(os.path.abspath(__file__)), "orders", f"order-{my_webshop_id}.json")
     database = open(file, "r")
     return json.loads(database.read())
+
+
+def get_public_url():
+    """
+    Return the base URL for this application, usable for sending to the mollie API.
+
+    This will normally return the flask root url, which points to 'localhost' on dev machines.
+    This is fine for limited local tests, but when you want to make test payments
+    against the Mollie API, you need an endpoint that is reachable from the public internet.
+
+    If the variable `MOLLIE_PUBLIC_URL` is available in the environment, we will use that instead
+    of the flask root URL.
+    """
+    try:
+        url = os.environ["MOLLIE_PUBLIC_URL"]
+    except KeyError:
+        url = flask.flask.request.url_root
+
+    if not url.endswith("/"):
+        return f"{url}/"
+    return url
+
+
+if __name__ == "__main__":
+    app.debug = True
+    app.run()
