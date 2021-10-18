@@ -2,7 +2,6 @@ from ..error import EmbedNotFound
 from ..resources.order_lines import OrderLines
 from ..resources.order_payments import OrderPayments
 from ..resources.order_refunds import OrderRefunds
-from ..resources.shipments import Shipments
 from .base import ObjectBase
 from .list import ObjectList
 from .order_line import OrderLine
@@ -211,21 +210,21 @@ class Order(ObjectBase):
     @property
     def shipments(self):
         """Retrieve all shipments for an order."""
-        return Shipments(self.client).on(self).list()
+        return self.client.shipments.on(self).list()
 
     def create_shipment(self, data=None):
         """Create a shipment for an order. When no data arg is given, a shipment for all order lines is assumed."""
         if data is None:
             data = {"lines": []}
-        return Shipments(self.client).on(self).create(data)
+        return self.client.shipments.on(self).create(data)
 
     def get_shipment(self, resource_id):
         """Retrieve a single shipment by a shipment's ID."""
-        return Shipments(self.client).on(self).get(resource_id)
+        return self.client.shipments.on(self).get(resource_id)
 
     def update_shipment(self, resource_id, data):
         """Update the tracking information of a shipment."""
-        return Shipments(self.client).on(self).update(resource_id, data)
+        return self.client.shipments.on(self).update(resource_id, data)
 
     @property
     def payments(self):
