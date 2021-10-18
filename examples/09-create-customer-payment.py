@@ -6,9 +6,11 @@ import time
 
 import flask
 
-from app import database_write
+from app import database_write, get_public_url
 from mollie.api.client import Client
 from mollie.api.error import Error
+
+PUBLIC_URL = get_public_url()
 
 
 def main():
@@ -54,8 +56,8 @@ def main():
             {
                 "amount": {"currency": "EUR", "value": "100.00"},
                 "description": "My first API payment",
-                "webhookUrl": f"{flask.request.url_root}02-webhook-verification",
-                "redirectUrl": f"{flask.request.url_root}03-return-page?my_webshop_id={my_webshop_id}",
+                "webhookUrl": f"{PUBLIC_URL}02-webhook-verification",
+                "redirectUrl": f"{PUBLIC_URL}03-return-page?my_webshop_id={my_webshop_id}",
                 "metadata": {"my_webshop_id": str(my_webshop_id)},
             }
         )

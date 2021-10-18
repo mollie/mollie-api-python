@@ -6,9 +6,11 @@ import time
 
 import flask
 
-from app import database_write
+from app import database_write, get_public_url
 from mollie.api.client import Client
 from mollie.api.error import Error
+
+PUBLIC_URL = get_public_url()
 
 
 def main():
@@ -57,8 +59,8 @@ def main():
                 "consumerDateOfBirth": "1958-01-31",
                 "locale": "nl_NL",
                 "orderNumber": "1337",
-                "redirectUrl": f"{flask.request.url_root}17-order-return-page?my_webshop_id={my_webshop_id}",
-                "webhookUrl": f"{flask.request.url_root}13-order-webhook-verification",
+                "redirectUrl": f"{PUBLIC_URL}17-order-return-page?my_webshop_id={my_webshop_id}",
+                "webhookUrl": f"{PUBLIC_URL}13-order-webhook-verification",
                 "lines": [
                     {
                         "type": "physical",
