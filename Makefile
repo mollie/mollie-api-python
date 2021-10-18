@@ -30,6 +30,20 @@ test: develop
 	$(PYTHON) -m safety check
 
 
+dist/mollie_api_python-*-py3-none-any.whl: virtualenv
+	$(PYTHON) -m pip install --upgrade build
+	$(PYTHON) -m build --wheel
+
+
+dist/mollie-api-python-*.tar.gz: virtualenv
+	$(PYTHON) -m pip install --upgrade build
+	$(PYTHON) -m build --sdist
+
+
+.PHONY: build
+build: dist/mollie_api_python-*-py3-none-any.whl dist/mollie-api-python-*.tar.gz
+
+
 .PHONY: clean
 clean:
 	rm -f -r build/ dist/ .eggs/ mollie_api_python.egg-info .pytest_cache
