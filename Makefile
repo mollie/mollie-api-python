@@ -18,8 +18,8 @@ $(VIRTUALENV):
 
 
 .PHONY: develop
-develop: mollie_api_python.egg-info virtualenv # alias
-mollie_api_python.egg-info:
+develop: mollie_api_python.egg-info # alias
+mollie_api_python.egg-info: virtualenv
 	$(PYTHON) -m pip install -r test_requirements.txt
 	$(PYTHON) -m pip install -e .
 
