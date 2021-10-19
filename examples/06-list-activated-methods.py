@@ -32,7 +32,7 @@ def main():
 
         for method in methods:
             body += '<div style="line-height:40px; vertical-align:top">'
-            body += f'<img src="{method.image_svg}"> {method.desciption} ({method.id})'
+            body += f'<img src="{method.image_svg}"> {method.description} ({method.id})'
             body += "</div>"
 
         return body
