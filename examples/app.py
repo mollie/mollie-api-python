@@ -6,6 +6,7 @@ import flask
 app = flask.Flask(__name__)
 examples = [
     "01-new-payment",
+    "01-new-payment-using-qrcode",
     "02-webhook-verification",
     "03-return-page",
     "04-ideal-payment",
