@@ -26,6 +26,7 @@ def test_get_invoice(oauth_client, response):
     assert invoice.vat_number == "NL001234567B01"
     assert invoice.status == "open"
     assert invoice.issued_at == "2016-08-31"
+    assert invoice.paid_at == "2016-09-01"
     assert invoice.due_at == "2016-09-14"
     assert invoice.net_amount == {"value": "45.00", "currency": "EUR"}
     assert invoice.vat_amount == {"value": "9.45", "currency": "EUR"}

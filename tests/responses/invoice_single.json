@@ -5,6 +5,7 @@
     "vatNumber": "NL001234567B01",
     "status": "open",
     "issuedAt": "2016-08-31",
+    "paidAt": "2016-09-01",
     "dueAt": "2016-09-14",
     "netAmount": {
         "value": "45.00",

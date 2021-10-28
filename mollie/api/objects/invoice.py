@@ -29,6 +29,10 @@ class Invoice(ObjectBase):
         return self._get_property("issuedAt")
 
     @property
+    def paid_at(self):
+        return self._get_property("paidAt")
+
+    @property
     def due_at(self):
         return self._get_property("dueAt")
 
