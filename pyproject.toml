@@ -14,6 +14,7 @@ addopts = """
     --no-cov-on-fail
     --cov-fail-under=80
     --cov-report=term-missing
+    --cov-branch
     --isort
     --flake8
 """
