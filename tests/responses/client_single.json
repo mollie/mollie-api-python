@@ -1,0 +1,30 @@
+{
+    "resource": "client",
+    "id": "org_1337",
+    "organizationCreatedAt": "2018-03-21T13:13:37+00:00",
+    "commission": {
+        "count": 200,
+        "totalAmount": {
+            "currency": "EUR",
+            "value": "10.00"
+        }
+    },
+    "_links": {
+        "self": {
+            "href": "https://api.mollie.com/v2/clients/org_1337",
+            "type": "application/hal+json"
+        },
+        "organization": {
+            "href": "https://api.mollie.com/v2/organizations/org_1337",
+            "type": "application/hal+json"
+        },
+        "onboarding": {
+            "href": "https://api.mollie.com/v2/onboarding/org_1337",
+            "type": "application/hal+json"
+        },
+        "documentation": {
+            "href": "https://docs.mollie.com/reference/v2/clients-api/get-client",
+            "type": "text/html"
+        }
+    }
+}
