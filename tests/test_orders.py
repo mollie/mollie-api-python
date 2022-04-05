@@ -1,6 +1,7 @@
 import json
 
 import pytest
+from responses import matchers
 
 from mollie.api.error import EmbedNotFound
 from mollie.api.objects.order import Order
@@ -84,9 +85,9 @@ def test_get_order(client, response):
 def test_get_order_with_payments(client, response):
     response.add(
         response.GET,
-        f"https://api.mollie.com/v2/orders/{ORDER_ID}?embed=payments",
+        f"https://api.mollie.com/v2/orders/{ORDER_ID}",
         body=response._get_body("order_single_with_embeds"),
-        match_querystring=True,
+        match=[matchers.query_param_matcher({"embed": "payments"})],
     )
 
     order = client.orders.get(ORDER_ID, embed="payments")
@@ -105,9 +106,9 @@ def test_get_order_with_payments_embed_error(client, response):
 def test_get_order_with_payments_empty_embed(client, response):
     response.add(
         response.GET,
-        f"https://api.mollie.com/v2/orders/{ORDER_ID}?embed=payments",
+        f"https://api.mollie.com/v2/orders/{ORDER_ID}",
         body=response._get_body("order_single"),
-        match_querystring=True,
+        match=[matchers.query_param_matcher({"embed": "payments"})],
     )
 
     order = client.orders.get(ORDER_ID, embed="payments")

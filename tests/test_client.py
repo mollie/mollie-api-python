@@ -4,6 +4,7 @@ from datetime import datetime
 
 import pytest
 import requests.adapters
+from responses import matchers
 
 from mollie.api.client import Client, generate_querystring
 from mollie.api.error import (
@@ -42,9 +43,9 @@ def test_client_querystring(client, response):
     """Verify that we are triggering the correct URL when using querystring with square brackets."""
     response.add(
         response.GET,
-        "https://api.mollie.com/v2/methods?amount[currency]=USD&amount[value]=100.00",
+        "https://api.mollie.com/v2/methods",
         body=response._get_body("methods_list"),
-        match_querystring=True,
+        match=[matchers.query_string_matcher("amount%5Bvalue%5D=100.00&amount%5Bcurrency%5D=USD")],
     )
 
     params = {"amount": {"currency": "USD", "value": "100.00"}}
