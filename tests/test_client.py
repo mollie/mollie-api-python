@@ -28,8 +28,8 @@ from .utils import assert_list_object
     [
         ({}, None),
         ({"locale": "nl_NL"}, "locale=nl_NL"),
-        ({"locale": "nl_NL", "hoeba": "kek"}, "hoeba=kek&locale=nl_NL"),
-        ({"amount": {"value": "100.00", "currency": "USD"}}, "amount%5Bcurrency%5D=USD&amount%5Bvalue%5D=100.00"),
+        ({"locale": "nl_NL", "hoeba": "kek"}, "locale=nl_NL&hoeba=kek"),
+        ({"amount": {"value": "100.00", "currency": "USD"}}, "amount%5Bvalue%5D=100.00&amount%5Bcurrency%5D=USD"),
     ],
 )
 def test_generate_querystring(params, querystring):
