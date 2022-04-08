@@ -154,6 +154,7 @@ def test_client_invalid_update_data(client):
             "organizations",
             "Invalid organization ID: 'invalid'. A organization ID should start with 'org_' or it should be 'me'.",
         ),
+        ("clients", "Invalid client ID: 'invalid'. A client ID should start with 'org_'."),
     ],
 )
 def test_client_get_invalid_id(client, endpoint, errorstr):
