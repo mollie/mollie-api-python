@@ -19,6 +19,7 @@ class Method(ObjectBase):
     GIFTCARD = "giftcard"
     GIROPAY = "giropay"
     IDEAL = "ideal"
+    IN3 = "in3"
     KBC = "kbc"
     KLARNAPAYLATER = "klarnapaylater"
     KLARNAPAYNOW = "klarnapaynow"
