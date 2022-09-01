@@ -16,5 +16,4 @@ addopts = """
     --cov-report=term-missing
     --cov-branch
     --isort
-    --flake8
 """
