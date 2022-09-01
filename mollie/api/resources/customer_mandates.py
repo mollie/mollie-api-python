@@ -1,9 +1,16 @@
 from ..error import IdentifierError
 from ..objects.mandate import Mandate
-from .base import ResourceBase
+from .base import (
+    ResourceBase,
+    ResourceCreateMixin,
+    ResourceDeleteMixin,
+    ResourceGetMixin,
+    ResourceListMixin,
+    ResourceUpdateMixin,
+)
 
 
-class CustomerMandates(ResourceBase):
+class CustomerMandates(ResourceBase, ResourceCreateMixin, ResourceDeleteMixin, ResourceGetMixin, ResourceListMixin, ResourceUpdateMixin):
     RESOURCE_ID_PREFIX = "mdt_"
     customer_id = None
 

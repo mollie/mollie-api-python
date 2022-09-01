@@ -1,9 +1,9 @@
 from ..error import IdentifierError
 from ..objects.invoice import Invoice
-from .base import ResourceBase
+from .base import ResourceBase, ResourceGetMixin, ResourceListMixin
 
 
-class Invoices(ResourceBase):
+class Invoices(ResourceBase, ResourceGetMixin, ResourceListMixin):
     RESOURCE_ID_PREFIX = "inv_"
 
     def get_resource_object(self, result):

@@ -1,9 +1,9 @@
 from ..error import IdentifierError
 from ..objects.capture import Capture
-from .base import ResourceBase
+from .base import ResourceBase, ResourceGetMixin, ResourceListMixin
 
 
-class Captures(ResourceBase):
+class Captures(ResourceBase, ResourceGetMixin, ResourceListMixin):
     RESOURCE_ID_PREFIX = "cpt_"
 
     def get_resource_object(self, result):

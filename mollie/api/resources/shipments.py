@@ -1,8 +1,8 @@
 from ..objects.shipment import Shipment
-from .base import ResourceBase
+from .base import ResourceBase, ResourceCreateMixin, ResourceGetMixin, ResourceListMixin, ResourceUpdateMixin
 
 
-class Shipments(ResourceBase):
+class Shipments(ResourceBase, ResourceCreateMixin, ResourceGetMixin, ResourceListMixin, ResourceUpdateMixin):
     order_id = None
 
     def get_resource_object(self, result):

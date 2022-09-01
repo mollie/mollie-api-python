@@ -1,9 +1,9 @@
 from ..objects.list import ObjectList
 from ..objects.method import Method
-from .base import ResourceBase
+from .base import ResourceBase, ResourceGetMixin, ResourceListMixin
 
 
-class Methods(ResourceBase):
+class Methods(ResourceBase, ResourceGetMixin, ResourceListMixin):
     def get_resource_object(self, result):
         return Method(result)
 

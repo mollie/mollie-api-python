@@ -1,8 +1,9 @@
 from ..error import RequestError
+from .base import ResourceCreateMixin, ResourceDeleteMixin
 from .methods import Methods
 
 
-class ProfileMethods(Methods):
+class ProfileMethods(Methods, ResourceCreateMixin, ResourceDeleteMixin):
     RESOURCE_REQUIRED_METHODS = ["giftcard", "voucher"]
 
     profile_id = None
@@ -29,9 +30,8 @@ class ProfileMethods(Methods):
         if self.method_id in self.RESOURCE_REQUIRED_METHODS and resource_id is None:
             raise RequestError(f"resource_id is required when enabling a {self.method_id}.")
         self.resource_id = resource_id
-        path = self.get_resource_name()
-        result = self.perform_api_call(self.REST_CREATE, path, data=data, params=params)
-        return self.get_resource_object(result)
+
+        return super().create(data, **params)
 
     def with_parent_id(self, profile_id, method=None):
         self.method_id = method

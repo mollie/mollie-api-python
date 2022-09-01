@@ -1,9 +1,9 @@
 from ..error import IdentifierError
 from ..objects.subscription import Subscription
-from .base import ResourceBase
+from .base import ResourceBase, ResourceCreateMixin, ResourceDeleteMixin, ResourceGetMixin, ResourceListMixin, ResourceUpdateMixin
 
 
-class CustomerSubscriptions(ResourceBase):
+class CustomerSubscriptions(ResourceBase, ResourceCreateMixin, ResourceDeleteMixin, ResourceListMixin, ResourceGetMixin, ResourceUpdateMixin):
     RESOURCE_ID_PREFIX = "sub_"
     customer_id = None
 

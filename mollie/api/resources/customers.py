@@ -1,9 +1,16 @@
 from ..error import IdentifierError
 from ..objects.customer import Customer
-from .base import ResourceBase
+from .base import (
+    ResourceBase,
+    ResourceCreateMixin,
+    ResourceDeleteMixin,
+    ResourceGetMixin,
+    ResourceListMixin,
+    ResourceUpdateMixin,
+)
 
 
-class Customers(ResourceBase):
+class Customers(ResourceBase, ResourceListMixin, ResourceCreateMixin, ResourceUpdateMixin, ResourceGetMixin, ResourceDeleteMixin):
     RESOURCE_ID_PREFIX = "cst_"
 
     def get_resource_object(self, result):
