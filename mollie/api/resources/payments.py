@@ -1,9 +1,9 @@
 from ..error import IdentifierError
 from ..objects.payment import Payment
-from .base import ResourceBase, ResourceCreateMixin, ResourceDeleteMixin, ResourceGetMixin, ResourceListMixin, ResourceUpdateMixin
+from .base import ResourceAllMethodsMixin, ResourceBase
 
 
-class Payments(ResourceBase, ResourceCreateMixin, ResourceDeleteMixin, ResourceGetMixin, ResourceListMixin, ResourceUpdateMixin):
+class Payments(ResourceBase, ResourceAllMethodsMixin):
     RESOURCE_ID_PREFIX = "tr_"
 
     def get_resource_object(self, result):
