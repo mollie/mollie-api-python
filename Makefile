@@ -6,7 +6,7 @@ ifndef VIRTUALENV
 	VIRTUALENV = $(PWD)/env
 endif
 
-PYTHON_VERSION = 3.9
+PYTHON_VERSION = 3.10
 PYTHON = $(VIRTUALENV)/bin/python
 
 
@@ -26,6 +26,7 @@ mollie_api_python.egg-info: virtualenv
 
 .PHONY: test
 test: develop
+	$(PYTHON) -m flake8 mollie/
 	$(PYTHON) -m pytest --black
 	$(PYTHON) -m safety check
 
