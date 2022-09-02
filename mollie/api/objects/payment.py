@@ -189,7 +189,7 @@ class Payment(ObjectBase):
         """Return the chargebacks related to this payment."""
         if not self.has_chargebacks():
             return ObjectList({}, None)
-        return self.client.payment_chargebacks.on(self).list()
+        return self.client.chargebacks.on(self).list()
 
     @property
     def captures(self):

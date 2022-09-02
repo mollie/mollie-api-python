@@ -1,3 +1,8 @@
+import re
+
+import pytest
+
+from mollie.api.error import IdentifierError, RemovedIn215Warning
 from mollie.api.objects.chargeback import Chargeback
 from mollie.api.objects.payment import Payment
 from mollie.api.objects.settlement import Settlement
@@ -13,7 +18,7 @@ def test_list_payment_chargebacks_by_payment_id(client, response):
     """Get chargebacks relevant to payment by payment id."""
     response.get(f"https://api.mollie.com/v2/payments/{PAYMENT_ID}/chargebacks", "chargebacks_list")
 
-    chargebacks = client.payment_chargebacks.with_parent_id(PAYMENT_ID).list()
+    chargebacks = client.chargebacks.with_parent_id(PAYMENT_ID).list()
     assert_list_object(chargebacks, Chargeback)
 
 
@@ -23,7 +28,7 @@ def test_get_single_payment_chargeback(client, response):
     response.get(f"https://api.mollie.com/v2/payments/{PAYMENT_ID}", "payment_single")
     response.get(f"https://api.mollie.com/v2/settlements/{SETTLEMENT_ID}", "settlement_single")
 
-    chargeback = client.payment_chargebacks.with_parent_id(PAYMENT_ID).get(CHARGEBACK_ID)
+    chargeback = client.chargebacks.with_parent_id(PAYMENT_ID).get(CHARGEBACK_ID)
     assert isinstance(chargeback, Chargeback)
     assert chargeback.id == CHARGEBACK_ID
     assert chargeback.amount == {"currency": "USD", "value": "43.38"}
@@ -42,7 +47,7 @@ def test_list_payment_chargebacks_by_payment_object(client, response):
     response.get(f"https://api.mollie.com/v2/payments/{PAYMENT_ID}", "payment_single")
 
     payment = client.payments.get(PAYMENT_ID)
-    chargebacks = client.payment_chargebacks.on(payment).list()
+    chargebacks = client.chargebacks.on(payment).list()
     assert_list_object(chargebacks, Chargeback)
 
 
@@ -52,6 +57,38 @@ def test_get_single_payment_chargeback_by_payment_object(client, response):
     response.get(f"https://api.mollie.com/v2/payments/{PAYMENT_ID}", "payment_single")
 
     payment = client.payments.get(PAYMENT_ID)
-    chargeback = client.payment_chargebacks.on(payment).get(CHARGEBACK_ID)
+    chargeback = client.chargebacks.on(payment).get(CHARGEBACK_ID)
     assert isinstance(chargeback, Chargeback)
     assert chargeback.payment_id == PAYMENT_ID
+
+
+def test_retrieve_payment_chargebacks_using_deprecated_path_raises_warning(client, response):
+    response.get(f"https://api.mollie.com/v2/payments/{PAYMENT_ID}/chargebacks/{CHARGEBACK_ID}", "chargeback_single")
+    response.get(f"https://api.mollie.com/v2/payments/{PAYMENT_ID}", "payment_single")
+
+    with pytest.warns(
+        RemovedIn215Warning,
+        match=re.escape(
+            "Using client.payment_chargebacks is deprecated, use "
+            "client.chargebacks.with_parent_id(<payment_id>).list() to retrieve Payment chargebacks."
+        ),
+    ):
+        client.payment_chargebacks.with_parent_id(PAYMENT_ID).get(CHARGEBACK_ID)
+
+    payment = client.payments.get(PAYMENT_ID)
+    with pytest.warns(
+        RemovedIn215Warning,
+        match=re.escape(
+            "Using client.payment_chargebacks is deprecated, use "
+            "client.chargebacks.on(<payment_object>).list() to retrieve Payment chargebacks."
+        ),
+    ):
+        client.payment_chargebacks.on(payment).get(CHARGEBACK_ID)
+
+
+def test_get_chargeback_with_invalid_parent_raises_error(client):
+    order_id = "ord_12345"  # an identifier with an Order prefix
+    with pytest.raises(
+        IdentifierError, match="Invalid Parent, the parent of a Chargeback should be a Payment."
+    ):
+        client.chargebacks.with_parent_id(order_id).get(CHARGEBACK_ID)

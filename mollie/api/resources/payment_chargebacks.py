@@ -1,15 +1,25 @@
+import warnings
+
+from ..error import RemovedIn215Warning
 from .chargebacks import Chargebacks
 
 
 class PaymentChargebacks(Chargebacks):
-    payment_id = None
+    # When removing below deprecation warnings, be sure to delete this whole class,
+    # and the places where it's being used.
 
-    def get_resource_name(self):
-        return f"payments/{self.payment_id}/chargebacks"
+    def with_parent_id(self, *args, **kwargs):
+        warnings.warn(
+            "Using client.payment_chargebacks is deprecated, use "
+            "client.chargebacks.with_parent_id(<payment_id>).list() to retrieve Payment chargebacks.",
+            RemovedIn215Warning,
+        )
+        return super().with_parent_id(*args, **kwargs)
 
-    def with_parent_id(self, payment_id):
-        self.payment_id = payment_id
-        return self
-
-    def on(self, payment):
-        return self.with_parent_id(payment.id)
+    def on(self, *args, **kwargs):
+        warnings.warn(
+            "Using client.payment_chargebacks is deprecated, use client.chargebacks.on(<payment_object>).list() to "
+            "retrieve Payment chargebacks.",
+            RemovedIn215Warning,
+        )
+        return super().on(*args, **kwargs)

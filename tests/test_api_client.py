@@ -180,7 +180,7 @@ def test_client_get_customer_related_invalid_id(client, endpoint, errorstr):
 @pytest.mark.parametrize(
     "endpoint, errorstr",
     [
-        ("payment_chargebacks", "Invalid chargeback ID: 'invalid'. A chargeback ID should start with 'chb_'."),
+        ("chargebacks", "Invalid chargeback ID: 'invalid'. A chargeback ID should start with 'chb_'."),
         ("payment_refunds", "Invalid refund ID: 'invalid'. A refund ID should start with 're_'."),
     ],
 )
