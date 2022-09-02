@@ -69,7 +69,7 @@ class Profile(ObjectBase):
 
     @property
     def chargebacks(self):
-        return self.client.profile_chargebacks.on(self).list()
+        return self.client.chargebacks.on(self).list()
 
     @property
     def methods(self):

@@ -2,6 +2,7 @@ from ..error import IdentifierError
 from ..objects.chargeback import Chargeback
 from .base import ResourceBase, ResourceGetMixin, ResourceListMixin
 from .payments import Payments
+from .profiles import Profiles
 from .settlements import Settlements
 
 
@@ -21,6 +22,9 @@ class Chargebacks(ResourceBase, ResourceGetMixin, ResourceListMixin):
 
         elif self.parent_id.startswith(Settlements.RESOURCE_ID_PREFIX):
             return f"settlements/{self.parent_id}/chargebacks"
+
+        elif self.parent_id.startswith(Profiles.RESOURCE_ID_PREFIX):
+            return f"chargebacks?profileId={self.parent_id}"
 
         else:
             raise IdentifierError("Invalid Parent, the parent of a Chargeback should be a Payment or a Settlement.")

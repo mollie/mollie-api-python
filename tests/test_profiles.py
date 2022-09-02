@@ -83,7 +83,7 @@ def test_get_profile(oauth_client, response):
     response.get(f"https://api.mollie.com/v2/refunds?profileId={PROFILE_ID}", "refunds_list")
 
     profile = oauth_client.profiles.get(PROFILE_ID)
-    chargebacks = oauth_client.profile_chargebacks.with_parent_id(PROFILE_ID).list()
+    chargebacks = oauth_client.chargebacks.with_parent_id(PROFILE_ID).list()
     methods = oauth_client.profile_methods.with_parent_id(PROFILE_ID).list()
     payments = oauth_client.profile_payments.with_parent_id(PROFILE_ID).list()
     refunds = oauth_client.profile_refunds.with_parent_id(PROFILE_ID).list()
