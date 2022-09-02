@@ -18,7 +18,7 @@ def test_capture_resource_class(client, response):
     assert isinstance(Capture.get_resource_class(client), Captures)
 
 
-def test_get_payment_captures_by_payment_id(client, response):
+def test_list_payment_captures_by_payment_id(client, response):
     """Get capture relevant to payment by payment id."""
     response.get(f"https://api.mollie.com/v2/payments/{PAYMENT_ID}/captures", "captures_list")
 

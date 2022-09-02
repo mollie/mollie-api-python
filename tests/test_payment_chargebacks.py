@@ -9,7 +9,7 @@ CHARGEBACK_ID = "chb_n9z0tp"
 SETTLEMENT_ID = "stl_jDk30akdN"
 
 
-def test_get_payment_chargebacks_by_payment_id(client, response):
+def test_list_payment_chargebacks_by_payment_id(client, response):
     """Get chargebacks relevant to payment by payment id."""
     response.get(f"https://api.mollie.com/v2/payments/{PAYMENT_ID}/chargebacks", "chargebacks_list")
 
