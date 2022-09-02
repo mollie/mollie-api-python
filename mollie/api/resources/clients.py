@@ -1,9 +1,9 @@
 from ..error import IdentifierError
 from ..objects.client import Client
-from .base import ResourceBase
+from .base import ResourceBase, ResourceGetMixin, ResourceListMixin
 
 
-class Clients(ResourceBase):
+class Clients(ResourceBase, ResourceListMixin, ResourceGetMixin):
     """Retrieve a list of Mollie merchants connected to your partner account (only for Mollie partners)."""
 
     RESOURCE_ID_PREFIX = "org_"

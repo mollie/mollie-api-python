@@ -1,9 +1,9 @@
 from ..error import IdentifierError
 from ..objects.onboarding import Onboarding as OnboardingObject
-from .base import ResourceBase
+from .base import ResourceBase, ResourceCreateMixin, ResourceGetMixin
 
 
-class Onboarding(ResourceBase):
+class Onboarding(ResourceBase, ResourceGetMixin):
     def get_resource_object(self, result):
         return OnboardingObject(result, self.client)
 
@@ -14,5 +14,5 @@ class Onboarding(ResourceBase):
 
     def create(self, resource_id, data=None, **params):
         path = self.get_resource_name() + "/" + str(resource_id)
-        result = self.perform_api_call(self.REST_CREATE, path, data, params)
+        result = self.perform_api_call(ResourceCreateMixin.REST_CREATE, path, data, params)
         return self.get_resource_object(result)

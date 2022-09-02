@@ -1,9 +1,9 @@
 from ..error import IdentifierError
 from ..objects.order import Order
-from .base import ResourceBase
+from .base import ResourceAllMethodsMixin, ResourceBase
 
 
-class Orders(ResourceBase):
+class Orders(ResourceBase, ResourceAllMethodsMixin):
     RESOURCE_ID_PREFIX = "ord_"
 
     def get_resource_object(self, result):

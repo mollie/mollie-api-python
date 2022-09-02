@@ -1,9 +1,9 @@
 from ..error import IdentifierError
 from ..objects.organization import Organization
-from .base import ResourceBase
+from .base import ResourceBase, ResourceGetMixin
 
 
-class Organizations(ResourceBase):
+class Organizations(ResourceBase, ResourceGetMixin):
     RESOURCE_ID_PREFIX = "org_"
 
     def get_resource_object(self, result):

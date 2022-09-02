@@ -1,9 +1,9 @@
 from ..error import IdentifierError
 from ..objects.profile import Profile
-from .base import ResourceBase
+from .base import ResourceAllMethodsMixin, ResourceBase
 
 
-class Profiles(ResourceBase):
+class Profiles(ResourceBase, ResourceAllMethodsMixin):
     RESOURCE_ID_PREFIX = "pfl_"
 
     def get_resource_object(self, result):

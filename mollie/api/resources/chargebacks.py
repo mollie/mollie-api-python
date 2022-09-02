@@ -1,9 +1,9 @@
 from ..error import IdentifierError
 from ..objects.chargeback import Chargeback
-from .base import ResourceBase
+from .base import ResourceBase, ResourceGetMixin, ResourceListMixin
 
 
-class Chargebacks(ResourceBase):
+class Chargebacks(ResourceBase, ResourceGetMixin, ResourceListMixin):
     RESOURCE_ID_PREFIX = "chb_"
 
     def get_resource_object(self, result):

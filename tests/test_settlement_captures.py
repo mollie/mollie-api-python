@@ -4,10 +4,9 @@ from .utils import assert_list_object
 
 PAYMENT_ID = "tr_7UhSN1zuXS"
 SETTLEMENT_ID = "stl_jDk30akdN"
-CHARGEBACK_ID = "chb_n9z0tp"
 
 
-def test_get_settlement_captures_by_capture_id(oauth_client, response):
+def test_list_settlement_captures_by_capture_id(oauth_client, response):
     """Get captures relevant to settlement by settlement id."""
     response.get(f"https://api.mollie.com/v2/settlements/{SETTLEMENT_ID}/captures", "captures_list")
 
