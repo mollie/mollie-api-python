@@ -1,3 +1,6 @@
+import pytest
+
+from mollie.api.error import RemovedIn215Warning
 from mollie.api.objects.capture import Capture
 from mollie.api.objects.payment import Payment
 from mollie.api.objects.settlement import Settlement
@@ -40,6 +43,18 @@ def test_get_single_payment_capture(client, response):
     assert capture.payment_id == PAYMENT_ID
     assert capture.shipment_id == "shp_3wmsgCJN4U"
     assert capture.settlement_id == "stl_jDk30akdN"
+
+
+def test_get_payment_capture_by_deprecated_parent_param_raises_warning(client, response):
+    response.get(f"https://api.mollie.com/v2/payments/{PAYMENT_ID}/captures/{CAPTURE_ID}", "capture_single")
+    response.get(f"https://api.mollie.com/v2/payments/{PAYMENT_ID}", "payment_single")
+
+    with pytest.warns(RemovedIn215Warning, match="Use parameter 'parent_id' to specify a Parent ID for captures."):
+        client.captures.with_parent_id(payment_id=PAYMENT_ID).get(CAPTURE_ID)
+
+    payment = client.payments.get(PAYMENT_ID)
+    with pytest.warns(RemovedIn215Warning, match="Use parameter 'parent' to specify a Parent for captures."):
+        client.captures.on(payment=payment).get(CAPTURE_ID)
 
 
 def test_list_payment_captures_by_payment_object(client, response):
