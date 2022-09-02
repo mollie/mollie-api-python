@@ -120,14 +120,14 @@ See https://www.django-rest-framework.org/community/release-notes/#deprecation-p
 """
 
 
-class RemovedIn27Warning(DeprecationWarning):
-    """Deprecation warning for features that will be removed in version 2.7.0."""
+class RemovedIn214Warning(DeprecationWarning):
+    """Deprecation warning for features that will be removed in version 2.14.0."""
 
     pass
 
 
-class RemovedIn28Warning(PendingDeprecationWarning):
-    """Pending deprecation warning for features that will be removed in version 2.8.0."""
+class RemovedIn215Warning(PendingDeprecationWarning):
+    """Pending deprecation warning for features that will be removed in version 2.15.0."""
 
     pass
 
