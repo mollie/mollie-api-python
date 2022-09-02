@@ -1,15 +1,25 @@
+import warnings
+
+from ..error import RemovedIn215Warning
 from .captures import Captures
 
 
 class SettlementCaptures(Captures):
-    settlement_id = None
+    # When removing below deprecation warnings, be sure to delete this whole class,
+    # and the places where it's being used.
 
-    def get_resource_name(self):
-        return f"settlements/{self.settlement_id}/captures"
+    def with_parent_id(self, *args, **kwargs):
+        warnings.warn(
+            "Using client.settlement_captures is deprecated, use "
+            "client.captures.with_parent_id(<settlement_id>).list() to retrieve Settlement captures.",
+            RemovedIn215Warning,
+        )
+        return super().with_parent_id(*args, **kwargs)
 
-    def with_parent_id(self, settlement_id):
-        self.settlement_id = settlement_id
-        return self
-
-    def on(self, settlement):
-        return self.with_parent_id(settlement.id)
+    def on(self, *args, **kwargs):
+        warnings.warn(
+            "Using client.settlement_captures is deprecated, use client.captures.on(<settlement_object>).list() to "
+            "retrieve Settlement captures.",
+            RemovedIn215Warning,
+        )
+        return super().on(*args, **kwargs)

@@ -1,6 +1,8 @@
+import re
+
 import pytest
 
-from mollie.api.error import RemovedIn215Warning
+from mollie.api.error import IdentifierError, RemovedIn215Warning
 from mollie.api.objects.capture import Capture
 from mollie.api.objects.payment import Payment
 from mollie.api.objects.settlement import Settlement
@@ -108,3 +110,15 @@ def test_capture_get_related_settlement(client, response):
     capture = client.captures.with_parent_id(PAYMENT_ID).get(CAPTURE_ID)
     settlement = capture.settlement
     assert isinstance(settlement, Settlement)
+
+
+def test_get_capture_without_parent_raises_error(client, response):
+    with pytest.raises(IdentifierError, match=re.escape("Parent is missing, use with_parent_id() or on() to set it.")):
+        client.captures.get(CAPTURE_ID)
+
+
+def test_get_capture_with_invalid_parent_raises_error(client):
+    with pytest.raises(
+        IdentifierError, match="Invalid Parent, the parent of a Capture should be a Payment or a Settlement."
+    ):
+        client.captures.with_parent_id(SHIPMENT_ID).get(CAPTURE_ID)

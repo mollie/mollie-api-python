@@ -52,8 +52,7 @@ def main(client):
         # https://docs.mollie.com/reference/v2/settlements-api/list-settlement-captures
 
         body += "<h1>List settlement captures</h1>"
-        settlement = client.settlements.get(settlement_id)
-        response = client.settlement_captures.on(settlement).list()
+        response = client.captures.with_parent_id(settlement_id).list()
         body += str(response)
 
         return body

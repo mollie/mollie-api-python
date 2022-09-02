@@ -85,7 +85,7 @@ class Settlement(ObjectBase):
     @property
     def captures(self):
         """Return the captures related to this settlement."""
-        return self.client.settlement_captures.on(self).list()
+        return self.client.captures.on(self).list()
 
     @property
     def invoice(self):

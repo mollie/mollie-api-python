@@ -33,7 +33,7 @@ def test_settlement_get(oauth_client, response):
     chargebacks = oauth_client.settlement_chargebacks.with_parent_id(SETTLEMENT_ID).list()
     payments = oauth_client.settlement_payments.with_parent_id(SETTLEMENT_ID).list()
     refunds = oauth_client.settlement_refunds.with_parent_id(SETTLEMENT_ID).list()
-    captures = oauth_client.settlement_captures.with_parent_id(SETTLEMENT_ID).list()
+    captures = oauth_client.captures.with_parent_id(SETTLEMENT_ID).list()
 
     assert isinstance(settlement, Settlement)
 
