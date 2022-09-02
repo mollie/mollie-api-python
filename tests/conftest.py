@@ -10,7 +10,7 @@ from mollie.api.client import Client
 logger = logging.getLogger("mollie.pytest.fixtures")
 
 
-@pytest.fixture(scope="session")
+@pytest.fixture()
 def client():
     """Setup a Mollie API client object."""
     api_key = os.environ.get("MOLLIE_API_KEY", "test_test")
@@ -20,7 +20,7 @@ def client():
     return client
 
 
-@pytest.fixture(scope="session")
+@pytest.fixture()
 def oauth_token():
     """Return a valid oauth token for resuming an existing OAuth client."""
     token = {
@@ -36,7 +36,7 @@ def oauth_token():
     return token
 
 
-@pytest.fixture(scope="session")
+@pytest.fixture()
 def oauth_client(oauth_token):
     """Setup a Mollie API client with initialized OAuth2 authentication."""
     client_id = "app_nvQQ4mGHqprcfFFqpnmbOgUs"
