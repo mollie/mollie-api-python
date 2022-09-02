@@ -1,15 +1,24 @@
+import warnings
+
+from ..error import RemovedIn215Warning
 from .chargebacks import Chargebacks
 
 
 class SettlementChargebacks(Chargebacks):
-    settlement_id = None
+    def with_parent_id(self, *args, **kwargs):
+        warnings.warn(
+            "Using client.settlement_chargebacks is deprecated, use "
+            "client.chargebacks.with_parent_id(<settlement_id>).list() to retrieve Settlement chargebacks.",
+            RemovedIn215Warning,
+        )
 
-    def get_resource_name(self):
-        return f"settlements/{self.settlement_id}/chargebacks"
+        return super().with_parent_id(*args, **kwargs)
 
-    def with_parent_id(self, settlement_id):
-        self.settlement_id = settlement_id
-        return self
+    def on(self, *args, **kwargs):
+        warnings.warn(
+            "Using client.settlement_chargebacks is deprecated, use "
+            "client.chargebacks.on(<settlement_object>).list() to retrieve Settlement chargebacks.",
+            RemovedIn215Warning,
+        )
 
-    def on(self, settlement):
-        return self.with_parent_id(settlement.id)
+        return super().on(*args, **kwargs)

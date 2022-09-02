@@ -89,6 +89,6 @@ def test_retrieve_payment_chargebacks_using_deprecated_path_raises_warning(clien
 def test_get_chargeback_with_invalid_parent_raises_error(client):
     order_id = "ord_12345"  # an identifier with an Order prefix
     with pytest.raises(
-        IdentifierError, match="Invalid Parent, the parent of a Chargeback should be a Payment."
+        IdentifierError, match="Invalid Parent, the parent of a Chargeback should be a Payment or a Settlement."
     ):
         client.chargebacks.with_parent_id(order_id).get(CHARGEBACK_ID)

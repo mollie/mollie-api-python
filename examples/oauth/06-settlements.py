@@ -46,7 +46,7 @@ def main(client):
         # https://docs.mollie.com/reference/v2/settlements-api/list-settlement-chargebacks
 
         body += "<h1>List settlement chargebacks</h1>"
-        response = client.settlement_chargebacks.with_parent_id(settlement_id).list()
+        response = client.chargebacks.with_parent_id(settlement_id).list()
         body += str(response)
 
         # https://docs.mollie.com/reference/v2/settlements-api/list-settlement-captures

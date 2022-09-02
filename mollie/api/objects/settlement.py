@@ -80,7 +80,7 @@ class Settlement(ObjectBase):
     @property
     def chargebacks(self):
         """Return the chargebacks related to this settlement."""
-        return self.client.settlement_chargebacks.on(self).list()
+        return self.client.chargebacks.on(self).list()
 
     @property
     def captures(self):

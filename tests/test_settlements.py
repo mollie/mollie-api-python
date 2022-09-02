@@ -30,7 +30,7 @@ def test_settlement_get(oauth_client, response):
     response.get(f"https://api.mollie.com/v2/invoices/{INVOICE_ID}", "invoice_single")
 
     settlement = oauth_client.settlements.get(SETTLEMENT_ID)
-    chargebacks = oauth_client.settlement_chargebacks.with_parent_id(SETTLEMENT_ID).list()
+    chargebacks = oauth_client.chargebacks.with_parent_id(SETTLEMENT_ID).list()
     payments = oauth_client.settlement_payments.with_parent_id(SETTLEMENT_ID).list()
     refunds = oauth_client.settlement_refunds.with_parent_id(SETTLEMENT_ID).list()
     captures = oauth_client.captures.with_parent_id(SETTLEMENT_ID).list()
