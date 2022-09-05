@@ -1,6 +1,5 @@
 from ..error import EmbedNotFound
 from ..resources.order_lines import OrderLines
-from ..resources.order_payments import OrderPayments
 from ..resources.order_refunds import OrderRefunds
 from .base import ObjectBase
 from .list import ObjectList
@@ -247,4 +246,4 @@ class Order(ObjectBase):
 
     def create_payment(self, data):
         """Creates a new payment object for an order."""
-        return OrderPayments(self.client).on(self).create(data)
+        return self.client.payments.on(self).create(data)
