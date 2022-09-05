@@ -1,3 +1,5 @@
+import re
+
 import pytest
 
 from mollie.api.error import IdentifierError
@@ -235,5 +237,8 @@ def test_update_payment(client, response):
 
 
 def test_get_payment_with_invalid_parent_raises_error(client):
-    with pytest.raises(IdentifierError, match="Invalid Parent, the parent of a Payment should be a Customer."):
+    with pytest.raises(
+        IdentifierError,
+        match=re.escape("Invalid Parent, the parent of a Payment should be a Customer, an Order or a Profile."),
+    ):
         client.payments.with_parent_id(REFUND_ID).get(PAYMENT_ID)

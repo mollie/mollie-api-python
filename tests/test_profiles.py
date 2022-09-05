@@ -1,6 +1,8 @@
+import re
+
 import pytest
 
-from mollie.api.error import APIDeprecationWarning, IdentifierError, RequestError
+from mollie.api.error import APIDeprecationWarning, IdentifierError, RemovedIn215Warning, RequestError
 from mollie.api.objects.profile import Profile
 from mollie.api.resources.profiles import Profiles
 
@@ -74,6 +76,30 @@ def test_list_profiles(oauth_client, response):
     assert_list_object(profiles, Profile)
 
 
+def test_list_profile_payments_through_deprecated_path_raises_warning(oauth_client, response):
+    response.get(f"https://api.mollie.com/v2/payments?profileId={PROFILE_ID}", "payments_list")
+    response.get(f"https://api.mollie.com/v2/profiles/{PROFILE_ID}", "profile_single")
+
+    with pytest.warns(
+        RemovedIn215Warning,
+        match=re.escape(
+            "Using client.profile_payments is deprecated, use client.payments.with_parent_id(<profile_id>).list() to "
+            "retrieve Profile payments."
+        ),
+    ):
+        oauth_client.profile_payments.with_parent_id(PROFILE_ID).list()
+
+    profile = oauth_client.profiles.get(PROFILE_ID)
+    with pytest.warns(
+        RemovedIn215Warning,
+        match=re.escape(
+            "Using client.profile_payments is deprecated, use client.payments.on(<profile_object>).list() to "
+            "retrieve Profile payments."
+        ),
+    ):
+        oauth_client.profile_payments.on(profile).list()
+
+
 def test_get_profile(oauth_client, response):
     """Retrieve a single profile."""
     response.get(f"https://api.mollie.com/v2/profiles/{PROFILE_ID}", "profile_single")
@@ -85,7 +111,7 @@ def test_get_profile(oauth_client, response):
     profile = oauth_client.profiles.get(PROFILE_ID)
     chargebacks = oauth_client.chargebacks.with_parent_id(PROFILE_ID).list()
     methods = oauth_client.profile_methods.with_parent_id(PROFILE_ID).list()
-    payments = oauth_client.profile_payments.with_parent_id(PROFILE_ID).list()
+    payments = oauth_client.payments.with_parent_id(PROFILE_ID).list()
     refunds = oauth_client.profile_refunds.with_parent_id(PROFILE_ID).list()
 
     assert isinstance(profile, Profile)

@@ -77,7 +77,7 @@ class Profile(ObjectBase):
 
     @property
     def payments(self):
-        return self.client.profile_payments.on(self).list()
+        return self.client.payments.on(self).list()
 
     @property
     def refunds(self):
