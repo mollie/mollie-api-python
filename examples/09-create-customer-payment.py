@@ -52,7 +52,7 @@ def main():
         #
         # See: https://www.mollie.com/nl/docs/reference/customers/create-payment
         #
-        payment = mollie_client.customer_payments.with_parent_id(customer.id).create(
+        payment = mollie_client.payments.with_parent_id(customer.id).create(
             {
                 "amount": {"currency": "EUR", "value": "100.00"},
                 "description": "My first API payment",

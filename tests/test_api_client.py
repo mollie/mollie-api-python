@@ -167,7 +167,7 @@ def test_client_get_invalid_id(client, endpoint, errorstr):
     "endpoint, errorstr",
     [
         ("customer_mandates", "Invalid mandate ID: 'invalid'. A mandate ID should start with 'mdt_'."),
-        ("customer_payments", "Invalid payment ID: 'invalid'. A payment ID should start with 'tr_'."),
+        ("payments", "Invalid payment ID: 'invalid'. A payment ID should start with 'tr_'."),
         ("customer_subscriptions", "Invalid subscription ID: 'invalid'. A subscription ID should start with 'sub_'."),
     ],
 )

@@ -49,7 +49,7 @@ def main():
         params = {
             "limit": amount_of_payments_to_retrieve,
         }
-        payments = mollie_client.customer_payments.with_parent_id(customer.id).list(**params)
+        payments = mollie_client.payments.with_parent_id(customer.id).list(**params)
 
         body += f'<p>Showing the last {len(payments)} payments for customer "{customer.id}"</p>'
 

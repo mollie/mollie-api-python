@@ -60,4 +60,4 @@ class Customer(ObjectBase):
         """Return the payment list for the customer."""
         if not self._get_link("payments"):
             return ObjectList({}, None)
-        return self.client.customer_payments.on(self).list()
+        return self.client.payments.on(self).list()

@@ -1,13 +1,25 @@
 from ..error import IdentifierError
 from ..objects.payment import Payment
 from .base import ResourceAllMethodsMixin, ResourceBase
+from .customers import Customers
 
 
 class Payments(ResourceBase, ResourceAllMethodsMixin):
     RESOURCE_ID_PREFIX = "tr_"
+    parent_id = None
 
     def get_resource_object(self, result):
         return Payment(result, self.client)
+
+    def get_resource_name(self):
+        if not self.parent_id:
+            return "payments"
+
+        elif self.parent_id.startswith(Customers.RESOURCE_ID_PREFIX):
+            return f"customers/{self.parent_id}/payments"
+
+        else:
+            raise IdentifierError("Invalid Parent, the parent of a Payment should be a Customer.")
 
     def get(self, payment_id, **params):
         if not payment_id or not payment_id.startswith(self.RESOURCE_ID_PREFIX):
@@ -28,3 +40,10 @@ class Payments(ResourceBase, ResourceAllMethodsMixin):
             )
         result = super().delete(payment_id, data)
         return self.get_resource_object(result)
+
+    def with_parent_id(self, parent_id):
+        self.parent_id = parent_id
+        return self
+
+    def on(self, parent):
+        return self.with_parent_id(parent.id)

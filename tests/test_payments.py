@@ -232,3 +232,8 @@ def test_update_payment(client, response):
     updated_payment = client.payments.update(PAYMENT_ID, data)
     assert isinstance(updated_payment, Payment)
     assert updated_payment.description == "Order #12346"
+
+
+def test_get_payment_with_invalid_parent_raises_error(client):
+    with pytest.raises(IdentifierError, match="Invalid Parent, the parent of a Payment should be a Customer."):
+        client.payments.with_parent_id(REFUND_ID).get(PAYMENT_ID)
