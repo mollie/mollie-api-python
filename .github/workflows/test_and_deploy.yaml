@@ -36,6 +36,9 @@ jobs:
       - name: Verify dependencies
         run: safety check
 
+      - name: Verify code style
+        run: python -m flake8 -v
+
   deployment:
     name: Deploy a new release to Pypi
     if: ${{ startsWith(github.ref, 'refs/tags/v') }}  # only on tagged commits
