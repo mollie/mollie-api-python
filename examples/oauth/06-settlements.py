@@ -34,7 +34,7 @@ def main(client):
         # https://docs.mollie.com/reference/v2/settlements-api/list-settlement-payments
 
         body += "<h1>List settlement payments</h1>"
-        response = client.settlement_payments.with_parent_id(settlement_id).list()
+        response = client.payments.with_parent_id(settlement_id).list()
         body += str(response)
 
         # https://docs.mollie.com/reference/v2/settlements-api/list-settlement-refunds

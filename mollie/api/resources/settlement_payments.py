@@ -1,15 +1,25 @@
+import warnings
+
+from ..error import RemovedIn215Warning
 from .payments import Payments
 
 
 class SettlementPayments(Payments):
-    settlement_id = None
+    # When removing below deprecation warnings, be sure to delete this whole class,
+    # and the places where it's being used.
 
-    def get_resource_name(self):
-        return f"settlements/{self.settlement_id}/payments"
+    def with_parent_id(self, *args, **kwargs):
+        warnings.warn(
+            "Using client.settlement_payments is deprecated, use "
+            "client.payments.with_parent_id(<settlement_id>).list() to retrieve Settlement payments.",
+            RemovedIn215Warning,
+        )
+        return super().with_parent_id(*args, **kwargs)
 
-    def with_parent_id(self, settlement_id):
-        self.settlement_id = settlement_id
-        return self
-
-    def on(self, settlement):
-        return self.with_parent_id(settlement.id)
+    def on(self, *args, **kwargs):
+        warnings.warn(
+            "Using client.settlement_payments is deprecated, use "
+            "client.payments.on(<settlement_object>).list() to retrieve Settlement payments.",
+            RemovedIn215Warning,
+        )
+        return super().on(*args, **kwargs)

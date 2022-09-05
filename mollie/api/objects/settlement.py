@@ -70,7 +70,7 @@ class Settlement(ObjectBase):
     @property
     def payments(self):
         """Return the payments related to this settlement."""
-        return self.client.settlement_payments.on(self).list()
+        return self.client.payments.on(self).list()
 
     @property
     def refunds(self):

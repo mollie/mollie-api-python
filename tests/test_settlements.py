@@ -31,7 +31,7 @@ def test_settlement_get(oauth_client, response):
 
     settlement = oauth_client.settlements.get(SETTLEMENT_ID)
     chargebacks = oauth_client.chargebacks.with_parent_id(SETTLEMENT_ID).list()
-    payments = oauth_client.settlement_payments.with_parent_id(SETTLEMENT_ID).list()
+    payments = oauth_client.payments.with_parent_id(SETTLEMENT_ID).list()
     refunds = oauth_client.settlement_refunds.with_parent_id(SETTLEMENT_ID).list()
     captures = oauth_client.captures.with_parent_id(SETTLEMENT_ID).list()
 

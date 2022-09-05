@@ -4,6 +4,7 @@ from .base import ResourceAllMethodsMixin, ResourceBase
 from .customers import Customers
 from .orders import Orders
 from .profiles import Profiles
+from .settlements import Settlements
 
 
 class Payments(ResourceBase, ResourceAllMethodsMixin):
@@ -26,9 +27,12 @@ class Payments(ResourceBase, ResourceAllMethodsMixin):
         elif self.parent_id.startswith(Profiles.RESOURCE_ID_PREFIX):
             return f"payments?profileId={self.parent_id}"
 
+        elif self.parent_id.startswith(Settlements.RESOURCE_ID_PREFIX):
+            return f"settlements/{self.parent_id}/payments"
+
         else:
             raise IdentifierError(
-                "Invalid Parent, the parent of a Payment should be a Customer, an Order or a Profile."
+                "Invalid Parent, the parent of a Payment should be a Customer, an Order, a Profile or a Settlement."
             )
 
     def get(self, payment_id, **params):
