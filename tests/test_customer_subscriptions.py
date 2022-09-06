@@ -168,7 +168,6 @@ def test_customer_subscription_get_related_payments(client, response):
         f"https://api.mollie.com/v2/customers/{CUSTOMER_ID}/subscriptions/{SUBSCRIPTION_ID}",
         "subscription_single",
     )
-    response.get(f"https://api.mollie.com/v2/customers/{CUSTOMER_ID}", "customer_single")
     response.get(
         f"https://api.mollie.com/v2/customers/{CUSTOMER_ID}/subscriptions/{SUBSCRIPTION_ID}/payments",
         "payments_list",

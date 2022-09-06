@@ -1,4 +1,6 @@
 from .base import ObjectBase
+from .list import ObjectList
+from .payment import Payment
 
 
 class Subscription(ObjectBase):
@@ -118,8 +120,12 @@ class Subscription(ObjectBase):
     @property
     def payments(self):
         """Return a list of payments for this subscription."""
-        payments = self.client.subscription_payments.on(self).list()
-        return payments
+        url = self._get_link("payments")
+        if not url:
+            return None
+
+        payments = self.client.payments.from_url(url)
+        return ObjectList(payments, Payment, self.client)
 
     # TODO: Implement this property.
     # Payload from API is missing customerId or a _links['mandate'] field to do this efficiently.
