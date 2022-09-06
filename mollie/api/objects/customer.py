@@ -46,7 +46,7 @@ class Customer(ObjectBase):
         """Return the subscription list for the customer."""
         if not self._get_link("subscriptions"):
             return ObjectList({}, None)
-        return self.client.customer_subscriptions.on(self).list()
+        return self.client.subscriptions.on(self).list()
 
     @property
     def mandates(self):

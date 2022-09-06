@@ -215,7 +215,7 @@ class Payment(ObjectBase):
     def subscription(self):
         """Return the subscription for this payment."""
         if self.customer_id and self.subscription_id:
-            return self.client.customer_subscriptions.with_parent_id(self.customer_id).get(self.subscription_id)
+            return self.client.subscriptions.with_parent_id(self.customer_id).get(self.subscription_id)
 
     @property
     def customer(self):
