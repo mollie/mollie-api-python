@@ -6,7 +6,7 @@ from .order_line import OrderLine
 class Refund(ObjectBase):
     @classmethod
     def get_resource_class(cls, client):
-        from ..resources.refunds import Refunds
+        from ..resources import Refunds
 
         return Refunds(client)
 

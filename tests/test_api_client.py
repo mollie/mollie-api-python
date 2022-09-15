@@ -145,7 +145,6 @@ def test_client_invalid_update_data(client):
     [
         ("customers", "Invalid customer ID: 'invalid'. A customer ID should start with 'cst_'."),
         ("payments", "Invalid payment ID: 'invalid'. A payment ID should start with 'tr_'."),
-        ("refunds", "Invalid refund ID: 'invalid'. A refund ID should start with 're_'."),
         ("orders", "Invalid order ID: 'invalid'. An order ID should start with 'ord_'."),
         ("captures", "Invalid capture ID: 'invalid'. A capture ID should start with 'cpt_'."),
         ("invoices", "Invalid invoice ID: 'invalid'. An invoice ID should start with 'inv_'."),
@@ -181,7 +180,6 @@ def test_client_get_customer_related_invalid_id(client, endpoint, errorstr):
     "endpoint, errorstr",
     [
         ("payment_chargebacks", "Invalid chargeback ID: 'invalid'. A chargeback ID should start with 'chb_'."),
-        ("payment_refunds", "Invalid refund ID: 'invalid'. A refund ID should start with 're_'."),
     ],
 )
 def test_client_get_payment_related_invalid_id(client, endpoint, errorstr):

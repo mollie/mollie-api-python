@@ -14,5 +14,5 @@ def test_list_refunds_on_settlement_object(oauth_client, response):
     settlement = oauth_client.settlements.get(SETTLEMENT_ID)
     assert isinstance(settlement, Settlement)
 
-    refunds = oauth_client.settlement_refunds.on(settlement).list()
+    refunds = settlement.refunds.list()
     assert_list_object(refunds, Refund)

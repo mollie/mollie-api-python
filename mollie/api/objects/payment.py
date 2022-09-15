@@ -1,3 +1,4 @@
+from ..resources import PaymentRefunds
 from .base import ObjectBase
 from .list import ObjectList
 
@@ -180,9 +181,7 @@ class Payment(ObjectBase):
     @property
     def refunds(self):
         """Return the refunds related to this payment."""
-        if not self.has_refunds():
-            return ObjectList({}, None)
-        return self.client.payment_refunds.on(self).list()
+        return PaymentRefunds(self.client, self)
 
     @property
     def chargebacks(self):

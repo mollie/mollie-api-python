@@ -1,7 +1,7 @@
 from ..error import EmbedNotFound
+from ..resources import OrderRefunds
 from ..resources.order_lines import OrderLines
 from ..resources.order_payments import OrderPayments
-from ..resources.order_refunds import OrderRefunds
 from .base import ObjectBase
 from .list import ObjectList
 from .order_line import OrderLine
@@ -166,13 +166,6 @@ class Order(ObjectBase):
     def has_refunds(self):
         return self.amount_refunded is not None
 
-    def create_refund(self, data=None, **params):
-        """Create a refund for the order. When no data arg is given, a refund for all order lines is assumed."""
-        if data is None:
-            data = {"lines": []}
-        refund = OrderRefunds(self.client).on(self).create(data, **params)
-        return refund
-
     def cancel_lines(self, data=None):
         """Cancel the lines given. When no lines are given, cancel all the lines.
 
@@ -188,9 +181,7 @@ class Order(ObjectBase):
 
     @property
     def refunds(self):
-        if not self.has_refunds():
-            return ObjectList({}, None)
-        return OrderRefunds(self.client).on(self).list()
+        return OrderRefunds(self.client, self)
 
     @property
     def lines(self):

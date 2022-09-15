@@ -1,4 +1,4 @@
-from ..error import ResponseError, ResponseHandlingError
+from ..error import IdentifierError, ResponseError, ResponseHandlingError
 from ..objects.list import ObjectList
 
 
@@ -35,6 +35,15 @@ class ResourceBase(object):
                     f"(status code: {resp.status_code}): '{resp.text}'."
                 )
         return result
+
+    def _validate_resource_id(self, resource_id: str, name: str = "", message: str = ""):
+        resource_name = name or "Identifier"
+        message = (
+            message or f"Invalid {resource_name} '{resource_id}', it should start with '{self.RESOURCE_ID_PREFIX}'."
+        )
+
+        if not resource_id or not str(resource_id).startswith(self.RESOURCE_ID_PREFIX):
+            raise IdentifierError(message)
 
     @staticmethod
     def extract_embed(params):

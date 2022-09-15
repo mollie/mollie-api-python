@@ -1,6 +1,7 @@
 import warnings
 
 from ..error import APIDeprecationWarning
+from ..resources import SettlementRefunds
 from .base import ObjectBase
 
 
@@ -75,7 +76,7 @@ class Settlement(ObjectBase):
     @property
     def refunds(self):
         """Return the refunds related to this settlement."""
-        return self.client.settlement_refunds.on(self).list()
+        return SettlementRefunds(self.client, self)
 
     @property
     def chargebacks(self):

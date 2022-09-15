@@ -10,6 +10,7 @@ from requests_oauthlib import OAuth2Session
 from urllib3.util import Retry
 
 from .error import RequestError, RequestSetupError
+from .resources import Refunds
 from .resources.captures import Captures
 from .resources.chargebacks import Chargebacks
 from .resources.clients import Clients
@@ -24,7 +25,6 @@ from .resources.orders import Orders
 from .resources.organizations import Organizations
 from .resources.payment_chargebacks import PaymentChargebacks
 from .resources.payment_links import PaymentLinks
-from .resources.payment_refunds import PaymentRefunds
 from .resources.payments import Payments
 from .resources.permissions import Permissions
 from .resources.profile_chargebacks import ProfileChargebacks
@@ -32,11 +32,9 @@ from .resources.profile_methods import ProfileMethods
 from .resources.profile_payments import ProfilePayments
 from .resources.profile_refunds import ProfileRefunds
 from .resources.profiles import Profiles
-from .resources.refunds import Refunds
 from .resources.settlement_captures import SettlementCaptures
 from .resources.settlement_chargebacks import SettlementChargebacks
 from .resources.settlement_payments import SettlementPayments
-from .resources.settlement_refunds import SettlementRefunds
 from .resources.settlements import Settlements
 from .resources.shipments import Shipments
 from .resources.subscription_payments import SubscriptionPayments
@@ -98,7 +96,6 @@ class Client(object):
         # add endpoint resources
         self.payments = Payments(self)
         self.payment_links = PaymentLinks(self)
-        self.payment_refunds = PaymentRefunds(self)
         self.payment_chargebacks = PaymentChargebacks(self)
         self.profiles = Profiles(self)
         self.profile_chargebacks = ProfileChargebacks(self)
@@ -122,7 +119,6 @@ class Client(object):
         self.captures = Captures(self)
         self.settlements = Settlements(self)
         self.settlement_payments = SettlementPayments(self)
-        self.settlement_refunds = SettlementRefunds(self)
         self.settlement_chargebacks = SettlementChargebacks(self)
         self.settlement_captures = SettlementCaptures(self)
         self.shipments = Shipments(self)

@@ -1,17 +1,68 @@
-from ..error import IdentifierError
 from ..objects.refund import Refund
 from .base import ResourceBase, ResourceCreateMixin, ResourceDeleteMixin, ResourceGetMixin, ResourceListMixin
 
 
-class Refunds(ResourceBase, ResourceCreateMixin, ResourceDeleteMixin, ResourceGetMixin, ResourceListMixin):
+class RefundsBase(ResourceBase):
     RESOURCE_ID_PREFIX = "re_"
 
     def get_resource_object(self, result):
         return Refund(result, self.client)
 
-    def get(self, refund_id, **params):
-        if not refund_id or not refund_id.startswith(self.RESOURCE_ID_PREFIX):
-            raise IdentifierError(
-                f"Invalid refund ID: '{refund_id}'. A refund ID should start with '{self.RESOURCE_ID_PREFIX}'."
-            )
+
+class Refunds(RefundsBase, ResourceListMixin):
+    """Resource handle for /refunds/ endpoint."""
+
+    pass
+
+
+class PaymentRefunds(RefundsBase, ResourceCreateMixin, ResourceDeleteMixin, ResourceGetMixin, ResourceListMixin):
+    """Resource handler for /payments/:paymentId:/refunds/ endpoint."""
+
+    _payment = None
+
+    def __init__(self, client, payment):
+        super().__init__(client)
+        self._payment = payment
+
+    def get_resource_name(self):
+        return f"payments/{self._payment.id}/refunds"
+
+    def get(self, refund_id: str, **params):
+        self._validate_resource_id(refund_id, "Refund ID")
         return super().get(refund_id, **params)
+
+    def delete(self, refund_id: str, **params):
+        self._validate_resource_id(refund_id, "Refund ID")
+        return super().delete(refund_id, **params)
+
+
+class OrderRefunds(RefundsBase, ResourceCreateMixin, ResourceListMixin):
+    """Resource handler for /orders/:orderId:/refunds/ endpoint."""
+
+    _order = None
+
+    def __init__(self, client, order):
+        super().__init__(client)
+        self._order = order
+
+    def get_resource_name(self):
+        return f"orders/{self._order.id}/refunds"
+
+    def create(self, data=None, **params):
+        """Create a refund for the order. When no data arg is given, a refund for all order lines is assumed."""
+        if not data:
+            data = {"lines": []}
+        return super().create(data, **params)
+
+
+class SettlementRefunds(RefundsBase, ResourceListMixin):
+    """ResourceHandler for /settlements/:settlementId:/refunds/ endpoint."""
+
+    _settlement = None
+
+    def __init__(self, client, settlement):
+        super().__init__(client)
+        self._settlement = settlement
+
+    def get_resource_path(self):
+        return f"settlements/{self._settlement.id}/refunds"

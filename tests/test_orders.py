@@ -8,6 +8,7 @@ from mollie.api.objects.order import Order
 from mollie.api.objects.payment import Payment
 from mollie.api.objects.refund import Refund
 from mollie.api.objects.shipment import Shipment
+from mollie.api.resources import OrderRefunds
 
 from .utils import assert_list_object
 
@@ -70,7 +71,7 @@ def test_get_order(client, response):
     assert order.completed_at is None
     assert order.checkout_url == "https://www.mollie.com/payscreen/order/checkout/kEn1PlbGa"
     assert_list_object(order.shipments, Shipment)
-    assert_list_object(order.refunds, Refund, 0)
+    assert isinstance(order.refunds, OrderRefunds)
     assert order.is_created() is True
     assert order.is_paid() is False
     assert order.is_authorized() is False
@@ -142,7 +143,7 @@ def test_create_order_refund(client, response):
     }
 
     order = client.orders.get(ORDER_ID)
-    refund = order.create_refund(data)
+    refund = order.refunds.create(data)
     assert isinstance(refund, Refund)
     assert refund.status == Refund.STATUS_PENDING
     assert refund.description == "Required quantity not in stock, refunding one photo book."
@@ -154,7 +155,7 @@ def test_create_order_refund_all_lines(client, response):
     response.post(f"https://api.mollie.com/v2/orders/{ORDER_ID}/refunds", "refund_single")
 
     order = client.orders.get(ORDER_ID)
-    refund = order.create_refund()
+    refund = order.refunds.create()
     assert isinstance(refund, Refund)
 
     # Inspect the request that was made

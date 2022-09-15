@@ -137,7 +137,7 @@ def test_payment_get_related_refunds(client, response):
     response.get(f"https://api.mollie.com/v2/payments/{PAYMENT_ID}/refunds", "refunds_list")
 
     payment = client.payments.get(PAYMENT_ID)
-    refunds = payment.refunds
+    refunds = payment.refunds.list()
     assert_list_object(refunds, Refund)
 
 
