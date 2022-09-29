@@ -7,3 +7,5 @@ pytest-mock
 mock
 responses>=0.17.0
 safety
+# testing dependabot with a security-flawed package
+urllib3==1.26.4
