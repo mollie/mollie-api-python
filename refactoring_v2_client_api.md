@@ -23,6 +23,20 @@ To make all the above much cleaner, we would have to do a few things:
 
 All of the above should be applied throughout the whole library.
 
+
+# Overview of all documented API calls.
+
+## Payments API
+
+| Description | 2.x client path | New client path | Notes |
+| ------------|-----------------|-----------------|-------|
+| Create payment | `client.payments.create(:data)` | `client.payments.create(:data)` | No changes |
+| Get payment | `client.payments.get(:payment_id)` |  `client.payments.get(:payment_id)` | No changes |
+| Update payment | `client.payments.update(:payment_id, :data)` | `client.payments.update(:payment_id, :data)` | No changes |
+| Cancel payment | `client.payments.delete(:payment_id)` | `client.payments.delete(:payment_id)` | No changes |
+| List payments | `client.payments.list()` | `client.payments.list()` | No changes |
+
+
 ## Refunds API
 
 - Various existing codepaths are removed: `client.payment_refunds`, `order.create_refund()`.

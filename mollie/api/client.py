@@ -10,7 +10,7 @@ from requests_oauthlib import OAuth2Session
 from urllib3.util import Retry
 
 from .error import RequestError, RequestSetupError
-from .resources import Refunds
+from .resources import Payments, Refunds
 from .resources.captures import Captures
 from .resources.chargebacks import Chargebacks
 from .resources.clients import Clients
@@ -25,7 +25,6 @@ from .resources.orders import Orders
 from .resources.organizations import Organizations
 from .resources.payment_chargebacks import PaymentChargebacks
 from .resources.payment_links import PaymentLinks
-from .resources.payments import Payments
 from .resources.permissions import Permissions
 from .resources.profile_chargebacks import ProfileChargebacks
 from .resources.profile_methods import ProfileMethods

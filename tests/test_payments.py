@@ -61,8 +61,9 @@ def test_cancel_payment(client, response):
 
 def test_cancel_payment_invalid_id(client):
     """Verify that an invalid payment id is validated and an error is raised."""
-    with pytest.raises(IdentifierError):
+    with pytest.raises(IdentifierError) as excinfo:
         client.payments.delete("invalid")
+    assert str(excinfo.value) == "Invalid payment ID 'invalid', it should start with 'tr_'."
 
 
 def test_get_single_payment(client, response):
@@ -129,6 +130,12 @@ def test_get_single_payment(client, response):
     assert payment.can_be_refunded() is False
     assert payment.has_sequence_type_first() is False
     assert payment.has_sequence_type_recurring() is True
+
+
+def test_get_payment_invalid_id(client):
+    with pytest.raises(IdentifierError) as excinfo:
+        client.payments.get("invalid")
+    assert str(excinfo.value) == "Invalid payment ID 'invalid', it should start with 'tr_'."
 
 
 def test_payment_get_related_refunds(client, response):
@@ -232,3 +239,10 @@ def test_update_payment(client, response):
     updated_payment = client.payments.update(PAYMENT_ID, data)
     assert isinstance(updated_payment, Payment)
     assert updated_payment.description == "Order #12346"
+
+
+def test_update_payment_invalid_id(client):
+    data = {}
+    with pytest.raises(IdentifierError) as excinfo:
+        client.payments.update("invalid", data)
+    assert str(excinfo.value) == "Invalid payment ID 'invalid', it should start with 'tr_'."

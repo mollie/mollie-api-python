@@ -6,7 +6,7 @@ from .list import ObjectList
 class Payment(ObjectBase):
     @classmethod
     def get_resource_class(cls, client):
-        from ..resources.payments import Payments
+        from ..resources import Payments
 
         return Payments(client)
 
