@@ -62,6 +62,18 @@ All of the above should be applied throughout the whole library.
 | List refunds | `client.refunds.list()` | `client.refunds.list()` | No changes |
 
 
+## Chargebacks API 
+
+- The `client.payment_chargebacks` object is removed.
+- The `payment.chargebacks` object still exists, but is working differently.
+
+| Description | 2.x client path | New client path | Notes |
+| ------------|-----------------|-----------------|-------|
+| Get payment chargeback | `client.payment_chargebacks.with_parent_id(:payment_id).get(:chargeback_id)` | `payment = client.payments.get(:payment_id); payment.chargebacks.get(:chargeback_id)` ||
+| List payment chargebacks | `client.payment_chargebacks.with_parent_id(:payment_id).list()` <br>OR<br> `payment = client.payments.get(:payment_id); payment.chargebacks` | `payment = client.payments.get(:payment_id); payment.chargebacks.list()` ||
+| List chargebacks | `client.chargeback.list()` | `client.chargeback.list()` | No changes |
+
+
 ## Subscriptions API
 
 - The `client.subscription_payments` object is removed.

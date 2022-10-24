@@ -174,18 +174,6 @@ def test_client_get_customer_related_invalid_id(client, endpoint, errorstr):
         getattr(client, endpoint).with_parent_id("cst_12345").get("invalid")
 
 
-@pytest.mark.parametrize(
-    "endpoint, errorstr",
-    [
-        ("payment_chargebacks", "Invalid chargeback ID: 'invalid'. A chargeback ID should start with 'chb_'."),
-    ],
-)
-def test_client_get_payment_related_invalid_id(client, endpoint, errorstr):
-    """An invalid formatted object ID should raise an error."""
-    with pytest.raises(IdentifierError, match=errorstr):
-        getattr(client, endpoint).with_parent_id("tr_12345").get("invalid")
-
-
 def test_client_delete_order_invalid_id(client):
     with pytest.raises(IdentifierError, match="Invalid order ID: 'invalid'. An order ID should start with 'ord_'."):
         client.orders.delete("invalid")

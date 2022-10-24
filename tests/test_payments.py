@@ -154,7 +154,7 @@ def test_payment_get_related_chargebacks(client, response):
     response.get(f"https://api.mollie.com/v2/payments/{PAYMENT_ID}/chargebacks", "chargebacks_list")
 
     payment = client.payments.get(PAYMENT_ID)
-    chargebacks = payment.chargebacks
+    chargebacks = payment.chargebacks.list()
     assert_list_object(chargebacks, Chargeback)
 
 

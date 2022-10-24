@@ -1,4 +1,4 @@
-from ..resources import PaymentRefunds
+from ..resources import PaymentChargebacks, PaymentRefunds
 from .base import ObjectBase
 from .list import ObjectList
 
@@ -186,9 +186,7 @@ class Payment(ObjectBase):
     @property
     def chargebacks(self):
         """Return the chargebacks related to this payment."""
-        if not self.has_chargebacks():
-            return ObjectList({}, None)
-        return self.client.payment_chargebacks.on(self).list()
+        return PaymentChargebacks(self.client, self)
 
     @property
     def captures(self):

@@ -10,9 +10,8 @@ from requests_oauthlib import OAuth2Session
 from urllib3.util import Retry
 
 from .error import RequestError, RequestSetupError
-from .resources import Methods, Payments, Refunds
+from .resources import Chargebacks, Methods, Payments, Refunds
 from .resources.captures import Captures
-from .resources.chargebacks import Chargebacks
 from .resources.clients import Clients
 from .resources.customer_mandates import CustomerMandates
 from .resources.customer_payments import CustomerPayments
@@ -22,7 +21,6 @@ from .resources.invoices import Invoices
 from .resources.onboarding import Onboarding
 from .resources.orders import Orders
 from .resources.organizations import Organizations
-from .resources.payment_chargebacks import PaymentChargebacks
 from .resources.payment_links import PaymentLinks
 from .resources.permissions import Permissions
 from .resources.profile_chargebacks import ProfileChargebacks
@@ -94,7 +92,6 @@ class Client(object):
         # add endpoint resources
         self.payments = Payments(self)
         self.payment_links = PaymentLinks(self)
-        self.payment_chargebacks = PaymentChargebacks(self)
         self.profiles = Profiles(self)
         self.profile_chargebacks = ProfileChargebacks(self)
         self.profile_methods = ProfileMethods(self)
