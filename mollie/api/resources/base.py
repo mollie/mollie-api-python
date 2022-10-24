@@ -5,13 +5,26 @@ from ..objects.list import ObjectList
 class ResourceBase(object):
     DEFAULT_LIMIT = 10
 
+    REST_CREATE = "POST"
+    REST_READ = "GET"
+    REST_LIST = "GET"
+    REST_UPDATE = "PATCH"
+    REST_DELETE = "DELETE"
+
     def __init__(self, client):
         self.client = client
 
-    def get_resource_object(self, result):
+    def get_resource_object(self, result: dict):
+        """
+        Return an instantiated result class for this resource. Should be overriden by a subclass.
+
+        :param result: The API response that the object should hold.
+        :type result: dict
+        """
         raise NotImplementedError()  # pragma: no cover
 
-    def get_resource_name(self):
+    def get_resource_path(self):
+        """Return the base URL path in the API for this resource."""
         return self.__class__.__name__.lower()
 
     def perform_api_call(self, http_method, path, data=None, params=None):
@@ -36,11 +49,10 @@ class ResourceBase(object):
                 )
         return result
 
-    def _validate_resource_id(self, resource_id: str, name: str = "", message: str = ""):
-        resource_name = name or "Identifier"
-        message = (
-            message or f"Invalid {resource_name} '{resource_id}', it should start with '{self.RESOURCE_ID_PREFIX}'."
-        )
+    def validate_resource_id(self, resource_id: str, name: str = "Identifier", message: str = ""):
+        """Generic identifier validation."""
+        if not message:
+            message = f"Invalid {name} '{resource_id}', it should start with '{self.RESOURCE_ID_PREFIX}'."
 
         if not resource_id or not str(resource_id).startswith(self.RESOURCE_ID_PREFIX):
             raise IdentifierError(message)
@@ -48,25 +60,23 @@ class ResourceBase(object):
     @staticmethod
     def extract_embed(params):
         """Extract and parse the embed parameter from the request."""
+        # TODO Remove this
         if "embed" not in params:
             return
         return params["embed"].split(",")
 
 
 class ResourceCreateMixin:
-    REST_CREATE = "POST"
-
     def create(self, data=None, **params):
-        path = self.get_resource_name()
+        path = self.get_resource_path()
         result = self.perform_api_call(self.REST_CREATE, path, data, params)
         return self.get_resource_object(result)
 
 
 class ResourceGetMixin:
-    REST_READ = "GET"
-
-    def get(self, resource_id, **params):
-        path = self.get_resource_name() + "/" + str(resource_id)
+    def get(self, resource_id: str, **params):
+        resource_path = self.get_resource_path()
+        path = f"{resource_path}/{resource_id}"
         result = self.perform_api_call(self.REST_READ, path, params=params)
         return self.get_resource_object(result)
 
@@ -80,28 +90,24 @@ class ResourceGetMixin:
 
 
 class ResourceListMixin:
-    REST_LIST = "GET"
-
     def list(self, **params):
-        path = self.get_resource_name()
+        path = self.get_resource_path()
         result = self.perform_api_call(self.REST_LIST, path, params=params)
         return ObjectList(result, self.get_resource_object({}).__class__, self.client)
 
 
 class ResourceUpdateMixin:
-    REST_UPDATE = "PATCH"
-
-    def update(self, resource_id, data=None, **params):
-        path = self.get_resource_name() + "/" + str(resource_id)
+    def update(self, resource_id: str, data=None, **params):
+        resource_path = self.get_resource_path()
+        path = f"{resource_path}/{resource_id}"
         result = self.perform_api_call(self.REST_UPDATE, path, data, params)
         return self.get_resource_object(result)
 
 
 class ResourceDeleteMixin:
-    REST_DELETE = "DELETE"
-
     def delete(self, resource_id, data=None):
-        path = self.get_resource_name() + "/" + str(resource_id)
+        resource_path = self.get_resource_path()
+        path = f"{resource_path}/{resource_id}"
         return self.perform_api_call(self.REST_DELETE, path, data)
 
 

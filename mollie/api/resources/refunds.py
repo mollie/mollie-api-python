@@ -24,15 +24,15 @@ class PaymentRefunds(RefundsBase, ResourceCreateMixin, ResourceDeleteMixin, Reso
         super().__init__(client)
         self._payment = payment
 
-    def get_resource_name(self):
+    def get_resource_path(self):
         return f"payments/{self._payment.id}/refunds"
 
     def get(self, refund_id: str, **params):
-        self._validate_resource_id(refund_id, "Refund ID")
+        self.validate_resource_id(refund_id, "Refund ID")
         return super().get(refund_id, **params)
 
     def delete(self, refund_id: str, **params):
-        self._validate_resource_id(refund_id, "Refund ID")
+        self.validate_resource_id(refund_id, "Refund ID")
         return super().delete(refund_id, **params)
 
 
@@ -45,7 +45,7 @@ class OrderRefunds(RefundsBase, ResourceCreateMixin, ResourceListMixin):
         super().__init__(client)
         self._order = order
 
-    def get_resource_name(self):
+    def get_resource_path(self):
         return f"orders/{self._order.id}/refunds"
 
     def create(self, data=None, **params):

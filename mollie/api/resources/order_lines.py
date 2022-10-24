@@ -1,12 +1,12 @@
 from ..error import DataConsistencyError
 from ..objects.order_line import OrderLine
-from .base import ResourceBase, ResourceDeleteMixin, ResourceUpdateMixin
+from .base import ResourceBase
 
 
 class OrderLines(ResourceBase):
     order_id = None
 
-    def get_resource_name(self):
+    def get_resource_path(self):
         return f"orders/{self.order_id}/lines"
 
     def get_resource_object(self, result):
@@ -26,8 +26,8 @@ class OrderLines(ResourceBase):
         Orderlines are deleted by issuing a DELETE on the orders/*/lines endpoint,
         with the orderline IDs and quantities in the request body.
         """
-        path = self.get_resource_name()
-        result = self.perform_api_call(ResourceDeleteMixin.REST_DELETE, path, data=data)
+        path = self.get_resource_path()
+        result = self.perform_api_call(self.REST_DELETE, path, data=data)
         return result
 
     def update(self, resource_id, data=None, **params):
@@ -39,8 +39,9 @@ class OrderLines(ResourceBase):
 
         If you wish to retrieve the order object, you can do so by using the order_id property of the orderline.
         """
-        path = self.get_resource_name() + "/" + str(resource_id)
-        result = self.perform_api_call(ResourceUpdateMixin.REST_UPDATE, path, data=data)
+        resource_path = self.get_resource_path()
+        path = f"{resource_path}/{resource_id}"
+        result = self.perform_api_call(self.REST_UPDATE, path, data=data)
 
         for line in result["lines"]:
             if line["id"] == resource_id:

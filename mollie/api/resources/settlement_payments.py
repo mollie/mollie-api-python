@@ -4,7 +4,7 @@ from .payments import Payments
 class SettlementPayments(Payments):
     settlement_id = None
 
-    def get_resource_name(self):
+    def get_resource_path(self):
         return f"settlements/{self.settlement_id}/payments"
 
     def with_parent_id(self, settlement_id):

@@ -4,7 +4,7 @@ from .captures import Captures
 class SettlementCaptures(Captures):
     settlement_id = None
 
-    def get_resource_name(self):
+    def get_resource_path(self):
         return f"settlements/{self.settlement_id}/captures"
 
     def with_parent_id(self, settlement_id):

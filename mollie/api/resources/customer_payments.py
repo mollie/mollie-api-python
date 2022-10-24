@@ -4,7 +4,7 @@ from .payments import Payments
 class CustomerPayments(Payments):
     customer_id = None
 
-    def get_resource_name(self):
+    def get_resource_path(self):
         return f"customers/{self.customer_id}/payments"
 
     def with_parent_id(self, customer_id):

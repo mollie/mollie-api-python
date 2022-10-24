@@ -10,7 +10,7 @@ class ProfileMethods(Methods, ResourceCreateMixin, ResourceDeleteMixin):
     method_id = None
     resource_id = None
 
-    def get_resource_name(self):
+    def get_resource_path(self):
         path = f"profiles/{self.profile_id}/methods/{self.method_id}"
         if self.method_id in self.RESOURCE_REQUIRED_METHODS:
             path += f"/issuers/{self.resource_id}"
@@ -23,7 +23,7 @@ class ProfileMethods(Methods, ResourceCreateMixin, ResourceDeleteMixin):
         if self.method_id in self.RESOURCE_REQUIRED_METHODS and resource_id is None:
             raise RequestError(f"resource_id is required when disabling a {self.method_id}.")
         self.resource_id = resource_id
-        path = self.get_resource_name()
+        path = self.get_resource_path()
         return self.perform_api_call(self.REST_DELETE, path, None)
 
     def create(self, resource_id=None, data=None, **params):

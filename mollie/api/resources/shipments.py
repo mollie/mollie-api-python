@@ -8,7 +8,7 @@ class Shipments(ResourceBase, ResourceCreateMixin, ResourceGetMixin, ResourceLis
     def get_resource_object(self, result):
         return Shipment(result, self.client)
 
-    def get_resource_name(self):
+    def get_resource_path(self):
         return f"orders/{self.order_id}/shipments"
 
     def with_parent_id(self, order_id):

@@ -9,7 +9,7 @@ class Captures(ResourceBase, ResourceGetMixin, ResourceListMixin):
     def get_resource_object(self, result):
         return Capture(result, self.client)
 
-    def get_resource_name(self):
+    def get_resource_path(self):
         return f"payments/{self.payment_id}/captures"
 
     def get(self, capture_id, **params):

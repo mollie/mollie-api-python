@@ -4,7 +4,7 @@ from .chargebacks import Chargebacks
 class SettlementChargebacks(Chargebacks):
     settlement_id = None
 
-    def get_resource_name(self):
+    def get_resource_path(self):
         return f"settlements/{self.settlement_id}/chargebacks"
 
     def with_parent_id(self, settlement_id):
