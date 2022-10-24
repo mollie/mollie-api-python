@@ -6,7 +6,7 @@ from .list import ObjectList
 class Method(ObjectBase):
     @classmethod
     def get_resource_class(cls, client):
-        from ..resources.methods import Methods
+        from ..resources import Methods
 
         return Methods(client)
 

@@ -37,6 +37,15 @@ All of the above should be applied throughout the whole library.
 | List payments | `client.payments.list()` | `client.payments.list()` | No changes |
 
 
+## Methods API
+
+| Description | 2.x client path | New client path | Notes |
+| ------------|-----------------|-----------------|-------|
+| List payment methods | `client.methods.list()` | `client.methods.list()` | No changes |
+| List all payment methods | `client.methods.all()` | `client.methods.all()` | No changes |
+| Get payment method | `client.methods.get(:method_id)` | `client.methods.get(:method_id)` | No changes |
+
+
 ## Refunds API
 
 - Various existing codepaths are removed: `client.payment_refunds`, `order.create_refund()`.

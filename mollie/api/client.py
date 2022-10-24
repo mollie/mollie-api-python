@@ -10,7 +10,7 @@ from requests_oauthlib import OAuth2Session
 from urllib3.util import Retry
 
 from .error import RequestError, RequestSetupError
-from .resources import Payments, Refunds
+from .resources import Methods, Payments, Refunds
 from .resources.captures import Captures
 from .resources.chargebacks import Chargebacks
 from .resources.clients import Clients
@@ -19,7 +19,6 @@ from .resources.customer_payments import CustomerPayments
 from .resources.customer_subscriptions import CustomerSubscriptions
 from .resources.customers import Customers
 from .resources.invoices import Invoices
-from .resources.methods import Methods
 from .resources.onboarding import Onboarding
 from .resources.orders import Orders
 from .resources.organizations import Organizations

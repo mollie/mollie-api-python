@@ -9,6 +9,7 @@ class Methods(ResourceBase, ResourceGetMixin, ResourceListMixin):
 
     def all(self, **params):
         """List all mollie payment methods, including methods that aren't activated in your profile."""
-        path = "methods/all"
+        resource_path = self.get_resource_path()
+        path = f"{resource_path}/all"
         result = self.perform_api_call(self.REST_LIST, path, params=params)
         return ObjectList(result, self.get_resource_object({}).__class__, self.client)
