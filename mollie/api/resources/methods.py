@@ -5,7 +5,7 @@ from .base import ResourceBase, ResourceGetMixin, ResourceListMixin
 
 class Methods(ResourceBase, ResourceGetMixin, ResourceListMixin):
     def get_resource_object(self, result):
-        return Method(result)
+        return Method(result, self.client)
 
     def all(self, **params):
         """List all mollie payment methods, including methods that aren't activated in your profile."""

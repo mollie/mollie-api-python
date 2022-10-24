@@ -1,5 +1,5 @@
 class ObjectBase(dict):
-    def __init__(self, data, client=None):
+    def __init__(self, data, client):
         """
         Create a new object from API result data.
         """
