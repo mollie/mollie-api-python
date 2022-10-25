@@ -1,9 +1,5 @@
-from ..error import EmbedNotFound
 from ..resources import OrderLines
-from ..resources.order_payments import OrderPayments
 from .base import ObjectBase
-from .list import ObjectList
-from .payment import Payment
 
 
 class Order(ObjectBase):
@@ -195,23 +191,6 @@ class Order(ObjectBase):
 
     @property
     def payments(self):
-        if not self._has_embed("payments"):
-            raise EmbedNotFound("payments")
+        from ..resources import OrderPayments
 
-        try:
-            payments = self["_embedded"]["payments"]
-        except KeyError:
-            # No data available at API
-            payments = []
-
-        result = {
-            "_embedded": {
-                "payments": payments,
-            },
-            "count": len(payments),
-        }
-        return ObjectList(result, Payment, self.client)
-
-    def create_payment(self, data):
-        """Creates a new payment object for an order."""
-        return OrderPayments(self.client).on(self).create(data)
+        return OrderPayments(self.client, self)

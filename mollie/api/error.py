@@ -98,11 +98,8 @@ class EmbedNotFound(Error):
     to set the related embed parameter.
     """
 
-    def __init__(self, embed_name):
-        msg = (
-            "You tried to access embedded data, but did not request to embed this data in the request. "
-            f'Please specify embed="{embed_name}" when requesting the data.'
-        )
+    def __init__(self, name):
+        msg = f"You tried to access embedded data, but did not request to embed '{name}' in the request."
         super().__init__(msg)
 
 

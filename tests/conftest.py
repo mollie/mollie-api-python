@@ -63,25 +63,25 @@ def oauth_client(oauth_token):
 class ImprovedRequestsMock(responses.RequestsMock):
     """Wrapper adding a few shorthands to responses.RequestMock."""
 
-    def get(self, url, filename, status=200):
+    def get(self, url, filename, status=200, **kwargs):
         """Setup a mock response for a GET request."""
         body = self._get_body(filename)
-        self.add(responses.GET, url, body=body, status=status, content_type="application/hal+json")
+        self.add(responses.GET, url, body=body, status=status, content_type="application/hal+json", **kwargs)
 
-    def post(self, url, filename, status=200):
+    def post(self, url, filename, status=200, **kwargs):
         """Setup a mock response for a POST request."""
         body = self._get_body(filename)
-        self.add(responses.POST, url, body=body, status=status, content_type="application/hal+json")
+        self.add(responses.POST, url, body=body, status=status, content_type="application/hal+json", **kwargs)
 
-    def delete(self, url, filename, status=204):
+    def delete(self, url, filename, status=204, **kwargs):
         """Setup a mock response for a DELETE request."""
         body = self._get_body(filename)
-        return self.add(responses.DELETE, url, body=body, status=status, content_type="application/hal+json")
+        return self.add(responses.DELETE, url, body=body, status=status, content_type="application/hal+json", **kwargs)
 
-    def patch(self, url, filename, status=200):
+    def patch(self, url, filename, status=200, **kwargs):
         """Setup a mock response for a PATCH request."""
         body = self._get_body(filename)
-        return self.add(responses.PATCH, url, body=body, status=status, content_type="application/hal+json")
+        return self.add(responses.PATCH, url, body=body, status=status, content_type="application/hal+json", **kwargs)
 
     def _get_body(self, filename):
         """Read the response fixture file and return it."""

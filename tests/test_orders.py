@@ -8,7 +8,7 @@ from mollie.api.objects.order import Order
 from mollie.api.objects.payment import Payment
 from mollie.api.objects.refund import Refund
 from mollie.api.objects.shipment import Shipment
-from mollie.api.resources import OrderRefunds
+from mollie.api.resources import OrderPayments, OrderRefunds
 
 from .utils import assert_list_object
 
@@ -72,6 +72,8 @@ def test_get_order(client, response):
     assert order.checkout_url == "https://www.mollie.com/payscreen/order/checkout/kEn1PlbGa"
     assert_list_object(order.shipments, Shipment)
     assert isinstance(order.refunds, OrderRefunds)
+    assert isinstance(order.payments, OrderPayments)
+
     assert order.is_created() is True
     assert order.is_paid() is False
     assert order.is_authorized() is False
@@ -79,47 +81,11 @@ def test_get_order(client, response):
     assert order.is_completed() is False
     assert order.is_expired() is False
 
-    with pytest.raises(EmbedNotFound):
-        order.payments
-
 
 def test_get_order_invalid_id(client):
     with pytest.raises(IdentifierError) as excinfo:
         client.orders.get("invalid")
     assert str(excinfo.value) == "Invalid order ID 'invalid', it should start with 'ord_'."
-
-
-def test_get_order_with_payments(client, response):
-    response.add(
-        response.GET,
-        f"https://api.mollie.com/v2/orders/{ORDER_ID}",
-        body=response._get_body("order_single_with_embeds"),
-        match=[matchers.query_param_matcher({"embed": "payments"})],
-    )
-
-    order = client.orders.get(ORDER_ID, embed="payments")
-    assert_list_object(order.payments, Payment)
-
-
-def test_get_order_with_payments_embed_error(client, response):
-    response.get(f"https://api.mollie.com/v2/orders/{ORDER_ID}", "order_single")
-
-    order = client.orders.get(ORDER_ID)
-    with pytest.raises(EmbedNotFound) as excinfo:
-        order.payments
-    assert 'Please specify embed="payments" when requesting the data.' in str(excinfo.value)
-
-
-def test_get_order_with_payments_empty_embed(client, response):
-    response.add(
-        response.GET,
-        f"https://api.mollie.com/v2/orders/{ORDER_ID}",
-        body=response._get_body("order_single"),
-        match=[matchers.query_param_matcher({"embed": "payments"})],
-    )
-
-    order = client.orders.get(ORDER_ID, embed="payments")
-    assert_list_object(order.payments, Payment, 0)
 
 
 def test_list_orders(client, response):
@@ -293,6 +259,30 @@ def test_create_order_payment(client, response):
 
     order = client.orders.get(ORDER_ID)
     data = {"method": "ideal"}
-    payment = order.create_payment(data)
+    payment = order.payments.create(data)
     assert isinstance(payment, Payment)
     assert payment.order_id == ORDER_ID
+
+
+def test_list_embedded_payments_in_order(client, response):
+    response.get(
+        f"https://api.mollie.com/v2/orders/{ORDER_ID}",
+        "order_single_with_embeds",
+        match=[matchers.query_param_matcher({"embed": "payments"})],
+    )
+
+    order = client.orders.get(ORDER_ID, embed="payments")
+    assert_list_object(order.payments.list(), Payment)
+
+
+def test_list_embedded_payments_in_order_raises_error(client, response):
+    """If the data is not embedded, an error is raised."""
+    response.get(f"https://api.mollie.com/v2/orders/{ORDER_ID}", "order_single")
+
+    order = client.orders.get(ORDER_ID)
+    with pytest.raises(EmbedNotFound) as excinfo:
+        order.payments.list()
+    assert (
+        str(excinfo.value)
+        == "You tried to access embedded data, but did not request to embed 'payments' in the request."
+    )
