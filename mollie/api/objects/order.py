@@ -1,5 +1,4 @@
 from ..error import EmbedNotFound
-from ..resources import OrderRefunds
 from ..resources.order_lines import OrderLines
 from ..resources.order_payments import OrderPayments
 from .base import ObjectBase
@@ -22,7 +21,7 @@ class Order(ObjectBase):
 
     @classmethod
     def get_resource_class(cls, client):
-        from ..resources.orders import Orders
+        from ..resources import Orders
 
         return Orders(client)
 
@@ -181,6 +180,8 @@ class Order(ObjectBase):
 
     @property
     def refunds(self):
+        from ..resources import OrderRefunds
+
         return OrderRefunds(self.client, self)
 
     @property

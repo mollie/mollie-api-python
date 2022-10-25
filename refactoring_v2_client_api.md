@@ -96,6 +96,20 @@ The list below corresponds with the Mollie API documentation.
 | List payment links | `client.payment_links.list()` | `client.payment_links.list()` | No changes |
 
 
+
+## Orders API
+
+| Description | 2.x client path | New client path | Notes |
+| ------------|-----------------|-----------------|-------|
+| Create order | `client.orders.create(:data)` | `client.orders.create(:data)` | No changes |
+| Get order | `client.orders.get(:order_id)` | `client.order.get(:order_id)` | No changes |
+| Update order | `client.order.update(:order_id, :data)` | `client.order.update(:order_id, :data)` | No changes |
+| Cancel order | `client.order.delete(:order_id)` | `client.order.delete(:order_id)` | No changes |
+| List orders | `client.order.list()` | `client.order.list()` | No changes |
+| Update order line | `order = client.orders.get(:order_id); order.update_line(:line_id, :data)` | `order = client.orders.get(:order_id); order.lines.update(:line_id, :data)` ||
+| Cancel order lines |
+| Create order payment |
+
 ## Subscriptions API
 
 - The `client.subscription_payments` object is removed.

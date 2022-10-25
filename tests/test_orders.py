@@ -3,7 +3,7 @@ import json
 import pytest
 from responses import matchers
 
-from mollie.api.error import EmbedNotFound
+from mollie.api.error import EmbedNotFound, IdentifierError
 from mollie.api.objects.order import Order
 from mollie.api.objects.payment import Payment
 from mollie.api.objects.refund import Refund
@@ -81,6 +81,12 @@ def test_get_order(client, response):
 
     with pytest.raises(EmbedNotFound):
         order.payments
+
+
+def test_get_order_invalid_id(client):
+    with pytest.raises(IdentifierError) as excinfo:
+        client.orders.get("invalid")
+    assert str(excinfo.value) == "Invalid order ID 'invalid', it should start with 'ord_'."
 
 
 def test_get_order_with_payments(client, response):
@@ -243,6 +249,27 @@ def test_update_order(client, response):
     assert updated_order.billing_address["givenName"] == "Piet"
 
 
+def test_update_order_invalid_id(client):
+    data = {
+        "billingAddress": {
+            "streetAndNumber": "Keizersgracht 313",
+            "city": "Amsterdam",
+            "region": "Noord-Holland",
+            "postalCode": "1234AB",
+            "country": "NL",
+            "title": "Dhr",
+            "givenName": "Piet",
+            "familyName": "Mondriaan",
+            "email": "piet@mondriaan.com",
+            "phone": "+31208202070",
+        }
+    }
+
+    with pytest.raises(IdentifierError) as excinfo:
+        client.orders.update("invalid", data)
+    assert str(excinfo.value) == "Invalid order ID 'invalid', it should start with 'ord_'."
+
+
 def test_cancel_order(client, response):
     """Cancel an existing order."""
     response.delete(f"https://api.mollie.com/v2/orders/{ORDER_ID}", "order_canceled", 200)
@@ -251,6 +278,12 @@ def test_cancel_order(client, response):
     assert isinstance(canceled_order, Order)
     assert canceled_order.is_canceled() is True
     assert canceled_order.is_cancelable is False
+
+
+def test_cancel_order_invalid_id(client):
+    with pytest.raises(IdentifierError) as excinfo:
+        client.orders.delete("invalid")
+    assert str(excinfo.value) == "Invalid order ID 'invalid', it should start with 'ord_'."
 
 
 def test_cancel_order_lines(client, response):

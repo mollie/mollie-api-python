@@ -1,4 +1,4 @@
-from ..resources import PaymentCaptures, PaymentChargebacks, PaymentRefunds
+from ..resources import PaymentCaptures, PaymentChargebacks
 from .base import ObjectBase
 
 
@@ -180,6 +180,8 @@ class Payment(ObjectBase):
     @property
     def refunds(self):
         """Return the refunds related to this payment."""
+        from ..resources import PaymentRefunds
+
         return PaymentRefunds(self.client, self)
 
     @property

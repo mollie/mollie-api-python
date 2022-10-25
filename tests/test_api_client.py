@@ -144,7 +144,6 @@ def test_client_invalid_update_data(client):
     "endpoint, errorstr",
     [
         ("customers", "Invalid customer ID: 'invalid'. A customer ID should start with 'cst_'."),
-        ("orders", "Invalid order ID: 'invalid'. An order ID should start with 'ord_'."),
         ("invoices", "Invalid invoice ID: 'invalid'. An invoice ID should start with 'inv_'."),
         ("onboarding", "Invalid onboarding ID: 'invalid'. The onboarding ID should be 'me'."),
         (
@@ -171,11 +170,6 @@ def test_client_get_customer_related_invalid_id(client, endpoint, errorstr):
     """An invalid formatted object ID should raise an error."""
     with pytest.raises(IdentifierError, match=errorstr):
         getattr(client, endpoint).with_parent_id("cst_12345").get("invalid")
-
-
-def test_client_delete_order_invalid_id(client):
-    with pytest.raises(IdentifierError, match="Invalid order ID: 'invalid'. An order ID should start with 'ord_'."):
-        client.orders.delete("invalid")
 
 
 def test_client_delete_profile_method_misses_method_id(client):
