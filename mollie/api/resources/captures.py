@@ -1,6 +1,11 @@
 from ..objects.capture import Capture
 from .base import ResourceBase, ResourceGetMixin, ResourceListMixin
 
+__all__ = [
+    "PaymentCaptures",
+    "SettlementCaptures",
+]
+
 
 class CapturesBase(ResourceBase):
     RESOURCE_ID_PREFIX = "cpt_"

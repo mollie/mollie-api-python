@@ -2,6 +2,10 @@ from ..objects.list import ObjectList
 from ..objects.method import Method
 from .base import ResourceBase, ResourceGetMixin, ResourceListMixin
 
+__all__ = [
+    "Methods",
+]
+
 
 class Methods(ResourceBase, ResourceGetMixin, ResourceListMixin):
     def get_resource_object(self, result):

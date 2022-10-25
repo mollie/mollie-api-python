@@ -1,6 +1,10 @@
 from ..objects.payment_link import PaymentLink
 from .base import ResourceBase, ResourceCreateMixin, ResourceGetMixin, ResourceListMixin
 
+__all__ = [
+    "PaymentLinks",
+]
+
 
 class PaymentLinks(ResourceBase, ResourceCreateMixin, ResourceGetMixin, ResourceListMixin):
     RESOURCE_ID_PREFIX = "pl_"

@@ -1,6 +1,11 @@
 from ..objects.chargeback import Chargeback
 from .base import ResourceBase, ResourceGetMixin, ResourceListMixin
 
+__all__ = [
+    "Chargebacks",
+    "PaymentChargebacks",
+]
+
 
 class ChargebacksBase(ResourceBase):
     RESOURCE_ID_PREFIX = "chb_"

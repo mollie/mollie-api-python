@@ -7,6 +7,10 @@ from .base import (
     ResourceUpdateMixin,
 )
 
+__all__ = [
+    "Payments",
+]
+
 
 class PaymentsBase(ResourceBase):
     RESOURCE_ID_PREFIX = "tr_"
