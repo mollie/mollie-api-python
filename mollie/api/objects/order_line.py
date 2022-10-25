@@ -4,7 +4,7 @@ from .base import ObjectBase
 class OrderLine(ObjectBase):
     @classmethod
     def get_resource_class(cls, client):
-        from ..resources.order_lines import OrderLines
+        from ..resources import OrderLines
 
         return OrderLines(client)
 

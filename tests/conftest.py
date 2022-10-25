@@ -76,12 +76,12 @@ class ImprovedRequestsMock(responses.RequestsMock):
     def delete(self, url, filename, status=204):
         """Setup a mock response for a DELETE request."""
         body = self._get_body(filename)
-        self.add(responses.DELETE, url, body=body, status=status, content_type="application/hal+json")
+        return self.add(responses.DELETE, url, body=body, status=status, content_type="application/hal+json")
 
     def patch(self, url, filename, status=200):
         """Setup a mock response for a PATCH request."""
         body = self._get_body(filename)
-        self.add(responses.PATCH, url, body=body, status=status, content_type="application/hal+json")
+        return self.add(responses.PATCH, url, body=body, status=status, content_type="application/hal+json")
 
     def _get_body(self, filename):
         """Read the response fixture file and return it."""

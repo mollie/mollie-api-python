@@ -1,3 +1,8 @@
+import json
+
+import pytest
+
+from mollie.api.error import DataConsistencyError
 from mollie.api.objects.order_line import OrderLine
 
 from .utils import assert_list_object
@@ -11,7 +16,7 @@ def test_get_order_lines(client, response):
     response.get(f"https://api.mollie.com/v2/orders/{ORDER_ID}", "order_single")
 
     order = client.orders.get(ORDER_ID)
-    lines = order.lines
+    lines = order.lines.list()
     assert_list_object(lines, OrderLine)
 
     # Test properties of the first line
@@ -69,5 +74,86 @@ def test_update_order_line(client, response):
         "vatAmount": {"currency": "EUR", "value": "103.79"},
     }
     order = client.orders.get(ORDER_ID)
-    update = order.update_line(LINE_ID, data)
+    update = order.lines.update(LINE_ID, data)
     assert isinstance(update, OrderLine)
+
+    # Inspect the request that was sent
+    request = response.calls[-1].request
+    assert request.url == f"https://api.mollie.com/v2/orders/{ORDER_ID}/lines/{LINE_ID}"
+    assert json.loads(request.body) == data
+
+
+def test_update_order_line_unexpected_response_raises_data_consistency_error(client, response):
+    """When the API sends us data we did not expect raise an consistency error.
+
+    This test is a bit tricky, since we send an orderline_id that is not in the order. Normally
+    it is expected that the API would give us an error because of that, but we ignore that fact
+    for the sake of the test: we want the API to return us data that simply doesn't match the request.
+    """
+    OTHER_LINE_ID = "odl_kekjo"
+    response.get(f"https://api.mollie.com/v2/orders/{ORDER_ID}", "order_single")
+    response.patch(f"https://api.mollie.com/v2/orders/{ORDER_ID}/lines/{OTHER_LINE_ID}", "order_single")
+
+    order = client.orders.get(ORDER_ID)
+    data = {
+        "name": "LEGO 71043 Hogwarts™ Castle",
+    }
+
+    # Update an nonexistent order line. This raises an data consistency error.
+    with pytest.raises(DataConsistencyError) as excinfo:
+        order.lines.update(OTHER_LINE_ID, data)
+    assert str(excinfo.value) == "OrderLine with id 'odl_kekjo' not found in response."
+
+
+def test_cancel_order_lines(client, response):
+    """Cancel a line of an order."""
+    response.get(f"https://api.mollie.com/v2/orders/{ORDER_ID}", "order_single")
+    response.delete(f"https://api.mollie.com/v2/orders/{ORDER_ID}/lines", "empty", 204)
+
+    order = client.orders.get(ORDER_ID)
+    line = next(order.lines.list())
+    data = {
+        "lines": [
+            {"id": line.id, "quantity": line.quantity},
+        ]
+    }
+    order.lines.delete_lines(data)
+
+    # Inspect the request that was sent
+    request = response.calls[-1].request
+    assert request.url == f"https://api.mollie.com/v2/orders/{ORDER_ID}/lines"
+    assert json.loads(request.body) == data
+
+
+def test_cancel_order_lines_all(client, response):
+    response.get(f"https://api.mollie.com/v2/orders/{ORDER_ID}", "order_single")
+    response.delete(f"https://api.mollie.com/v2/orders/{ORDER_ID}/lines", "empty", 204)
+
+    order = client.orders.get(ORDER_ID)
+    order.lines.delete_lines()
+
+    # Inspect the request that was sent
+    request = response.calls[-1].request
+    assert request.url == f"https://api.mollie.com/v2/orders/{ORDER_ID}/lines"
+    assert json.loads(request.body) == {
+        "lines": []
+    }, "An empty list of lines should be generated, so all lines will be cancelled."
+
+
+def test_cancel_single_order_line(client, response):
+    response.get(f"https://api.mollie.com/v2/orders/{ORDER_ID}", "order_single")
+    response.delete(f"https://api.mollie.com/v2/orders/{ORDER_ID}/lines", "empty", 204)
+
+    order = client.orders.get(ORDER_ID)
+    order.lines.delete(LINE_ID)
+
+    # Inspect the request that was sent
+    request = response.calls[-1].request
+    assert request.url == f"https://api.mollie.com/v2/orders/{ORDER_ID}/lines"
+    assert json.loads(request.body) == {
+        "lines": [
+            {
+                "id": LINE_ID,
+            }
+        ]
+    }, "The correct payload for deleting a single line should be generated."

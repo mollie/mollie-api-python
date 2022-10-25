@@ -8,7 +8,6 @@ from responses import matchers
 
 from mollie.api.client import Client, generate_querystring
 from mollie.api.error import (
-    DataConsistencyError,
     IdentifierError,
     NotFoundError,
     RequestError,
@@ -302,22 +301,6 @@ def test_client_will_propagate_retry_setting(response):
 
     adapter = client._client.adapters["https://"]
     assert adapter.max_retries.connect == 3
-
-
-def test_client_data_consistency_error(client, response):
-    """When the API sends us data we did not expect raise an consistency error."""
-    order_id = "ord_kEn1PlbGa"
-    line_id = "odl_12345"
-    response.get(f"https://api.mollie.com/v2/orders/{order_id}", "order_single")
-    response.patch(f"https://api.mollie.com/v2/orders/{order_id}/lines/{line_id}", "order_single")
-
-    order = client.orders.get(order_id)
-    data = {
-        "name": "LEGO 71043 Hogwarts™ Castle",
-    }
-    # Update an nonexistent order line. This raises an data consistency error.
-    with pytest.raises(DataConsistencyError, match=r"Line id .* not found in response."):
-        order.update_line(line_id, data)
 
 
 def test_client_default_user_agent(client, response):

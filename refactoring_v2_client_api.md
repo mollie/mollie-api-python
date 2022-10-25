@@ -99,6 +99,9 @@ The list below corresponds with the Mollie API documentation.
 
 ## Orders API
 
+- The `order.update_line()`, `order.cancel_lines()` and `order.create_payment()` methods are removed.
+- The `order.lines` and `order.payments` objects still exist but are working differently.
+
 | Description | 2.x client path | New client path | Notes |
 | ------------|-----------------|-----------------|-------|
 | Create order | `client.orders.create(:data)` | `client.orders.create(:data)` | No changes |
@@ -107,7 +110,7 @@ The list below corresponds with the Mollie API documentation.
 | Cancel order | `client.order.delete(:order_id)` | `client.order.delete(:order_id)` | No changes |
 | List orders | `client.order.list()` | `client.order.list()` | No changes |
 | Update order line | `order = client.orders.get(:order_id); order.update_line(:line_id, :data)` | `order = client.orders.get(:order_id); order.lines.update(:line_id, :data)` ||
-| Cancel order lines |
+| Cancel order lines | `order = client.orders.get(:order_id); order.cancel_lines(:data)` | `order = client.orders.get(:order_id); order.lines.delete_lines(:data)` <br>OR<br> `order = client.orders.get(:order_id); order.lines.delete(:line_id)` ||
 | Create order payment |
 
 ## Subscriptions API

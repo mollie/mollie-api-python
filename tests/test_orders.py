@@ -286,34 +286,6 @@ def test_cancel_order_invalid_id(client):
     assert str(excinfo.value) == "Invalid order ID 'invalid', it should start with 'ord_'."
 
 
-def test_cancel_order_lines(client, response):
-    """Cancel a line of an order."""
-    response.get(f"https://api.mollie.com/v2/orders/{ORDER_ID}", "order_single")
-    response.delete(f"https://api.mollie.com/v2/orders/{ORDER_ID}/lines", "empty", 204)
-
-    order = client.orders.get(ORDER_ID)
-    line = next(order.lines)
-    data = {"lines": [{"id": line.id, "quantity": line.quantity}]}
-    canceled = order.cancel_lines(data)
-    assert canceled == {}
-
-
-def test_cancel_order_all_lines(client, response):
-    response.get(f"https://api.mollie.com/v2/orders/{ORDER_ID}", "order_single")
-    response.delete(f"https://api.mollie.com/v2/orders/{ORDER_ID}/lines", "empty", 204)
-
-    order = client.orders.get(ORDER_ID)
-    canceled = order.cancel_lines()
-    assert canceled == {}
-
-    # Inspect the request that was made
-    request = response.calls[-1].request
-    assert request.url == f"https://api.mollie.com/v2/orders/{ORDER_ID}/lines"
-    assert json.loads(request.body) == {
-        "lines": []
-    }, "An empty list of lines should be generated, so all lines will be cancelled."
-
-
 def test_create_order_payment(client, response):
     """Create a payment for an order."""
     response.get(f"https://api.mollie.com/v2/orders/{ORDER_ID}", "order_single")
