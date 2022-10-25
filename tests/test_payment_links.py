@@ -58,5 +58,6 @@ def test_get_single_payment_link(client, response):
 
 def test_get_payment_link_invalid_id(client):
     """Verify that an invalid payment id is validated and an error is raised."""
-    with pytest.raises(IdentifierError):
+    with pytest.raises(IdentifierError) as excinfo:
         client.payment_links.get("invalid")
+    assert str(excinfo.value) == "Invalid payment link ID 'invalid', it should start with 'pl_'."

@@ -87,6 +87,15 @@ The list below corresponds with the Mollie API documentation.
 | List captures | `client.captures.with_parent_id(:payment_id).list()` <br>OR<br> `payment = client.payments.get(:payment_id); payment.captures` | `payment = client.payments.get(:payment_id); payment.captures.list()` ||
 
 
+## Payment links API
+
+| Description | 2.x client path | New client path | Notes |
+| ------------|-----------------|-----------------|-------|
+| Create payment link | `client.payment_links.create(:data)` | `client.payment_links.create(:data)` | No changes |
+| Get payment link | `client.payment_links.get(:payment_link_id)` | `client.payment_links.get(:payment_link_id)` | No changes |
+| List payment links | `client.payment_links.list()` | `client.payment_links.list()` | No changes |
+
+
 ## Subscriptions API
 
 - The `client.subscription_payments` object is removed.
