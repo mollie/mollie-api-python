@@ -6,19 +6,11 @@ PAYMENT_ID = "tr_7UhSN1zuXS"
 SETTLEMENT_ID = "stl_jDk30akdN"
 
 
-def test_list_settlement_captures_by_capture_id(oauth_client, response):
-    """Get captures relevant to settlement by settlement id."""
-    response.get(f"https://api.mollie.com/v2/settlements/{SETTLEMENT_ID}/captures", "captures_list")
-
-    captures = oauth_client.settlement_captures.with_parent_id(SETTLEMENT_ID).list()
-    assert_list_object(captures, Capture)
-
-
-def test_list_settlement_captures_by_capture_object(oauth_client, response):
+def test_list_settlement_captures(oauth_client, response):
     """Get a list of captures relevant to settlement object."""
-    response.get(f"https://api.mollie.com/v2/settlements/{SETTLEMENT_ID}/captures", "captures_list")
     response.get(f"https://api.mollie.com/v2/settlements/{SETTLEMENT_ID}", "settlement_single")
+    response.get(f"https://api.mollie.com/v2/settlements/{SETTLEMENT_ID}/captures", "captures_list")
 
     settlement = oauth_client.settlements.get(SETTLEMENT_ID)
-    captures = oauth_client.settlement_captures.on(settlement).list()
+    captures = settlement.captures.list()
     assert_list_object(captures, Capture)

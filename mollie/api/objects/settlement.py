@@ -1,7 +1,7 @@
 import warnings
 
 from ..error import APIDeprecationWarning
-from ..resources import SettlementRefunds
+from ..resources import SettlementCaptures, SettlementRefunds
 from .base import ObjectBase
 
 
@@ -86,7 +86,7 @@ class Settlement(ObjectBase):
     @property
     def captures(self):
         """Return the captures related to this settlement."""
-        return self.client.settlement_captures.on(self).list()
+        return SettlementCaptures(self.client, self)
 
     @property
     def invoice(self):

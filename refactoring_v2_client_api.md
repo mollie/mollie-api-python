@@ -26,6 +26,8 @@ All of the above should be applied throughout the whole library.
 
 # Overview of all documented API calls.
 
+The list below corresponds with the Mollie API documentation.
+
 ## Payments API
 
 | Description | 2.x client path | New client path | Notes |
@@ -74,6 +76,17 @@ All of the above should be applied throughout the whole library.
 | List chargebacks | `client.chargeback.list()` | `client.chargeback.list()` | No changes |
 
 
+## Captures API
+
+- The `client.captures` object is removed.
+- The `payment.captures` object still exists, but is working differently.
+
+| Description | 2.x client path | New client path | Notes |
+| ------------|-----------------|-----------------|-------|
+| Get capture | `client.captures.with_parent_id(:payment_id).get(:capture_id)` | `payment = client.payments.get(:payment_id); payment.captures.get(:capture_id)` ||
+| List captures | `client.captures.with_parent_id(:payment_id).list()` <br>OR<br> `payment = client.payments.get(:payment_id); payment.captures` | `payment = client.payments.get(:payment_id); payment.captures.list()` ||
+
+
 ## Subscriptions API
 
 - The `client.subscription_payments` object is removed.
@@ -88,12 +101,13 @@ All of the above should be applied throughout the whole library.
 
 ### Settlements API
 
-- The `client.settlement_refunds` object is removed.
+- The `client.settlement_refunds` and `client.settlement_captures` objects are removed.
+- The `settlement.refunds` and `settlement.captures` objects still exist, but they are working differently.
 
 | Description | 2.x client path | New client path | Notes |
 | ------------|-----------------|-----------------|-------|
 | List settlement refunds | `client.settlement_refunds.with_parent_id(:settlement_id).list()` | `settlement = client.settlements.get(); settlement.refunds.list()` ||
-
+| List settlement captures | `client.settlement_captures.with_parent_id(:settlement_id).list()` | `settlement = client.settlements.get(); settlement.captures.list()` ||
 
 ## Proposed solution
 

@@ -159,12 +159,12 @@ def test_payment_get_related_chargebacks(client, response):
 
 
 def test_payment_get_related_captures(client, response):
-    """Get captures related to payment id."""
+    """Get captures related to payment."""
     response.get(f"https://api.mollie.com/v2/payments/{PAYMENT_ID}", "payment_single")
     response.get(f"https://api.mollie.com/v2/payments/{PAYMENT_ID}/captures", "captures_list")
 
     payment = client.payments.get(PAYMENT_ID)
-    captures = payment.captures
+    captures = payment.captures.list()
     assert_list_object(captures, Capture)
 
 

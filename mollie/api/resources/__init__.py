@@ -1,3 +1,4 @@
+from .captures import PaymentCaptures, SettlementCaptures
 from .chargebacks import Chargebacks, PaymentChargebacks
 from .methods import Methods
 from .payments import Payments
@@ -8,8 +9,10 @@ __all__ = [
     Methods,
     OrderRefunds,
     Payments,
+    PaymentCaptures,
     PaymentChargebacks,
     PaymentRefunds,
     Refunds,
+    SettlementCaptures,
     SettlementRefunds,
 ]

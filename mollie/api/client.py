@@ -11,7 +11,6 @@ from urllib3.util import Retry
 
 from .error import RequestError, RequestSetupError
 from .resources import Chargebacks, Methods, Payments, Refunds
-from .resources.captures import Captures
 from .resources.clients import Clients
 from .resources.customer_mandates import CustomerMandates
 from .resources.customer_payments import CustomerPayments
@@ -28,7 +27,6 @@ from .resources.profile_methods import ProfileMethods
 from .resources.profile_payments import ProfilePayments
 from .resources.profile_refunds import ProfileRefunds
 from .resources.profiles import Profiles
-from .resources.settlement_captures import SettlementCaptures
 from .resources.settlement_chargebacks import SettlementChargebacks
 from .resources.settlement_payments import SettlementPayments
 from .resources.settlements import Settlements
@@ -111,11 +109,9 @@ class Client(object):
         self.invoices = Invoices(self)
         self.permissions = Permissions(self)
         self.onboarding = Onboarding(self)
-        self.captures = Captures(self)
         self.settlements = Settlements(self)
         self.settlement_payments = SettlementPayments(self)
         self.settlement_chargebacks = SettlementChargebacks(self)
-        self.settlement_captures = SettlementCaptures(self)
         self.shipments = Shipments(self)
         self.subscriptions = Subscriptions(self)
 

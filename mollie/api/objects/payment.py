@@ -1,6 +1,5 @@
-from ..resources import PaymentChargebacks, PaymentRefunds
+from ..resources import PaymentCaptures, PaymentChargebacks, PaymentRefunds
 from .base import ObjectBase
-from .list import ObjectList
 
 
 class Payment(ObjectBase):
@@ -191,10 +190,7 @@ class Payment(ObjectBase):
     @property
     def captures(self):
         """Return the captures related to this payment"""
-        if not self.has_captures():
-            return ObjectList({}, None)
-
-        return self.client.captures.on(self).list()
+        return PaymentCaptures(self.client, self)
 
     @property
     def settlement(self):
