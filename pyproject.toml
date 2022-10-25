@@ -15,5 +15,4 @@ addopts = """
     --cov-fail-under=80
     --cov-report=term-missing
     --cov-branch
-    --isort
 """

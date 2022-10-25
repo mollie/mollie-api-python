@@ -27,7 +27,6 @@ mollie_api_python.egg-info: virtualenv
 .PHONY: test
 test: develop
 	$(PYTHON) -m flake8
-	$(PYTHON) -m black --check --diff .
 	$(PYTHON) -m pytest
 	$(PYTHON) -m safety check
 

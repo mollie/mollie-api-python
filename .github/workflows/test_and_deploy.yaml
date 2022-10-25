@@ -34,9 +34,6 @@ jobs:
       - name: Verify code style
         run: python -m flake8 -v
 
-      - name: Verify code formatting
-        run: python -m black --check --diff .
-
   deployment:
     name: Deploy a new release to Pypi
     if: ${{ startsWith(github.ref, 'refs/tags/v') }}  # only on tagged commits
