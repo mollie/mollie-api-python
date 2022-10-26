@@ -1,3 +1,6 @@
+import pytest
+
+from mollie.api.error import IdentifierError
 from mollie.api.objects.customer import Customer
 from mollie.api.objects.mandate import Mandate
 
@@ -9,20 +12,23 @@ MANDATE_ID = "mdt_h3gAaD5zP"
 
 def test_list_customer_mandates(client, response):
     """Retrieve a list of mandates."""
+    response.get(f"https://api.mollie.com/v2/customers/{CUSTOMER_ID}", "customer_single")
     response.get(f"https://api.mollie.com/v2/customers/{CUSTOMER_ID}/mandates", "customer_mandates_list")
-    mandates = client.customer_mandates.with_parent_id(CUSTOMER_ID).list()
+
+    customer = client.customers.get(CUSTOMER_ID)
+    mandates = customer.mandates.list()
     assert_list_object(mandates, Mandate)
 
 
-def test_get_customer_mandate_by_id(client, response):
-    """Retrieve a single mandate by ID."""
+def test_get_customer_mandate(client, response):
+    response.get(f"https://api.mollie.com/v2/customers/{CUSTOMER_ID}", "customer_single")
     response.get(
         f"https://api.mollie.com/v2/customers/{CUSTOMER_ID}/mandates/{MANDATE_ID}",
         "customer_mandate_single",
     )
-    response.get(f"https://api.mollie.com/v2/customers/{CUSTOMER_ID}", "customer_new")
 
-    mandate = client.customer_mandates.with_parent_id(CUSTOMER_ID).get(MANDATE_ID)
+    customer = client.customers.get(CUSTOMER_ID)
+    mandate = customer.mandates.get(MANDATE_ID)
     assert isinstance(mandate, Mandate)
     assert mandate.id == MANDATE_ID
     assert mandate.resource == "mandate"
@@ -42,39 +48,32 @@ def test_get_customer_mandate_by_id(client, response):
     assert mandate.customer is not None
 
 
-def test_get_customer_mandate_by_customer(client, response):
-    """Retrieve a customer by customer object."""
-    response.get(f"https://api.mollie.com/v2/customers/{CUSTOMER_ID}", "customer_new")
-    response.get(f"https://api.mollie.com/v2/customers/{CUSTOMER_ID}/mandates", "customer_mandates_list")
-    response.get(
-        f"https://api.mollie.com/v2/customers/{CUSTOMER_ID}/mandates/{MANDATE_ID}",
-        "customer_mandate_single",
-    )
+def test_get_customer_mandate_invalid_id(client, response):
+    response.get(f"https://api.mollie.com/v2/customers/{CUSTOMER_ID}", "customer_single")
+
     customer = client.customers.get(CUSTOMER_ID)
-
-    mandates = client.customer_mandates.on(customer).list()
-    assert_list_object(mandates, Mandate)
-
-    mandate = client.customer_mandates.on(customer).get(MANDATE_ID)
-    assert isinstance(mandate, Mandate)
-    assert mandate.id == MANDATE_ID
+    with pytest.raises(IdentifierError) as excinfo:
+        customer.mandates.get("invalid")
+    assert str(excinfo.value) == "Invalid mandate ID 'invalid', it should start with 'mdt_'."
 
 
 def test_customer_mandate_get_related_customer(client, response):
     """Retrieve a related customer object from a mandate."""
+    response.get(f"https://api.mollie.com/v2/customers/{CUSTOMER_ID}", "customer_single")
     response.get(
         f"https://api.mollie.com/v2/customers/{CUSTOMER_ID}/mandates/{MANDATE_ID}",
         "customer_mandate_single",
     )
-    response.get(f"https://api.mollie.com/v2/customers/{CUSTOMER_ID}", "customer_new")
 
-    mandate = client.customer_mandates.with_parent_id(CUSTOMER_ID).get(MANDATE_ID)
+    customer = client.customers.get(CUSTOMER_ID)
+    mandate = customer.mandates.get(MANDATE_ID)
     assert isinstance(mandate.customer, Customer)
     assert mandate.customer.id == CUSTOMER_ID
 
 
-def test_customer_mandates_create_mandate(client, response):
+def test_create_customer_mandate(client, response):
     """Create a new customer mandate."""
+    response.get(f"https://api.mollie.com/v2/customers/{CUSTOMER_ID}", "customer_single")
     response.post(f"https://api.mollie.com/v2/customers/{CUSTOMER_ID}/mandates", "customer_mandate_single")
 
     data = {
@@ -85,35 +84,30 @@ def test_customer_mandates_create_mandate(client, response):
         "signatureDate": "2018-05-07",
         "mandateReference": "YOUR-COMPANY-MD1380",
     }
-    mandate = client.customer_mandates.with_parent_id(CUSTOMER_ID).create(data=data)
-    assert isinstance(mandate, Mandate)
-    assert mandate.id == MANDATE_ID
 
-
-def test_update_customer_mandate(client, response):
-    response.patch(
-        f"https://api.mollie.com/v2/customers/{CUSTOMER_ID}/mandates/{MANDATE_ID}", "customer_mandate_updated"
-    )
-
-    data = {
-        "method": "directdebit",
-        "consumerName": "John Doe",
-        "consumerAccount": "NL09ASNB0000000000",
-        "consumerBic": "ASNBNL21",
-        "signatureDate": "2018-05-07",
-        "mandateReference": "OTHER-COMPANY-12345",
-    }
-    mandate = client.customer_mandates.with_parent_id(CUSTOMER_ID).update(MANDATE_ID, data=data)
+    customer = client.customers.get(CUSTOMER_ID)
+    mandate = customer.mandates.create(data)
     assert isinstance(mandate, Mandate)
     assert mandate.id == MANDATE_ID
 
 
 def test_revoke_customer_mandate(client, response):
+    response.get(f"https://api.mollie.com/v2/customers/{CUSTOMER_ID}", "customer_single")
     response.delete(
         f"https://api.mollie.com/v2/customers/{CUSTOMER_ID}/mandates/{MANDATE_ID}",
         "empty",
         204,
     )
 
-    resp = client.customer_mandates.with_parent_id(CUSTOMER_ID).delete(MANDATE_ID)
+    customer = client.customers.get(CUSTOMER_ID)
+    resp = customer.mandates.delete(MANDATE_ID)
     assert resp == {}
+
+
+def test_revoke_customer_mandate_invalid_id(client, response):
+    response.get(f"https://api.mollie.com/v2/customers/{CUSTOMER_ID}", "customer_new")
+
+    customer = client.customers.get(CUSTOMER_ID)
+    with pytest.raises(IdentifierError) as excinfo:
+        customer.mandates.delete("invalid")
+    assert str(excinfo.value) == "Invalid mandate ID 'invalid', it should start with 'mdt_'."

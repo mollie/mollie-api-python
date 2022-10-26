@@ -50,10 +50,9 @@ class Customer(ObjectBase):
 
     @property
     def mandates(self):
-        """Return the mandate list for the customer."""
-        if not self._get_link("mandates"):
-            return ObjectList({}, None)
-        return self.client.customer_mandates.on(self).list()
+        from ..resources import CustomerMandates
+
+        return CustomerMandates(self.client, self)
 
     @property
     def payments(self):

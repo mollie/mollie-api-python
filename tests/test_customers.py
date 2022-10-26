@@ -98,11 +98,11 @@ def test_get_customer_invalid_id(client):
 
 def test_customer_get_related_mandates(client, response):
     """Retrieve related mandates for a customer."""
-    response.get(f"https://api.mollie.com/v2/customers/{CUSTOMER_ID}", "customer_updated")
+    response.get(f"https://api.mollie.com/v2/customers/{CUSTOMER_ID}", "customer_single")
     response.get(f"https://api.mollie.com/v2/customers/{CUSTOMER_ID}/mandates", "customer_mandates_list")
 
     customer = client.customers.get(CUSTOMER_ID)
-    mandates = customer.mandates
+    mandates = customer.mandates.list()
     assert_list_object(mandates, Mandate)
 
 

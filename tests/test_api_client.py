@@ -160,7 +160,6 @@ def test_client_get_invalid_id(client, endpoint, errorstr):
 @pytest.mark.parametrize(
     "endpoint, errorstr",
     [
-        ("customer_mandates", "Invalid mandate ID: 'invalid'. A mandate ID should start with 'mdt_'."),
         ("customer_subscriptions", "Invalid subscription ID: 'invalid'. A subscription ID should start with 'sub_'."),
     ],
 )

@@ -1,5 +1,6 @@
 from ..resources import PaymentCaptures, PaymentChargebacks
 from .base import ObjectBase
+from .customer import Customer
 
 
 class Payment(ObjectBase):
@@ -204,7 +205,9 @@ class Payment(ObjectBase):
     def mandate(self):
         """Return the mandate for this payment."""
         if self.customer_id and self.mandate_id:
-            return self.client.customer_mandates.with_parent_id(self.customer_id).get(self.mandate_id)
+            # Setup a minimal Customer object without querying the API.
+            customer = Customer({"id": self.customer_id}, self.client)
+            return customer.mandates.get(self.mandate_id)
 
     @property
     def subscription(self):

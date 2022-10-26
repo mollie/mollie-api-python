@@ -142,6 +142,19 @@ The list below corresponds with the Mollie API documentation.
 | List customer payments | `customer = client.customers.get(:customer_id); customer.payments` <br>OR<br> `client.customer_payments.with_parent_id(:customer_id).list()` | `customer = client.customers.get(:customer_id); customer.payments.list()` ||
 
 
+## Mandates API
+
+- The `client.customer_mandates` object is removed.
+- The `customer.mandates` object still exists but is working differently.
+
+| Description | 2.x client path | New client path | Notes |
+| ------------|-----------------|-----------------|-------|
+| Create mandate | `client.customer_mandates.on(:customer_id).create(:data)` | `customer = client.customers.get(:customer_id); customer.mandates.create(:data)` ||
+| Get mandate | `client.customer_mandates.on(:customer_id).get(:mandate_id)` <br>OR<br> `payment = client.payments.get(:payments.id); payment.mandate` | `customer = client.customers.get(:customer_id); customer.mandates.get(:mandate_id)` ||
+| Revoke mandate | `client.customer_mandates.on(:customer_id).delete(:mandate_id)` | `customer = client.customers.get(:customer_id); customer.mandates.delete(:mandate_id)` ||
+| List mandates | `customer = client.customers.get(:customer_id); customer.mandates` <br>OR<br> `client.customer_mandates.with_parent_id(:customer_id).list()` | `customer = client.customers.get(:customer_id); customer.mandates.list()` ||
+
+
 ## Subscriptions API
 
 - The `client.subscription_payments` object is removed.

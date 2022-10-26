@@ -12,7 +12,6 @@ from urllib3.util import Retry
 from .error import RequestError, RequestSetupError
 from .resources import Chargebacks, Customers, Methods, Orders, PaymentLinks, Payments, Refunds
 from .resources.clients import Clients
-from .resources.customer_mandates import CustomerMandates
 from .resources.customer_subscriptions import CustomerSubscriptions
 from .resources.invoices import Invoices
 from .resources.onboarding import Onboarding
@@ -95,7 +94,6 @@ class Client(object):
         self.chargebacks = Chargebacks(self)
         self.clients = Clients(self)
         self.customers = Customers(self)
-        self.customer_mandates = CustomerMandates(self)
         self.customer_subscriptions = CustomerSubscriptions(self)
         self.orders = Orders(self)
         self.organizations = Organizations(self)
