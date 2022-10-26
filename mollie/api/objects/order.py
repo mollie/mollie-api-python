@@ -172,22 +172,9 @@ class Order(ObjectBase):
 
     @property
     def shipments(self):
-        """Retrieve all shipments for an order."""
-        return self.client.shipments.on(self).list()
+        from ..resources import OrderShipments
 
-    def create_shipment(self, data=None):
-        """Create a shipment for an order. When no data arg is given, a shipment for all order lines is assumed."""
-        if data is None:
-            data = {"lines": []}
-        return self.client.shipments.on(self).create(data)
-
-    def get_shipment(self, resource_id):
-        """Retrieve a single shipment by a shipment's ID."""
-        return self.client.shipments.on(self).get(resource_id)
-
-    def update_shipment(self, resource_id, data):
-        """Update the tracking information of a shipment."""
-        return self.client.shipments.on(self).update(resource_id, data)
+        return OrderShipments(self.client, self)
 
     @property
     def payments(self):

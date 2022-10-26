@@ -7,8 +7,7 @@ from mollie.api.error import EmbedNotFound, IdentifierError
 from mollie.api.objects.order import Order
 from mollie.api.objects.payment import Payment
 from mollie.api.objects.refund import Refund
-from mollie.api.objects.shipment import Shipment
-from mollie.api.resources import OrderPayments, OrderRefunds
+from mollie.api.resources import OrderPayments, OrderRefunds, OrderShipments
 
 from .utils import assert_list_object
 
@@ -18,7 +17,6 @@ ORDER_ID = "ord_kEn1PlbGa"
 def test_get_order(client, response):
     """Retrieve a single order by order ID."""
     response.get(f"https://api.mollie.com/v2/orders/{ORDER_ID}", "order_single")
-    response.get(f"https://api.mollie.com/v2/orders/{ORDER_ID}/shipments", "shipments_list")
 
     order = client.orders.get(ORDER_ID)
     assert isinstance(order, Order)
@@ -70,7 +68,7 @@ def test_get_order(client, response):
     assert order.canceled_at is None
     assert order.completed_at is None
     assert order.checkout_url == "https://www.mollie.com/payscreen/order/checkout/kEn1PlbGa"
-    assert_list_object(order.shipments, Shipment)
+    assert isinstance(order.shipments, OrderShipments)
     assert isinstance(order.refunds, OrderRefunds)
     assert isinstance(order.payments, OrderPayments)
 

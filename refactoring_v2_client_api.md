@@ -113,6 +113,19 @@ The list below corresponds with the Mollie API documentation.
 | Create order payment | `order = client.orders.get(:order_id); order.create_payment(:data)` | `order = client.orders.get(:order_id); order.payments.create(:data)` ||
 
 
+## Shipments API
+
+- The `client.shipments` object and the `order.create_shipment()`, `order.get_shipment()`, `order.update_shipment()` methods are removed.
+- The `order.shipments` object still exists, but is working differently.
+
+| Description | 2.x client path | New client path | Notes |
+| ------------|-----------------|-----------------|-------|
+| Create shipment | `order = client.orders.get(:order_id); order.create_shipment(:data)` | `order = client.orders.get(:order_id); order.shipments.create(:data)` ||
+| Get shipment | `order = client.orders.get(:order_id); order.get_shipment(:shipment_id)` | `order = client.orders.get(:order_id); order.shipments.get(:shipment_id)` ||
+| Update shipment | `order = client.orders.get(:order_id); order.update_shipment(:shipment_id, :data)` | `order = client.orders.get(:order_id); order.shipments.update(:shipment_id¸ :data)` ||
+| List shipments | `order = client.orders.get(:order_id); order.shipments` | `order = client.orders.get(:order_id); order.shipments.list()` ||
+
+
 ## Subscriptions API
 
 - The `client.subscription_payments` object is removed.

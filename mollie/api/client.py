@@ -28,7 +28,6 @@ from .resources.profiles import Profiles
 from .resources.settlement_chargebacks import SettlementChargebacks
 from .resources.settlement_payments import SettlementPayments
 from .resources.settlements import Settlements
-from .resources.shipments import Shipments
 from .resources.subscription_payments import SubscriptionPayments
 from .resources.subscriptions import Subscriptions
 from .version import VERSION
@@ -110,7 +109,6 @@ class Client(object):
         self.settlements = Settlements(self)
         self.settlement_payments = SettlementPayments(self)
         self.settlement_chargebacks = SettlementChargebacks(self)
-        self.shipments = Shipments(self)
         self.subscriptions = Subscriptions(self)
 
         # compose base user agent string
