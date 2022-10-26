@@ -126,6 +126,22 @@ The list below corresponds with the Mollie API documentation.
 | List shipments | `order = client.orders.get(:order_id); order.shipments` | `order = client.orders.get(:order_id); order.shipments.list()` ||
 
 
+## Customers API
+
+- The `client.customer_payments` object is removed.
+- The `customer.payments` object still exists but is working differently.
+
+| Description | 2.x client path | New client path | Notes |
+| ------------|-----------------|-----------------|-------|
+| Create customer | `client.customers.create(:data)` | `client.customers.create(:data)` | No changes |
+| Get customer | `client.customers.get(:customer_id)` | `client.customers.get(:customer_id)` | No changes |
+| Update customer | `client.customers.update(:customer_id, :data)` | `client.customers.update(:customer_id, :data)` | No changes |
+| Delete customer | `client.customers.delete(:customer_id)` | `client.customers.delete(:customer_id)` | No changes |
+| List customers | `client.customers.list()` | `client.customers.list()` | No changes |
+| Create customer payment | `client.customer_payments.with_parent_id(:customer.id).create(:data)` | `customer = client.customers.get(:customer_id); customer.payments.create(:data)` ||
+| List customer payments | `customer = client.customers.get(:customer_id); customer.payments` <br>OR<br> `client.customer_payments.with_parent_id(:customer_id).list()` | `customer = client.customers.get(:customer_id); customer.payments.list()` ||
+
+
 ## Subscriptions API
 
 - The `client.subscription_payments` object is removed.

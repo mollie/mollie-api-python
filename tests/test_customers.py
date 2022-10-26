@@ -1,3 +1,6 @@
+import pytest
+
+from mollie.api.error import IdentifierError
 from mollie.api.objects.customer import Customer
 from mollie.api.objects.mandate import Mandate
 from mollie.api.objects.payment import Payment
@@ -39,12 +42,25 @@ def test_update_customer(client, response):
     assert updated_customer.email == "updated-customer@example.org"
 
 
+def test_update_customer_invalid_id(client):
+    data = {}
+    with pytest.raises(IdentifierError) as excinfo:
+        client.customers.update("invalid", data)
+    assert str(excinfo.value) == "Invalid customer ID 'invalid', it should start with 'cst_'."
+
+
 def test_delete_customer(client, response):
     """Delete a customer."""
     response.delete(f"https://api.mollie.com/v2/customers/{CUSTOMER_ID}", "empty")
 
     deleted_customer = client.customers.delete("cst_8wmqcHMN4U")
     assert deleted_customer == {}
+
+
+def test_delete_customer_invalid_id(client):
+    with pytest.raises(IdentifierError) as excinfo:
+        client.customers.delete("invalid")
+    assert str(excinfo.value) == "Invalid customer ID 'invalid', it should start with 'cst_'."
 
 
 def test_list_customers(client, response):
@@ -74,6 +90,12 @@ def test_get_customer(client, response):
     assert customer.payments is not None
 
 
+def test_get_customer_invalid_id(client):
+    with pytest.raises(IdentifierError) as excinfo:
+        client.customers.get("invalid")
+    assert str(excinfo.value) == "Invalid customer ID 'invalid', it should start with 'cst_'."
+
+
 def test_customer_get_related_mandates(client, response):
     """Retrieve related mandates for a customer."""
     response.get(f"https://api.mollie.com/v2/customers/{CUSTOMER_ID}", "customer_updated")
@@ -96,9 +118,9 @@ def test_customer_get_related_subscriptions(client, response):
 
 def test_customer_get_related_payments(client, response):
     """Retrieve related payments for a customer."""
-    response.get(f"https://api.mollie.com/v2/customers/{CUSTOMER_ID}", "customer_updated")
+    response.get(f"https://api.mollie.com/v2/customers/{CUSTOMER_ID}", "customer_single")
     response.get(f"https://api.mollie.com/v2/customers/{CUSTOMER_ID}/payments", "customer_payments_multiple")
 
     customer = client.customers.get(CUSTOMER_ID)
-    payments = customer.payments
+    payments = customer.payments.list()
     assert_list_object(payments, Payment)

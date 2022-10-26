@@ -5,7 +5,7 @@ from .list import ObjectList
 class Customer(ObjectBase):
     @classmethod
     def get_resource_class(cls, client):
-        from ..resources.customers import Customers
+        from ..resources import Customers
 
         return Customers(client)
 
@@ -57,7 +57,6 @@ class Customer(ObjectBase):
 
     @property
     def payments(self):
-        """Return the payment list for the customer."""
-        if not self._get_link("payments"):
-            return ObjectList({}, None)
-        return self.client.customer_payments.on(self).list()
+        from ..resources import CustomerPayments
+
+        return CustomerPayments(self.client, self)

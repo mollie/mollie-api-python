@@ -6,27 +6,20 @@ CUSTOMER_ID = "cst_8wmqcHMN4U"
 
 
 def test_list_customer_payments(client, response):
-    """Retrieve a list of payments related to a customer id."""
-    response.get(f"https://api.mollie.com/v2/customers/{CUSTOMER_ID}/payments", "customer_payments_multiple")
-
-    payments = client.customer_payments.with_parent_id(CUSTOMER_ID).list()
-    assert_list_object(payments, Payment)
-
-
-def test_list_customer_payments_by_object(client, response):
     response.get(f"https://api.mollie.com/v2/customers/{CUSTOMER_ID}", "customer_single")
     response.get(f"https://api.mollie.com/v2/customers/{CUSTOMER_ID}/payments", "customer_payments_multiple")
 
     customer = client.customers.get(CUSTOMER_ID)
-    payments = client.customer_payments.on(customer).list()
+    payments = customer.payments.list()
     assert_list_object(payments, Payment)
 
 
 def test_create_customer_payment(client, response):
-    """Create a customer payment."""
+    response.get(f"https://api.mollie.com/v2/customers/{CUSTOMER_ID}", "customer_single")
     response.post(f"https://api.mollie.com/v2/customers/{CUSTOMER_ID}/payments", "payment_single")
 
-    payment = client.customer_payments.with_parent_id(CUSTOMER_ID).create(
+    customer = client.customers.get(CUSTOMER_ID)
+    payment = customer.payments.create(
         {
             "amount": {"currency": "EUR", "value": "10.00"},
             "description": "Order #12345",

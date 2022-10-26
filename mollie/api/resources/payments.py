@@ -10,6 +10,7 @@ from .base import (
 )
 
 __all__ = [
+    "CustomerPayments",
     "OrderPayments",
     "Payments",
 ]
@@ -71,3 +72,14 @@ class OrderPayments(PaymentsBase, ResourceCreateMixin):
             "count": len(payments),
         }
         return ObjectList(data, Payment, self.client)
+
+
+class CustomerPayments(PaymentsBase, ResourceCreateMixin, ResourceListMixin):
+    _customer = None
+
+    def __init__(self, client, customer):
+        self._customer = customer
+        super().__init__(client)
+
+    def get_resource_path(self):
+        return f"customers/{self._customer.id}/payments"
