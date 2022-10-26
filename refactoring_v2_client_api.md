@@ -163,7 +163,12 @@ The list below corresponds with the Mollie API documentation.
 
 | Description | 2.x client path | New client path | Notes |
 | ------------|-----------------|-----------------|-------|
+| Create subscription | `client.customer_subscriptions.with_parent_id(:customer_id).create(:data)` | `customer = client.customers.get:customer_id); customer.subscriptions.create(:data)` ||
+| Get subscription | `client.customer_subscriptions.with_parent_id(:customer_id).get(:subscription_id)` <br>OR<br> `payment = client.payments.get(:payment_id); payment.subscription` | `customer = client.customers.get:customer_id); customer.subscriptions.get(:subscription_id)` ||
+| Update subscription | `client.customer_subscriptions.with_parent_id(:customer_id).update(:subscription_id, :data)` | `customer = client.customers.get:customer_id); customer.subscriptions.update(:subscription_id, :data)` ||
+| Cancel subscription | `client.customer_subscriptions.with_parent_id(:customer_id).delete(:subscription_id)` | `customer = client.customers.get:customer_id); customer.subscriptions.delete(:subscription_id)` ||
 | List subscriptions | `client.customer_subscriptions.with_parent_id(:customer_id).list()` <br>OR<br> `customer = client.customers.get:customer_id); customer.subscriptions` | `customer = client.customers.get(:customer_id); customer.subscriptions.list()` ||
+| List all subscriptions | `client.subscriptions.list()` | `client.subscriptions.list()` | No changes |
 | List subscription payments | `client.subscription_payments.with_parent_id(:customer_id, :subscription_id).list()` | `customer = client.customers.get(:customer_id); subscription = customer.subscriptions.get(:subscription_id); payments = subscription.payments.list()` ||
 
 

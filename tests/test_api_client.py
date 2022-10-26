@@ -157,18 +157,6 @@ def test_client_get_invalid_id(client, endpoint, errorstr):
         getattr(client, endpoint).get("invalid")
 
 
-@pytest.mark.parametrize(
-    "endpoint, errorstr",
-    [
-        ("customer_subscriptions", "Invalid subscription ID: 'invalid'. A subscription ID should start with 'sub_'."),
-    ],
-)
-def test_client_get_customer_related_invalid_id(client, endpoint, errorstr):
-    """An invalid formatted object ID should raise an error."""
-    with pytest.raises(IdentifierError, match=errorstr):
-        getattr(client, endpoint).with_parent_id("cst_12345").get("invalid")
-
-
 def test_client_delete_profile_method_misses_method_id(client):
     with pytest.raises(RequestError, match="resource_id is required when disabling a giftcard."):
         client.profile_methods.with_parent_id("pfl_v9hTwCvYqw", "giftcard").delete()

@@ -1,4 +1,7 @@
+import re
+
 from .base import ObjectBase
+from .customer import Customer
 
 
 class Subscription(ObjectBase):
@@ -108,6 +111,20 @@ class Subscription(ObjectBase):
         return self.client.customers.from_url(url)
 
     @property
+    def customer_id(self):
+        """
+        Retrieve the customer id from the customer link.
+
+        The customer_id is not available as a direct subscription property,
+        but we need it to implement various features that need it. The only
+        option is to extract it from the link.
+        """
+        url = self._get_link("customer")
+        matches = re.findall(r"/customers/(cst_\w+)", url)
+        if matches:
+            return matches[0]
+
+    @property
     def profile(self):
         """Return the profile related to this subscription."""
         url = self._get_link("profile")
@@ -117,12 +134,18 @@ class Subscription(ObjectBase):
 
     @property
     def payments(self):
-        """Return a list of payments for this subscription."""
-        payments = self.client.subscription_payments.on(self).list()
-        return payments
+        # We could also have implemented this using the "payments" entry from the _links, but then we would not have
+        # the explicit interface using .payments.list()
+        from ..resources import SubscriptionPayments
 
-    # TODO: Implement this property.
-    # Payload from API is missing customerId or a _links['mandate'] field to do this efficiently.
-    # @property
-    # def mandate(self):
-    #     pass
+        # Create a fake customer object with minimal payload
+        customer = Customer({"id": self.customer_id}, self.client)
+        return SubscriptionPayments(self.client, customer=customer, subscription=self)
+
+    @property
+    def mandate(self):
+        if self.mandate_id and self.customer_id:
+            from ..resources import CustomerMandates
+
+            customer = Customer({"id": self.customer_id}, self.client)
+            return CustomerMandates(self.client, customer).get(self.mandate_id)

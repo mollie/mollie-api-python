@@ -112,7 +112,7 @@ def test_customer_get_related_subscriptions(client, response):
     response.get(f"https://api.mollie.com/v2/customers/{CUSTOMER_ID}/subscriptions", "subscriptions_customer_list")
 
     customer = client.customers.get(CUSTOMER_ID)
-    subscriptions = customer.subscriptions
+    subscriptions = customer.subscriptions.list()
     assert_list_object(subscriptions, Subscription)
 
 

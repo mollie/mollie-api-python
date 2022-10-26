@@ -10,9 +10,8 @@ from requests_oauthlib import OAuth2Session
 from urllib3.util import Retry
 
 from .error import RequestError, RequestSetupError
-from .resources import Chargebacks, Customers, Methods, Orders, PaymentLinks, Payments, Refunds
+from .resources import Chargebacks, Customers, Methods, Orders, PaymentLinks, Payments, Refunds, Subscriptions
 from .resources.clients import Clients
-from .resources.customer_subscriptions import CustomerSubscriptions
 from .resources.invoices import Invoices
 from .resources.onboarding import Onboarding
 from .resources.organizations import Organizations
@@ -25,8 +24,6 @@ from .resources.profiles import Profiles
 from .resources.settlement_chargebacks import SettlementChargebacks
 from .resources.settlement_payments import SettlementPayments
 from .resources.settlements import Settlements
-from .resources.subscription_payments import SubscriptionPayments
-from .resources.subscriptions import Subscriptions
 from .version import VERSION
 
 
@@ -94,10 +91,8 @@ class Client(object):
         self.chargebacks = Chargebacks(self)
         self.clients = Clients(self)
         self.customers = Customers(self)
-        self.customer_subscriptions = CustomerSubscriptions(self)
         self.orders = Orders(self)
         self.organizations = Organizations(self)
-        self.subscription_payments = SubscriptionPayments(self)
         self.invoices = Invoices(self)
         self.permissions = Permissions(self)
         self.onboarding = Onboarding(self)

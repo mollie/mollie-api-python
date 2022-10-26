@@ -145,10 +145,6 @@ class Payment(ObjectBase):
         return self._get_property("mandateId")
 
     @property
-    def subscription_id(self):
-        return self._get_property("subscriptionId")
-
-    @property
     def order_id(self):
         return self._get_property("orderId")
 
@@ -211,9 +207,16 @@ class Payment(ObjectBase):
 
     @property
     def subscription(self):
-        """Return the subscription for this payment."""
-        if self.customer_id and self.subscription_id:
-            return self.client.customer_subscriptions.with_parent_id(self.customer_id).get(self.subscription_id)
+        """
+        Return the subscription for this payment.
+
+        This is only available for recurring payments.
+        """
+        url = self._get_link("subscription")
+        if url:
+            from ..resources import CustomerSubscriptions
+
+            return CustomerSubscriptions(self.client, customer=None).from_url(url)
 
     @property
     def customer(self):

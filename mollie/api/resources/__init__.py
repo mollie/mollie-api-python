@@ -9,3 +9,4 @@ from .payment_links import *  # noqa: F401, F403
 from .payments import *  # noqa: F401, F403
 from .refunds import *  # noqa: F401, F403
 from .shipments import *  # noqa: F401, F403
+from .subscriptions import *  # noqa: F401, F403
