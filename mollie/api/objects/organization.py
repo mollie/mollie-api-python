@@ -4,7 +4,7 @@ from .base import ObjectBase
 class Organization(ObjectBase):
     @classmethod
     def get_resource_class(cls, client):
-        from ..resources.organizations import Organizations
+        from ..resources import Organizations
 
         return Organizations(client)
 
@@ -43,3 +43,7 @@ class Organization(ObjectBase):
     @property
     def dashboard(self):
         return self._get_link("dashboard")
+
+    # TODO: Implement https://docs.mollie.com/reference/v2/organizations-api/get-partner
+    # def get_partner(self):
+    #     ...

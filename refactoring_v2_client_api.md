@@ -189,6 +189,15 @@ The list below corresponds with the Mollie API documentation.
 | List permissions | `client.permissions.list()` | `client.permissions.list()` | No changes |
 
 
+## Organizations API
+
+| Description | 2.x client path | New client path | Notes |
+| ------------|-----------------|-----------------|-------|
+| Get current organization | `client.organizations.get("me")` | `client.organizations.get("me")` | No changes |
+| Get organization | `client.organizations.get(:organization_id)` | `client.organizations.get(:organization_id)` | No changes |
+| Get partner status | Not implemented | TODO | This will be implemented later |
+
+
 ### Settlements API
 
 - The `client.settlement_refunds` and `client.settlement_captures` objects are removed.

@@ -144,10 +144,6 @@ def test_client_invalid_update_data(client):
     [
         ("invoices", "Invalid invoice ID: 'invalid'. An invoice ID should start with 'inv_'."),
         ("onboarding", "Invalid onboarding ID: 'invalid'. The onboarding ID should be 'me'."),
-        (
-            "organizations",
-            "Invalid organization ID: 'invalid'. A organization ID should start with 'org_' or it should be 'me'.",
-        ),
         ("clients", "Invalid client ID: 'invalid'. A client ID should start with 'org_'."),
     ],
 )
