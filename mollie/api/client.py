@@ -268,6 +268,10 @@ class Client(object):
         self.set_token(self.access_token)
         return self.access_token
 
+    # TODO Implement https://docs.mollie.com/reference/oauth2/revoke-token
+    # def revoke_oauth_token(self, token, type_hint):
+    #     ...
+
     def _setup_retry(self):
         """Configure a retry behaviour on the HTTP client."""
         if self.retry:

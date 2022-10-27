@@ -172,6 +172,15 @@ The list below corresponds with the Mollie API documentation.
 | List subscription payments | `client.subscription_payments.with_parent_id(:customer_id, :subscription_id).list()` | `customer = client.customers.get(:customer_id); subscription = customer.subscriptions.get(:subscription_id); payments = subscription.payments.list()` ||
 
 
+## OAuth API
+
+| Description | 2.x client path | New client path | Notes |
+| ------------|-----------------|-----------------|-------|
+| Authorize | `client.setup_oauth()` | `client.setup_oauth()` | Used internally, no changes |
+| Generate tokens | `client.setup_oauth_authorization_response()` | `client.setup_oauth_authorization_response()` | Used internally, no changes |
+| Revoke token | Not implemented | TODO | This will be implemented later |
+
+
 ### Settlements API
 
 - The `client.settlement_refunds` and `client.settlement_captures` objects are removed.
