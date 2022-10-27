@@ -181,6 +181,14 @@ The list below corresponds with the Mollie API documentation.
 | Revoke token | Not implemented | TODO | This will be implemented later |
 
 
+## Permissions API
+
+| Description | 2.x client path | New client path | Notes |
+| ------------|-----------------|-----------------|-------|
+| Get permission | `client.permissions.get(:permission_id)` | `client.permissions.get(:permission_id)` | No changes |
+| List permissions | `client.permissions.list()` | `client.permissions.list()` | No changes |
+
+
 ### Settlements API
 
 - The `client.settlement_refunds` and `client.settlement_captures` objects are removed.
