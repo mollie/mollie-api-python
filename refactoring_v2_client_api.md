@@ -198,6 +198,18 @@ The list below corresponds with the Mollie API documentation.
 | Get partner status | Not implemented | TODO | This will be implemented later |
 
 
+## Profiles API
+
+| Description | 2.x client path | New client path | Notes |
+| ------------|-----------------|-----------------|-------|
+| Create profile | `client.profiles.create(:data)` | `client.profiles.create(:data)` | No changes |
+| Get profile | `client.profiles.get(:profile_id)` | `client.profiles.get(:profile_id)` | No changes |
+| Get current profile | `client.profiles.get("me")` | `client.profiles.get("me")` | No changes |
+| Update profile | `client.profiles.update(:profile_id, :data)` | `client.profiles.update(:profile_id, :data)` | No changes |
+| Delete profile | `client.profiles.delete(:profile_id)` | `client.profiles.delete(:profile_id)` | No changes |
+| List profiles | `client.profiles.list()` | `client.profiles.list()` | No changes |
+
+
 ### Settlements API
 
 - The `client.settlement_refunds` and `client.settlement_captures` objects are removed.
