@@ -46,6 +46,10 @@ class Method(ObjectBase):
         return self._get_property("id")
 
     @property
+    def resource(self):
+        return self._get_property("resource")
+
+    @property
     def minimum_amount(self):
         return self._get_property("minimumAmount")
 

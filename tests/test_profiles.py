@@ -1,8 +1,8 @@
 import pytest
 
-from mollie.api.error import APIDeprecationWarning, IdentifierError, RequestError
+from mollie.api.error import APIDeprecationWarning, IdentifierError
 from mollie.api.objects.profile import Profile
-from mollie.api.resources import ProfileMethods, Profiles
+from mollie.api.resources import ProfileMethods
 
 from .utils import assert_list_object
 
@@ -117,45 +117,6 @@ def test_get_current_profile(oauth_client, response):
 
     profile = oauth_client.profiles.get("me")
     assert isinstance(profile, Profile)
-
-
-@pytest.mark.parametrize("method", ["giftcard", "voucher"])
-def test_profile_enable_giftcard_no_resource_id(oauth_client, response, method):
-    response.get(f"https://api.mollie.com/v2/profiles/{PROFILE_ID}", "profile_single")
-
-    profile = oauth_client.profiles.get(PROFILE_ID)
-
-    with pytest.raises(RequestError):
-        oauth_client.profile_methods.on(profile, method).create()
-
-
-@pytest.mark.parametrize("method", ["giftcard", "voucher"])
-def test_profile_enable_giftcard(oauth_client, response, method):
-    response.get(f"https://api.mollie.com/v2/profiles/{PROFILE_ID}", "profile_single")
-    response.post(
-        f"https://api.mollie.com/v2/profiles/{PROFILE_ID}/methods/{method}/issuers/festivalcadeau",
-        "profile_enable_gift_card_issuer",
-    )
-
-    profile = oauth_client.profiles.get(PROFILE_ID)
-    method = oauth_client.profile_methods.on(profile, method).create("festivalcadeau")
-
-    assert method.id == "festivalcadeau"
-
-
-@pytest.mark.parametrize("method", ["giftcard", "voucher"])
-def test_profile_disable_giftcard(oauth_client, response, method):
-    response.get(f"https://api.mollie.com/v2/profiles/{PROFILE_ID}", "profile_single")
-    response.delete(
-        f"https://api.mollie.com/v2/profiles/{PROFILE_ID}/methods/{method}/issuers/festivalcadeau",
-        "empty",
-        204,
-    )
-
-    profile = oauth_client.profiles.get(PROFILE_ID)
-    method = oauth_client.profile_methods.on(profile, method).delete("festivalcadeau")
-
-    assert method == {}
 
 
 def test_profile_category_code_is_deprecated(client, response):

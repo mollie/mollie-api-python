@@ -213,6 +213,10 @@ The list below corresponds with the Mollie API documentation.
 | List profiles | `client.profiles.list()` | `client.profiles.list()` | No changes |
 | Enable payment method | `client.profile_methods.with_parent_id(:profile_id, :method_id).create()` | `profile = client.profiles.get(:profile_id); profile.methods.enable(:method_id)` ||
 | Disable payment method | `client.profile_methods.with_parent_id(:profile_id, :method_id).delete()` | `profile = client.profiles.get(:profile_id); profile.methods.disable(:method_id)` ||
+| Enable gift card issuer | `client.profile_methods.with_parent_id(:profile_id, "giftcard").create(:issuer_id)` | `profile = client.profiles.get(:profile_id); profile.methods.enable_issuer("giftcard", :issuer_id)` ||
+| Disable gift card issuer | `client.profile_methods.with_parent_id(:profile_id, "giftcard").delete(:issuer_id)` | `profile = client.profiles.get(:profile_id); profile.methods.disable_issuer("giftcard", :issuer_id)` ||
+| Enable voucher issuer | `client.profile_methods.with_parent_id(:profile_id, "voucher").create(:issuer_id)` | `profile = client.profiles.get(:profile_id); profile.methods.enable_issuer("voucher", :issuer_id)` ||
+| Disable voucher issuer | `client.profile_methods.with_parent_id(:profile_id, "voucher").delete(:issuer_id)` | `profile = client.profiles.get(:profile_id); profile.methods.disable_issuer("voucher", :issuer_id)` ||
 
 
 ### Settlements API
