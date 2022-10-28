@@ -10,6 +10,8 @@ class Method(ObjectBase):
 
         return Methods(client)
 
+    # Payment methods for Payments and Orders
+    APPLEPAY = "applepay"
     BANCONTACT = "bancontact"
     BANKTRANSFER = "banktransfer"
     BELFIUS = "belfius"
@@ -19,19 +21,21 @@ class Method(ObjectBase):
     GIFTCARD = "giftcard"
     GIROPAY = "giropay"
     IDEAL = "ideal"
-    IN3 = "in3"
     KBC = "kbc"
-    KLARNAPAYLATER = "klarnapaylater"
-    KLARNAPAYNOW = "klarnapaynow"
-    KLARNASLICEIT = "klarnasliceit"
-    MEALVOUCHER = "mealvoucher"
-    MISTERCASH = "mistercash"
     MYBANK = "mybank"
     PAYPAL = "paypal"
     PAYSAFECARD = "paysafecard"
-    PODIUMCADEAUKAART = "podiumcadeaukaart"
-    PRZELEWY24 = "przelewy24"
     SOFORT = "sofort"
+
+    # Payment methods for Payments only
+    # (none)
+
+    # Payment methods for Orders only
+    IN3 = "in3"
+    KLARNAPAYLATER = "klarnapaylater"
+    KLARNAPAYNOW = "klarnapaynow"
+    KLARNASLICEIT = "klarnasliceit"
+    VOUCHER = "voucher"
 
     @property
     def description(self):
