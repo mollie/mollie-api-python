@@ -2,7 +2,7 @@ import pytest
 
 from mollie.api.error import APIDeprecationWarning, IdentifierError, RequestError
 from mollie.api.objects.profile import Profile
-from mollie.api.resources.profiles import Profiles
+from mollie.api.resources import ProfileMethods, Profiles
 
 from .utils import assert_list_object
 
@@ -76,13 +76,11 @@ def test_get_profile(oauth_client, response):
     """Retrieve a single profile."""
     response.get(f"https://api.mollie.com/v2/profiles/{PROFILE_ID}", "profile_single")
     response.get(f"https://api.mollie.com/v2/chargebacks?profileId={PROFILE_ID}", "chargebacks_list")
-    response.get(f"https://api.mollie.com/v2/methods?profileId={PROFILE_ID}", "methods_list")
     response.get(f"https://api.mollie.com/v2/payments?profileId={PROFILE_ID}", "payments_list")
     response.get(f"https://api.mollie.com/v2/refunds?profileId={PROFILE_ID}", "refunds_list")
 
     profile = oauth_client.profiles.get(PROFILE_ID)
     chargebacks = oauth_client.profile_chargebacks.with_parent_id(PROFILE_ID).list()
-    methods = oauth_client.profile_methods.with_parent_id(PROFILE_ID).list()
     payments = oauth_client.profile_payments.with_parent_id(PROFILE_ID).list()
     refunds = oauth_client.profile_refunds.with_parent_id(PROFILE_ID).list()
 
@@ -100,7 +98,7 @@ def test_get_profile(oauth_client, response):
     assert profile.review == {"status": "pending"}
     assert profile.checkout_preview_url == "https://www.mollie.com/payscreen/preview/pfl_v9hTwCvYqw"
     assert profile.chargebacks == chargebacks
-    assert profile.methods == methods
+    assert isinstance(profile.methods, ProfileMethods)
     assert profile.payments == payments
     assert profile.refunds == refunds
     assert profile.is_unverified() is False
@@ -119,27 +117,6 @@ def test_get_current_profile(oauth_client, response):
 
     profile = oauth_client.profiles.get("me")
     assert isinstance(profile, Profile)
-
-
-def test_profile_enable_payment_method(oauth_client, response):
-    response.get(f"https://api.mollie.com/v2/profiles/{PROFILE_ID}", "profile_single")
-    response.post(
-        f"https://api.mollie.com/v2/profiles/{PROFILE_ID}/methods/bancontact",
-        "profile_enable_payment_method",
-    )
-
-    profile = oauth_client.profiles.get(PROFILE_ID)
-    method = oauth_client.profile_methods.on(profile, "bancontact").create()
-    assert method.id == "bancontact"
-
-
-def test_profile_disable_payment_method(oauth_client, response):
-    response.get(f"https://api.mollie.com/v2/profiles/{PROFILE_ID}", "profile_single")
-    response.delete(f"https://api.mollie.com/v2/profiles/{PROFILE_ID}/methods/bancontact", "empty", 204)
-
-    profile = oauth_client.profiles.get(PROFILE_ID)
-    method = oauth_client.profile_methods.on(profile, "bancontact").delete()
-    assert method == {}
 
 
 @pytest.mark.parametrize("method", ["giftcard", "voucher"])

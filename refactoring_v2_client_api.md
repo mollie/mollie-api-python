@@ -200,6 +200,9 @@ The list below corresponds with the Mollie API documentation.
 
 ## Profiles API
 
+- The `client.profile_methods` object is removed.
+- The totally unexpected call to `client.profile_methods.with_parent_id(:profile_id, :method_id)` with 2 arguments will be removed.
+
 | Description | 2.x client path | New client path | Notes |
 | ------------|-----------------|-----------------|-------|
 | Create profile | `client.profiles.create(:data)` | `client.profiles.create(:data)` | No changes |
@@ -208,6 +211,8 @@ The list below corresponds with the Mollie API documentation.
 | Update profile | `client.profiles.update(:profile_id, :data)` | `client.profiles.update(:profile_id, :data)` | No changes |
 | Delete profile | `client.profiles.delete(:profile_id)` | `client.profiles.delete(:profile_id)` | No changes |
 | List profiles | `client.profiles.list()` | `client.profiles.list()` | No changes |
+| Enable payment method | `client.profile_methods.with_parent_id(:profile_id, :method_id).create()` | `profile = client.profiles.get(:profile_id); profile.methods.enable(:method_id)` ||
+| Disable payment method | `client.profile_methods.with_parent_id(:profile_id, :method_id).delete()` | `profile = client.profiles.get(:profile_id); profile.methods.disable(:method_id)` ||
 
 
 ### Settlements API

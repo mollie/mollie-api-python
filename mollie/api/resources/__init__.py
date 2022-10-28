@@ -9,6 +9,7 @@ from .organizations import *  # noqa: F401, F403
 from .payment_links import *  # noqa: F401, F403
 from .payments import *  # noqa: F401, F403
 from .permissions import *  # noqa: F401, F403
+from .profiles import *  # noqa: F401, F403
 from .refunds import *  # noqa: F401, F403
 from .shipments import *  # noqa: F401, F403
 from .subscriptions import *  # noqa: F401, F403

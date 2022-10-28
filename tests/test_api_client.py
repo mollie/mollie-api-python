@@ -153,11 +153,6 @@ def test_client_get_invalid_id(client, endpoint, errorstr):
         getattr(client, endpoint).get("invalid")
 
 
-def test_client_delete_profile_method_misses_method_id(client):
-    with pytest.raises(RequestError, match="resource_id is required when disabling a giftcard."):
-        client.profile_methods.with_parent_id("pfl_v9hTwCvYqw", "giftcard").delete()
-
-
 def test_client_invalid_json_response(client, response):
     """An invalid json response should raise an error."""
     response.get("https://api.mollie.com/v2/customers", "invalid_json")
