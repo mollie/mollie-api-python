@@ -13,6 +13,7 @@ __all__ = [
     "CustomerPayments",
     "OrderPayments",
     "Payments",
+    "SettlementPayments",
     "SubscriptionPayments",
 ]
 
@@ -97,3 +98,14 @@ class SubscriptionPayments(PaymentsBase, ResourceListMixin):
 
     def get_resource_path(self):
         return f"customers/{self._customer.id}/subscriptions/{self._subscription.id}/payments"
+
+
+class SettlementPayments(PaymentsBase, ResourceListMixin):
+    _settlement = None
+
+    def __init__(self, client, settlement):
+        self._settlement = settlement
+        super().__init__(client)
+
+    def get_resource_path(self):
+        return f"settlements/{self._settlement.id}/payments"

@@ -4,6 +4,7 @@ from .base import ResourceBase, ResourceGetMixin, ResourceListMixin
 __all__ = [
     "Chargebacks",
     "PaymentChargebacks",
+    "SettlementChargebacks",
 ]
 
 
@@ -31,3 +32,14 @@ class PaymentChargebacks(ChargebacksBase, ResourceGetMixin, ResourceListMixin):
     def get(self, chargeback_id: str, **params):
         self.validate_resource_id(chargeback_id, "chargeback ID")
         return super().get(chargeback_id, **params)
+
+
+class SettlementChargebacks(ChargebacksBase, ResourceListMixin):
+    _settlement = None
+
+    def __init__(self, client, settlement):
+        self._settlement = settlement
+        super().__init__(client)
+
+    def get_resource_path(self):
+        return f"settlements/{self._settlement.id}/chargebacks"

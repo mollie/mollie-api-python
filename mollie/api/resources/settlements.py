@@ -19,19 +19,35 @@ class Settlements(ResourceBase, ResourceGetMixin, ResourceListMixin):
         return Settlement(result, self.client)
 
     @classmethod
-    def validate_settlement_id(cls, settlement_id):
-        if not settlement_id or (
-            not settlement_id.startswith(cls.RESOURCE_ID_PREFIX)
-            and settlement_id not in ["next", "open"]
-            and not cls.BANK_REFERENCE_REGEX.match(settlement_id)
-        ):
-            raise IdentifierError(
-                f"Invalid settlement ID: '{settlement_id}'. A settlement ID should "
-                f"start with '{cls.RESOURCE_ID_PREFIX}' "
-                ", be 'next' or 'open' or contain a valid bank reference."
-            )
+    def validate_settlement_id(cls, settlement_id: str):
+        """
+        Validate the reference id to a settlement.
+
+        Valid references for settlements are:
+        - The string "next"
+        - The string "open"
+        - A settlement id, starting with "stl_"
+        - A bank reference
+        """
+        exc_message = (
+            f"Invalid settlement ID '{settlement_id}', it should start with '{cls.RESOURCE_ID_PREFIX}', "
+            "be 'next' or 'open', or contain a valid bank reference."
+        )
+
+        if settlement_id in ["next", "open"]:
+            return True
+
+        elif cls.BANK_REFERENCE_REGEX.match(str(settlement_id)):
+            return True
+
+        else:
+            try:
+                cls.validate_resource_id(settlement_id)
+            except IdentifierError:
+                raise IdentifierError(exc_message)
+
+            return True
 
     def get(self, settlement_id, **params):
         self.validate_settlement_id(settlement_id)
-        """Verify the settlement ID and retrieve the settlement from the API."""
         return super().get(settlement_id, **params)

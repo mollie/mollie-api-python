@@ -226,15 +226,28 @@ The list below corresponds with the Mollie API documentation.
 | Submit onboarding data | `client.onboarding.create("me", :data)` | `client.onboarding.create(:data)` ||
 | Get onboarding status | `client.onboarding.get("me")` |`client.onboarding.get("me")` | No changes |
 
-### Settlements API
 
-- The `client.settlement_refunds` and `client.settlement_captures` objects are removed.
-- The `settlement.refunds` and `settlement.captures` objects still exist, but they are working differently.
+## Balances API
+
+The Balances API is not supported yet in any client.
+
+
+## Settlements API
+
+- The `client.settlement_payments`, `client.settlement_refunds` `client.settlement_chargebacks`, and `client.settlement_captures` objects are removed.
+- The `settlement.payments`, `settlement.refunds`, `settlement.chargebacks` and `settlement.captures` objects still exist, but they are working differently.
 
 | Description | 2.x client path | New client path | Notes |
 | ------------|-----------------|-----------------|-------|
-| List settlement refunds | `client.settlement_refunds.with_parent_id(:settlement_id).list()` | `settlement = client.settlements.get(); settlement.refunds.list()` ||
+| Get settlement | `client.settlements.get(:settlement_id)` | `client.settlements.get(:settlement_id)` | No changes |
+| Get next settlement | `client.settlements.get("next")` | `client.settlements.get("next")` | No changes |
+| Get open settlement | `client.settlements.get("open")` | `client.settlements.get("open")` | No changes |
+| List settlements | `client.settlements.list()` | `client.settlements.list` | No changes |
+| List settlement payments | `client.settlement_payments.with_parent_id(:settlement_id).list()` | `client.settlements.get(:settlement_id); settlement.payments.list()` ||
 | List settlement captures | `client.settlement_captures.with_parent_id(:settlement_id).list()` | `settlement = client.settlements.get(); settlement.captures.list()` ||
+| List settlement refunds | `client.settlement_refunds.with_parent_id(:settlement_id).list()` | `settlement = client.settlements.get(); settlement.refunds.list()` ||
+| List settlement chargebacks | `client.settlement_chargebacks.with_parent_id(:settlement_id).list()` | `settlement = client.settlements.get(); settlement.chargebacks.list()` ||
+
 
 ## Proposed solution
 

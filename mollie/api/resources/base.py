@@ -49,12 +49,13 @@ class ResourceBase(object):
                 )
         return result
 
-    def validate_resource_id(self, resource_id: str, name: str = "Identifier", message: str = ""):
+    @classmethod
+    def validate_resource_id(cls, resource_id: str, name: str = "Identifier", message: str = ""):
         """Generic identifier validation."""
         if not message:
-            message = f"Invalid {name} '{resource_id}', it should start with '{self.RESOURCE_ID_PREFIX}'."
+            message = f"Invalid {name} '{resource_id}', it should start with '{cls.RESOURCE_ID_PREFIX}'."
 
-        if not resource_id or not str(resource_id).startswith(self.RESOURCE_ID_PREFIX):
+        if not resource_id or not str(resource_id).startswith(cls.RESOURCE_ID_PREFIX):
             raise IdentifierError(message)
 
     @staticmethod

@@ -21,6 +21,7 @@ from .resources import (
     Payments,
     Permissions,
     Refunds,
+    Settlements,
     Subscriptions,
 )
 from .resources.clients import Clients
@@ -29,9 +30,6 @@ from .resources.profile_chargebacks import ProfileChargebacks
 from .resources.profile_payments import ProfilePayments
 from .resources.profile_refunds import ProfileRefunds
 from .resources.profiles import Profiles
-from .resources.settlement_chargebacks import SettlementChargebacks
-from .resources.settlement_payments import SettlementPayments
-from .resources.settlements import Settlements
 from .version import VERSION
 
 
@@ -104,8 +102,6 @@ class Client(object):
         self.permissions = Permissions(self)
         self.onboarding = Onboarding(self)
         self.settlements = Settlements(self)
-        self.settlement_payments = SettlementPayments(self)
-        self.settlement_chargebacks = SettlementChargebacks(self)
         self.subscriptions = Subscriptions(self)
 
         # compose base user agent string

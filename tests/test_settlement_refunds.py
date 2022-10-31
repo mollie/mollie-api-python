@@ -1,5 +1,4 @@
 from mollie.api.objects.refund import Refund
-from mollie.api.objects.settlement import Settlement
 
 from .utils import assert_list_object
 
@@ -12,7 +11,5 @@ def test_list_refunds_on_settlement_object(oauth_client, response):
     response.get(f"https://api.mollie.com/v2/settlements/{SETTLEMENT_ID}/refunds", "refunds_list")
 
     settlement = oauth_client.settlements.get(SETTLEMENT_ID)
-    assert isinstance(settlement, Settlement)
-
     refunds = settlement.refunds.list()
     assert_list_object(refunds, Refund)
