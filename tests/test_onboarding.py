@@ -1,3 +1,6 @@
+import pytest
+
+from mollie.api.error import IdentifierError
 from mollie.api.objects.onboarding import Onboarding
 from mollie.api.objects.organization import Organization
 
@@ -23,20 +26,29 @@ def test_get_onboarding(oauth_client, response):
     assert onboarding.is_completed() is True
 
 
+def test_get_onboarding_invalid_id(oauth_client):
+    with pytest.raises(IdentifierError) as excinfo:
+        oauth_client.onboarding.get("invalid")
+    assert str(excinfo.value) == "Invalid onboarding ID: 'invalid'. The onboarding ID should be 'me'."
+
+
 def test_create_onboarding(oauth_client, response):
     """Create onboarding."""
     response.post("https://api.mollie.com/v2/onboarding/me", "empty", 204)
 
     data = {"profile": {"categoryCode": "6012"}}
 
-    onboarding = oauth_client.onboarding.create(resource_id="me", data=data)
+    onboarding = oauth_client.onboarding.create(data)
     assert isinstance(onboarding, Onboarding)
 
 
 def test_onboarding_get_organization(oauth_client, response):
     """Retrieve organization related to onboarding."""
     response.get("https://api.mollie.com/v2/onboarding/me", "onboarding_me")
-    response.get(f"https://api.mollie.com/v2/organization/{ORGANIZATION_ID}", "organization_single")
+    response.get(
+        f"https://api.mollie.com/v2/organization/{ORGANIZATION_ID}",
+        "organization_single",
+    )
 
     onboarding = oauth_client.onboarding.get("me")
     organization = onboarding.organization

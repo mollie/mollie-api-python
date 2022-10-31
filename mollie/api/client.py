@@ -14,6 +14,7 @@ from .resources import (
     Chargebacks,
     Customers,
     Methods,
+    Onboarding,
     Orders,
     Organizations,
     PaymentLinks,
@@ -24,7 +25,6 @@ from .resources import (
 )
 from .resources.clients import Clients
 from .resources.invoices import Invoices
-from .resources.onboarding import Onboarding
 from .resources.profile_chargebacks import ProfileChargebacks
 from .resources.profile_payments import ProfilePayments
 from .resources.profile_refunds import ProfileRefunds

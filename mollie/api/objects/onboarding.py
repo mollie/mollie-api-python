@@ -4,7 +4,7 @@ from .base import ObjectBase
 class Onboarding(ObjectBase):
     @classmethod
     def get_resource_class(cls, client):
-        from ..resources.onboarding import Onboarding as OnboardingResource
+        from ..resources import Onboarding as OnboardingResource
 
         return OnboardingResource(client)
 

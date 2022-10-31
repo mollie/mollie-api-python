@@ -219,6 +219,13 @@ The list below corresponds with the Mollie API documentation.
 | Disable voucher issuer | `client.profile_methods.with_parent_id(:profile_id, "voucher").delete(:issuer_id)` | `profile = client.profiles.get(:profile_id); profile.methods.disable_issuer("voucher", :issuer_id)` ||
 
 
+## Onboarding API
+
+| Description | 2.x client path | New client path | Notes |
+| ------------|-----------------|-----------------|-------|
+| Submit onboarding data | `client.onboarding.create("me", :data)` | `client.onboarding.create(:data)` ||
+| Get onboarding status | `client.onboarding.get("me")` |`client.onboarding.get("me")` | No changes |
+
 ### Settlements API
 
 - The `client.settlement_refunds` and `client.settlement_captures` objects are removed.
