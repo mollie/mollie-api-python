@@ -13,6 +13,7 @@ __all__ = [
     "CustomerPayments",
     "OrderPayments",
     "Payments",
+    "ProfilePayments",
     "SettlementPayments",
     "SubscriptionPayments",
 ]
@@ -109,3 +110,16 @@ class SettlementPayments(PaymentsBase, ResourceListMixin):
 
     def get_resource_path(self):
         return f"settlements/{self._settlement.id}/payments"
+
+
+class ProfilePayments(PaymentsBase):
+    _profile = None
+
+    def __init__(self, client, profile):
+        self._profile = profile
+        super().__init__(client)
+
+    def list(self, **params):
+        # Set the profileId in the query params
+        params.update({"profileId": self._profile.id})
+        return Payments(self.client).list(**params)

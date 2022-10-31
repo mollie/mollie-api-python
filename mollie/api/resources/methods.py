@@ -24,7 +24,7 @@ class Methods(MethodsBase, ResourceGetMixin, ResourceListMixin):
         return ObjectList(result, Method, self.client)
 
 
-class ProfileMethods(MethodsBase, ResourceListMixin):
+class ProfileMethods(MethodsBase):
     _profile = None
 
     def __init__(self, client, profile):

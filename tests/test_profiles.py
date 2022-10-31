@@ -2,7 +2,7 @@ import pytest
 
 from mollie.api.error import APIDeprecationWarning, IdentifierError
 from mollie.api.objects.profile import Profile
-from mollie.api.resources import ProfileMethods
+from mollie.api.resources import ProfileChargebacks, ProfileMethods, ProfilePayments, ProfileRefunds
 
 from .utils import assert_list_object
 
@@ -75,14 +75,8 @@ def test_list_profiles(oauth_client, response):
 def test_get_profile(oauth_client, response):
     """Retrieve a single profile."""
     response.get(f"https://api.mollie.com/v2/profiles/{PROFILE_ID}", "profile_single")
-    response.get(f"https://api.mollie.com/v2/chargebacks?profileId={PROFILE_ID}", "chargebacks_list")
-    response.get(f"https://api.mollie.com/v2/payments?profileId={PROFILE_ID}", "payments_list")
-    response.get(f"https://api.mollie.com/v2/refunds?profileId={PROFILE_ID}", "refunds_list")
 
     profile = oauth_client.profiles.get(PROFILE_ID)
-    chargebacks = oauth_client.profile_chargebacks.with_parent_id(PROFILE_ID).list()
-    payments = oauth_client.profile_payments.with_parent_id(PROFILE_ID).list()
-    refunds = oauth_client.profile_refunds.with_parent_id(PROFILE_ID).list()
 
     assert isinstance(profile, Profile)
     assert profile.id == PROFILE_ID
@@ -97,10 +91,10 @@ def test_get_profile(oauth_client, response):
     assert profile.status == "verified"
     assert profile.review == {"status": "pending"}
     assert profile.checkout_preview_url == "https://www.mollie.com/payscreen/preview/pfl_v9hTwCvYqw"
-    assert profile.chargebacks == chargebacks
+    assert isinstance(profile.chargebacks, ProfileChargebacks)
     assert isinstance(profile.methods, ProfileMethods)
-    assert profile.payments == payments
-    assert profile.refunds == refunds
+    assert isinstance(profile.payments, ProfilePayments)
+    assert isinstance(profile.refunds, ProfileRefunds)
     assert profile.is_unverified() is False
     assert profile.is_verified() is True
     assert profile.is_blocked() is False

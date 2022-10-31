@@ -4,6 +4,7 @@ from .base import ResourceBase, ResourceCreateMixin, ResourceDeleteMixin, Resour
 __all__ = [
     "OrderRefunds",
     "PaymentRefunds",
+    "ProfileRefunds",
     "Refunds",
     "SettlementRefunds",
 ]
@@ -73,3 +74,16 @@ class SettlementRefunds(RefundsBase, ResourceListMixin):
 
     def get_resource_path(self):
         return f"settlements/{self._settlement.id}/refunds"
+
+
+class ProfileRefunds(RefundsBase):
+    _profile = None
+
+    def __init__(self, client, profile):
+        self._profile = profile
+        super().__init__(client)
+
+    def list(self, **params):
+        # Set the profileId in the query params
+        params.update({"profileId": self._profile.id})
+        return Refunds(self.client).list(**params)

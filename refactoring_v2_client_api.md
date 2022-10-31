@@ -51,7 +51,7 @@ The list below corresponds with the Mollie API documentation.
 ## Refunds API
 
 - Various existing codepaths are removed: `client.payment_refunds`, `order.create_refund()`.
-- The `order.refunds` and `payment.refunds` object still exist but are working differently.
+- The `order.refunds` and `payment.refunds` objects still exist but are working differently.
 
 | Description | 2.x client path | New client path | Notes |
 | ------------|-----------------|-----------------|-------|
@@ -217,6 +217,19 @@ The list below corresponds with the Mollie API documentation.
 | Disable gift card issuer | `client.profile_methods.with_parent_id(:profile_id, "giftcard").delete(:issuer_id)` | `profile = client.profiles.get(:profile_id); profile.methods.disable_issuer("giftcard", :issuer_id)` ||
 | Enable voucher issuer | `client.profile_methods.with_parent_id(:profile_id, "voucher").create(:issuer_id)` | `profile = client.profiles.get(:profile_id); profile.methods.enable_issuer("voucher", :issuer_id)` ||
 | Disable voucher issuer | `client.profile_methods.with_parent_id(:profile_id, "voucher").delete(:issuer_id)` | `profile = client.profiles.get(:profile_id); profile.methods.disable_issuer("voucher", :issuer_id)` ||
+
+There is also some profile-related functionality that has been updated with does not relate directly to a documented Profiles API endpoint.
+
+- The `client.profile_payments`, `client.profile_refunds` and `client.profile_chargebacks` objects are removed.
+- The `profile.methods`, `profile.chargebacks`, `profile.payments` and `profile.refunds` objects still exist, but they are working differently.
+
+| Description | 2.x client path | New client path | Notes |
+| ------------|-----------------|-----------------|-------|
+| List profile payments | `client.profile_payments.with_parent_id(:profile_id).list()` <br>OR<br> `profile = client.profiles.get(:profile_id); profile.payments` | `profile = client.profiles.get(:profile_id); profile.payments.list()` | Same result can be achieved using `client.payments.list(profileId=:profile_id)` in old and new client |
+| List profile refunds | `client.profile_refunds.with_parent_id(:profile_id).list()` <br>OR<br> `profile = client.profiles.get(:profile_id); profile.refunds` | `profile = client.profiles.get(:profile_id); profile.refunds.list()` | Same result can be achieved using `client.refunds.list(profileId=:profile_id)` in old and new client |
+| List profile chargebacks | `client.profile_chargebacks.with_parent_id(:profile_id).list()` <br>OR<br> `profile = client.profiles.get(:profile_id); profile.chargebacks` | `profile = client.profiles.get(:profile_id); profile.chargebacks.list()` | Same result can be achieved using `client.chargebacks.list(profileId=:profile_id)` in old and new client |
+| List profile methods | `client.profile_methods.with_parent_id(:profile_id).list()` <br>OR<br> `profile = client.profiles.get(:profile_id); profile.methods` | `profile = client.profiles.get(:profile_id); profile.methods.list()` | Same result can be achieved using `client.methods.list(profileId=:profile_id)` in old and new client |
+
 
 
 ## Onboarding API

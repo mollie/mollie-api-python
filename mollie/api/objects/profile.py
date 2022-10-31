@@ -70,7 +70,9 @@ class Profile(ObjectBase):
 
     @property
     def chargebacks(self):
-        return self.client.profile_chargebacks.on(self).list()
+        from ..resources import ProfileChargebacks
+
+        return ProfileChargebacks(self.client, self)
 
     @property
     def methods(self):
@@ -78,11 +80,15 @@ class Profile(ObjectBase):
 
     @property
     def payments(self):
-        return self.client.profile_payments.on(self).list()
+        from ..resources import ProfilePayments
+
+        return ProfilePayments(self.client, self)
 
     @property
     def refunds(self):
-        return self.client.profile_refunds.on(self).list()
+        from ..resources import ProfileRefunds
+
+        return ProfileRefunds(self.client, self)
 
     @property
     def checkout_preview_url(self):

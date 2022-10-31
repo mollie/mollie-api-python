@@ -4,6 +4,7 @@ from .base import ResourceBase, ResourceGetMixin, ResourceListMixin
 __all__ = [
     "Chargebacks",
     "PaymentChargebacks",
+    "ProfileChargebacks",
     "SettlementChargebacks",
 ]
 
@@ -43,3 +44,16 @@ class SettlementChargebacks(ChargebacksBase, ResourceListMixin):
 
     def get_resource_path(self):
         return f"settlements/{self._settlement.id}/chargebacks"
+
+
+class ProfileChargebacks(ChargebacksBase):
+    _profile = None
+
+    def __init__(self, client, profile):
+        self._profile = profile
+        super().__init__(client)
+
+    def list(self, **params):
+        # Set the profileId in the query params
+        params.update({"profileId": self._profile.id})
+        return Chargebacks(self.client).list(**params)

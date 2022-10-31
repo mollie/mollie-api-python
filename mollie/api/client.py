@@ -26,9 +26,6 @@ from .resources import (
     Settlements,
     Subscriptions,
 )
-from .resources.profile_chargebacks import ProfileChargebacks
-from .resources.profile_payments import ProfilePayments
-from .resources.profile_refunds import ProfileRefunds
 from .resources.profiles import Profiles
 from .version import VERSION
 
@@ -88,9 +85,6 @@ class Client(object):
         self.payments = Payments(self)
         self.payment_links = PaymentLinks(self)
         self.profiles = Profiles(self)
-        self.profile_chargebacks = ProfileChargebacks(self)
-        self.profile_payments = ProfilePayments(self)
-        self.profile_refunds = ProfileRefunds(self)
         self.methods = Methods(self)
         self.refunds = Refunds(self)
         self.chargebacks = Chargebacks(self)
