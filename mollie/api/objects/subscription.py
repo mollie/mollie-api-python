@@ -7,7 +7,7 @@ from .customer import Customer
 class Subscription(ObjectBase):
     @classmethod
     def get_resource_class(cls, client):
-        from ..resources.customer_subscriptions import CustomerSubscriptions
+        from ..resources import CustomerSubscriptions
 
         return CustomerSubscriptions(client)
 

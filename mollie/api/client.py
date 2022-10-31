@@ -22,11 +22,11 @@ from .resources import (
     PaymentLinks,
     Payments,
     Permissions,
+    Profiles,
     Refunds,
     Settlements,
     Subscriptions,
 )
-from .resources.profiles import Profiles
 from .version import VERSION
 
 

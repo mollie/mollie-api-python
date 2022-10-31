@@ -12,7 +12,7 @@ class Profile(ObjectBase):
 
     @classmethod
     def get_resource_class(cls, client):
-        from ..resources.profiles import Profiles
+        from ..resources import Profiles
 
         return Profiles(client)
 
