@@ -142,7 +142,6 @@ def test_client_invalid_update_data(client):
 @pytest.mark.parametrize(
     "endpoint, errorstr",
     [
-        ("invoices", "Invalid invoice ID: 'invalid'. An invoice ID should start with 'inv_'."),
         ("clients", "Invalid client ID: 'invalid'. A client ID should start with 'org_'."),
     ],
 )

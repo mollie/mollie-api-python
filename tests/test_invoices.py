@@ -1,3 +1,6 @@
+import pytest
+
+from mollie.api.error import IdentifierError
 from mollie.api.objects.invoice import Invoice
 
 from .utils import assert_list_object
@@ -42,3 +45,9 @@ def test_get_invoice(oauth_client, response):
     ]
     url = "https://www.mollie.com/merchant/download/invoice/xBEbP9rvAq/2ab44d60b35b1d06090bba955fa2c602"
     assert invoice.pdf == url
+
+
+def test_get_invoice_invalid_id(oauth_client):
+    with pytest.raises(IdentifierError) as excinfo:
+        oauth_client.invoices.get("invalid")
+    assert str(excinfo.value) == "Invalid invoice ID 'invalid', it should start with 'inv_'."

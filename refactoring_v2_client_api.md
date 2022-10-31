@@ -249,6 +249,14 @@ The Balances API is not supported yet in any client.
 | List settlement chargebacks | `client.settlement_chargebacks.with_parent_id(:settlement_id).list()` | `settlement = client.settlements.get(); settlement.chargebacks.list()` ||
 
 
+## Invoices API
+
+| Description | 2.x client path | New client path | Notes |
+| ------------|-----------------|-----------------|-------|
+| Get invoice | `client.invoices.get(:invoice_id)` | `client.invoices.get(:invoice_id)` | No changes |
+| List invoices | `client.invoices.list()` | `client.invoices.list()` | No changes |
+
+
 ## Proposed solution
 
 - We will refactor the library and example code to use the interface described above.
