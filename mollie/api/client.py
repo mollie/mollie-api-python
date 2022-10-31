@@ -12,6 +12,7 @@ from urllib3.util import Retry
 from .error import RequestError, RequestSetupError
 from .resources import (
     Chargebacks,
+    Clients,
     Customers,
     Invoices,
     Methods,
@@ -25,7 +26,6 @@ from .resources import (
     Settlements,
     Subscriptions,
 )
-from .resources.clients import Clients
 from .resources.profile_chargebacks import ProfileChargebacks
 from .resources.profile_payments import ProfilePayments
 from .resources.profile_refunds import ProfileRefunds

@@ -8,7 +8,6 @@ from responses import matchers
 
 from mollie.api.client import Client, generate_querystring
 from mollie.api.error import (
-    IdentifierError,
     NotFoundError,
     RequestError,
     RequestSetupError,
@@ -137,18 +136,6 @@ def test_client_invalid_update_data(client):
     data = datetime.now()
     with pytest.raises(RequestSetupError, match="Error encoding parameters into JSON"):
         client.customers.update("cst_12345", data=data)
-
-
-@pytest.mark.parametrize(
-    "endpoint, errorstr",
-    [
-        ("clients", "Invalid client ID: 'invalid'. A client ID should start with 'org_'."),
-    ],
-)
-def test_client_get_invalid_id(client, endpoint, errorstr):
-    """An invalid formatted object ID should raise an error."""
-    with pytest.raises(IdentifierError, match=errorstr):
-        getattr(client, endpoint).get("invalid")
 
 
 def test_client_invalid_json_response(client, response):

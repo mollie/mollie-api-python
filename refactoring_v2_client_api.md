@@ -257,6 +257,14 @@ The Balances API is not supported yet in any client.
 | List invoices | `client.invoices.list()` | `client.invoices.list()` | No changes |
 
 
+## Clients API
+
+| Description | 2.x client path | New client path | Notes |
+| ------------|-----------------|-----------------|-------|
+| Get client | `client.clients.get(:client_id)` | `client.clients.get(:client_id)` | No changes |
+| List clients | `client.clients.list()` | `client.clients.list()` | No changes |
+
+
 ## Proposed solution
 
 - We will refactor the library and example code to use the interface described above.

@@ -1,6 +1,9 @@
-from ..error import IdentifierError
 from ..objects.client import Client
 from .base import ResourceBase, ResourceGetMixin, ResourceListMixin
+
+__all__ = [
+    "Clients",
+]
 
 
 class Clients(ResourceBase, ResourceListMixin, ResourceGetMixin):
@@ -11,10 +14,7 @@ class Clients(ResourceBase, ResourceListMixin, ResourceGetMixin):
     def get_resource_object(self, result):
         return Client(result, self.client)
 
-    def get(self, client_id, **params):
+    def get(self, client_id: str, **params):
         """Retrieve a single client, linked to your partner account, by its ID."""
-        if not client_id or not client_id.startswith(self.RESOURCE_ID_PREFIX):
-            raise IdentifierError(
-                f"Invalid client ID: '{client_id}'. A client ID should start with '{self.RESOURCE_ID_PREFIX}'."
-            )
+        self.validate_resource_id(client_id, "client ID")
         return super().get(client_id, **params)
