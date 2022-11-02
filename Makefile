@@ -47,7 +47,9 @@ build: dist/mollie_api_python-*-py3-none-any.whl dist/mollie-api-python-*.tar.gz
 
 .PHONY: clean
 clean:
-	rm -f -r build/ dist/ .eggs/ mollie_api_python.egg-info .pytest_cache
+	rm -f -r build/ dist/ htmlcov/ .eggs/ mollie_api_python.egg-info .pytest_cache .mypy_cache
+	find . -type f -name '*.pyc' -delete
+	find . -type d -name __pycache__ -delete
 
 
 .PHONY: realclean
