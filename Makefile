@@ -6,7 +6,7 @@ ifndef VIRTUALENV
 	VIRTUALENV = $(PWD)/env
 endif
 
-PYTHON_VERSION = 3.10
+PYTHON_VERSION = 3.7
 PYTHON = $(VIRTUALENV)/bin/python
 
 
