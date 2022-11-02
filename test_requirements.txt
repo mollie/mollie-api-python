@@ -1,8 +1,8 @@
-black
 flake8
-pytest>=5.4.3
+flake8-black
+flake8-isort
+pytest
 pytest-cov>=2.10.0
-pytest-isort
 pytest-mock
 mock
 responses>=0.17.0
