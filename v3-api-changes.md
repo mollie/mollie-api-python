@@ -1,32 +1,32 @@
-# Refactoring the Client API to be more logical.
+# Refactoring the Mollie Client API to be more logical
 
-This document describes the changes in the way certain endpoint paths are exposed to the developer by the Mollie Python API client. Part of the existing API is remnant of the `v1` client that was inherited. Other parts were newly added over time, many of them due to lack for a better way to add the functionality, given the existing architecture.
+This document describes the changes in the way certain endpoint paths are exposed to the developer by the Mollie Python API client. Part of the existing API in the `v2` library is remnant of the `v1` code that we inherited. Other parts were newly added over time, many of them due to lack for a better way to add the functionality, given the existing architecture. With these changes put into place, the client API will be much clearer, but lots of things will move around. In some situations, a proper deprecation path is not really possible. 
 
-When the proposed changes are put into place, the client API will be much clearer, but lots of things will move around. In some situations, a proper deprecation path will not really be possible. This would warrant a major version change (i.e. release as `v3.0`).
+This warrants a major version change (i.e. we are releasing the changes as `v3.0`).
+
 
 ## Problems with the v2 client API
 
-Some issues that are popping up during Client API development, or during implementation of the client API in applications:
+Some issues that were popping up during Client API development, or during implementation of the client API in applications:
 
-- Many endpoint handlers have methods that aren't supported by the API. E.g. A method exists at `client.refunds.get()`, but the method doesn't work, since it only results in actual data when you do `client.refunds.with_parent_id(:payment_id).get(:refund_id)`. Exposing the `.get()` method only in the correct context will make things much simpler.
+- Many endpoint handlers have methods that aren't supported by the API. E.g. A method exists at `client.refunds.get()`, but the method doesn't work, since it only results in actual data when you do `client.refunds.with_parent_id(:payment_id).get(:refund_id)`. Under the hood, this uses the same `.get()` method as the first example, but due to the wrong context the method doesn't work sometimes. Exposing the `.get()` method only in the correct context will make things much simpler.
 - Some methods are somewhat bolted on, which means that they aren't easy to find. At the more logical path (where you'd expect the functionality to live), there is nothing, or something that doesn't work. E.g. To create an order refund, you currently need to do `order = client.orders.get(:order_id); order.create_refund(:data)`. The `order` object also has an `order.refunds` property, but that is the 'List order refunds' functionality, and it has no support for creating refunds.
 - Some methods have unexpected signatures, which means that they are hard to use. E.g. Throughout the API we expose a method `.with_parent_id(:parent_id)` which takes a single argument. But in order to list subscription payments, you need to use `client.subscription_payments.with_parent_id(:customer_id, :subscription_id).list()`, with `with_parent_id()` taking 2 required arguments.
-- Some methods perform unexpected API calls. E.g. The current `order.refunds` property performs an API call to list the Order refunds, but that is not clear since, in general, we do listings using the `.list()` method. So `order.refunds.list()` would be much clearer. This also makes room in the API for adding the `order.refunds.create()`.
+- Some methods perform unexpected API calls. E.g. The current `order.refunds` property performs an API call to list the Order refunds, but that is not clear since, in general, we do listings using the `.list()` method. So `order.refunds.list()` would be much clearer. This also makes room in the API for adding the `order.refunds.create()` method.
+
 
 ## Refactoring
 
-To make all the above much cleaner, we would have to do a few things:
+To make all the above much cleaner, we have done a few things:
 
-- Expose the explicit methods that retrieve data from the API only on logical places in the API. The Refunds API has several endpoints that handle data in the context of a Payment. We should expose those methods only on a Payment object, and no longer on various objects directly on the Client object, which use methods like `.with_parent_id(:parent_id)` to inject details about a parent that is never created.
-- Remove some methods that revolve around injecting details about a parent object that is not actually created: `.with_parent_id()` and `.on()`. Given the changes from the previous point (the parent is the actual place where the functionality is exposed), these methods are no longer useful.
+- Expose the explicit methods that retrieve data from the API only on logical places in the API. The Refunds API has several endpoints that handle data only in the context of a Payment. We should expose those methods only on a Payment object, and no longer on various objects directly on the Client object, which use methods like `.with_parent_id(:parent_id)` to inject details about a parent Payment that is never created.
+- Remove the methods that revolve around injecting details about a parent object that is not actually created: `.with_parent_id()` and `.on()`. Given the changes from the previous point (the parent is the actual place where the functionality is exposed), these methods are no longer useful.
 - Update some object properties that currently expose partial functionality, and replace them with generic resource handlers that expose all the available API methods. This means refactoring the `payment.refunds` property into an object that exposes a `.list()`, a `.get()`, a `.delete()` and a `.create()` method.
 
-All of the above should be applied throughout the whole library.
 
+# Overview of all documented API calls
 
-# Overview of all documented API calls.
-
-The list below corresponds with the Mollie API documentation.
+The list below corresponds with the Mollie API documentation. It shows all currently documented Mollie API endpoints, with the old and new code to perform the correct API call.
 
 ## Payments API
 
@@ -73,7 +73,7 @@ The list below corresponds with the Mollie API documentation.
 | ------------|-----------------|-----------------|-------|
 | Get payment chargeback | `client.payment_chargebacks.with_parent_id(:payment_id).get(:chargeback_id)` | `payment = client.payments.get(:payment_id); payment.chargebacks.get(:chargeback_id)` ||
 | List payment chargebacks | `client.payment_chargebacks.with_parent_id(:payment_id).list()` <br>OR<br> `payment = client.payments.get(:payment_id); payment.chargebacks` | `payment = client.payments.get(:payment_id); payment.chargebacks.list()` ||
-| List chargebacks | `client.chargeback.list()` | `client.chargeback.list()` | No changes |
+| List chargebacks | `client.chargebacks.list()` | `client.chargebacks.list()` | No changes |
 
 
 ## Captures API
@@ -276,10 +276,3 @@ The Balances API is not supported yet in any client.
 | ------------|-----------------|-----------------|-------|
 | Get client | `client.clients.get(:client_id)` | `client.clients.get(:client_id)` | No changes |
 | List clients | `client.clients.list()` | `client.clients.list()` | No changes |
-
-
-## Proposed solution
-
-- We will refactor the library and example code to use the interface described above.
-- We will provide a document describing all old and new uses of the Client API, like the example listings above. This will make it easier for users to update their code.
-- We release the new code with a major version bump (from 2.x to 3.0), with clear Release notes, so everybody will be aware of the changes.
