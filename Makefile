@@ -30,6 +30,8 @@ test: develop
 	$(PYTHON) -m pytest
 	$(PYTHON) -m safety check
 
+test-mypy: develop
+	$(PYTHON) -m mypy mollie/api/resources
 
 dist/mollie_api_python-*-py3-none-any.whl: virtualenv
 	$(PYTHON) -m pip install --upgrade build
