@@ -1,29 +1,22 @@
+from typing import Optional
+
 from ..objects.order import Order
-from .base import (
-    ResourceBase,
-    ResourceCreateMixin,
-    ResourceDeleteMixin,
-    ResourceGetMixin,
-    ResourceListMixin,
-    ResourceUpdateMixin,
-)
+from .base import ResourceCreateMixin, ResourceDeleteMixin, ResourceGetMixin, ResourceListMixin, ResourceUpdateMixin
 
 __all__ = [
     "Orders",
 ]
 
 
-class Orders(
-    ResourceBase, ResourceCreateMixin, ResourceDeleteMixin, ResourceGetMixin, ResourceListMixin, ResourceUpdateMixin
-):
+class Orders(ResourceCreateMixin, ResourceDeleteMixin, ResourceGetMixin, ResourceListMixin, ResourceUpdateMixin):
     RESOURCE_ID_PREFIX = "ord_"
 
-    def get_resource_object(self, result):
+    def get_resource_object(self, result: dict) -> Order:
         return Order(result, self.client)
 
-    def get(self, order_id: str, **params):
-        self.validate_resource_id(order_id, "order ID")
-        order = super().get(order_id, **params)
+    def get(self, resource_id: str, **params):
+        self.validate_resource_id(resource_id, "order ID")
+        order = super().get(resource_id, **params)
 
         requested_embeds = self.extract_embed(params)
         if requested_embeds:
@@ -31,17 +24,17 @@ class Orders(
 
         return order
 
-    def delete(self, order_id: str, **params):
+    def delete(self, resource_id: str, **params):
         """Cancel order and return the order object.
 
         Deleting an order causes the order status to change to canceled.
         The updated order object is returned.
         """
-        self.validate_resource_id(order_id, "order ID")
-        result = super().delete(order_id, **params)
+        self.validate_resource_id(resource_id, "order ID")
+        result = super().delete(resource_id, **params)
         return self.get_resource_object(result)
 
-    def update(self, order_id: str, data=None, **params):
+    def update(self, resource_id: str, data: Optional[dict] = None, **params):
         """Update an order, and return the updated order."""
-        self.validate_resource_id(order_id, "order ID")
-        return super().update(order_id, data, **params)
+        self.validate_resource_id(resource_id, "order ID")
+        return super().update(resource_id, data, **params)

@@ -1,3 +1,5 @@
+from typing import Optional
+
 from ..error import DataConsistencyError
 from ..objects.list import ObjectList
 from ..objects.order_line import OrderLine
@@ -26,13 +28,13 @@ class OrderLines(ResourceBase):
         self._order = order
         super().__init__(client)
 
-    def get_resource_path(self):
-        return f"orders/{self._order.id}/lines"
+    def get_resource_path(self) -> str:
+        return f"orders/{self._order.id}/lines"  # type: ignore
 
-    def get_resource_object(self, result):
+    def get_resource_object(self, result: dict) -> OrderLine:
         return OrderLine(result, self.client)
 
-    def delete_lines(self, data=None, **params):
+    def delete_lines(self, data: Optional[dict] = None, **params):
         """
         Cancel multiple orderlines.
 
@@ -77,7 +79,7 @@ class OrderLines(ResourceBase):
         }
         return self.delete_lines(data, **params)
 
-    def update(self, order_line_id: str, data=None, **params):
+    def update(self, order_line_id: str, data: Optional[dict] = None, **params):
         """
         Custom handling for updating orderlines.
 

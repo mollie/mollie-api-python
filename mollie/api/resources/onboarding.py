@@ -1,20 +1,20 @@
 from ..error import IdentifierError
 from ..objects.onboarding import Onboarding as OnboardingObject
-from .base import ResourceBase, ResourceGetMixin
+from .base import ResourceGetMixin
 
 __all__ = [
     "Onboarding",
 ]
 
 
-class Onboarding(ResourceBase, ResourceGetMixin):
-    def get_resource_object(self, result):
+class Onboarding(ResourceGetMixin):
+    def get_resource_object(self, result: dict) -> OnboardingObject:
         return OnboardingObject(result, self.client)
 
-    def get(self, onboarding_id: str, **params):
-        if onboarding_id != "me":
-            raise IdentifierError(f"Invalid onboarding ID: '{onboarding_id}'. The onboarding ID should be 'me'.")
-        return super().get(onboarding_id, **params)
+    def get(self, resource_id: str, **params):
+        if resource_id != "me":
+            raise IdentifierError(f"Invalid onboarding ID: '{resource_id}'. The onboarding ID should be 'me'.")
+        return super().get(resource_id, **params)
 
     def create(self, data: dict, **params):
         resource_path = self.get_resource_path()

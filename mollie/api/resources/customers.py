@@ -1,30 +1,23 @@
+from typing import Optional
+
 from ..objects.customer import Customer
-from .base import (
-    ResourceBase,
-    ResourceCreateMixin,
-    ResourceDeleteMixin,
-    ResourceGetMixin,
-    ResourceListMixin,
-    ResourceUpdateMixin,
-)
+from .base import ResourceCreateMixin, ResourceDeleteMixin, ResourceGetMixin, ResourceListMixin, ResourceUpdateMixin
 
 
-class Customers(
-    ResourceBase, ResourceCreateMixin, ResourceDeleteMixin, ResourceGetMixin, ResourceListMixin, ResourceUpdateMixin
-):
+class Customers(ResourceCreateMixin, ResourceDeleteMixin, ResourceGetMixin, ResourceListMixin, ResourceUpdateMixin):
     RESOURCE_ID_PREFIX = "cst_"
 
-    def get_resource_object(self, result):
+    def get_resource_object(self, result: dict) -> Customer:
         return Customer(result, self.client)
 
-    def get(self, customer_id: str, **params):
-        self.validate_resource_id(customer_id, "customer ID")
-        return super().get(customer_id, **params)
+    def get(self, resource_id: str, **params):
+        self.validate_resource_id(resource_id, "customer ID")
+        return super().get(resource_id, **params)
 
-    def update(self, customer_id: str, data: dict, **params):
-        self.validate_resource_id(customer_id, "customer ID")
-        return super().update(customer_id, data, **params)
+    def update(self, resource_id: str, data: Optional[dict] = None, **params):
+        self.validate_resource_id(resource_id, "customer ID")
+        return super().update(resource_id, data, **params)
 
-    def delete(self, customer_id: str, **params):
-        self.validate_resource_id(customer_id, "customer ID")
-        return super().delete(customer_id, **params)
+    def delete(self, resource_id: str, **params):
+        self.validate_resource_id(resource_id, "customer ID")
+        return super().delete(resource_id, **params)

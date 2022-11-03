@@ -9,11 +9,11 @@ __all__ = [
 ]
 
 
-class ChargebacksBase(ResourceBase):
+class ChargebacksBase:
     RESOURCE_ID_PREFIX = "chb_"
 
-    def get_resource_object(self, result):
-        return Chargeback(result, self.client)
+    def get_resource_object(self, result: dict) -> Chargeback:
+        return Chargeback(result, self.client)  # type: ignore
 
 
 class Chargebacks(ChargebacksBase, ResourceListMixin):
@@ -27,12 +27,12 @@ class PaymentChargebacks(ChargebacksBase, ResourceGetMixin, ResourceListMixin):
         self._payment = payment
         super().__init__(client)
 
-    def get_resource_path(self):
-        return f"payments/{self._payment.id}/chargebacks"
+    def get_resource_path(self) -> str:
+        return f"payments/{self._payment.id}/chargebacks"  # type: ignore
 
-    def get(self, chargeback_id: str, **params):
-        self.validate_resource_id(chargeback_id, "chargeback ID")
-        return super().get(chargeback_id, **params)
+    def get(self, resource_id: str, **params):
+        self.validate_resource_id(resource_id, "chargeback ID")
+        return super().get(resource_id, **params)
 
 
 class SettlementChargebacks(ChargebacksBase, ResourceListMixin):
@@ -42,11 +42,11 @@ class SettlementChargebacks(ChargebacksBase, ResourceListMixin):
         self._settlement = settlement
         super().__init__(client)
 
-    def get_resource_path(self):
-        return f"settlements/{self._settlement.id}/chargebacks"
+    def get_resource_path(self) -> str:
+        return f"settlements/{self._settlement.id}/chargebacks"  # type: ignore
 
 
-class ProfileChargebacks(ChargebacksBase):
+class ProfileChargebacks(ChargebacksBase, ResourceBase):
     _profile = None
 
     def __init__(self, client, profile):

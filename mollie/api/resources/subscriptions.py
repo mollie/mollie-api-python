@@ -1,12 +1,7 @@
+from typing import Optional
+
 from ..objects.subscription import Subscription
-from .base import (
-    ResourceBase,
-    ResourceCreateMixin,
-    ResourceDeleteMixin,
-    ResourceGetMixin,
-    ResourceListMixin,
-    ResourceUpdateMixin,
-)
+from .base import ResourceCreateMixin, ResourceDeleteMixin, ResourceGetMixin, ResourceListMixin, ResourceUpdateMixin
 
 __all__ = [
     "CustomerSubscriptions",
@@ -14,11 +9,11 @@ __all__ = [
 ]
 
 
-class SubscriptionsBase(ResourceBase):
+class SubscriptionsBase:
     RESOURCE_ID_PREFIX = "sub_"
 
-    def get_resource_object(self, result):
-        return Subscription(result, self.client)
+    def get_resource_object(self, result: dict) -> Subscription:
+        return Subscription(result, self.client)  # type: ignore
 
 
 class Subscriptions(SubscriptionsBase, ResourceListMixin):
@@ -39,18 +34,18 @@ class CustomerSubscriptions(
         self._customer = customer
         super().__init__(client)
 
-    def get_resource_path(self):
-        return f"customers/{self._customer.id}/subscriptions"
+    def get_resource_path(self) -> str:
+        return f"customers/{self._customer.id}/subscriptions"  # type:ignore
 
-    def get(self, subscription_id: str, **params):
-        self.validate_resource_id(subscription_id, "subscription ID")
-        return super().get(subscription_id, **params)
+    def get(self, resource_id: str, **params):
+        self.validate_resource_id(resource_id, "subscription ID")
+        return super().get(resource_id, **params)
 
-    def update(self, subscription_id: str, data: dict, **params):
-        self.validate_resource_id(subscription_id, "subscription ID")
-        return super().update(subscription_id, data, **params)
+    def update(self, resource_id: str, data: Optional[dict] = None, **params):
+        self.validate_resource_id(resource_id, "subscription ID")
+        return super().update(resource_id, data, **params)
 
-    def delete(self, subscription_id: str, **params):
-        self.validate_resource_id(subscription_id, "subscription ID")
-        resp = super().delete(subscription_id, **params)
+    def delete(self, resource_id: str, **params):
+        self.validate_resource_id(resource_id, "subscription ID")
+        resp = super().delete(resource_id, **params)
         return self.get_resource_object(resp)

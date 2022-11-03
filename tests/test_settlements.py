@@ -81,7 +81,7 @@ def test_get_settlement_by_bank_reference(oauth_client, response):
     ],
 )
 def test_validate_settlement_id_valid_input(identifier):
-    assert Settlements.validate_settlement_id(identifier) is True
+    assert Settlements.validate_resource_id(identifier) is None
 
 
 @pytest.mark.parametrize(
@@ -93,7 +93,7 @@ def test_validate_settlement_id_valid_input(identifier):
 )
 def test_validate_settlement_id_invalid_input(identifier):
     with pytest.raises(IdentifierError) as excinfo:
-        Settlements.validate_settlement_id(identifier)
+        Settlements.validate_resource_id(identifier)
     assert str(excinfo.value) == (
         f"Invalid settlement ID '{identifier}', it should start with 'stl_', be 'next' or 'open', "
         "or contain a valid bank reference."

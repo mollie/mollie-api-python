@@ -1,3 +1,5 @@
+from typing import Optional
+
 from ..objects.refund import Refund
 from .base import ResourceBase, ResourceCreateMixin, ResourceDeleteMixin, ResourceGetMixin, ResourceListMixin
 
@@ -10,11 +12,11 @@ __all__ = [
 ]
 
 
-class RefundsBase(ResourceBase):
+class RefundsBase:
     RESOURCE_ID_PREFIX = "re_"
 
-    def get_resource_object(self, result):
-        return Refund(result, self.client)
+    def get_resource_object(self, result: dict) -> Refund:
+        return Refund(result, self.client)  # type:ignore
 
 
 class Refunds(RefundsBase, ResourceListMixin):
@@ -29,19 +31,19 @@ class PaymentRefunds(RefundsBase, ResourceCreateMixin, ResourceDeleteMixin, Reso
     _payment = None
 
     def __init__(self, client, payment):
-        super().__init__(client)
         self._payment = payment
+        super().__init__(client)
 
-    def get_resource_path(self):
-        return f"payments/{self._payment.id}/refunds"
+    def get_resource_path(self) -> str:
+        return f"payments/{self._payment.id}/refunds"  # type: ignore
 
-    def get(self, refund_id: str, **params):
-        self.validate_resource_id(refund_id, "Refund ID")
-        return super().get(refund_id, **params)
+    def get(self, resource_id: str, **params):
+        self.validate_resource_id(resource_id, "Refund ID")
+        return super().get(resource_id, **params)
 
-    def delete(self, refund_id: str, **params):
-        self.validate_resource_id(refund_id, "Refund ID")
-        return super().delete(refund_id, **params)
+    def delete(self, resource_id: str, **params):
+        self.validate_resource_id(resource_id, "Refund ID")
+        return super().delete(resource_id, **params)
 
 
 class OrderRefunds(RefundsBase, ResourceCreateMixin, ResourceListMixin):
@@ -53,10 +55,10 @@ class OrderRefunds(RefundsBase, ResourceCreateMixin, ResourceListMixin):
         super().__init__(client)
         self._order = order
 
-    def get_resource_path(self):
-        return f"orders/{self._order.id}/refunds"
+    def get_resource_path(self) -> str:
+        return f"orders/{self._order.id}/refunds"  # type: ignore
 
-    def create(self, data=None, **params):
+    def create(self, data: Optional[dict] = None, **params):
         """Create a refund for the order. When no data arg is given, a refund for all order lines is assumed."""
         if not data:
             data = {"lines": []}
@@ -72,18 +74,18 @@ class SettlementRefunds(RefundsBase, ResourceListMixin):
         super().__init__(client)
         self._settlement = settlement
 
-    def get_resource_path(self):
-        return f"settlements/{self._settlement.id}/refunds"
+    def get_resource_path(self) -> str:
+        return f"settlements/{self._settlement.id}/refunds"  # type: ignore
 
 
-class ProfileRefunds(RefundsBase):
+class ProfileRefunds(RefundsBase, ResourceBase):
     _profile = None
 
     def __init__(self, client, profile):
         self._profile = profile
         super().__init__(client)
 
-    def list(self, **params):
+    def list(self, **params) -> Refunds:
         # Set the profileId in the query params
-        params.update({"profileId": self._profile.id})
+        params.update({"profileId": self._profile.id})  # type: ignore
         return Refunds(self.client).list(**params)

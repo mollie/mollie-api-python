@@ -10,13 +10,13 @@ __all__ = [
 ]
 
 
-class MethodsBase(ResourceBase):
-    def get_resource_object(self, result):
-        return Method(result, self.client)
+class MethodsBase:
+    def get_resource_object(self, result: dict) -> Method:
+        return Method(result, self.client)  # type: ignore
 
 
 class Methods(MethodsBase, ResourceGetMixin, ResourceListMixin):
-    def all(self, **params):
+    def all(self, **params) -> ObjectList:
         """List all mollie payment methods, including methods that aren't activated in your profile."""
         resource_path = self.get_resource_path()
         path = f"{resource_path}/all"
@@ -24,19 +24,19 @@ class Methods(MethodsBase, ResourceGetMixin, ResourceListMixin):
         return ObjectList(result, Method, self.client)
 
 
-class ProfileMethods(MethodsBase):
+class ProfileMethods(MethodsBase, ResourceBase):
     _profile = None
 
     def __init__(self, client, profile):
         self._profile = profile
         super().__init__(client)
 
-    def get_resource_path(self):
-        return f"profiles/{self._profile.id}/methods"
+    def get_resource_path(self) -> str:
+        return f"profiles/{self._profile.id}/methods"  # type: ignore
 
     @property
     def payment_method_requires_issuer(self):
-        """A list payment methods that requires management of specific issuers."""
+        """A list of payment methods that requires management of specific issuers."""
         return [
             Method.GIFTCARD,
             Method.VOUCHER,
