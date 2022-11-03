@@ -64,14 +64,6 @@ class ResourceBase:
         if not resource_id or not str(resource_id).startswith(cls.RESOURCE_ID_PREFIX):
             raise IdentifierError(message)
 
-    @staticmethod
-    def extract_embed(params):
-        """Extract and parse the embed parameter from the request."""
-        # TODO Remove this
-        if "embed" not in params:
-            return
-        return params["embed"].split(",")
-
 
 class ResourceCreateMixin(ResourceBase):
     def create(self, data: Optional[dict] = None, **params):

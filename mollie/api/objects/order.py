@@ -3,16 +3,8 @@ from .base import ObjectBase
 
 
 class Order(ObjectBase):
-    requested_embeds = None
-
-    def __init__(self, data, client=None, requested_embeds=None):
+    def __init__(self, data, client):
         super().__init__(data, client)
-        self.requested_embeds = requested_embeds
-
-    def _has_embed(self, embed_name):
-        if self.requested_embeds and embed_name in self.requested_embeds:
-            return True
-        return False
 
     @classmethod
     def get_resource_class(cls, client):

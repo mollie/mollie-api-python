@@ -16,13 +16,7 @@ class Orders(ResourceCreateMixin, ResourceDeleteMixin, ResourceGetMixin, Resourc
 
     def get(self, resource_id: str, **params):
         self.validate_resource_id(resource_id, "order ID")
-        order = super().get(resource_id, **params)
-
-        requested_embeds = self.extract_embed(params)
-        if requested_embeds:
-            order.requested_embeds = requested_embeds
-
-        return order
+        return super().get(resource_id, **params)
 
     def delete(self, resource_id: str, **params):
         """Cancel order and return the order object.
