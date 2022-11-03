@@ -196,7 +196,7 @@ def test_client_response_404_but_no_payload(response):
 def test_client_error_including_field_response(client, response):
     """An error response containing a 'field' value should be reflected in the raised error."""
     response.post("https://api.mollie.com/v2/payments", "payment_rejected", status=422)
-    params = {
+    data = {
         "amount": {
             "value": "10000000.00",
             "currency": "EUR",
@@ -207,7 +207,7 @@ def test_client_error_including_field_response(client, response):
         "webhookUrl": "https://webshop.example.org/payments/webhook/",
     }
     with pytest.raises(UnprocessableEntityError, match="The amount is higher than the maximum") as excinfo:
-        client.payments.create(**params)
+        client.payments.create(data)
     assert excinfo.value.field == "amount"
 
 
