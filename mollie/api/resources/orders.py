@@ -31,17 +31,17 @@ class Orders(
 
         return order
 
-    def delete(self, order_id: str, data=None):
+    def delete(self, order_id: str, **params):
         """Cancel order and return the order object.
 
         Deleting an order causes the order status to change to canceled.
         The updated order object is returned.
         """
         self.validate_resource_id(order_id, "order ID")
-        result = super().delete(order_id, data)
+        result = super().delete(order_id, **params)
         return self.get_resource_object(result)
 
-    def update(self, order_id: str, data=None):
+    def update(self, order_id: str, data=None, **params):
         """Update an order, and return the updated order."""
         self.validate_resource_id(order_id, "order ID")
-        return super().update(order_id, data)
+        return super().update(order_id, data, **params)

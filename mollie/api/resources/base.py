@@ -1,3 +1,5 @@
+from typing import Optional
+
 from ..error import IdentifierError, ResponseError, ResponseHandlingError
 from ..objects.list import ObjectList
 
@@ -106,7 +108,7 @@ class ResourceUpdateMixin:
 
 
 class ResourceDeleteMixin:
-    def delete(self, resource_id, data=None):
+    def delete(self, resource_id: str, **params: Optional[dict]):
         resource_path = self.get_resource_path()
         path = f"{resource_path}/{resource_id}"
-        return self.perform_api_call(self.REST_DELETE, path, data)
+        return self.perform_api_call(self.REST_DELETE, path, params=params)
