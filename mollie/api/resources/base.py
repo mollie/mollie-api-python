@@ -110,9 +110,3 @@ class ResourceDeleteMixin:
         resource_path = self.get_resource_path()
         path = f"{resource_path}/{resource_id}"
         return self.perform_api_call(self.REST_DELETE, path, data)
-
-
-class ResourceAllMethodsMixin(
-    ResourceCreateMixin, ResourceDeleteMixin, ResourceGetMixin, ResourceListMixin, ResourceUpdateMixin
-):
-    pass
