@@ -90,8 +90,7 @@ class Settlement(ObjectBase):
         """Return the captures related to this settlement."""
         return SettlementCaptures(self.client, self)
 
-    @property
-    def invoice(self):
+    def get_invoice(self):
         """Return the invoice related to this settlement."""
         url = self._get_link("invoice")
         return self.client.invoices.from_url(url)

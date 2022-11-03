@@ -9,7 +9,7 @@ from mollie.api.resources.settlements import Settlements
 from .utils import assert_list_object
 
 SETTLEMENT_ID = "stl_jDk30akdN"
-INVOICE_ID = "inv_FrvewDA3Pr"
+INVOICE_ID = "inv_xBEbP9rvAq"
 BANK_REFERENCE = "1234567.1804.03"
 
 
@@ -24,7 +24,6 @@ def test_list_settlements(oauth_client, response):
 def test_settlement_get(oauth_client, response):
     """Retrieve a single settlement method by ID."""
     response.get(f"https://api.mollie.com/v2/settlements/{SETTLEMENT_ID}", "settlement_single")
-    response.get(f"https://api.mollie.com/v2/invoices/{INVOICE_ID}", "invoice_single")
 
     settlement = oauth_client.settlements.get(SETTLEMENT_ID)
     assert isinstance(settlement, Settlement)
@@ -45,7 +44,6 @@ def test_settlement_get(oauth_client, response):
     assert isinstance(settlement.payments, SettlementPayments)
     assert isinstance(settlement.refunds, SettlementRefunds)
     assert isinstance(settlement.captures, SettlementCaptures)
-    assert isinstance(settlement.invoice, Invoice)
 
 
 def test_settlement_get_next(oauth_client, response):
@@ -105,10 +103,20 @@ def test_settlement_invoice_id_is_deprecated(oauth_client, response):
 
     settlement = oauth_client.settlements.get(SETTLEMENT_ID)
     with pytest.warns(APIDeprecationWarning) as warnings:
-        assert settlement.invoice_id == "inv_FrvewDA3Pr"
+        assert settlement.invoice_id == INVOICE_ID
 
     assert len(warnings) == 1
     assert str(warnings[0].message) == (
         "Using Settlement Invoice ID is deprecated, see "
         "https://docs.mollie.com/reference/v2/settlements-api/get-settlement"
     )
+
+
+def test_settlement_get_related_invoice(oauth_client, response):
+    response.get(f"https://api.mollie.com/v2/settlements/{SETTLEMENT_ID}", "settlement_single")
+    response.get(f"https://api.mollie.com/v2/invoices/{INVOICE_ID}", "invoice_single")
+
+    settlement = oauth_client.settlements.get(SETTLEMENT_ID)
+    invoice = settlement.get_invoice()
+    assert isinstance(invoice, Invoice)
+    assert invoice.id == INVOICE_ID

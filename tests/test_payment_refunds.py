@@ -47,11 +47,6 @@ def test_get_payment_refund(client, response):
     assert refund.payment_id == PAYMENT_ID
     assert refund.order_id is None
     assert refund.created_at == "2018-03-14T17:09:02.0Z"
-    # properties from _links
-    assert refund.payment is not None
-    assert refund.settlement is None
-    assert refund.order is None
-
     # additional methods
     assert refund.is_queued() is False
     assert refund.is_pending() is True
@@ -106,7 +101,7 @@ def test_payment_refund_get_related_payment(refund, response):
     response.get(f"https://api.mollie.com/v2/payments/{PAYMENT_ID}", "payment_single")
 
     assert refund.payment_id == PAYMENT_ID
-    payment = refund.payment
+    payment = refund.get_payment()
     assert isinstance(payment, Payment)
     assert payment.id == PAYMENT_ID
 
@@ -116,7 +111,7 @@ def test_payment_refund_get_related_settlement(refund, response):
 
     assert refund.settlement_id == SETTLEMENT_ID
     assert refund.settlement_amount == {"currency": "EUR", "value": "10.00"}
-    settlement = refund.settlement
+    settlement = refund.get_settlement()
     assert isinstance(settlement, Settlement)
     assert settlement.id == SETTLEMENT_ID
 
@@ -125,7 +120,7 @@ def test_payment_refund_get_related_order(refund, response):
     response.get(f"https://api.mollie.com/v2/orders/{ORDER_ID}", "order_single")
 
     assert refund.order_id == ORDER_ID
-    order = refund.order
+    order = refund.get_order()
     assert isinstance(order, Order)
     assert order.id == ORDER_ID
 

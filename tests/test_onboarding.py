@@ -51,6 +51,6 @@ def test_onboarding_get_organization(oauth_client, response):
     )
 
     onboarding = oauth_client.onboarding.get("me")
-    organization = onboarding.organization
+    organization = onboarding.get_organization()
     assert isinstance(organization, Organization)
     assert organization.id == ORGANIZATION_ID

@@ -92,11 +92,11 @@
                         }
                     }
                 ],
-                "invoiceId": "inv_FrvewDA3Pr"
+                "invoiceId": "inv_xBEbP9rvAq"
             }
         }
     },
-    "invoiceId": "inv_FrvewDA3Pr",
+    "invoiceId": "inv_xBEbP9rvAq",
     "_links": {
         "self": {
             "href": "https://api.mollie.com/v2/settlements/next",
@@ -119,7 +119,7 @@
             "type": "application/hal+json"
         },
         "invoice": {
-             "href": "https://api.mollie.com/v2/invoices/inv_FrvewDA3Pr",
+             "href": "https://api.mollie.com/v2/invoices/inv_xBEbP9rvAq",
              "type": "application/hal+json"
         },
         "documentation": {

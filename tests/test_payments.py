@@ -69,7 +69,6 @@ def test_cancel_payment_invalid_id(client):
 def test_get_single_payment(client, response):
     """Retrieve a single payment by payment id."""
     response.get(f"https://api.mollie.com/v2/payments/{PAYMENT_ID}", "payment_single_no_links")
-    response.get(f"https://api.mollie.com/v2/customers/{CUSTOMER_ID}", "customer_single")
 
     payment = client.payments.get(PAYMENT_ID)
     assert isinstance(payment, Payment)
@@ -110,11 +109,7 @@ def test_get_single_payment(client, response):
     assert payment.payonline_url is None
     assert payment.refunds is not None
     assert payment.chargebacks is not None
-    assert payment.mandate is None
-    assert payment.subscription is None
-    assert payment.customer is not None
     assert payment.captures is not None
-    assert payment.order is None
     # additional methods
     assert payment.is_open() is True
     assert payment.is_pending() is False
@@ -177,7 +172,7 @@ def test_payment_get_related_settlement(client, response):
     assert payment.settlement_id == SETTLEMENT_ID
     assert payment.settlement_amount == {"currency": "EUR", "value": "39.75"}
 
-    settlement = payment.settlement
+    settlement = payment.get_settlement()
     assert isinstance(settlement, Settlement)
     assert settlement.id == SETTLEMENT_ID
 
@@ -188,7 +183,7 @@ def test_payment_get_related_mandate(client, response):
     response.get(f"https://api.mollie.com/v2/customers/{CUSTOMER_ID}/mandates/{MANDATE_ID}", "customer_mandate_single")
 
     payment = client.payments.get(PAYMENT_ID)
-    mandate = payment.mandate
+    mandate = payment.get_mandate()
     assert isinstance(mandate, Mandate)
     assert mandate.id == MANDATE_ID
 
@@ -200,7 +195,7 @@ def test_payment_get_related_subscription(client, response):
     )
 
     payment = client.payments.get(PAYMENT_ID)
-    subscription = payment.subscription
+    subscription = payment.get_subscription()
     assert isinstance(subscription, Subscription)
     assert subscription.id == SUBSCRIPTION_ID
 
@@ -211,7 +206,7 @@ def test_payment_get_related_customer(client, response):
     response.get(f"https://api.mollie.com/v2/customers/{CUSTOMER_ID}", "customer_single")
 
     payment = client.payments.get(PAYMENT_ID)
-    customer = payment.customer
+    customer = payment.get_customer()
     assert isinstance(customer, Customer)
     assert customer.id == CUSTOMER_ID
 
@@ -221,7 +216,7 @@ def test_payment_get_related_order(client, response):
     response.get(f"https://api.mollie.com/v2/orders/{ORDER_ID}", "order_single")
 
     payment = client.payments.get(PAYMENT_ID)
-    order = payment.order
+    order = payment.get_order()
     assert isinstance(order, Order)
     assert order.id == ORDER_ID
 

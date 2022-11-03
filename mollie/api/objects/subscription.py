@@ -104,8 +104,7 @@ class Subscription(ObjectBase):
     def application_fee(self):
         return self._get_property("applicationFee")
 
-    @property
-    def customer(self):
+    def get_customer(self):
         """Return the customer for this subscription."""
         url = self._get_link("customer")
         return self.client.customers.from_url(url)
@@ -124,13 +123,19 @@ class Subscription(ObjectBase):
         if matches:
             return matches[0]
 
-    @property
-    def profile(self):
+    def get_profile(self):
         """Return the profile related to this subscription."""
         url = self._get_link("profile")
         if not url:
             return None
         return self.client.profiles.from_url(url)
+
+    def get_mandate(self):
+        if self.mandate_id and self.customer_id:
+            from ..resources import CustomerMandates
+
+            customer = Customer({"id": self.customer_id}, self.client)
+            return CustomerMandates(self.client, customer).get(self.mandate_id)
 
     @property
     def payments(self):
@@ -138,14 +143,5 @@ class Subscription(ObjectBase):
         # the explicit interface using .payments.list()
         from ..resources import SubscriptionPayments
 
-        # Create a fake customer object with minimal payload
         customer = Customer({"id": self.customer_id}, self.client)
         return SubscriptionPayments(self.client, customer=customer, subscription=self)
-
-    @property
-    def mandate(self):
-        if self.mandate_id and self.customer_id:
-            from ..resources import CustomerMandates
-
-            customer = Customer({"id": self.customer_id}, self.client)
-            return CustomerMandates(self.client, customer).get(self.mandate_id)

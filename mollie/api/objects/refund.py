@@ -75,20 +75,17 @@ class Refund(ObjectBase):
 
     # documented _links
 
-    @property
-    def payment(self):
+    def get_payment(self):
         """Return the payment for this refund."""
         return self.client.payments.get(self.payment_id)
 
-    @property
-    def settlement(self):
+    def get_settlement(self):
         """Return the settlement for this refund."""
         if self.settlement_id:
             return self.client.settlements.get(self.settlement_id)
         return None
 
-    @property
-    def order(self):
+    def get_order(self):
         """Return the order for this refund."""
         if self.order_id:
             return self.client.orders.get(self.order_id)
