@@ -273,7 +273,7 @@ If you wish to learn more about our API, please visit the [Mollie Developer Port
 
 ## Want to help us make our API client even better? ##
 
-Want to help us make our API client even better? We take [pull requests](https://github.com/mollie/mollie-api-python/pulls?utf8=%E2%9C%93&q=is%3Apr), sure. But how would you like to contribute to a [technology oriented organization](https://www.mollie.com/nl/blog/post/werken-bij-mollie-als-developer/)? Mollie is hiring developers and system engineers. [Check out our vacancies](https://jobs.mollie.com/) or [get in touch](mailto:personeel@mollie.com).
+Want to help us make our API client even better? We take [pull requests](https://github.com/mollie/mollie-api-python/pulls?utf8=%E2%9C%93&q=is%3Apr), sure. But how would you like to contribute to a technology oriented organization? Mollie is hiring developers and system engineers. [Check out our vacancies](https://jobs.mollie.com/) or [get in touch](mailto:personeel@mollie.com).
 
 ## License ##
 [BSD (Berkeley Software Distribution) License](https://opensource.org/licenses/bsd-license.php).
