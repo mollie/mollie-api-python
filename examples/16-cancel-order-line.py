@@ -26,11 +26,10 @@ def main():
         #
         body = "<p>Attempting to retrieve the first page of orders, and grabbing the first.</p>"
         order = next(mollie_client.orders.list())
-        line = next(order.lines)
+        first_line = next(order.lines.list())
 
-        if line and line.is_cancelable:
-            data = {"lines": [{"id": line.id, "quantity": 1}]}
-            order.cancel_lines(data)
+        if first_line and first_line.is_cancelable:
+            order.lines.delete(first_line.id)
 
             order = mollie_client.orders.get(order.id)
             body += f"Your order {order.id} was updated:"

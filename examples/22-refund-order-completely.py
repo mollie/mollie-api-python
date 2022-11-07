@@ -25,7 +25,7 @@ def main():
         body = "<p>Attempting to retrieve the first page of orders, and grabbing the first.</p>"
 
         order = next(mollie_client.orders.list())
-        refund = order.create_refund()
+        refund = order.refunds.create()
 
         body += f"Refund {refund.id} was created for order {order.id}:"
 

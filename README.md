@@ -185,7 +185,7 @@ ING Home'Pay and bank transfer payments. Other types of payments cannot be refun
 payment = mollie_client.payments.get(payment.id)
 
 # Refund € 2 of this payment
-refund = mollie_client.refunds.on(payment).create({
+refund = payment.refunds.create({
     'amount': {
         'currency': 'EUR',
         'value': '2.00'
@@ -207,7 +207,7 @@ Run the oauth2 examples:
 export MOLLIE_CLIENT_ID=your_client_id
 export MOLLIE_CLIENT_SECRET=your_client_secret
 export MOLLIE_PUBLIC_URL=https://some.ngrok.url.io
-python examples/oauth/app.py
+python examples/oauth/oauth_app.py
 ```
 
 The Authorize endpoint is the endpoint on the Mollie web site where the merchant logs in, and grants authorization to your client application. E.g. when the merchant clicks on the Connect with Mollie button, you should redirect the merchant to the Authorize endpoint.

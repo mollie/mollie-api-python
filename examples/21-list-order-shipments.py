@@ -24,7 +24,7 @@ def main():
         #
         body = "<p>Attempting to retrieve the first page of orders, and grabbing the first.</p>"
         order = next(mollie_client.orders.list())
-        shipments = order.shipments
+        shipments = order.shipments.list()
 
         body += f"Shipments for order with ID {order.id}:"
         body += """

@@ -35,7 +35,7 @@ def main():
 
         order = mollie_client.orders.get(order_id) if order_id else next(mollie_client.orders.list())
 
-        shipment = order.create_shipment()
+        shipment = order.shipments.create()
         body += f"A shipment with ID {shipment.id} has been created for your order with ID {order.id}"
         for line in shipment.lines:
             body += f"{line.name} Status: <b>{line.status}</b>"
