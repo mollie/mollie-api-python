@@ -1,3 +1,5 @@
+import json
+
 import pytest
 
 from mollie.api.error import IdentifierError
@@ -73,6 +75,26 @@ def test_profile_payment_method_enable_issuer(oauth_client, response):
     issuer = profile.methods.enable_issuer("giftcard", GIFTCARD_ISSUER_ID)
     assert isinstance(issuer, Issuer)
     assert issuer.id == GIFTCARD_ISSUER_ID
+
+
+def test_profile_payment_method_enable_issuer_with_payload(oauth_client, response):
+    response.get(f"https://api.mollie.com/v2/profiles/{PROFILE_ID}", "profile_single")
+    response.post(
+        f"https://api.mollie.com/v2/profiles/{PROFILE_ID}/methods/voucher/issuers/{VOUCHER_ISSUER_ID}",
+        "issuer_voucher",
+    )
+
+    profile = oauth_client.profiles.get(PROFILE_ID)
+    issuer = profile.methods.enable_issuer("voucher", VOUCHER_ISSUER_ID, {"contractId": "abc123"})
+    assert isinstance(issuer, Issuer)
+    assert issuer.id == VOUCHER_ISSUER_ID
+
+    # Inspect the request that was sent
+    request = response.calls[-1].request
+    assert (
+        request.url == f"https://api.mollie.com/v2/profiles/{PROFILE_ID}/methods/voucher/issuers/{VOUCHER_ISSUER_ID}"
+    )
+    assert json.loads(request.body) == {"contractId": "abc123"}
 
 
 def test_profile_payment_method_enable_issuer_invalid_method(oauth_client, response):

@@ -215,7 +215,7 @@ The list below corresponds with the Mollie API documentation. It shows all curre
 | Disable payment method | `client.profile_methods.with_parent_id(:profile_id, :method_id).delete()` | `profile = client.profiles.get(:profile_id); profile.methods.disable(:method_id)` ||
 | Enable gift card issuer | `client.profile_methods.with_parent_id(:profile_id, "giftcard").create(:issuer_id)` | `profile = client.profiles.get(:profile_id); profile.methods.enable_issuer("giftcard", :issuer_id)` ||
 | Disable gift card issuer | `client.profile_methods.with_parent_id(:profile_id, "giftcard").delete(:issuer_id)` | `profile = client.profiles.get(:profile_id); profile.methods.disable_issuer("giftcard", :issuer_id)` ||
-| Enable voucher issuer | `client.profile_methods.with_parent_id(:profile_id, "voucher").create(:issuer_id)` | `profile = client.profiles.get(:profile_id); profile.methods.enable_issuer("voucher", :issuer_id)` ||
+| Enable voucher issuer | `client.profile_methods.with_parent_id(:profile_id, "voucher").create(:issuer_id)` | `profile = client.profiles.get(:profile_id); profile.methods.enable_issuer("voucher", :issuer_id, :data)` ||
 | Disable voucher issuer | `client.profile_methods.with_parent_id(:profile_id, "voucher").delete(:issuer_id)` | `profile = client.profiles.get(:profile_id); profile.methods.disable_issuer("voucher", :issuer_id)` ||
 
 There is also some profile-related functionality that has been updated with does not relate directly to a documented Profiles API endpoint.

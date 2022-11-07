@@ -1,3 +1,5 @@
+from typing import Optional
+
 from ..error import IdentifierError
 from ..objects.issuer import Issuer
 from ..objects.list import ObjectList
@@ -86,7 +88,7 @@ class ProfileMethods(MethodsBase, ResourceBase):
         # Divert the API call to the general Methods resource
         return Methods(self.client).list(**params)
 
-    def enable_issuer(self, method_id: str, issuer_id: str, **params):
+    def enable_issuer(self, method_id: str, issuer_id: str, data: Optional[dict] = None, **params):
         """
         Enable an issuer for a payment method.
 
@@ -96,13 +98,14 @@ class ProfileMethods(MethodsBase, ResourceBase):
         :type method_id: str
         :param issuer_id: The issuer to enable.
         :type issuer_id: str
+        :param data: Optional payload
         """
         if method_id not in self.payment_method_requires_issuer:
             raise IdentifierError(f"Payment method '{method_id}' does not support issuers.")
 
         resource_path = self.get_resource_path()
         path = f"{resource_path}/{method_id}/issuers/{issuer_id}"
-        result = self.perform_api_call(self.REST_CREATE, path, params=params)
+        result = self.perform_api_call(self.REST_CREATE, path, data, params)
         return Issuer(result, self.client)
 
     def disable_issuer(self, method_id: str, issuer_id: str, **params):

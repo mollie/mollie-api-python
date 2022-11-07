@@ -1,0 +1,26 @@
+{
+    "resource": "issuer",
+    "id": "appetiz",
+    "description": "Appetiz",
+    "status": "pending-issuer",
+    "contractor": {
+        "id": "Conecs",
+        "name": "Conecs",
+        "contractId": "abc123"
+    },
+    "image": {
+        "size1x": "https://www.mollie.com/external/icons/voucher-issuers/apetiz.png",
+        "size2x": "https://www.mollie.com/external/icons/voucher-issuers/apetiz%402x.png",
+        "svg": "https://www.mollie.com/external/icons/voucher-issuers/apetiz.svg"
+    },
+    "_links": {
+        "self": {
+            "href": "https://api.mollie.com/v2/issuers/appetiz",
+            "type": "application/hal+json"
+        },
+        "documentation": {
+            "href": "https://docs.mollie.com/reference/v2/profiles-api/enable-voucher-issuer",
+            "type": "text/html"
+        }
+    }
+}
