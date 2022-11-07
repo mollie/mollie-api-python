@@ -7,6 +7,8 @@ __all__ = [
 
 
 class Organizations(ResourceGetMixin):
+    """Resource handler for the `/organizations` endpoint."""
+
     RESOURCE_ID_PREFIX = "org_"
 
     def get_resource_object(self, result: dict) -> Organization:

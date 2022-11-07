@@ -17,10 +17,14 @@ class ChargebacksBase:
 
 
 class Chargebacks(ChargebacksBase, ResourceListMixin):
+    """Resource handler for the `/chargebacks` endpoint."""
+
     pass
 
 
 class PaymentChargebacks(ChargebacksBase, ResourceGetMixin, ResourceListMixin):
+    """Resource handler for the `/payments/:payment_id:/chargebacks` endpoint."""
+
     _payment = None
 
     def __init__(self, client, payment):
@@ -36,6 +40,8 @@ class PaymentChargebacks(ChargebacksBase, ResourceGetMixin, ResourceListMixin):
 
 
 class SettlementChargebacks(ChargebacksBase, ResourceListMixin):
+    """Resource handler for the `/settlements/:settlement_id:/chargebacks` endpoint."""
+
     _settlement = None
 
     def __init__(self, client, settlement):
@@ -47,6 +53,12 @@ class SettlementChargebacks(ChargebacksBase, ResourceListMixin):
 
 
 class ProfileChargebacks(ChargebacksBase, ResourceBase):
+    """
+    Resource handler for the `/chargebacks?profileId=:profile_id:` endpoint.
+
+    This is separate from the `Chargebacks` resource handler to make it easier to inject the profileId.
+    """
+
     _profile = None
 
     def __init__(self, client, profile):

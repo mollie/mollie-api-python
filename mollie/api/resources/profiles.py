@@ -9,6 +9,8 @@ __all__ = [
 
 
 class Profiles(ResourceCreateMixin, ResourceDeleteMixin, ResourceGetMixin, ResourceListMixin, ResourceUpdateMixin):
+    """Resource handler for the `/profiles` endpoint."""
+
     RESOURCE_ID_PREFIX = "pfl_"
 
     def get_resource_object(self, result: dict) -> Profile:

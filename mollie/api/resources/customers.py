@@ -5,6 +5,8 @@ from .base import ResourceCreateMixin, ResourceDeleteMixin, ResourceGetMixin, Re
 
 
 class Customers(ResourceCreateMixin, ResourceDeleteMixin, ResourceGetMixin, ResourceListMixin, ResourceUpdateMixin):
+    """Resource handler for the `/customers` endpoint."""
+
     RESOURCE_ID_PREFIX = "cst_"
 
     def get_resource_object(self, result: dict) -> Customer:

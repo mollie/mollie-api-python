@@ -16,6 +16,8 @@ class MethodsBase:
 
 
 class Methods(MethodsBase, ResourceGetMixin, ResourceListMixin):
+    """Resource handler for the `/methods` endpoint."""
+
     def all(self, **params) -> ObjectList:
         """List all mollie payment methods, including methods that aren't activated in your profile."""
         resource_path = self.get_resource_path()
@@ -25,6 +27,8 @@ class Methods(MethodsBase, ResourceGetMixin, ResourceListMixin):
 
 
 class ProfileMethods(MethodsBase, ResourceBase):
+    """Resource handler for the `/profiles/:profile_id:/methods` endpoint."""
+
     _profile = None
 
     def __init__(self, client, profile):

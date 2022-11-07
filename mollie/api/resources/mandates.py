@@ -7,6 +7,8 @@ __all__ = [
 
 
 class CustomerMandates(ResourceCreateMixin, ResourceDeleteMixin, ResourceGetMixin, ResourceListMixin):
+    """Resource handler for the `/customers/:customer_id:/mandates` endpoint."""
+
     RESOURCE_ID_PREFIX = "mdt_"
 
     _customer = None

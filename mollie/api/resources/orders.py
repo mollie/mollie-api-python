@@ -9,6 +9,8 @@ __all__ = [
 
 
 class Orders(ResourceCreateMixin, ResourceDeleteMixin, ResourceGetMixin, ResourceListMixin, ResourceUpdateMixin):
+    """Resource handler for the `/orders` endpoint."""
+
     RESOURCE_ID_PREFIX = "ord_"
 
     def get_resource_object(self, result: dict) -> Order:

@@ -12,7 +12,7 @@ __all__ = [
 
 class OrderLines(ResourceBase):
     """
-    OrderLine resource class
+    Resource handler for the `/orders/:order_id:/lines` endpoint.
 
     This class provides various generic methods such as .delete(), .update() and
     .list(), but since the API interface for these methods is completely different

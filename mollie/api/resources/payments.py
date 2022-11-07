@@ -33,6 +33,8 @@ class PaymentsBase:
 class Payments(
     PaymentsBase, ResourceCreateMixin, ResourceDeleteMixin, ResourceGetMixin, ResourceListMixin, ResourceUpdateMixin
 ):
+    """Resource handler for the `/payments` endpoint."""
+
     def get(self, resource_id: str, **params):
         self.validate_resource_id(resource_id, "payment ID")
         return super().get(resource_id, **params)
@@ -53,6 +55,8 @@ class Payments(
 
 
 class OrderPayments(PaymentsBase, ResourceCreateMixin):
+    """Resource handler for the `/orders/:order_id:/payments` endpoint."""
+
     _order = None
 
     def __init__(self, client, order):
@@ -80,6 +84,8 @@ class OrderPayments(PaymentsBase, ResourceCreateMixin):
 
 
 class CustomerPayments(PaymentsBase, ResourceCreateMixin, ResourceListMixin):
+    """Resource handler for the `/customers/:customer_id:/payments` endpoint."""
+
     _customer = None
 
     def __init__(self, client, customer):
@@ -91,6 +97,8 @@ class CustomerPayments(PaymentsBase, ResourceCreateMixin, ResourceListMixin):
 
 
 class SubscriptionPayments(PaymentsBase, ResourceListMixin):
+    """Resource handler for the `/customers/:customer_id:/subscriptions/:subscription_id:/payments` endpoint."""
+
     _customer = None
     _subscription = None
 
@@ -104,6 +112,8 @@ class SubscriptionPayments(PaymentsBase, ResourceListMixin):
 
 
 class SettlementPayments(PaymentsBase, ResourceListMixin):
+    """Resource handler for the `/settlements/:settlement_id:/payments` endpoint."""
+
     _settlement = None
 
     def __init__(self, client, settlement):
@@ -115,6 +125,12 @@ class SettlementPayments(PaymentsBase, ResourceListMixin):
 
 
 class ProfilePayments(PaymentsBase, ResourceBase):
+    """
+    Resource handler for the `/payments?profileId=:profile_id:` endpoint.
+
+    This is separate from the `Payments` resource handler to make it easier to inject the profileId.
+    """
+
     _profile = None
 
     def __init__(self, client, profile):

@@ -7,6 +7,8 @@ from .base import ResourceGetMixin, ResourceListMixin
 
 
 class Settlements(ResourceGetMixin, ResourceListMixin):
+    """Resource handler for the `/settlements` endpoint."""
+
     RESOURCE_ID_PREFIX = "stl_"
 
     # According to Mollie, the bank reference is formatted as:

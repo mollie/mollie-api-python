@@ -7,6 +7,8 @@ __all__ = [
 
 
 class Invoices(ResourceGetMixin, ResourceListMixin):
+    """Resource handler for the `/invoices` endpoint."""
+
     RESOURCE_ID_PREFIX = "inv_"
 
     def get_resource_object(self, result: dict) -> Invoice:

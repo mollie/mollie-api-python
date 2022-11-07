@@ -15,6 +15,8 @@ class CapturesBase:
 
 
 class PaymentCaptures(CapturesBase, ResourceGetMixin, ResourceListMixin):
+    """Resource handler for the `/payments/:payment_id:/captures` endpoint."""
+
     _payment = None
 
     def __init__(self, client, payment):
@@ -30,6 +32,8 @@ class PaymentCaptures(CapturesBase, ResourceGetMixin, ResourceListMixin):
 
 
 class SettlementCaptures(CapturesBase, ResourceListMixin):
+    """Resource handler for the `/settlements/:settlement_id:/captures` endpoint."""
+
     _settlement = None
 
     def __init__(self, client, settlement):

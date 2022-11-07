@@ -8,6 +8,8 @@ __all__ = [
 
 
 class Onboarding(ResourceGetMixin):
+    """Resource handler for the `/onboarding` endpoint."""
+
     def get_resource_object(self, result: dict) -> OnboardingObject:
         return OnboardingObject(result, self.client)
 

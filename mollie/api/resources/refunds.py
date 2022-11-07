@@ -20,13 +20,13 @@ class RefundsBase:
 
 
 class Refunds(RefundsBase, ResourceListMixin):
-    """Resource handle for /refunds/ endpoint."""
+    """Resource handler for the `/refunds` endpoint."""
 
     pass
 
 
 class PaymentRefunds(RefundsBase, ResourceCreateMixin, ResourceDeleteMixin, ResourceGetMixin, ResourceListMixin):
-    """Resource handler for /payments/:paymentId:/refunds/ endpoint."""
+    """Resource handler for the `/payments/:payment_id:/refunds` endpoint."""
 
     _payment = None
 
@@ -47,7 +47,7 @@ class PaymentRefunds(RefundsBase, ResourceCreateMixin, ResourceDeleteMixin, Reso
 
 
 class OrderRefunds(RefundsBase, ResourceCreateMixin, ResourceListMixin):
-    """Resource handler for /orders/:orderId:/refunds/ endpoint."""
+    """Resource handler for the `/orders/:order_id:/refunds` endpoint."""
 
     _order = None
 
@@ -66,7 +66,7 @@ class OrderRefunds(RefundsBase, ResourceCreateMixin, ResourceListMixin):
 
 
 class SettlementRefunds(RefundsBase, ResourceListMixin):
-    """ResourceHandler for /settlements/:settlementId:/refunds/ endpoint."""
+    """ResourceHandler for the `/settlements/:settlement_id:/refunds` endpoint."""
 
     _settlement = None
 
@@ -79,6 +79,12 @@ class SettlementRefunds(RefundsBase, ResourceListMixin):
 
 
 class ProfileRefunds(RefundsBase, ResourceBase):
+    """
+    Resource handler for the `/refunds?profileId=:profile_id:` endpoint.
+
+    This is separate from the `Refunds` resource handler to make it easier to inject the profileId.
+    """
+
     _profile = None
 
     def __init__(self, client, profile):

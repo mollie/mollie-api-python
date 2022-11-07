@@ -17,6 +17,8 @@ class SubscriptionsBase:
 
 
 class Subscriptions(SubscriptionsBase, ResourceListMixin):
+    """Resource handler for the `/subscriptions` endpoint."""
+
     pass
 
 
@@ -28,6 +30,8 @@ class CustomerSubscriptions(
     ResourceListMixin,
     ResourceUpdateMixin,
 ):
+    """Resource handler for the `/customers/:customer_id:/subscriptions` endpoint."""
+
     _customer = None
 
     def __init__(self, client, customer):

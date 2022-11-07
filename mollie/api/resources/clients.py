@@ -7,7 +7,11 @@ __all__ = [
 
 
 class Clients(ResourceListMixin, ResourceGetMixin):
-    """Retrieve a list of Mollie merchants connected to your partner account (only for Mollie partners)."""
+    """
+    Resource handler for the `/clients` endpoint.
+
+    Retrieve a list of Mollie merchants connected to your partner account (only for Mollie partners).
+    """
 
     RESOURCE_ID_PREFIX = "org_"
 

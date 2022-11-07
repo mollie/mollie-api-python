@@ -9,6 +9,8 @@ __all__ = [
 
 
 class OrderShipments(ResourceCreateMixin, ResourceGetMixin, ResourceListMixin, ResourceUpdateMixin):
+    """Resource handler for the `/orders/:order_id:/shipments` endpoint."""
+
     RESOURCE_ID_PREFIX = "shp_"
 
     _order = None
