@@ -1,18 +1,30 @@
-from ..error import IdentifierError
+from typing import Optional
+
 from ..objects.profile import Profile
-from .base import ResourceAllMethodsMixin, ResourceBase
+from .base import ResourceCreateMixin, ResourceDeleteMixin, ResourceGetMixin, ResourceListMixin, ResourceUpdateMixin
+
+__all__ = [
+    "Profiles",
+]
 
 
-class Profiles(ResourceBase, ResourceAllMethodsMixin):
+class Profiles(ResourceCreateMixin, ResourceDeleteMixin, ResourceGetMixin, ResourceListMixin, ResourceUpdateMixin):
+    """Resource handler for the `/profiles` endpoint."""
+
     RESOURCE_ID_PREFIX = "pfl_"
 
-    def get_resource_object(self, result):
+    def get_resource_object(self, result: dict) -> Profile:
         return Profile(result, self.client)
 
-    def get(self, profile_id, **params):
-        if not profile_id or (not profile_id.startswith(self.RESOURCE_ID_PREFIX) and not profile_id == "me"):
-            raise IdentifierError(
-                f"Invalid profile ID: '{profile_id}'. A profile ID should start with '{self.RESOURCE_ID_PREFIX}' "
-                "or it should be 'me'."
-            )
-        return super().get(profile_id, **params)
+    def get(self, resource_id: str, **params):
+        if resource_id != "me":
+            self.validate_resource_id(resource_id, "profile ID")
+        return super().get(resource_id, **params)
+
+    def delete(self, resource_id: str, **params):
+        self.validate_resource_id(resource_id, "profile ID")
+        return super().delete(resource_id, **params)
+
+    def update(self, resource_id: str, data: Optional[dict] = None, **params):
+        self.validate_resource_id(resource_id, "profile ID")
+        return super().update(resource_id, **params)

@@ -4,7 +4,7 @@ from .base import ObjectBase
 class Invoice(ObjectBase):
     @classmethod
     def get_resource_class(cls, client):
-        from ..resources.invoices import Invoices
+        from ..resources import Invoices
 
         return Invoices(client)
 

@@ -1,11 +1,10 @@
 from .base import ObjectBase
-from .list import ObjectList
 
 
 class Customer(ObjectBase):
     @classmethod
     def get_resource_class(cls, client):
-        from ..resources.customers import Customers
+        from ..resources import Customers
 
         return Customers(client)
 
@@ -43,21 +42,18 @@ class Customer(ObjectBase):
 
     @property
     def subscriptions(self):
-        """Return the subscription list for the customer."""
-        if not self._get_link("subscriptions"):
-            return ObjectList({}, None)
-        return self.client.customer_subscriptions.on(self).list()
+        from ..resources import CustomerSubscriptions
+
+        return CustomerSubscriptions(self.client, self)
 
     @property
     def mandates(self):
-        """Return the mandate list for the customer."""
-        if not self._get_link("mandates"):
-            return ObjectList({}, None)
-        return self.client.customer_mandates.on(self).list()
+        from ..resources import CustomerMandates
+
+        return CustomerMandates(self.client, self)
 
     @property
     def payments(self):
-        """Return the payment list for the customer."""
-        if not self._get_link("payments"):
-            return ObjectList({}, None)
-        return self.client.customer_payments.on(self).list()
+        from ..resources import CustomerPayments
+
+        return CustomerPayments(self.client, self)

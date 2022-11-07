@@ -1,6 +1,7 @@
 import warnings
 
 from ..error import APIDeprecationWarning
+from ..resources import ProfileMethods
 from .base import ObjectBase
 
 
@@ -11,7 +12,7 @@ class Profile(ObjectBase):
 
     @classmethod
     def get_resource_class(cls, client):
-        from ..resources.profiles import Profiles
+        from ..resources import Profiles
 
         return Profiles(client)
 
@@ -69,19 +70,25 @@ class Profile(ObjectBase):
 
     @property
     def chargebacks(self):
-        return self.client.profile_chargebacks.on(self).list()
+        from ..resources import ProfileChargebacks
+
+        return ProfileChargebacks(self.client, self)
 
     @property
     def methods(self):
-        return self.client.profile_methods.on(self).list()
+        return ProfileMethods(self.client, self)
 
     @property
     def payments(self):
-        return self.client.profile_payments.on(self).list()
+        from ..resources import ProfilePayments
+
+        return ProfilePayments(self.client, self)
 
     @property
     def refunds(self):
-        return self.client.profile_refunds.on(self).list()
+        from ..resources import ProfileRefunds
+
+        return ProfileRefunds(self.client, self)
 
     @property
     def checkout_preview_url(self):

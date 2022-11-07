@@ -4,7 +4,7 @@ from .base import ObjectBase
 class PaymentLink(ObjectBase):
     @classmethod
     def get_resource_class(cls, client):
-        from ..resources.payment_links import PaymentLinks
+        from ..resources import PaymentLinks
 
         return PaymentLinks(client)
 

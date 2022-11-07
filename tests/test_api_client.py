@@ -8,8 +8,6 @@ from responses import matchers
 
 from mollie.api.client import Client, generate_querystring
 from mollie.api.error import (
-    DataConsistencyError,
-    IdentifierError,
     NotFoundError,
     RequestError,
     RequestSetupError,
@@ -140,66 +138,6 @@ def test_client_invalid_update_data(client):
         client.customers.update("cst_12345", data=data)
 
 
-@pytest.mark.parametrize(
-    "endpoint, errorstr",
-    [
-        ("customers", "Invalid customer ID: 'invalid'. A customer ID should start with 'cst_'."),
-        ("payments", "Invalid payment ID: 'invalid'. A payment ID should start with 'tr_'."),
-        ("refunds", "Invalid refund ID: 'invalid'. A refund ID should start with 're_'."),
-        ("orders", "Invalid order ID: 'invalid'. An order ID should start with 'ord_'."),
-        ("captures", "Invalid capture ID: 'invalid'. A capture ID should start with 'cpt_'."),
-        ("invoices", "Invalid invoice ID: 'invalid'. An invoice ID should start with 'inv_'."),
-        ("onboarding", "Invalid onboarding ID: 'invalid'. The onboarding ID should be 'me'."),
-        (
-            "organizations",
-            "Invalid organization ID: 'invalid'. A organization ID should start with 'org_' or it should be 'me'.",
-        ),
-        ("clients", "Invalid client ID: 'invalid'. A client ID should start with 'org_'."),
-    ],
-)
-def test_client_get_invalid_id(client, endpoint, errorstr):
-    """An invalid formatted object ID should raise an error."""
-    with pytest.raises(IdentifierError, match=errorstr):
-        getattr(client, endpoint).get("invalid")
-
-
-@pytest.mark.parametrize(
-    "endpoint, errorstr",
-    [
-        ("customer_mandates", "Invalid mandate ID: 'invalid'. A mandate ID should start with 'mdt_'."),
-        ("customer_payments", "Invalid payment ID: 'invalid'. A payment ID should start with 'tr_'."),
-        ("customer_subscriptions", "Invalid subscription ID: 'invalid'. A subscription ID should start with 'sub_'."),
-    ],
-)
-def test_client_get_customer_related_invalid_id(client, endpoint, errorstr):
-    """An invalid formatted object ID should raise an error."""
-    with pytest.raises(IdentifierError, match=errorstr):
-        getattr(client, endpoint).with_parent_id("cst_12345").get("invalid")
-
-
-@pytest.mark.parametrize(
-    "endpoint, errorstr",
-    [
-        ("payment_chargebacks", "Invalid chargeback ID: 'invalid'. A chargeback ID should start with 'chb_'."),
-        ("payment_refunds", "Invalid refund ID: 'invalid'. A refund ID should start with 're_'."),
-    ],
-)
-def test_client_get_payment_related_invalid_id(client, endpoint, errorstr):
-    """An invalid formatted object ID should raise an error."""
-    with pytest.raises(IdentifierError, match=errorstr):
-        getattr(client, endpoint).with_parent_id("tr_12345").get("invalid")
-
-
-def test_client_delete_order_invalid_id(client):
-    with pytest.raises(IdentifierError, match="Invalid order ID: 'invalid'. An order ID should start with 'ord_'."):
-        client.orders.delete("invalid")
-
-
-def test_client_delete_profile_method_misses_method_id(client):
-    with pytest.raises(RequestError, match="resource_id is required when disabling a giftcard."):
-        client.profile_methods.with_parent_id("pfl_v9hTwCvYqw", "giftcard").delete()
-
-
 def test_client_invalid_json_response(client, response):
     """An invalid json response should raise an error."""
     response.get("https://api.mollie.com/v2/customers", "invalid_json")
@@ -258,7 +196,7 @@ def test_client_response_404_but_no_payload(response):
 def test_client_error_including_field_response(client, response):
     """An error response containing a 'field' value should be reflected in the raised error."""
     response.post("https://api.mollie.com/v2/payments", "payment_rejected", status=422)
-    params = {
+    data = {
         "amount": {
             "value": "10000000.00",
             "currency": "EUR",
@@ -269,7 +207,7 @@ def test_client_error_including_field_response(client, response):
         "webhookUrl": "https://webshop.example.org/payments/webhook/",
     }
     with pytest.raises(UnprocessableEntityError, match="The amount is higher than the maximum") as excinfo:
-        client.payments.create(**params)
+        client.payments.create(data)
     assert excinfo.value.field == "amount"
 
 
@@ -325,22 +263,6 @@ def test_client_will_propagate_retry_setting(response):
 
     adapter = client._client.adapters["https://"]
     assert adapter.max_retries.connect == 3
-
-
-def test_client_data_consistency_error(client, response):
-    """When the API sends us data we did not expect raise an consistency error."""
-    order_id = "ord_kEn1PlbGa"
-    line_id = "odl_12345"
-    response.get(f"https://api.mollie.com/v2/orders/{order_id}", "order_single")
-    response.patch(f"https://api.mollie.com/v2/orders/{order_id}/lines/{line_id}", "order_single")
-
-    order = client.orders.get(order_id)
-    data = {
-        "name": "LEGO 71043 Hogwarts™ Castle",
-    }
-    # Update an nonexistent order line. This raises an data consistency error.
-    with pytest.raises(DataConsistencyError, match=r"Line id .* not found in response."):
-        order.update_line(line_id, data)
 
 
 def test_client_default_user_agent(client, response):

@@ -4,7 +4,7 @@ from .base import ObjectBase
 class Permission(ObjectBase):
     @classmethod
     def get_resource_class(cls, client):
-        from ..resources.permissions import Permissions
+        from ..resources import Permissions
 
         return Permissions(client)
 

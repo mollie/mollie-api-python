@@ -1,17 +1,19 @@
-from ..error import IdentifierError
 from ..objects.invoice import Invoice
-from .base import ResourceBase, ResourceGetMixin, ResourceListMixin
+from .base import ResourceGetMixin, ResourceListMixin
+
+__all__ = [
+    "Invoices",
+]
 
 
-class Invoices(ResourceBase, ResourceGetMixin, ResourceListMixin):
+class Invoices(ResourceGetMixin, ResourceListMixin):
+    """Resource handler for the `/invoices` endpoint."""
+
     RESOURCE_ID_PREFIX = "inv_"
 
-    def get_resource_object(self, result):
+    def get_resource_object(self, result: dict) -> Invoice:
         return Invoice(result, self.client)
 
-    def get(self, invoice_id, **params):
-        if not invoice_id or not invoice_id.startswith(self.RESOURCE_ID_PREFIX):
-            raise IdentifierError(
-                f"Invalid invoice ID: '{invoice_id}'. An invoice ID should start with '{self.RESOURCE_ID_PREFIX}'."
-            )
-        return super().get(invoice_id, **params)
+    def get(self, resource_id: str, **params):
+        self.validate_resource_id(resource_id, "invoice ID")
+        return super().get(resource_id, **params)

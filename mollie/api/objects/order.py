@@ -1,28 +1,14 @@
-from ..error import EmbedNotFound
-from ..resources.order_lines import OrderLines
-from ..resources.order_payments import OrderPayments
-from ..resources.order_refunds import OrderRefunds
+from ..resources import OrderLines
 from .base import ObjectBase
-from .list import ObjectList
-from .order_line import OrderLine
-from .payment import Payment
 
 
 class Order(ObjectBase):
-    requested_embeds = None
-
-    def __init__(self, data, client=None, requested_embeds=None):
+    def __init__(self, data, client):
         super().__init__(data, client)
-        self.requested_embeds = requested_embeds
-
-    def _has_embed(self, embed_name):
-        if self.requested_embeds and embed_name in self.requested_embeds:
-            return True
-        return False
 
     @classmethod
     def get_resource_class(cls, client):
-        from ..resources.orders import Orders
+        from ..resources import Orders
 
         return Orders(client)
 
@@ -166,85 +152,24 @@ class Order(ObjectBase):
     def has_refunds(self):
         return self.amount_refunded is not None
 
-    def create_refund(self, data=None, **params):
-        """Create a refund for the order. When no data arg is given, a refund for all order lines is assumed."""
-        if data is None:
-            data = {"lines": []}
-        refund = OrderRefunds(self.client).on(self).create(data, **params)
-        return refund
-
-    def cancel_lines(self, data=None):
-        """Cancel the lines given. When no lines are given, cancel all the lines.
-
-        Canceling an order line causes the order line status to change to canceled.
-        An empty dictionary will be returned.
-        """
-        from ..resources.order_lines import OrderLines
-
-        if data is None:
-            data = {"lines": []}
-        canceled = OrderLines(self.client).on(self).delete(data)
-        return canceled
-
     @property
     def refunds(self):
-        if not self.has_refunds():
-            return ObjectList({}, None)
-        return OrderRefunds(self.client).on(self).list()
+        from ..resources import OrderRefunds
+
+        return OrderRefunds(self.client, self)
 
     @property
     def lines(self):
-        lines = self._get_property("lines") or []
-        result = {
-            "_embedded": {
-                "lines": lines,
-            },
-            "count": len(lines),
-        }
-        return ObjectList(result, OrderLine, self.client)
-
-    def update_line(self, resource_id, data):
-        """Update a line for an order."""
-        return OrderLines(self.client).on(self).update(resource_id, data)
+        return OrderLines(self.client, self)
 
     @property
     def shipments(self):
-        """Retrieve all shipments for an order."""
-        return self.client.shipments.on(self).list()
+        from ..resources import OrderShipments
 
-    def create_shipment(self, data=None):
-        """Create a shipment for an order. When no data arg is given, a shipment for all order lines is assumed."""
-        if data is None:
-            data = {"lines": []}
-        return self.client.shipments.on(self).create(data)
-
-    def get_shipment(self, resource_id):
-        """Retrieve a single shipment by a shipment's ID."""
-        return self.client.shipments.on(self).get(resource_id)
-
-    def update_shipment(self, resource_id, data):
-        """Update the tracking information of a shipment."""
-        return self.client.shipments.on(self).update(resource_id, data)
+        return OrderShipments(self.client, self)
 
     @property
     def payments(self):
-        if not self._has_embed("payments"):
-            raise EmbedNotFound("payments")
+        from ..resources import OrderPayments
 
-        try:
-            payments = self["_embedded"]["payments"]
-        except KeyError:
-            # No data available at API
-            payments = []
-
-        result = {
-            "_embedded": {
-                "payments": payments,
-            },
-            "count": len(payments),
-        }
-        return ObjectList(result, Payment, self.client)
-
-    def create_payment(self, data):
-        """Creates a new payment object for an order."""
-        return OrderPayments(self.client).on(self).create(data)
+        return OrderPayments(self.client, self)

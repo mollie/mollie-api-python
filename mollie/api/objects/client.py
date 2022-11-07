@@ -4,7 +4,7 @@ from .base import ObjectBase
 class Client(ObjectBase):
     @classmethod
     def get_resource_class(cls, client):
-        from ..resources.clients import Clients
+        from ..resources import Clients
 
         return Clients(client)
 

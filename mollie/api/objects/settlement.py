@@ -1,6 +1,7 @@
 import warnings
 
 from ..error import APIDeprecationWarning
+from ..resources import SettlementCaptures, SettlementChargebacks, SettlementRefunds
 from .base import ObjectBase
 
 
@@ -12,7 +13,7 @@ class Settlement(ObjectBase):
 
     @classmethod
     def get_resource_class(cls, client):
-        from ..resources.settlements import Settlements
+        from ..resources import Settlements
 
         return Settlements(client)
 
@@ -70,22 +71,24 @@ class Settlement(ObjectBase):
     @property
     def payments(self):
         """Return the payments related to this settlement."""
-        return self.client.settlement_payments.on(self).list()
+        from ..resources import SettlementPayments
+
+        return SettlementPayments(self.client, self)
 
     @property
     def refunds(self):
         """Return the refunds related to this settlement."""
-        return self.client.settlement_refunds.on(self).list()
+        return SettlementRefunds(self.client, self)
 
     @property
     def chargebacks(self):
         """Return the chargebacks related to this settlement."""
-        return self.client.settlement_chargebacks.on(self).list()
+        return SettlementChargebacks(self.client, self)
 
     @property
     def captures(self):
         """Return the captures related to this settlement."""
-        return self.client.settlement_captures.on(self).list()
+        return SettlementCaptures(self.client, self)
 
     @property
     def invoice(self):

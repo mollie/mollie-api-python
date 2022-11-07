@@ -19,3 +19,11 @@ def assert_list_object(obj, object_type, count=None):
 
     assert len(items) == obj.count, "Items in ObjectList don't match list count."
     assert len(set(items)) == obj.count, "Not all object ids in the ObjectList are unique."
+
+
+def assert_empty_object(obj, object_type):
+    """Assert that an object is empty and of the given type."""
+    assert isinstance(obj, object_type)
+    assert obj == {}, "Dict representaton of the object should be empty."
+    assert obj.resource is None, "A resource property should not be available."
+    assert obj.id is None, "An id resource property should not be available."

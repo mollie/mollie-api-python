@@ -51,7 +51,10 @@ class Capture(ObjectBase):
         """Return the shipment for this capture."""
         url = self._get_link("shipment")
         if url:
-            return self.client.shipments.from_url(url)
+            from ..resources import OrderShipments
+
+            # We fake the order object here, since it is not used by from_url()
+            return OrderShipments(self.client, order=None).from_url(url)
 
     @property
     def settlement(self):

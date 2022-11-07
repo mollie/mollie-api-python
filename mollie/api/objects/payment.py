@@ -1,11 +1,12 @@
+from ..resources import PaymentCaptures, PaymentChargebacks
 from .base import ObjectBase
-from .list import ObjectList
+from .customer import Customer
 
 
 class Payment(ObjectBase):
     @classmethod
     def get_resource_class(cls, client):
-        from ..resources.payments import Payments
+        from ..resources import Payments
 
         return Payments(client)
 
@@ -144,10 +145,6 @@ class Payment(ObjectBase):
         return self._get_property("mandateId")
 
     @property
-    def subscription_id(self):
-        return self._get_property("subscriptionId")
-
-    @property
     def order_id(self):
         return self._get_property("orderId")
 
@@ -180,24 +177,19 @@ class Payment(ObjectBase):
     @property
     def refunds(self):
         """Return the refunds related to this payment."""
-        if not self.has_refunds():
-            return ObjectList({}, None)
-        return self.client.payment_refunds.on(self).list()
+        from ..resources import PaymentRefunds
+
+        return PaymentRefunds(self.client, self)
 
     @property
     def chargebacks(self):
         """Return the chargebacks related to this payment."""
-        if not self.has_chargebacks():
-            return ObjectList({}, None)
-        return self.client.payment_chargebacks.on(self).list()
+        return PaymentChargebacks(self.client, self)
 
     @property
     def captures(self):
         """Return the captures related to this payment"""
-        if not self.has_captures():
-            return ObjectList({}, None)
-
-        return self.client.captures.on(self).list()
+        return PaymentCaptures(self.client, self)
 
     @property
     def settlement(self):
@@ -209,13 +201,22 @@ class Payment(ObjectBase):
     def mandate(self):
         """Return the mandate for this payment."""
         if self.customer_id and self.mandate_id:
-            return self.client.customer_mandates.with_parent_id(self.customer_id).get(self.mandate_id)
+            # Setup a minimal Customer object without querying the API.
+            customer = Customer({"id": self.customer_id}, self.client)
+            return customer.mandates.get(self.mandate_id)
 
     @property
     def subscription(self):
-        """Return the subscription for this payment."""
-        if self.customer_id and self.subscription_id:
-            return self.client.customer_subscriptions.with_parent_id(self.customer_id).get(self.subscription_id)
+        """
+        Return the subscription for this payment.
+
+        This is only available for recurring payments.
+        """
+        url = self._get_link("subscription")
+        if url:
+            from ..resources import CustomerSubscriptions
+
+            return CustomerSubscriptions(self.client, customer=None).from_url(url)
 
     @property
     def customer(self):

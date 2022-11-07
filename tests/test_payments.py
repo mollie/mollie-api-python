@@ -61,8 +61,9 @@ def test_cancel_payment(client, response):
 
 def test_cancel_payment_invalid_id(client):
     """Verify that an invalid payment id is validated and an error is raised."""
-    with pytest.raises(IdentifierError):
+    with pytest.raises(IdentifierError) as excinfo:
         client.payments.delete("invalid")
+    assert str(excinfo.value) == "Invalid payment ID 'invalid', it should start with 'tr_'."
 
 
 def test_get_single_payment(client, response):
@@ -131,13 +132,19 @@ def test_get_single_payment(client, response):
     assert payment.has_sequence_type_recurring() is True
 
 
+def test_get_payment_invalid_id(client):
+    with pytest.raises(IdentifierError) as excinfo:
+        client.payments.get("invalid")
+    assert str(excinfo.value) == "Invalid payment ID 'invalid', it should start with 'tr_'."
+
+
 def test_payment_get_related_refunds(client, response):
     """Retrieve a list of refunds related to a payment."""
     response.get(f"https://api.mollie.com/v2/payments/{PAYMENT_ID}", "payment_single")
     response.get(f"https://api.mollie.com/v2/payments/{PAYMENT_ID}/refunds", "refunds_list")
 
     payment = client.payments.get(PAYMENT_ID)
-    refunds = payment.refunds
+    refunds = payment.refunds.list()
     assert_list_object(refunds, Refund)
 
 
@@ -147,17 +154,17 @@ def test_payment_get_related_chargebacks(client, response):
     response.get(f"https://api.mollie.com/v2/payments/{PAYMENT_ID}/chargebacks", "chargebacks_list")
 
     payment = client.payments.get(PAYMENT_ID)
-    chargebacks = payment.chargebacks
+    chargebacks = payment.chargebacks.list()
     assert_list_object(chargebacks, Chargeback)
 
 
 def test_payment_get_related_captures(client, response):
-    """Get captures related to payment id."""
+    """Get captures related to payment."""
     response.get(f"https://api.mollie.com/v2/payments/{PAYMENT_ID}", "payment_single")
     response.get(f"https://api.mollie.com/v2/payments/{PAYMENT_ID}/captures", "captures_list")
 
     payment = client.payments.get(PAYMENT_ID)
-    captures = payment.captures
+    captures = payment.captures.list()
     assert_list_object(captures, Capture)
 
 
@@ -232,3 +239,10 @@ def test_update_payment(client, response):
     updated_payment = client.payments.update(PAYMENT_ID, data)
     assert isinstance(updated_payment, Payment)
     assert updated_payment.description == "Order #12346"
+
+
+def test_update_payment_invalid_id(client):
+    data = {}
+    with pytest.raises(IdentifierError) as excinfo:
+        client.payments.update("invalid", data)
+    assert str(excinfo.value) == "Invalid payment ID 'invalid', it should start with 'tr_'."

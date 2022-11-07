@@ -15,7 +15,7 @@
   "nextPaymentDate": "2016-09-01",
   "description": "Quarterly payment",
   "method": "ideal",
-  "mandateId": "mdt_38HS4fsS",
+  "mandateId": "mdt_h3gAaD5zP",
   "webhookUrl": "https://webshop.example.org/payments/webhook",
   "metadata": {"order_id": 1337},
   "_links": {

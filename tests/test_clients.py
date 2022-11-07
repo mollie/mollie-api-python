@@ -1,3 +1,6 @@
+import pytest
+
+from mollie.api.error import IdentifierError
 from mollie.api.objects.client import Client
 from mollie.api.objects.onboarding import Onboarding
 from mollie.api.objects.organization import Organization
@@ -24,6 +27,12 @@ def test_get_client(oauth_client, response):
     assert client.id == CLIENT_ID
     assert client.resource == "client"
     assert client.organisation_created_at == "2018-03-21T13:13:37+00:00"
+
+
+def test_get_client_invalid_id(oauth_client):
+    with pytest.raises(IdentifierError) as excinfo:
+        oauth_client.clients.get("invalid")
+    assert str(excinfo.value) == "Invalid client ID 'invalid', it should start with 'org_'."
 
 
 def test_client_get_organization(oauth_client, response):

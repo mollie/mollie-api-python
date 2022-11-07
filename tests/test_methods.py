@@ -35,3 +35,12 @@ def test_list_all_methods(client, response):
 
     methods = client.methods.all()
     assert_list_object(methods, Method)
+
+
+def test_list_methods_for_profile(oauth_client, response):
+    response.get("https://api.mollie.com/v2/profiles/me", "profile_single")
+    response.get("https://api.mollie.com/v2/methods?profileId=pfl_v9hTwCvYqw", "methods_list")
+
+    profile = oauth_client.profiles.get("me")
+    methods = oauth_client.methods.list(profileId=profile.id)
+    assert_list_object(methods, Method)

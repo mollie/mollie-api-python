@@ -1,3 +1,6 @@
+import pytest
+
+from mollie.api.error import IdentifierError
 from mollie.api.objects.organization import Organization
 
 ORGANIZATION_ID = "org_12345678"
@@ -44,3 +47,9 @@ def test_get_current_organization(oauth_client, response):
         "streetAndNumber": "Keizersgracht 313",
     }
     assert organization.dashboard == "https://mollie.com/dashboard/org_12345678"
+
+
+def test_get_organization_invalid_id(oauth_client):
+    with pytest.raises(IdentifierError) as excinfo:
+        oauth_client.organizations.get("invalid")
+    assert str(excinfo.value) == "Invalid organization ID 'invalid', it should start with 'org_'."

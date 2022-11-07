@@ -4,7 +4,7 @@ from .base import ObjectBase
 class Mandate(ObjectBase):
     @classmethod
     def get_resource_class(cls, client):
-        from ..resources.customer_mandates import CustomerMandates
+        from ..resources import CustomerMandates
 
         return CustomerMandates(client)
 

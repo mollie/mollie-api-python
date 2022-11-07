@@ -1,20 +1,22 @@
-from ..error import IdentifierError
 from ..objects.payment_link import PaymentLink
-from .base import ResourceBase, ResourceCreateMixin, ResourceGetMixin, ResourceListMixin
+from .base import ResourceCreateMixin, ResourceGetMixin, ResourceListMixin
+
+__all__ = [
+    "PaymentLinks",
+]
 
 
-class PaymentLinks(ResourceBase, ResourceCreateMixin, ResourceGetMixin, ResourceListMixin):
+class PaymentLinks(ResourceCreateMixin, ResourceGetMixin, ResourceListMixin):
+    """Resource handler for the `/payment_links` endpoint."""
+
     RESOURCE_ID_PREFIX = "pl_"
 
-    def get_resource_object(self, result):
-        return PaymentLink(result, self.client)
-
-    def get_resource_name(self):
+    def get_resource_path(self) -> str:
         return "payment-links"
 
-    def get(self, payment_link_id, **params):
-        if not payment_link_id or not payment_link_id.startswith(self.RESOURCE_ID_PREFIX):
-            raise IdentifierError(
-                f"Invalid payment ID: '{payment_link_id}'. A payment ID should start with '{self.RESOURCE_ID_PREFIX}'."
-            )
-        return super().get(payment_link_id, **params)
+    def get_resource_object(self, result) -> PaymentLink:
+        return PaymentLink(result, self.client)  # type: ignore
+
+    def get(self, resource_id: str, **params):
+        self.validate_resource_id(resource_id, "payment link ID")
+        return super().get(resource_id, **params)

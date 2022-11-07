@@ -1,28 +1,44 @@
-from ..error import IdentifierError
 from ..objects.capture import Capture
-from .base import ResourceBase, ResourceGetMixin, ResourceListMixin
+from .base import ResourceGetMixin, ResourceListMixin
+
+__all__ = [
+    "PaymentCaptures",
+    "SettlementCaptures",
+]
 
 
-class Captures(ResourceBase, ResourceGetMixin, ResourceListMixin):
+class CapturesBase:
     RESOURCE_ID_PREFIX = "cpt_"
 
-    def get_resource_object(self, result):
-        return Capture(result, self.client)
+    def get_resource_object(self, result: dict) -> Capture:
+        return Capture(result, self.client)  # type: ignore
 
-    def get_resource_name(self):
-        return f"payments/{self.payment_id}/captures"
 
-    def get(self, capture_id, **params):
-        """Verify the capture ID and retrieve the capture from the API."""
-        if not capture_id or not capture_id.startswith(self.RESOURCE_ID_PREFIX):
-            raise IdentifierError(
-                f"Invalid capture ID: '{capture_id}'. A capture ID should start with '{self.RESOURCE_ID_PREFIX}'."
-            )
-        return super().get(capture_id, **params)
+class PaymentCaptures(CapturesBase, ResourceGetMixin, ResourceListMixin):
+    """Resource handler for the `/payments/:payment_id:/captures` endpoint."""
 
-    def with_parent_id(self, payment_id):
-        self.payment_id = payment_id
-        return self
+    _payment = None
 
-    def on(self, payment):
-        return self.with_parent_id(payment.id)
+    def __init__(self, client, payment):
+        self._payment = payment
+        super().__init__(client)
+
+    def get_resource_path(self) -> str:
+        return f"payments/{self._payment.id}/captures"  # type:ignore
+
+    def get(self, resource_id: str, **params):
+        self.validate_resource_id(resource_id, "capture ID")
+        return super().get(resource_id, **params)
+
+
+class SettlementCaptures(CapturesBase, ResourceListMixin):
+    """Resource handler for the `/settlements/:settlement_id:/captures` endpoint."""
+
+    _settlement = None
+
+    def __init__(self, client, settlement):
+        self._settlement = settlement
+        super().__init__(client)
+
+    def get_resource_path(self) -> str:
+        return f"settlements/{self._settlement.id}/captures"  # type:ignore

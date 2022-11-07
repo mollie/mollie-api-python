@@ -27,6 +27,7 @@ mollie_api_python.egg-info: virtualenv
 .PHONY: test
 test: develop
 	$(PYTHON) -m flake8
+	$(PYTHON) -m mypy --config mypy.ini mollie/
 	$(PYTHON) -m pytest
 	$(PYTHON) -m safety check
 
