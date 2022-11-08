@@ -32,7 +32,6 @@ def test_get_customer_subscription(client, response):
         f"https://api.mollie.com/v2/customers/{CUSTOMER_ID}/subscriptions/{SUBSCRIPTION_ID}",
         "subscription_single",
     )
-    response.get(f"https://api.mollie.com/v2/customers/{CUSTOMER_ID}/mandates/{MANDATE_ID}", "customer_mandate_single")
 
     customer = client.customers.get(CUSTOMER_ID)
     subscription = customer.subscriptions.get(SUBSCRIPTION_ID)
@@ -52,8 +51,6 @@ def test_get_customer_subscription(client, response):
     assert subscription.start_date == "2016-06-01"
     assert subscription.next_payment_date == "2016-09-01"
     assert subscription.canceled_at is None
-    assert subscription.customer is not None
-    assert subscription.mandate is not None
     assert subscription.metadata == {"order_id": 1337}
     assert subscription.application_fee is None
     assert subscription.is_active() is True
@@ -82,8 +79,9 @@ def test_customer_subscription_get_related_customer(client, response):
 
     customer = client.customers.get(CUSTOMER_ID)
     subscription = customer.subscriptions.get(SUBSCRIPTION_ID)
-    assert isinstance(subscription.customer, Customer)
-    assert subscription.customer.id == CUSTOMER_ID
+    related_customer = subscription.get_customer()
+    assert isinstance(related_customer, Customer)
+    assert related_customer.id == CUSTOMER_ID == customer.id
 
 
 def test_customer_subscription_get_related_profile(client, response):
@@ -96,7 +94,7 @@ def test_customer_subscription_get_related_profile(client, response):
 
     customer = client.customers.get(CUSTOMER_ID)
     subscription = customer.subscriptions.get(SUBSCRIPTION_ID)
-    profile = subscription.profile
+    profile = subscription.get_profile()
     assert isinstance(profile, Profile)
     assert profile.id == PROFILE_ID
 
@@ -111,7 +109,7 @@ def test_customer_subscription_get_related_mandate(client, response):
 
     customer = client.customers.get(CUSTOMER_ID)
     subscription = customer.subscriptions.get(SUBSCRIPTION_ID)
-    mandate = subscription.mandate
+    mandate = subscription.get_mandate()
     assert isinstance(mandate, Mandate)
     assert mandate.id == MANDATE_ID
 

@@ -40,7 +40,7 @@ def test_client_get_organization(oauth_client, response):
     response.get(f"https://api.mollie.com/v2/organizations/{CLIENT_ID}", "organization_single")
 
     client = oauth_client.clients.get(CLIENT_ID)
-    organization = client.organization
+    organization = client.get_organization()
     assert isinstance(organization, Organization)
 
 
@@ -49,5 +49,5 @@ def test_client_get_onboarding(oauth_client, response):
     response.get(f"https://api.mollie.com/v2/onboarding/{CLIENT_ID}", "onboarding_single")
 
     client = oauth_client.clients.get(CLIENT_ID)
-    onboarding = client.onboarding
+    onboarding = client.get_onboarding()
     assert isinstance(onboarding, Onboarding)

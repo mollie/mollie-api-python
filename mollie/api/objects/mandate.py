@@ -56,8 +56,7 @@ class Mandate(ObjectBase):
         """Check if the mandate is invalid."""
         return self.status == self.STATUS_INVALID
 
-    @property
-    def customer(self):
+    def get_customer(self):
         """Return the customer for this mandate."""
         url = self._get_link("customer")
         if url:

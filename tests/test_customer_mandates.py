@@ -45,7 +45,6 @@ def test_get_customer_mandate(client, response):
     assert mandate.is_pending() is False
     assert mandate.is_valid() is True
     assert mandate.is_invalid() is False
-    assert mandate.customer is not None
 
 
 def test_get_customer_mandate_invalid_id(client, response):
@@ -67,8 +66,9 @@ def test_customer_mandate_get_related_customer(client, response):
 
     customer = client.customers.get(CUSTOMER_ID)
     mandate = customer.mandates.get(MANDATE_ID)
-    assert isinstance(mandate.customer, Customer)
-    assert mandate.customer.id == CUSTOMER_ID
+    customer = mandate.get_customer()
+    assert isinstance(customer, Customer)
+    assert customer.id == CUSTOMER_ID
 
 
 def test_create_customer_mandate(client, response):

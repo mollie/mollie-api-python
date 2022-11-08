@@ -40,8 +40,7 @@ class Shipment(ObjectBase):
         }
         return ObjectList(result, OrderLine, self.client)
 
-    @property
-    def order(self):
+    def get_order(self):
         """Return the order of this shipment."""
         return self.client.orders.get(self.order_id)
 

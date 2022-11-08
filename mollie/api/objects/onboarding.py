@@ -36,13 +36,6 @@ class Onboarding(ObjectBase):
     def can_receive_settlements(self):
         return self._get_property("canReceiveSettlements")
 
-    @property
-    def organization(self):
-        """Retrieve organization for an onboarding."""
-        url = self._get_link("organization")
-        if url:
-            return self.client.organizations.from_url(url)
-
     def is_needs_data(self):
         return self.status == self.STATUS_NEEDS_DATA
 
@@ -51,3 +44,9 @@ class Onboarding(ObjectBase):
 
     def is_completed(self):
         return self.status == self.STATUS_COMPLETED
+
+    def get_organization(self):
+        """Retrieve the related organization."""
+        url = self._get_link("organization")
+        if url:
+            return self.client.organizations.from_url(url)

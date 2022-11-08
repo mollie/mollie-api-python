@@ -191,22 +191,19 @@ class Payment(ObjectBase):
         """Return the captures related to this payment"""
         return PaymentCaptures(self.client, self)
 
-    @property
-    def settlement(self):
+    def get_settlement(self):
         """Return the settlement for this payment."""
         if self.settlement_id:
             return self.client.settlements.get(self.settlement_id)
 
-    @property
-    def mandate(self):
+    def get_mandate(self):
         """Return the mandate for this payment."""
         if self.customer_id and self.mandate_id:
             # Setup a minimal Customer object without querying the API.
             customer = Customer({"id": self.customer_id}, self.client)
             return customer.mandates.get(self.mandate_id)
 
-    @property
-    def subscription(self):
+    def get_subscription(self):
         """
         Return the subscription for this payment.
 
@@ -218,14 +215,12 @@ class Payment(ObjectBase):
 
             return CustomerSubscriptions(self.client, customer=None).from_url(url)
 
-    @property
-    def customer(self):
+    def get_customer(self):
         """Return the customer for this payment."""
         if self.customer_id:
             return self.client.customers.get(self.customer_id)
 
-    @property
-    def order(self):
+    def get_order(self):
         """Return the order for this payment."""
         url = self._get_link("order")
         if url:

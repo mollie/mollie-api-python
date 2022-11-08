@@ -34,7 +34,6 @@ def test_get_shipment(client, response):
     assert shipment.has_tracking_url() is True
     assert shipment.tracking_url == "http://postnl.nl/tracktrace/?B=3SKABA000000000&P=1016EE&D=NL&T=C"
     assert_list_object(shipment.lines, OrderLine)
-    assert isinstance(shipment.order, Order)
 
 
 def test_create_shipment(client, response):
@@ -107,3 +106,14 @@ def test_update_shipment_invalid_id(client, response):
     with pytest.raises(IdentifierError) as excinfo:
         order.shipments.update("invalid", data)
     assert str(excinfo.value) == "Invalid shipment ID 'invalid', it should start with 'shp_'."
+
+
+def test_shipment_get_related_order(client, response):
+    response.get(f"https://api.mollie.com/v2/orders/{ORDER_ID}", "order_single")
+    response.get(f"https://api.mollie.com/v2/orders/{ORDER_ID}/shipments/{SHIPMENT_ID}", "shipment_single")
+
+    order = client.orders.get(ORDER_ID)
+    shipment = order.shipments.get(SHIPMENT_ID)
+    related_order = shipment.get_order()
+    assert isinstance(related_order, Order)
+    assert related_order.id == related_order.id

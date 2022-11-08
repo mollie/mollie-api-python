@@ -1,6 +1,5 @@
 import re
 
-from ..error import DataConsistencyError
 from .base import ObjectBase
 
 
@@ -40,22 +39,27 @@ class Chargeback(ObjectBase):
         return self._get_property("paymentId")
 
     @property
-    def payment(self):
-        """Return the Payment object related to this chargeback."""
-        # TODO Use the embedded payment data, if available.
-        return self.client.payments.get(self.payment_id)
+    def settlement_id(self):
+        """
+        Return the settlement ID.
 
-    @property
-    def settlement(self):
-        """Return the Settlement object related to this chargeback, if available."""
+        It is extracted from the settlement link, since the id is not available as a real property.
+        """
         url = self._get_link("settlement")
         if not url:
             return None
 
-        match = re.search(r"settlements/(stl_[a-zA-Z0-9]+)$", url)
-        if not match:
-            # This should never happen
-            raise DataConsistencyError("Unable to extract the settlementId from settlement URL.")  # pragma: no cover
+        match = re.findall(r"/settlements/(stl_\w+)$", url)
+        if match:
+            return match[0]
 
-        settlement_id = match.group(1)
-        return self.client.settlements.get(settlement_id)
+    def get_payment(self):
+        """Return the Payment object related to this chargeback."""
+        # TODO Use the embedded payment data, if available.
+        return self.client.payments.get(self.payment_id)
+
+    def get_settlement(self):
+        """Return the Settlement object related to this chargeback, if available."""
+        settlement_id = self.settlement_id
+        if settlement_id is not None:
+            return self.client.settlements.get(settlement_id)

@@ -40,14 +40,12 @@ class Capture(ObjectBase):
     def created_at(self):
         return self._get_property("createdAt")
 
-    @property
-    def payment(self):
+    def get_payment(self):
         """Return the payment for this capture."""
-        # TODO Use the embedded payment data, if avalable.
+        # TODO Use the embedded payment data, if available.
         return self.client.payments.get(self.payment_id)
 
-    @property
-    def shipment(self):
+    def get_shipment(self):
         """Return the shipment for this capture."""
         url = self._get_link("shipment")
         if url:
@@ -56,7 +54,6 @@ class Capture(ObjectBase):
             # We fake the order object here, since it is not used by from_url()
             return OrderShipments(self.client, order=None).from_url(url)
 
-    @property
-    def settlement(self):
+    def get_settlement(self):
         """Return the settlement for this capture."""
         return self.client.settlements.get(self.settlement_id)

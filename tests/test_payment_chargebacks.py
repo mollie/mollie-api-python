@@ -22,11 +22,10 @@ def test_list_payment_chargebacks(client, response):
     assert_list_object(chargebacks, Chargeback)
 
 
-def test_get_single_payment_chargeback(client, response):
+def test_get_payment_chargeback(client, response):
     """Get a single chargeback relevant to a payment."""
     response.get(f"https://api.mollie.com/v2/payments/{PAYMENT_ID}", "payment_single")
     response.get(f"https://api.mollie.com/v2/payments/{PAYMENT_ID}/chargebacks/{CHARGEBACK_ID}", "chargeback_single")
-    response.get(f"https://api.mollie.com/v2/settlements/{SETTLEMENT_ID}", "settlement_single")
 
     payment = client.payments.get(PAYMENT_ID)
     chargeback = payment.chargebacks.get(CHARGEBACK_ID)
@@ -38,8 +37,6 @@ def test_get_single_payment_chargeback(client, response):
     assert chargeback.reason is None
     assert chargeback.reversed_at == "2018-03-14T17:00:55.0Z"
     assert chargeback.payment_id == PAYMENT_ID
-    assert isinstance(chargeback.payment, Payment)
-    assert isinstance(chargeback.settlement, Settlement)
 
 
 def test_get_payment_chargeback_invalid_id(client, response):
@@ -49,3 +46,26 @@ def test_get_payment_chargeback_invalid_id(client, response):
     with pytest.raises(IdentifierError) as excinfo:
         payment.chargebacks.get("invalid")
     assert str(excinfo.value) == "Invalid chargeback ID 'invalid', it should start with 'chb_'."
+
+
+def test_payment_chargeback_get_related_payment(client, response):
+    response.get(f"https://api.mollie.com/v2/payments/{PAYMENT_ID}", "payment_single")
+    response.get(f"https://api.mollie.com/v2/payments/{PAYMENT_ID}/chargebacks/{CHARGEBACK_ID}", "chargeback_single")
+
+    payment = client.payments.get(PAYMENT_ID)
+    chargeback = payment.chargebacks.get(CHARGEBACK_ID)
+    related_payment = chargeback.get_payment()
+    assert isinstance(related_payment, Payment)
+    assert related_payment.id == payment.id == PAYMENT_ID
+
+
+def test_payment_chargeback_get_related_settlement(client, response):
+    response.get(f"https://api.mollie.com/v2/payments/{PAYMENT_ID}", "payment_single")
+    response.get(f"https://api.mollie.com/v2/payments/{PAYMENT_ID}/chargebacks/{CHARGEBACK_ID}", "chargeback_single")
+    response.get(f"https://api.mollie.com/v2/settlements/{SETTLEMENT_ID}", "settlement_single")
+
+    payment = client.payments.get(PAYMENT_ID)
+    chargeback = payment.chargebacks.get(CHARGEBACK_ID)
+    related_settlement = chargeback.get_settlement()
+    assert isinstance(related_settlement, Settlement)
+    assert related_settlement.id == SETTLEMENT_ID

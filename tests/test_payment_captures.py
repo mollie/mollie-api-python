@@ -58,7 +58,7 @@ def test_capture_get_related_payment(client, response):
 
     payment = client.payments.get(PAYMENT_ID)
     capture = payment.captures.get(CAPTURE_ID)
-    payment = capture.payment
+    payment = capture.get_payment()
     assert isinstance(payment, Payment)
     assert payment.id == PAYMENT_ID
 
@@ -71,7 +71,7 @@ def test_capture_get_related_shipment(client, response):
 
     payment = client.payments.get(PAYMENT_ID)
     capture = payment.captures.get(CAPTURE_ID)
-    shipment = capture.shipment
+    shipment = capture.get_shipment()
     assert isinstance(shipment, Shipment)
     assert shipment.id == SHIPMENT_ID
 
@@ -84,5 +84,5 @@ def test_capture_get_related_settlement(client, response):
 
     payment = client.payments.get(PAYMENT_ID)
     capture = payment.captures.get(CAPTURE_ID)
-    settlement = capture.settlement
+    settlement = capture.get_settlement()
     assert isinstance(settlement, Settlement)

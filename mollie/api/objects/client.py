@@ -24,8 +24,7 @@ class Client(ObjectBase):
 
     # documented _links
 
-    @property
-    def organization(self):
+    def get_organization(self):
         """Return the client’s organization. Only available when the include could have been used."""
         url = self._get_link("organization")
         if url:
@@ -33,8 +32,7 @@ class Client(ObjectBase):
         else:
             return None
 
-    @property
-    def onboarding(self):
+    def get_onboarding(self):
         """Return the client’s onboarding status. Only available when the include could have been used."""
         url = self._get_link("onboarding")
         if url:
