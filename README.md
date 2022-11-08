@@ -21,6 +21,9 @@ To use the Mollie API client, the following things are required:
 + Up-to-date OpenSSL (or other SSL/TLS toolkit)
 + Mollie API client for Python has a dependency on [Requests](http://docs.python-requests.org/en/master/) and [Requests-OAuthlib](https://requests-oauthlib.readthedocs.io/en/latest/)
 
+## Migration to v3 ##
+If your application uses a recent v2 version of the Mollie API client and you're ready to migrate to v3, [read all about the API changes](https://github.com/mollie/mollie-api-python/blob/master/v3-api-changes.md) that we made. Use the docs to quickly find how to update your integration code and use the v3 client correctly.
+
 ## Installation ##
 **Please note:** If you want to install an older version of the Mollie API client (current major version is `v3`), then please refer to their respective github branches for installation instructions:
 - version 2.x.x is available from the [v2-develop branch](https://github.com/mollie/mollie-api-python/tree/v2-develop).
