@@ -279,7 +279,7 @@ def test_client_default_user_agent(client, response):
 
 def test_oauth_client_default_user_agent(oauth_client, response):
     """Default user-agent should contain some known values."""
-    regex = re.compile(r"^Mollie/[\d\.]+ Python/[\w\.\+]+ OpenSSL/[\w\.]+ OAuth/2.0$")
+    regex = re.compile(r"^Mollie/[\d\.]+ Python/[\w\.\+]+ OpenSSL/[\w\.]+ OAuth/2\.0$")
     assert re.match(regex, oauth_client.user_agent)
 
     # perform a request and inpect the actual used headers
