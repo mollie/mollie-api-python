@@ -81,7 +81,7 @@ def get_public_url():
     try:
         url = os.environ["MOLLIE_PUBLIC_URL"]
     except KeyError:
-        url = flask.flask.request.url_root
+        url = flask.request.url_root
 
     if not url.endswith("/"):
         return f"{url}/"

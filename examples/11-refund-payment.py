@@ -38,7 +38,7 @@ def main():
             and float(payment.amount_remaining["value"]) >= 2.0
         ):
             data = {"amount": {"value": "2.00", "currency": "EUR"}}
-            refund = mollie_client.payment_refunds.with_parent_id(payment_id).create(data)
+            refund = payment.refunds.create(data)
             body += f'<p>{refund.amount["currency"]} {refund.amount["value"]} of payment {payment_id} refunded</p>'
         else:
             body += f"<p>Payment {payment_id} can not be refunded</p>"

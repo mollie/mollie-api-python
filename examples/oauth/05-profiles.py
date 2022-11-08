@@ -23,8 +23,8 @@ def main(client):
         # https://docs.mollie.com/reference/v2/profiles-api/get-profile
 
         body += "<h1>Get profile</h1>"
-        response = client.profiles.get(profile_id)
-        body += str(response)
+        profile = client.profiles.get(profile_id)
+        body += str(profile)
 
         # https://docs.mollie.com/reference/v2/profiles-api/update-profile
 
@@ -42,13 +42,13 @@ def main(client):
 
         body += "<h1>Enable payment method</h1>"
         profile = client.profiles.get(profile_id)
-        response = client.profile_methods.on(profile, "bancontact").create()
+        response = profile.methods.enable("bancontact")
         body += str(response)
 
         # https://docs.mollie.com/reference/v2/profiles-api/disable-method
 
         body += "<h1>Disable payment method</h1>"
-        response = client.profile_methods.on(profile, "bancontact").delete()
+        response = profile.methods.disable("bancontact")
         body += str(response)
 
         # https://docs.mollie.com/reference/v2/profiles-api/list-profiles

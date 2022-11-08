@@ -25,19 +25,22 @@ def main():
         body = "<p>Attempting to retrieve the first page of orders, and grabbing the first.</p>"
         order = next(mollie_client.orders.list())
 
-        if not len(order.shipments):
+        shipments = order.shipments.list()
+        if not len(shipments):
             body += "<p>You have no shipments. You can create one from the examples.</p>"
             return body
 
         body = "<p>Attempting to retrieve the first page of shipments if your order, and grabbing the first.</p>"
-        shipment = next(order.shipments)
+        shipment = next(shipments)
 
-        tracking = {
-            "carrier": "PostNL",
-            "code": "3SKABA000000000",
-            "url": "http://postnl.nl/tracktrace/?B=3SKABA000000000&P=1016EE&D=NL&T=C",
+        data = {
+            "tracking": {
+                "carrier": "PostNL",
+                "code": "3SKABA000000000",
+                "url": "http://postnl.nl/tracktrace/?B=3SKABA000000000&P=1016EE&D=NL&T=C",
+            }
         }
-        shipment = order.update_shipment(shipment.id, tracking)
+        shipment = order.shipments.update(shipment.id, data)
 
         body += f"Shipment {shipment.id} for order {order.id}:"
         body += "Tracking information updated:"

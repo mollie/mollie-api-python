@@ -48,7 +48,11 @@ def main():
             body += "<tr>"
             body += f"<td>{order.id}</td>"
             body += f'<td>{order.billing_address["givenName"]} {order.billing_address["familyName"]}</td>'
-            body += f'<td>{order.shipping_address["givenName"]} {order.shipping_address["familyName"]}</td>'
+            body += str(order.shipping_address)
+            if order.shipping_address:
+                body += f'<td>{order.shipping_address["givenName"]} {order.shipping_address["familyName"]}</td>'
+            else:
+                body += "<td>No shipping address</td>"
             body += f'<td>{order.amount["currency"]} {order.amount["value"]}</td>'
             body += f'<td><a href="{order.checkout_url}" target="_blank">Pay order</a></td>'
             body += f'<td><a href="/14-cancel-order?order_id={order.id}">Cancel order</a></td>'

@@ -41,7 +41,7 @@ examples = [
 @app.route("/")
 def index():
     """
-    FLASK_APP=examples/oauth/app.py \
+    FLASK_APP=examples/oauth/oauth_app.py \
     MOLLIE_CLIENT_ID=your_client_id \
     MOLLIE_CLIENT_SECRET=your_client_secret \
     MOLLIE_PUBLIC_URL=https://your_domain.tld \
@@ -91,6 +91,7 @@ def index():
 
     if not authorized:
         body = "<h1>Your applications config panel</h1>"
+        body += "You need to setup OAuth first:<br>"
         body += f'<a href="{authorization_url}">{authorization_url}</a>'
         return body
     return redirect(url_for("examples_view"))
@@ -103,7 +104,7 @@ def callback(*args, **kwargs):
     url = request.url.replace("http", "https")  # This fakes httpS. DONT DO THIS!
     client.setup_oauth_authorization_response(url)
     body = "<h1>Oauth client is setup</h1>"
-    body += '<a href="/examples">Examples</a></p>'
+    body += '<a href="/examples/oauth">Examples</a></p>'
     return body
 
 
@@ -111,7 +112,7 @@ def callback(*args, **kwargs):
 def examples_view():
     body = "<h1>Examples</h1><ul>"
     for example in examples:
-        body += f'<li><a href="/{example}">{example}</a></li>'
+        body += f'<li><a href="{example}">{example}</a></li>'
     body += "</ul>"
     return body
 

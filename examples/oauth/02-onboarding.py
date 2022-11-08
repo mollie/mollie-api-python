@@ -14,7 +14,7 @@ def main(client):
 
         body += "<h1>Submit onboarding data</h1>"
         data = {"profile": {"categoryCode": "6012"}}
-        onboarding = client.onboarding.create(resource_id="me", data=data)
+        onboarding = client.onboarding.create(data)
         body += str(onboarding)
 
         return body

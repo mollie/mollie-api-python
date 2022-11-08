@@ -8,10 +8,10 @@ def main(client):
         # https://docs.mollie.com/reference/v2/settlements-api/list-settlements
 
         body += "<h1>List settlements</h1>"
-        response = client.settlements.list()
-        body += str(response)
+        settlements = client.settlements.list()
+        body += str(settlements)
 
-        settlement_id = next(response).id
+        settlement_id = next(settlements).id
 
         # https://docs.mollie.com/reference/v2/settlements-api/get-settlement
 
@@ -52,7 +52,6 @@ def main(client):
         # https://docs.mollie.com/reference/v2/settlements-api/list-settlement-captures
 
         body += "<h1>List settlement captures</h1>"
-        settlement = client.settlements.get(settlement_id)
         response = settlement.captures.list()
         body += str(response)
 
