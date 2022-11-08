@@ -22,7 +22,9 @@ To use the Mollie API client, the following things are required:
 + Mollie API client for Python has a dependency on [Requests](http://docs.python-requests.org/en/master/) and [Requests-OAuthlib](https://requests-oauthlib.readthedocs.io/en/latest/)
 
 ## Installation ##
-**Please note:** If you are looking to install the v1 version of the Mollie API client, please refer to the [v1-develop branch](https://github.com/mollie/mollie-api-python/tree/v1-develop) for installation instructions.
+**Please note:** If you want to install an older version of the Mollie API client (current major version is `v3`), then please refer to their respective github branches for installation instructions:
+- version 2.x.x is available from the [v2-develop branch](https://github.com/mollie/mollie-api-python/tree/v2-develop).
+- version 1.x.x is available from the [v1-develop branch](https://github.com/mollie/mollie-api-python/tree/v1-develop).
 
 By far the easiest way to install the Mollie API client is to install it with [pip](https://pip.pypa.io). The command below will install the latest released version of the client.
 ```shell
