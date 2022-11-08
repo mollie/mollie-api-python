@@ -265,9 +265,17 @@ def test_client_will_propagate_retry_setting(response):
     assert adapter.max_retries.connect == 3
 
 
+def test_client_version_is_pep440_compatible(client):
+    # PEP 440 specifies how python package versioning needs to look: https://peps.python.org/pep-0440
+    # Below is the regular expression from PEP 440, Appendix B, for canonical versions.
+    regex = r"^([1-9][0-9]*!)?(0|[1-9][0-9]*)(\.(0|[1-9][0-9]*))*((a|b|rc)(0|[1-9][0-9]*))?(\.post(0|[1-9][0-9]*))?(\.dev(0|[1-9][0-9]*))?$"  # noqa: E501
+    assert re.match(regex, client.CLIENT_VERSION), "Client version does not match PEP 440 specification"
+
+
 def test_client_default_user_agent(client, response):
     """Default user-agent should contain some known values."""
-    regex = re.compile(r"^Mollie/[\d\.]+ Python/[\w\.\+]+ OpenSSL/[\w\.]+$")
+    version = re.escape(client.CLIENT_VERSION)
+    regex = re.compile(rf"^Mollie/{version} Python/[\w\.\+]+ OpenSSL/[\w\.]+$")
     assert re.match(regex, client.user_agent)
 
     # perform a request and inpect the actual used headers
@@ -279,7 +287,8 @@ def test_client_default_user_agent(client, response):
 
 def test_oauth_client_default_user_agent(oauth_client, response):
     """Default user-agent should contain some known values."""
-    regex = re.compile(r"^Mollie/[\d\.]+ Python/[\w\.\+]+ OpenSSL/[\w\.]+ OAuth/2\.0$")
+    version = re.escape(oauth_client.CLIENT_VERSION)
+    regex = re.compile(rf"^Mollie/{version} Python/[\w\.\+]+ OpenSSL/[\w\.]+ OAuth/2\.0$")
     assert re.match(regex, oauth_client.user_agent)
 
     # perform a request and inpect the actual used headers
