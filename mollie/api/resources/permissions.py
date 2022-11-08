@@ -17,7 +17,6 @@ class Permissions(ResourceGetMixin, ResourceListMixin):
 
     @staticmethod
     def validate_permission_id(permission_id: str):
-        # TODO Maybe we should just include a list of supported permissions?
         if not permission_id or not bool(re.match(r"^[a-z]+\.[a-z]+$", permission_id)):
             raise IdentifierError(f"Invalid permission ID: '{permission_id}'. Does not match ^[a-z]+.[a-z]+$")
 
