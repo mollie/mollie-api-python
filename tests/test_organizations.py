@@ -13,6 +13,7 @@ def test_get_organization(oauth_client, response):
     organization = oauth_client.organizations.get(ORGANIZATION_ID)
     assert isinstance(organization, Organization)
     assert organization.id == ORGANIZATION_ID
+    assert organization.resource == "organization"
     assert organization.name == "Mollie B.V."
     assert organization.email == "info@mollie.com"
     assert organization.locale == "nl_NL"
