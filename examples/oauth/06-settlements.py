@@ -8,7 +8,7 @@ def main(client):
         # https://docs.mollie.com/reference/v2/settlements-api/list-settlements
 
         body += "<h1>List settlements</h1>"
-        settlements = client.settlements.list()
+        settlements = client.settlements.list(limit=10)
         body += str(settlements)
 
         settlement_id = next(settlements).id
@@ -34,25 +34,25 @@ def main(client):
         # https://docs.mollie.com/reference/v2/settlements-api/list-settlement-payments
 
         body += "<h1>List settlement payments</h1>"
-        response = settlement.payments.list()
+        response = settlement.payments.list(limit=10)
         body += str(response)
 
         # https://docs.mollie.com/reference/v2/settlements-api/list-settlement-refunds
 
         body += "<h1>List settlement refunds</h1>"
-        response = settlement.refunds.list()
+        response = settlement.refunds.list(limit=10)
         body += str(response)
 
         # https://docs.mollie.com/reference/v2/settlements-api/list-settlement-chargebacks
 
         body += "<h1>List settlement chargebacks</h1>"
-        response = settlement.chargebacks.list()
+        response = settlement.chargebacks.list(limit=10)
         body += str(response)
 
         # https://docs.mollie.com/reference/v2/settlements-api/list-settlement-captures
 
         body += "<h1>List settlement captures</h1>"
-        response = settlement.captures.list()
+        response = settlement.captures.list(limit=10)
         body += str(response)
 
         return body
