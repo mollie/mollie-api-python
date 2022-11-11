@@ -13,6 +13,10 @@ class Organization(ObjectBase):
         return self._get_property("id")
 
     @property
+    def resource(self):
+        return self._get_property("resource")
+
+    @property
     def name(self):
         return self._get_property("name")
 

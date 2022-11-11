@@ -8,14 +8,14 @@ def main(client):
 
         body = "<h1>Get onboarding status</h1>"
         onboarding = client.onboarding.get("me")
-        body += f"Status: <b>{onboarding.status}</b>"
+        body += f"Status: <b>{onboarding.name}, onboarding status = {onboarding.status}</b>"
 
         # https://docs.mollie.com/reference/v2/onboarding-api/submit-onboarding-data
 
         body += "<h1>Submit onboarding data</h1>"
         data = {"profile": {"categoryCode": "6012"}}
-        onboarding = client.onboarding.create(data)
-        body += str(onboarding)
+        result = client.onboarding.create(data)
+        body += str(result)
 
         return body
 

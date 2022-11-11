@@ -90,8 +90,8 @@ def index():
     )
 
     if not authorized:
-        body = "<h1>Your applications config panel</h1>"
-        body += "You need to setup OAuth first:<br>"
+        body = "<h1>Mollie OAuth examples: You need to setup OAuth first</h1>"
+        body += "Visit the Mollie OAuth flow to allow the examples app access to your data<br>"
         body += f'<a href="{authorization_url}">{authorization_url}</a>'
         return body
     return redirect(url_for("examples_view"))
@@ -101,10 +101,10 @@ def index():
 def callback(*args, **kwargs):
     global client
 
-    url = request.url.replace("http", "https")  # This fakes httpS. DONT DO THIS!
+    url = request.url.replace("http", "https")  # Fake https for the examples app only. DON'T DO THIS IN YOUR CODE!
     client.setup_oauth_authorization_response(url)
     body = "<h1>Oauth client is setup</h1>"
-    body += '<a href="/examples/oauth">Examples</a></p>'
+    body += '<a href="/examples">Examples</a></p>'
     return body
 
 

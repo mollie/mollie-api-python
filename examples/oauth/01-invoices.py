@@ -9,7 +9,10 @@ def main(client):
         # https://docs.mollie.com/reference/v2/invoices-api/list-invoices
 
         body = "<h1>List invoices</h1>"
-        body += str(client.invoices.list())
+        body += "<ul>"
+        for invoice in client.invoices.list(limit=10):
+            body += f"<li>{invoice.id}: {invoice.net_amount}<a href='{invoice.pdf}'>Download PDF</a></li>"
+        body += "</ul>"
 
         # https://docs.mollie.com/reference/v2/invoices-api/get-invoice
 
