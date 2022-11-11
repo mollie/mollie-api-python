@@ -82,9 +82,11 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}  # Provided by github actions, no need to configure
           tag: ${{ github.ref_name }}
-          name: Release ${{ github.ref_name }}
+          name: ${{ github.ref_name }}
           body: |
             Summary:
               - TODO
+
+            Install it: https://pypi.org/project/mollie-api-python/${{ github.ref_name }}
           draft: true
           artifacts: dist/*
