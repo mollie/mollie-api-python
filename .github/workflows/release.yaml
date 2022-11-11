@@ -34,7 +34,7 @@ jobs:
       - name: Save artifacts
         uses: actions/upload-artifact@v3
         with: 
-          name: packages-${{ github.ref }}
+          name: packages-${{ github.ref_name }}
           path: dist/*
 
   pypi-release:
@@ -55,7 +55,7 @@ jobs:
       - name: Download artifacts
         uses: actions/download-artifact@v3
         with:
-          name: packages-${{ github.ref }}
+          name: packages-${{ github.ref_name }}
           path: dist/
 
       - name: Upload packages
@@ -66,13 +66,13 @@ jobs:
 
   github-release:
     name: Create release on Github
-    needs: pypi-release
+    needs: build
     runs-on: ubuntu-latest
     steps:
       - name: Get packages
         uses: actions/download-artifact@v3
         with:
-          name: packages
+          name: packages-${{ github.ref_name }}
           path: dist/
 
       - name: Create new release
@@ -80,8 +80,8 @@ jobs:
         uses: ncipollo/release-action@v1
         with:
           token: ${{ secrets.GITHUB_TOKEN }}  # Provided by github actions, no need to configure
-          tag: ${{ github.ref }}
-          name: Release ${{ github.ref }}
+          tag: ${{ github.ref_name }}
+          name: Release ${{ github.ref_name }}
           body: |
             Summary:
               - TODO
