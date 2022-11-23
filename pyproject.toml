@@ -16,3 +16,9 @@ addopts = """
     --cov-report=term-missing
     --cov-branch
 """
+
+[tool.coverage.report]
+exclude_lines = [
+    "pragma: no cover",
+    "if TYPE_CHECKING:",
+]
