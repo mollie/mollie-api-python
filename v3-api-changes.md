@@ -4,6 +4,12 @@ This document describes the changes in the way certain endpoint paths are expose
 
 This warrants a major version change (i.e. we are releasing the changes as `v3.0`).
 
+## Table of contents
+
+ * [Problems with the v2 client API](#problems-with-the-v2-client-api)
+ * [Refactoring](#refactoring)
+ * [Overview of all documented API calls](#overview-of-all-documented-api-calls)
+ * [Other changes](#other-changes)
 
 ## Problems with the v2 client API
 
@@ -276,3 +282,38 @@ The Balances API is not supported yet in any client.
 | ------------|-----------------|-----------------|-------|
 | Get client | `client.clients.get(:client_id)` | `client.clients.get(:client_id)` | No changes |
 | List clients | `client.clients.list()` | `client.clients.list()` | No changes |
+
+
+# Other changes
+
+## Properties should not perform heavy operations
+
+In general, object properties are seen by developers as lightweight data accessors. They are supposed to be 'cheap'. In the `v2` codebase, several object properties actually performed API calls. Some of them are already addressed above, f.i. `Payment.refunds`, which has changed into `Payment.refunds.list()`. There are also other properties, which mainly returned single result objects, that not directly represent an API endpoint like the methods above. They are, for instance, based on the existance of a property in the `_links` section of an API response, like `Refund.payment`: the payment related to a refund. 
+
+In `v3`, all result object properties that perform API calls have been replaced with regular methods. Below you'll find a list of all of these properties, and the methods that have replaced them.
+
+
+| 2.x client property | New client method |
+|---------------------|-------------------|
+| `Capture.payment` | `Capture.get_payment()` |
+| `Capture.shipment` | `Capture.get_shipment()` |
+| `Capture.settlement` | `Capture.get_settlement()` |
+| `Chargeback.payment` | `Chargeback.get_payment()` |
+| `Chargeback.settlement` | `Chargeback.get_settlement()` |
+| `Client.organization` | `Client.get_organization()` |
+| `Client.onboarding` | `Client.get_onboarding()` |
+| `Mandate.customer` | `Client.get_customer()` |
+| `Onboarding.organization` | `Onboarding.get_organization()` |
+| `Payment.settlement` | `Payment.get_settlement()` |
+| `Payment.mandate` | `Payment.get_mandate()` |
+| `Payment.subscription` | `Payment.get_subscription()` |
+| `Payment.customer` | `Payment.get_customer()` |
+| `Payment.order` | `Payment.get_order()` |
+| `Refund.payment` | `Refund.get_payment()` |
+| `Refund.settlement` | `Refund.get_settlement()` |
+| `Refund.order` | `Refund.get_order()` |
+| `Settlement.invoice` | `Settlement.get_invoice()` |
+| `Shipment.order` | `Shipment.get_order()` |
+| `Subscription.customer` | `Subscription.get_customer()` |
+| `Subscription.profile` | `Subscription.get_profile()` |
+| `Subscription.mandate` | `Subscription.get_mandate()` |
