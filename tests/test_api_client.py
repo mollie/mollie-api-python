@@ -127,15 +127,29 @@ def test_client_generic_request_error(response, oauth_client):
 def test_client_invalid_create_data(client):
     """Invalid data for a create command should raise an error."""
     data = datetime.now()
-    with pytest.raises(RequestSetupError, match="Error encoding parameters into JSON"):
+    with pytest.raises(RequestSetupError) as excinfo:
         client.customers.create(data=data)
+    assert str(excinfo.value) == "Error encoding data into JSON: Object of type datetime is not JSON serializable."
+
+    # Also test with nested data
+    data = {"date": datetime.now()}
+    with pytest.raises(RequestSetupError) as excinfo:
+        client.customers.create(data=data)
+    assert str(excinfo.value) == "Error encoding data into JSON: Object of type datetime is not JSON serializable."
 
 
 def test_client_invalid_update_data(client):
     """Invalid data for a create command should raise an error."""
     data = datetime.now()
-    with pytest.raises(RequestSetupError, match="Error encoding parameters into JSON"):
+    with pytest.raises(RequestSetupError) as excinfo:
         client.customers.update("cst_12345", data=data)
+    assert str(excinfo.value) == "Error encoding data into JSON: Object of type datetime is not JSON serializable."
+
+    # Also test with nested data
+    data = {"date": datetime.now()}
+    with pytest.raises(RequestSetupError) as excinfo:
+        client.customers.update("cst_12345", data=data)
+    assert str(excinfo.value) == "Error encoding data into JSON: Object of type datetime is not JSON serializable."
 
 
 def test_client_invalid_json_response(client, response):
