@@ -1,7 +1,11 @@
-from typing import Optional
+from typing import TYPE_CHECKING, Any, Dict, Optional
 
+from ..objects.customer import Customer
 from ..objects.list import ObjectList
+from ..objects.order import Order
 from ..objects.payment import Payment
+from ..objects.profile import Profile
+from ..objects.subscription import Subscription
 from .base import (
     ResourceBase,
     ResourceCreateMixin,
@@ -10,6 +14,10 @@ from .base import (
     ResourceListMixin,
     ResourceUpdateMixin,
 )
+
+if TYPE_CHECKING:
+    from ..client import Client
+    from ..objects.settlement import Settlement
 
 __all__ = [
     "CustomerPayments",
@@ -21,13 +29,13 @@ __all__ = [
 ]
 
 
-class PaymentsBase:
-    RESOURCE_ID_PREFIX = "tr_"
+class PaymentsBase(ResourceBase):
+    RESOURCE_ID_PREFIX: str = "tr_"
 
     def get_resource_object(self, result: dict) -> Payment:
         from ..objects.payment import Payment
 
-        return Payment(result, self.client)  # type: ignore
+        return Payment(result, self.client)
 
 
 class Payments(
@@ -35,11 +43,11 @@ class Payments(
 ):
     """Resource handler for the `/payments` endpoint."""
 
-    def get(self, resource_id: str, **params):
+    def get(self, resource_id: str, **params: Optional[Dict[str, Any]]) -> Payment:
         self.validate_resource_id(resource_id, "payment ID")
         return super().get(resource_id, **params)
 
-    def delete(self, resource_id: str, **params):
+    def delete(self, resource_id: str, **params: Optional[Dict[str, Any]]) -> dict:
         """Cancel payment and return the payment object.
 
         Deleting a payment causes the payment status to change to canceled.
@@ -49,7 +57,9 @@ class Payments(
         result = super().delete(resource_id, **params)
         return self.get_resource_object(result)
 
-    def update(self, resource_id: str, data: Optional[dict] = None, **params):
+    def update(
+        self, resource_id: str, data: Optional[Dict[str, Any]] = None, **params: Optional[Dict[str, Any]]
+    ) -> Payment:
         self.validate_resource_id(resource_id, "payment ID")
         return super().update(resource_id, data, **params)
 
@@ -57,14 +67,14 @@ class Payments(
 class OrderPayments(PaymentsBase, ResourceCreateMixin):
     """Resource handler for the `/orders/:order_id:/payments` endpoint."""
 
-    _order = None
+    _order: Order
 
-    def __init__(self, client, order):
+    def __init__(self, client: "Client", order: Order) -> None:
         self._order = order
         super().__init__(client)
 
     def get_resource_path(self) -> str:
-        return f"orders/{self._order.id}/payments"  # type: ignore
+        return f"orders/{self._order.id}/payments"
 
     def list(self) -> ObjectList:
         """
@@ -72,7 +82,7 @@ class OrderPayments(PaymentsBase, ResourceCreateMixin):
 
         When you receive an EmbedError, you need to embed the payments in the parent order.
         """
-        payments = self._order.get_embedded("payments")  # type: ignore
+        payments = self._order.get_embedded("payments")
 
         data = {
             "_embedded": {
@@ -86,58 +96,58 @@ class OrderPayments(PaymentsBase, ResourceCreateMixin):
 class CustomerPayments(PaymentsBase, ResourceCreateMixin, ResourceListMixin):
     """Resource handler for the `/customers/:customer_id:/payments` endpoint."""
 
-    _customer = None
+    _customer: Customer
 
-    def __init__(self, client, customer):
+    def __init__(self, client: "Client", customer: Customer) -> None:
         self._customer = customer
         super().__init__(client)
 
     def get_resource_path(self) -> str:
-        return f"customers/{self._customer.id}/payments"  # type: ignore
+        return f"customers/{self._customer.id}/payments"
 
 
 class SubscriptionPayments(PaymentsBase, ResourceListMixin):
     """Resource handler for the `/customers/:customer_id:/subscriptions/:subscription_id:/payments` endpoint."""
 
-    _customer = None
-    _subscription = None
+    _customer: Customer
+    _subscription: Subscription
 
-    def __init__(self, client, customer, subscription):
+    def __init__(self, client: "Client", customer: Customer, subscription: Subscription) -> None:
         self._customer = customer
         self._subscription = subscription
         super().__init__(client)
 
     def get_resource_path(self) -> str:
-        return f"customers/{self._customer.id}/subscriptions/{self._subscription.id}/payments"  # type: ignore
+        return f"customers/{self._customer.id}/subscriptions/{self._subscription.id}/payments"
 
 
 class SettlementPayments(PaymentsBase, ResourceListMixin):
     """Resource handler for the `/settlements/:settlement_id:/payments` endpoint."""
 
-    _settlement = None
+    _settlement: "Settlement"
 
-    def __init__(self, client, settlement):
+    def __init__(self, client: "Client", settlement: "Settlement") -> None:
         self._settlement = settlement
         super().__init__(client)
 
     def get_resource_path(self) -> str:
-        return f"settlements/{self._settlement.id}/payments"  # type: ignore
+        return f"settlements/{self._settlement.id}/payments"
 
 
-class ProfilePayments(PaymentsBase, ResourceBase):
+class ProfilePayments(PaymentsBase):
     """
     Resource handler for the `/payments?profileId=:profile_id:` endpoint.
 
     This is separate from the `Payments` resource handler to make it easier to inject the profileId.
     """
 
-    _profile = None
+    _profile: Profile
 
-    def __init__(self, client, profile):
+    def __init__(self, client: "Client", profile: Profile) -> None:
         self._profile = profile
         super().__init__(client)
 
-    def list(self, **params):
+    def list(self, **params: Optional[Dict[str, Any]]) -> ObjectList:
         # Set the profileId in the query params
         params.update({"profileId": self._profile.id})
         return Payments(self.client).list(**params)

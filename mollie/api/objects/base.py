@@ -22,7 +22,7 @@ class ObjectBase(dict):
         except (KeyError, TypeError):
             return None
 
-    def get_embedded(self, name: str):
+    def get_embedded(self, name: str) -> dict:
         """
         Get embedded data by its name.
 

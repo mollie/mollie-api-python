@@ -6,7 +6,7 @@ from .base import ObjectBase
 class Chargeback(ObjectBase):
     @classmethod
     def get_resource_class(cls, client):
-        from ..resources.chargebacks import Chargebacks
+        from ..resources import Chargebacks
 
         return Chargebacks(client)
 

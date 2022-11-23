@@ -1,7 +1,10 @@
-from typing import Any, Optional
+from typing import TYPE_CHECKING, Any, Dict, Optional
 
 from ..error import IdentifierError, ResponseError, ResponseHandlingError
 from ..objects.list import ObjectList
+
+if TYPE_CHECKING:
+    from ..client import Client
 
 
 class ResourceBase:
@@ -15,7 +18,7 @@ class ResourceBase:
 
     RESOURCE_ID_PREFIX: str = ""
 
-    def __init__(self, client):
+    def __init__(self, client: "Client") -> None:
         self.client = client
 
     def get_resource_object(self, result: dict) -> Any:
@@ -32,8 +35,12 @@ class ResourceBase:
         return self.__class__.__name__.lower()
 
     def perform_api_call(
-        self, http_method: str, path: str, data: Optional[dict] = None, params: Optional[dict] = None
-    ) -> dict:
+        self,
+        http_method: str,
+        path: str,
+        data: Optional[Dict[str, Any]] = None,
+        params: Optional[Dict[str, Any]] = None,
+    ) -> Dict[str, Any]:
         resp = self.client.perform_http_call(http_method, path, data, params)
         if "application/hal+json" in resp.headers.get("Content-Type", ""):
             # set the content type according to the media type definition
@@ -56,7 +63,7 @@ class ResourceBase:
         return result
 
     @classmethod
-    def validate_resource_id(cls, resource_id: str, name: str = "Identifier", message: Optional[str] = None) -> None:
+    def validate_resource_id(cls, resource_id: str, name: str = "Identifier", message: str = "") -> None:
         """Generic identifier validation."""
         if not message:
             message = f"Invalid {name} '{resource_id}', it should start with '{cls.RESOURCE_ID_PREFIX}'."
@@ -66,37 +73,39 @@ class ResourceBase:
 
 
 class ResourceCreateMixin(ResourceBase):
-    def create(self, data: Optional[dict] = None, **params):
+    def create(self, data: Optional[Dict[str, Any]] = None, **params: Optional[Dict[str, Any]]) -> Any:
         path = self.get_resource_path()
         result = self.perform_api_call(self.REST_CREATE, path, data, params)
         return self.get_resource_object(result)
 
 
 class ResourceGetMixin(ResourceBase):
-    def get(self, resource_id: str, **params):
+    def get(self, resource_id: str, **params: Optional[Dict[str, Any]]) -> Any:
         resource_path = self.get_resource_path()
         path = f"{resource_path}/{resource_id}"
         result = self.perform_api_call(self.REST_READ, path, params=params)
         return self.get_resource_object(result)
 
-    def from_url(self, url: str, data: Optional[dict] = None, params: Optional[dict] = None):
+    def from_url(self, url: str, params: Optional[Dict[str, Any]] = None) -> Any:
         """Utility method to return an object from a full URL (such as from _links).
 
         This method always does a GET request and returns a single Object.
         """
-        result = self.perform_api_call(self.REST_READ, url, data, params)
+        result = self.perform_api_call(self.REST_READ, url, params=params)
         return self.get_resource_object(result)
 
 
 class ResourceListMixin(ResourceBase):
-    def list(self, **params):
+    def list(self, **params: Optional[Dict[str, Any]]) -> ObjectList:
         path = self.get_resource_path()
         result = self.perform_api_call(self.REST_LIST, path, params=params)
         return ObjectList(result, self.get_resource_object({}).__class__, self.client)
 
 
 class ResourceUpdateMixin(ResourceBase):
-    def update(self, resource_id: str, data: Optional[dict] = None, **params):
+    def update(
+        self, resource_id: str, data: Optional[Dict[str, Any]] = None, **params: Optional[Dict[str, Any]]
+    ) -> Any:
         resource_path = self.get_resource_path()
         path = f"{resource_path}/{resource_id}"
         result = self.perform_api_call(self.REST_UPDATE, path, data, params)
@@ -104,7 +113,7 @@ class ResourceUpdateMixin(ResourceBase):
 
 
 class ResourceDeleteMixin(ResourceBase):
-    def delete(self, resource_id: str, **params):
+    def delete(self, resource_id: str, **params: Optional[Dict[str, Any]]) -> Any:
         resource_path = self.get_resource_path()
         path = f"{resource_path}/{resource_id}"
         return self.perform_api_call(self.REST_DELETE, path, params=params)
