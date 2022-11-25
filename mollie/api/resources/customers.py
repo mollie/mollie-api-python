@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Any, Dict, Optional
 
 from ..objects.customer import Customer
 from .base import ResourceCreateMixin, ResourceDeleteMixin, ResourceGetMixin, ResourceListMixin, ResourceUpdateMixin
@@ -7,19 +7,21 @@ from .base import ResourceCreateMixin, ResourceDeleteMixin, ResourceGetMixin, Re
 class Customers(ResourceCreateMixin, ResourceDeleteMixin, ResourceGetMixin, ResourceListMixin, ResourceUpdateMixin):
     """Resource handler for the `/customers` endpoint."""
 
-    RESOURCE_ID_PREFIX = "cst_"
+    RESOURCE_ID_PREFIX: str = "cst_"
 
     def get_resource_object(self, result: dict) -> Customer:
         return Customer(result, self.client)
 
-    def get(self, resource_id: str, **params):
+    def get(self, resource_id: str, **params: Optional[Dict[str, Any]]) -> Customer:
         self.validate_resource_id(resource_id, "customer ID")
         return super().get(resource_id, **params)
 
-    def update(self, resource_id: str, data: Optional[dict] = None, **params):
+    def update(
+        self, resource_id: str, data: Optional[Dict[str, Any]] = None, **params: Optional[Dict[str, Any]]
+    ) -> Customer:
         self.validate_resource_id(resource_id, "customer ID")
         return super().update(resource_id, data, **params)
 
-    def delete(self, resource_id: str, **params):
+    def delete(self, resource_id: str, **params: Optional[Dict[str, Any]]) -> dict:
         self.validate_resource_id(resource_id, "customer ID")
         return super().delete(resource_id, **params)

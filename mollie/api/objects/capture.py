@@ -4,9 +4,9 @@ from .base import ObjectBase
 class Capture(ObjectBase):
     @classmethod
     def get_resource_class(cls, client):
-        from ..resources.captures import Captures
+        from ..resources import PaymentCaptures
 
-        return Captures(client)
+        return PaymentCaptures(client)
 
     @property
     def id(self):

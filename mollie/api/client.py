@@ -3,6 +3,7 @@ import platform
 import re
 import ssl
 from collections import OrderedDict
+from typing import Any, Callable, Dict, List, Optional, Tuple, Union
 from urllib.parse import urlencode
 
 import requests
@@ -31,28 +32,41 @@ from .version import VERSION
 
 
 class Client(object):
-    CLIENT_VERSION = VERSION
-    API_ENDPOINT = "https://api.mollie.com"
-    API_VERSION = "v2"
-    UNAME = " ".join(platform.uname())
+    CLIENT_VERSION: str = VERSION
+    API_ENDPOINT: str = "https://api.mollie.com"
+    API_VERSION: str = "v2"
+    UNAME: str = " ".join(platform.uname())
 
-    OAUTH_AUTHORIZATION_URL = "https://www.mollie.com/oauth2/authorize"
-    OAUTH_AUTO_REFRESH_URL = API_ENDPOINT + "/oauth2/tokens"
-    OAUTH_TOKEN_URL = API_ENDPOINT + "/oauth2/tokens"
+    OAUTH_AUTHORIZATION_URL: str = "https://www.mollie.com/oauth2/authorize"
+    OAUTH_AUTO_REFRESH_URL: str = API_ENDPOINT + "/oauth2/tokens"
+    OAUTH_TOKEN_URL: str = API_ENDPOINT + "/oauth2/tokens"
+
+    _client: requests.Session
+    _oauth_client: OAuth2Session
+    api_endpoint: str
+    api_version: str
+    timeout: Union[int, Tuple[int, int]]
+    retry: int
+    api_key: str = ""
+    access_token: str = ""
+    user_agent_components: Dict[str, str]
+    client_id: str = ""
+    client_secret: str = ""
+    set_token: Callable[[dict], None]
 
     @staticmethod
-    def validate_api_endpoint(api_endpoint):
+    def validate_api_endpoint(api_endpoint: str) -> str:
         return api_endpoint.strip().rstrip("/")
 
     @staticmethod
-    def validate_api_key(api_key):
+    def validate_api_key(api_key: str) -> str:
         api_key = api_key.strip()
         if not re.compile(r"^(live|test)_\w+$").match(api_key):
             raise RequestSetupError(f"Invalid API key: '{api_key}'. An API key must start with 'test_' or 'live_'.")
         return api_key
 
     @staticmethod
-    def validate_access_token(access_token):
+    def validate_access_token(access_token: str) -> str:
         access_token = access_token.strip()
         if not access_token.startswith("access_"):
             raise RequestSetupError(
@@ -60,7 +74,7 @@ class Client(object):
             )
         return access_token
 
-    def __init__(self, api_endpoint=None, timeout=(2, 10), retry=3):
+    def __init__(self, api_endpoint: str = "", timeout: Union[int, Tuple[int, int]] = (2, 10), retry: int = 3) -> None:
         """Initialize a new Mollie API client.
 
         :param api_endpoint: The API endpoint to communicate to, this default to the production environment (string)
@@ -73,13 +87,6 @@ class Client(object):
         self.api_version = self.API_VERSION
         self.timeout = timeout
         self.retry = retry
-        self.api_key = None
-        self._client = None
-
-        self._oauth_client = None
-        self.client_secret = None
-        self.access_token = None
-        self.set_token = None
 
         # add endpoint resources
         self.payments = Payments(self)
@@ -106,20 +113,20 @@ class Client(object):
             "OpenSSL", ssl.OPENSSL_VERSION.split(" ")[1], sanitize=False
         )  # keep legacy formatting of this component
 
-    def set_api_endpoint(self, api_endpoint):
+    def set_api_endpoint(self, api_endpoint: str) -> None:
         self.api_endpoint = self.validate_api_endpoint(api_endpoint)
 
-    def set_api_key(self, api_key):
+    def set_api_key(self, api_key: str) -> None:
         self.api_key = self.validate_api_key(api_key)
 
-    def set_access_token(self, access_token):
+    def set_access_token(self, access_token: str) -> None:
         self.api_key = self.validate_access_token(access_token)
         self.set_user_agent_component("OAuth", "2.0", sanitize=False)  # keep spelling equal to the PHP client
 
-    def set_timeout(self, timeout):
+    def set_timeout(self, timeout: Union[int, Tuple[int, int]]) -> None:
         self.timeout = timeout
 
-    def set_user_agent_component(self, key, value, sanitize=True):
+    def set_user_agent_component(self, key: str, value: str, sanitize: bool = True) -> None:
         """Add or replace new user-agent component strings.
 
         Given strings are formatted along the format agreed upon by Mollie and implementers:
@@ -137,40 +144,52 @@ class Client(object):
         self.user_agent_components[key] = value
 
     @property
-    def user_agent(self):
+    def user_agent(self) -> str:
         """Return the formatted user agent string."""
         components = ["/".join(x) for x in self.user_agent_components.items()]
         return " ".join(components)
 
-    def _format_request_data(self, path, data, params):
+    def _format_request_data(
+        self,
+        path: str,
+        data: Optional[Dict[str, Any]],
+        params: Optional[Dict[str, Any]],
+    ) -> Tuple[str, str, Optional[Dict[str, Any]]]:
         if path.startswith(f"{self.api_endpoint}/{self.api_version}"):
             url = path
         else:
             url = f"{self.api_endpoint}/{self.api_version}/{path}"
 
+        payload = ""
         if data is not None:
             try:
-                data = json.dumps(data)
-            except Exception as err:
-                raise RequestSetupError(f"Error encoding parameters into JSON: '{err}'.")
+                payload = json.dumps(data)
+            except TypeError as err:
+                raise RequestSetupError(f"Error encoding data into JSON: {err}.")
 
         querystring = generate_querystring(params)
         if querystring:
             url += "?" + querystring
             params = None
 
-        return url, data, params
+        return url, payload, params
 
-    def _perform_http_call_apikey(self, http_method, path, data=None, params=None):
+    def _perform_http_call_apikey(
+        self,
+        http_method: str,
+        path: str,
+        data: Optional[Dict[str, Any]] = None,
+        params: Optional[Dict[str, Any]] = None,
+    ) -> requests.Response:
         if not self.api_key:
             raise RequestSetupError("You have not set an API key. Please use set_api_key() to set the API key.")
 
-        if not self._client:
+        if not hasattr(self, "_client"):
             self._client = requests.Session()
             self._client.verify = True
             self._setup_retry()
 
-        url, data, params = self._format_request_data(path, data, params)
+        url, payload, params = self._format_request_data(path, data, params)
         try:
             response = self._client.request(
                 method=http_method,
@@ -183,15 +202,21 @@ class Client(object):
                     "X-Mollie-Client-Info": self.UNAME,
                 },
                 params=params,
-                data=data,
+                data=payload,
                 timeout=self.timeout,
             )
         except requests.exceptions.RequestException as err:
             raise RequestError(f"Unable to communicate with Mollie: {err}")
         return response
 
-    def _perform_http_call_oauth(self, http_method, path, data=None, params=None):
-        url, data, params = self._format_request_data(path, data, params)
+    def _perform_http_call_oauth(
+        self,
+        http_method: str,
+        path: str,
+        data: Optional[Dict[str, Any]] = None,
+        params: Optional[Dict[str, Any]] = None,
+    ) -> requests.Response:
+        url, payload, params = self._format_request_data(path, data, params)
         try:
             response = self._oauth_client.request(
                 method=http_method,
@@ -203,20 +228,34 @@ class Client(object):
                     "X-Mollie-Client-Info": self.UNAME,
                 },
                 params=params,
-                data=data,
+                data=payload,
                 timeout=self.timeout,
             )
         except requests.exceptions.RequestException as err:
             raise RequestError(f"Unable to communicate with Mollie: {err}")
         return response
 
-    def perform_http_call(self, http_method, path, data=None, params=None):
-        if self._oauth_client:
+    def perform_http_call(
+        self,
+        http_method: str,
+        path: str,
+        data: Optional[Dict[str, Any]] = None,
+        params: Optional[Dict[str, Any]] = None,
+    ) -> requests.Response:
+        if hasattr(self, "_oauth_client"):
             return self._perform_http_call_oauth(http_method, path, data=data, params=params)
         else:
             return self._perform_http_call_apikey(http_method, path, data=data, params=params)
 
-    def setup_oauth(self, client_id, client_secret, redirect_uri, scope, token, set_token):
+    def setup_oauth(
+        self,
+        client_id: str,
+        client_secret: str,
+        redirect_uri: str,
+        scope: List[str],
+        token: str,
+        set_token: Callable[[dict], None],
+    ) -> Tuple[bool, Optional[str]]:
         """
         :param client_id: (string)
         :param client_secret: (string)
@@ -251,37 +290,36 @@ class Client(object):
         # The merchant should visit this url to authorize access.
         return self._oauth_client.authorized, authorization_url
 
-    def setup_oauth_authorization_response(self, authorization_response):
+    def setup_oauth_authorization_response(self, authorization_response: str) -> None:
         """
         :param authorization_response: The full callback URL (string)
         :return: None
         """
-        # Fetch an access token from the provider using the authorization code obtained during user authorization.
-        self.access_token = self._oauth_client.fetch_token(
+        # Fetch an OAuth token from the provider using the authorization code obtained during user authorization.
+        token = self._oauth_client.fetch_token(
             self.OAUTH_TOKEN_URL,
             authorization_response=authorization_response,
             client_secret=self.client_secret,
         )
-        self.set_token(self.access_token)
-        return self.access_token
+        self.set_token(token)
 
     # TODO Implement https://docs.mollie.com/reference/oauth2/revoke-token
     # def revoke_oauth_token(self, token, type_hint):
     #     ...
 
-    def _setup_retry(self):
+    def _setup_retry(self) -> None:
         """Configure a retry behaviour on the HTTP client."""
         if self.retry:
             retry = Retry(connect=self.retry, backoff_factor=1)
             adapter = requests.adapters.HTTPAdapter(max_retries=retry)
 
-            if self._client:
+            if hasattr(self, "_client"):
                 self._client.mount("https://", adapter)
-            if self._oauth_client:
+            elif hasattr(self, "_oauth_client"):
                 self._oauth_client.mount("https://", adapter)
 
 
-def generate_querystring(params):
+def generate_querystring(params: Optional[Dict[str, Any]]) -> Optional[str]:
     """
     Generate a querystring suitable for use in the v2 api.
 
@@ -290,8 +328,10 @@ def generate_querystring(params):
     """
     if not params:
         return None
+
     parts = []
     for param, value in params.items():
+        # TODO clean this up with a simple recursive approach
         if not isinstance(value, dict):
             parts.append(urlencode({param: value}))
         else:
@@ -299,5 +339,5 @@ def generate_querystring(params):
             for key, sub_value in value.items():
                 composed = f"{param}[{key}]"
                 parts.append(urlencode({composed: sub_value}))
-    if parts:
-        return "&".join(parts)
+
+    return "&".join(parts)

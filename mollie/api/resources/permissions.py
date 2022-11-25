@@ -1,4 +1,5 @@
 import re
+from typing import Any, Dict, Optional
 
 from ..error import IdentifierError
 from ..objects.permission import Permission
@@ -16,10 +17,10 @@ class Permissions(ResourceGetMixin, ResourceListMixin):
         return Permission(result, self.client)
 
     @staticmethod
-    def validate_permission_id(permission_id: str):
+    def validate_permission_id(permission_id: str) -> None:
         if not permission_id or not bool(re.match(r"^[a-z]+\.[a-z]+$", permission_id)):
             raise IdentifierError(f"Invalid permission ID: '{permission_id}'. Does not match ^[a-z]+.[a-z]+$")
 
-    def get(self, resource_id: str, **params):
+    def get(self, resource_id: str, **params: Optional[Dict[str, Any]]) -> Permission:
         self.validate_resource_id(resource_id)
         return super().get(resource_id, **params)

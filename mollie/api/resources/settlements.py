@@ -1,5 +1,5 @@
 import re
-from typing import Optional
+from typing import Any, Dict, Optional, Pattern
 
 from ..error import IdentifierError
 from ..objects.settlement import Settlement
@@ -9,20 +9,20 @@ from .base import ResourceGetMixin, ResourceListMixin
 class Settlements(ResourceGetMixin, ResourceListMixin):
     """Resource handler for the `/settlements` endpoint."""
 
-    RESOURCE_ID_PREFIX = "stl_"
+    RESOURCE_ID_PREFIX: str = "stl_"
 
     # According to Mollie, the bank reference is formatted as:
     # - The Mollie customer ID, 4 to 7 digits.
     # - The year and month, 4 digits
     # - The sequence number of the settlement in that month, 2 digits
     # The components are separated by a dot.
-    BANK_REFERENCE_REGEX = re.compile(r"^\d{4,7}\.\d{4}\.\d{2}$", re.ASCII)
+    BANK_REFERENCE_REGEX: Pattern[str] = re.compile(r"^\d{4,7}\.\d{4}\.\d{2}$", re.ASCII)
 
     def get_resource_object(self, result: dict) -> Settlement:
-        return Settlement(result, self.client)  # type: ignore
+        return Settlement(result, self.client)
 
     @classmethod
-    def validate_resource_id(cls, resource_id: str, name: str = "", message: Optional[str] = None) -> None:
+    def validate_resource_id(cls, resource_id: str, name: str = "", message: str = "") -> None:
         """
         Validate the reference id to a settlement.
 
@@ -49,6 +49,6 @@ class Settlements(ResourceGetMixin, ResourceListMixin):
             except IdentifierError:
                 raise IdentifierError(exc_message)
 
-    def get(self, resource_id: str, **params):
+    def get(self, resource_id: str, **params: Optional[Dict[str, Any]]) -> Settlement:
         self.validate_resource_id(resource_id)
         return super().get(resource_id, **params)

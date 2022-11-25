@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import TYPE_CHECKING, Any, Dict, List, Optional
 
 from ..error import IdentifierError
 from ..objects.issuer import Issuer
@@ -6,21 +6,26 @@ from ..objects.list import ObjectList
 from ..objects.method import Method
 from .base import ResourceBase, ResourceGetMixin, ResourceListMixin
 
+if TYPE_CHECKING:
+    from ..client import Client
+    from ..objects.profile import Profile
+
+
 __all__ = [
     "Methods",
     "ProfileMethods",
 ]
 
 
-class MethodsBase:
+class MethodsBase(ResourceBase):
     def get_resource_object(self, result: dict) -> Method:
-        return Method(result, self.client)  # type: ignore
+        return Method(result, self.client)
 
 
 class Methods(MethodsBase, ResourceGetMixin, ResourceListMixin):
     """Resource handler for the `/methods` endpoint."""
 
-    def all(self, **params) -> ObjectList:
+    def all(self, **params: Optional[Dict[str, Any]]) -> ObjectList:
         """List all mollie payment methods, including methods that aren't activated in your profile."""
         resource_path = self.get_resource_path()
         path = f"{resource_path}/all"
@@ -28,27 +33,27 @@ class Methods(MethodsBase, ResourceGetMixin, ResourceListMixin):
         return ObjectList(result, Method, self.client)
 
 
-class ProfileMethods(MethodsBase, ResourceBase):
+class ProfileMethods(MethodsBase):
     """Resource handler for the `/profiles/:profile_id:/methods` endpoint."""
 
-    _profile = None
+    _profile: "Profile"
 
-    def __init__(self, client, profile):
+    def __init__(self, client: "Client", profile: "Profile") -> None:
         self._profile = profile
         super().__init__(client)
 
     def get_resource_path(self) -> str:
-        return f"profiles/{self._profile.id}/methods"  # type: ignore
+        return f"profiles/{self._profile.id}/methods"
 
     @property
-    def payment_method_requires_issuer(self):
+    def payment_method_requires_issuer(self) -> List[str]:
         """A list of payment methods that requires management of specific issuers."""
         return [
             Method.GIFTCARD,
             Method.VOUCHER,
         ]
 
-    def enable(self, method_id: str, **params):
+    def enable(self, method_id: str, **params: Optional[Dict[str, Any]]) -> Method:
         """
         Enable payment method for profile.
 
@@ -65,7 +70,7 @@ class ProfileMethods(MethodsBase, ResourceBase):
         result = self.perform_api_call(self.REST_CREATE, path, params=params)
         return self.get_resource_object(result)
 
-    def disable(self, method_id: str, **params):
+    def disable(self, method_id: str, **params: Optional[Dict[str, Any]]) -> Method:
         """
         Disable payment method for the profile.
 
@@ -82,13 +87,15 @@ class ProfileMethods(MethodsBase, ResourceBase):
         result = self.perform_api_call(self.REST_DELETE, path, params=params)
         return self.get_resource_object(result)
 
-    def list(self, **params):
+    def list(self, **params: Optional[Dict[str, Any]]) -> ObjectList:
         """List the payment methods for the profile."""
         params.update({"profileId": self._profile.id})
         # Divert the API call to the general Methods resource
         return Methods(self.client).list(**params)
 
-    def enable_issuer(self, method_id: str, issuer_id: str, data: Optional[dict] = None, **params):
+    def enable_issuer(
+        self, method_id: str, issuer_id: str, data: Optional[Dict[str, Any]] = None, **params: Optional[Dict[str, Any]]
+    ) -> Issuer:
         """
         Enable an issuer for a payment method.
 
@@ -108,7 +115,7 @@ class ProfileMethods(MethodsBase, ResourceBase):
         result = self.perform_api_call(self.REST_CREATE, path, data, params)
         return Issuer(result, self.client)
 
-    def disable_issuer(self, method_id: str, issuer_id: str, **params):
+    def disable_issuer(self, method_id: str, issuer_id: str, **params: Optional[Dict[str, Any]]) -> Issuer:
         """
         Disable an issuer for a payment method.
 

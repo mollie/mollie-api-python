@@ -1,3 +1,5 @@
+from typing import Any, Dict, Optional
+
 from ..objects.organization import Organization
 from .base import ResourceGetMixin
 
@@ -9,12 +11,12 @@ __all__ = [
 class Organizations(ResourceGetMixin):
     """Resource handler for the `/organizations` endpoint."""
 
-    RESOURCE_ID_PREFIX = "org_"
+    RESOURCE_ID_PREFIX: str = "org_"
 
     def get_resource_object(self, result: dict) -> Organization:
         return Organization(result, self.client)
 
-    def get(self, resource_id: str, **params):
+    def get(self, resource_id: str, **params: Optional[Dict[str, Any]]) -> Organization:
         if resource_id != "me":
             self.validate_resource_id(resource_id, "organization ID")
         return super().get(resource_id, **params)

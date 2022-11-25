@@ -1,3 +1,5 @@
+from typing import Any, Dict, Optional
+
 from ..objects.payment_link import PaymentLink
 from .base import ResourceCreateMixin, ResourceGetMixin, ResourceListMixin
 
@@ -9,14 +11,14 @@ __all__ = [
 class PaymentLinks(ResourceCreateMixin, ResourceGetMixin, ResourceListMixin):
     """Resource handler for the `/payment_links` endpoint."""
 
-    RESOURCE_ID_PREFIX = "pl_"
+    RESOURCE_ID_PREFIX: str = "pl_"
 
     def get_resource_path(self) -> str:
         return "payment-links"
 
-    def get_resource_object(self, result) -> PaymentLink:
-        return PaymentLink(result, self.client)  # type: ignore
+    def get_resource_object(self, result: dict) -> PaymentLink:
+        return PaymentLink(result, self.client)
 
-    def get(self, resource_id: str, **params):
+    def get(self, resource_id: str, **params: Optional[Dict[str, Any]]) -> PaymentLink:
         self.validate_resource_id(resource_id, "payment link ID")
         return super().get(resource_id, **params)

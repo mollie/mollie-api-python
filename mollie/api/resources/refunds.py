@@ -1,7 +1,15 @@
-from typing import Optional
+from typing import TYPE_CHECKING, Any, Dict, Optional
 
+from ..objects.list import ObjectList
+from ..objects.order import Order
+from ..objects.payment import Payment
+from ..objects.profile import Profile
 from ..objects.refund import Refund
 from .base import ResourceBase, ResourceCreateMixin, ResourceDeleteMixin, ResourceGetMixin, ResourceListMixin
+
+if TYPE_CHECKING:
+    from ..client import Client
+    from ..objects.settlement import Settlement
 
 __all__ = [
     "OrderRefunds",
@@ -12,11 +20,11 @@ __all__ = [
 ]
 
 
-class RefundsBase:
-    RESOURCE_ID_PREFIX = "re_"
+class RefundsBase(ResourceBase):
+    RESOURCE_ID_PREFIX: str = "re_"
 
     def get_resource_object(self, result: dict) -> Refund:
-        return Refund(result, self.client)  # type:ignore
+        return Refund(result, self.client)
 
 
 class Refunds(RefundsBase, ResourceListMixin):
@@ -28,20 +36,20 @@ class Refunds(RefundsBase, ResourceListMixin):
 class PaymentRefunds(RefundsBase, ResourceCreateMixin, ResourceDeleteMixin, ResourceGetMixin, ResourceListMixin):
     """Resource handler for the `/payments/:payment_id:/refunds` endpoint."""
 
-    _payment = None
+    _payment: Payment
 
-    def __init__(self, client, payment):
+    def __init__(self, client: "Client", payment: Payment) -> None:
         self._payment = payment
         super().__init__(client)
 
     def get_resource_path(self) -> str:
-        return f"payments/{self._payment.id}/refunds"  # type: ignore
+        return f"payments/{self._payment.id}/refunds"
 
-    def get(self, resource_id: str, **params):
+    def get(self, resource_id: str, **params: Optional[Dict[str, Any]]) -> Refund:
         self.validate_resource_id(resource_id, "Refund ID")
         return super().get(resource_id, **params)
 
-    def delete(self, resource_id: str, **params):
+    def delete(self, resource_id: str, **params: Optional[Dict[str, Any]]) -> dict:
         self.validate_resource_id(resource_id, "Refund ID")
         return super().delete(resource_id, **params)
 
@@ -49,16 +57,16 @@ class PaymentRefunds(RefundsBase, ResourceCreateMixin, ResourceDeleteMixin, Reso
 class OrderRefunds(RefundsBase, ResourceCreateMixin, ResourceListMixin):
     """Resource handler for the `/orders/:order_id:/refunds` endpoint."""
 
-    _order = None
+    _order: Order
 
-    def __init__(self, client, order):
+    def __init__(self, client: "Client", order: Order) -> None:
         super().__init__(client)
         self._order = order
 
     def get_resource_path(self) -> str:
-        return f"orders/{self._order.id}/refunds"  # type: ignore
+        return f"orders/{self._order.id}/refunds"
 
-    def create(self, data: Optional[dict] = None, **params):
+    def create(self, data: Optional[Dict[str, Any]] = None, **params: Optional[Dict[str, Any]]) -> Refund:
         """Create a refund for the order. When no data arg is given, a refund for all order lines is assumed."""
         if not data:
             data = {"lines": []}
@@ -68,30 +76,30 @@ class OrderRefunds(RefundsBase, ResourceCreateMixin, ResourceListMixin):
 class SettlementRefunds(RefundsBase, ResourceListMixin):
     """ResourceHandler for the `/settlements/:settlement_id:/refunds` endpoint."""
 
-    _settlement = None
+    _settlement: "Settlement"
 
-    def __init__(self, client, settlement):
+    def __init__(self, client: "Client", settlement: "Settlement"):
         super().__init__(client)
         self._settlement = settlement
 
     def get_resource_path(self) -> str:
-        return f"settlements/{self._settlement.id}/refunds"  # type: ignore
+        return f"settlements/{self._settlement.id}/refunds"
 
 
-class ProfileRefunds(RefundsBase, ResourceBase):
+class ProfileRefunds(RefundsBase):
     """
     Resource handler for the `/refunds?profileId=:profile_id:` endpoint.
 
     This is separate from the `Refunds` resource handler to make it easier to inject the profileId.
     """
 
-    _profile = None
+    _profile: Profile
 
-    def __init__(self, client, profile):
+    def __init__(self, client: "Client", profile: Profile) -> None:
         self._profile = profile
         super().__init__(client)
 
-    def list(self, **params) -> Refunds:
+    def list(self, **params: Optional[Dict[str, Any]]) -> ObjectList:
         # Set the profileId in the query params
-        params.update({"profileId": self._profile.id})  # type: ignore
+        params.update({"profileId": self._profile.id})
         return Refunds(self.client).list(**params)

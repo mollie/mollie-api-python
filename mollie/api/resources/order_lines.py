@@ -1,9 +1,13 @@
-from typing import Optional
+from typing import TYPE_CHECKING, Any, Dict, Optional
 
 from ..error import DataConsistencyError
 from ..objects.list import ObjectList
 from ..objects.order_line import OrderLine
 from .base import ResourceBase
+
+if TYPE_CHECKING:
+    from ..client import Client
+    from ..objects.order import Order
 
 __all__ = [
     "OrderLines",
@@ -20,21 +24,21 @@ class OrderLines(ResourceBase):
     implementations in this class.
     """
 
-    RESOURCE_ID_PREFIX = "odl_"
+    RESOURCE_ID_PREFIX: str = "odl_"
 
-    _order = None
+    _order: "Order"
 
-    def __init__(self, client, order):
+    def __init__(self, client: "Client", order: "Order") -> None:
         self._order = order
         super().__init__(client)
 
     def get_resource_path(self) -> str:
-        return f"orders/{self._order.id}/lines"  # type: ignore
+        return f"orders/{self._order.id}/lines"
 
     def get_resource_object(self, result: dict) -> OrderLine:
         return OrderLine(result, self.client)
 
-    def delete_lines(self, data: Optional[dict] = None, **params):
+    def delete_lines(self, data: Optional[Dict[str, Any]] = None, **params: Optional[Dict[str, Any]]) -> dict:
         """
         Cancel multiple orderlines.
 
@@ -65,7 +69,7 @@ class OrderLines(ResourceBase):
         path = self.get_resource_path()
         return self.perform_api_call(self.REST_DELETE, path, data=data, params=params)
 
-    def delete(self, order_line_id: str, **params):
+    def delete(self, order_line_id: str, **params: Optional[Dict[str, Any]]) -> dict:
         """
         Cancel a single orderline.
 
@@ -79,7 +83,9 @@ class OrderLines(ResourceBase):
         }
         return self.delete_lines(data, **params)
 
-    def update(self, order_line_id: str, data: Optional[dict] = None, **params):
+    def update(
+        self, order_line_id: str, data: Optional[Dict[str, Any]] = None, **params: Optional[Dict[str, Any]]
+    ) -> OrderLine:
         """
         Custom handling for updating orderlines.
 
@@ -98,7 +104,7 @@ class OrderLines(ResourceBase):
 
         raise DataConsistencyError(f"OrderLine with id '{order_line_id}' not found in response.")
 
-    def list(self, **params):
+    def list(self, **params: Optional[Dict[str, Any]]) -> ObjectList:
         """Return the orderline data from the related order."""
         lines = self._order._get_property("lines") or []
         data = {
