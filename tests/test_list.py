@@ -1,9 +1,35 @@
 import pytest
+from responses import matchers
 
 from mollie.api.objects.list import ObjectList
 from mollie.api.objects.method import Method
 
 from .utils import assert_list_object
+
+
+def test_list_payments_use_new_iterator(client, response):
+    """Retrieve a list of payments using the new result iterator."""
+    response.get(
+        "https://api.mollie.com/v2/payments",
+        "payments_list_with_next",
+        match=[matchers.query_string_matcher("limit=3")],
+    )
+    response.get(
+        "https://api.mollie.com/v2/payments",
+        "payments_list",
+        match=[matchers.query_string_matcher("from=tr_gM5hTq4x4J&limit=3")],
+    )
+
+    payments = client.payments.list(limit=3, return_iterator=True)
+    payment_ids = [p.id for p in payments]
+    assert payment_ids == [
+        "tr_gHTfdq4xAB",
+        "tr_9uhYN1zuCD",
+        "tr_47HgTDE9EF",
+        "tr_gM5hTq4x4J",
+        "tr_7UhSN1zuXS",
+        "tr_45xyzDE9v9",
+    ]
 
 
 def test_list_iterator_behaviour(client, response):

@@ -1,7 +1,7 @@
-from typing import TYPE_CHECKING, Any, Dict, Optional
+from typing import TYPE_CHECKING, Any, Dict, Optional, Union
 
 from ..objects.customer import Customer
-from ..objects.list import ObjectList
+from ..objects.list import ObjectList, ResultListIterator
 from ..objects.order import Order
 from ..objects.payment import Payment
 from ..objects.profile import Profile
@@ -147,7 +147,7 @@ class ProfilePayments(PaymentsBase):
         self._profile = profile
         super().__init__(client)
 
-    def list(self, **params: Any) -> ObjectList:
+    def list(self, **params: Any) -> Union[ObjectList, ResultListIterator]:
         # Set the profileId in the query params
         params.update({"profileId": self._profile.id})
         return Payments(self.client).list(**params)

@@ -1,4 +1,9 @@
+from typing import TYPE_CHECKING, Any, Dict, List, Tuple, Type
+
 from .base import ObjectBase
+
+if TYPE_CHECKING:
+    from ..resources.base import ResourceBase
 
 
 class UnknownObject(ObjectBase):
@@ -97,3 +102,90 @@ class ObjectList(ObjectBase):
         resource = self.object_type.get_resource_class(self.client)
         resp = resource.perform_api_call(resource.REST_READ, url)
         return ObjectList(resp, self.object_type, self.client)
+
+
+class ResultListIterator:
+    """
+    An iterator for result lists from the API.
+
+    You can iterate through the results. If the initial result indocates pagination,
+    a new result page is automatically fetched from the API when the current result page
+    is exhausted.
+
+    Note: This iterator should preferably replace the ObjectList as the default
+    return value for the ResourceBase.list() method in the future.
+    """
+
+    _last: int
+    resource: "ResourceBase"
+    result_class: Type[ObjectBase]
+    next_uri: str
+    list_data: List[Dict[str, Any]]
+
+    def __init__(self, resource: "ResourceBase", data: Dict[str, Any]) -> None:
+        self.resource = resource
+        self.list_data, self.next_uri = self._parse_data(data)
+        self._last = -1
+
+    def __iter__(self):
+        """Return the iterator."""
+        return self
+
+    def __next__(self) -> ObjectBase:
+        """
+        Return the next result.
+
+        If the list data is exhausted, but a link to further paginated results
+        is available, we fetch those results and return the first result of that.
+        """
+        current = self._last + 1
+        try:
+            object_data = self.list_data[current]
+
+        except IndexError:
+            if self.next_uri:
+                # Fetch new results and return the first entry
+                self._reinit_from_uri(self.next_uri)
+                return next(self)
+
+            else:
+                # No more results to return, nor to fetch: this iterator is really exhausted
+                raise StopIteration
+
+        else:
+            # Return the next result
+            self._last = current
+            return self.resource.get_resource_object(object_data)
+
+    def _parse_data(self, data: Dict[str, Any]) -> Tuple[List[Dict[str, Any]], str]:
+        """
+        Extract useful data from the payload.
+
+        We are interested in the following parts:
+        - the actual list data, unwrapped
+        - links to next results, when results are paginated
+        """
+        try:
+            next_uri = data["_links"]["next"]["href"]
+        except TypeError:
+            next_uri = ""
+
+        if not hasattr(self, "result_class"):
+            # A bit klunky: need to instantiate the class with fake data, only to get its type.
+            #
+            # This could be improved if we define the result class (or its dotted path) as a
+            # class constant on the resource. Additionaly, that could help when making
+            # get_resource_object() a generic method on ResourceBase.
+            self.result_class = type(self.resource.get_resource_object({}))
+
+        resource_name = self.result_class.get_object_name()
+        list_data = data["_embedded"][resource_name]
+
+        return list_data, next_uri
+
+    def _reinit_from_uri(self, uri: str) -> None:
+        """Fetch additional results from the API, and feed the iterator with the data."""
+
+        result = self.resource.perform_api_call(self.resource.REST_READ, uri)
+        self.list_data, self.next_uri = self._parse_data(result)
+        self._last = -1

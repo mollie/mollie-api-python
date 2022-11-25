@@ -1,9 +1,9 @@
 import logging
 import uuid
-from typing import TYPE_CHECKING, Any, Dict, Optional
+from typing import TYPE_CHECKING, Any, Dict, Optional, Union
 
 from ..error import IdentifierError, ResponseError, ResponseHandlingError
-from ..objects.list import ObjectList
+from ..objects.list import ObjectList, ResultListIterator
 
 if TYPE_CHECKING:
     from ..client import Client
@@ -44,7 +44,6 @@ class ResourceBase:
         params: Optional[Dict[str, Any]] = None,
         idempotency_key: str = "",
     ) -> Dict[str, Any]:
-
         resp = self.client.perform_http_call(http_method, path, data, params, idempotency_key)
         if "application/hal+json" in resp.headers.get("Content-Type", ""):
             # set the content type according to the media type definition
@@ -113,10 +112,16 @@ class ResourceGetMixin(ResourceBase):
 
 
 class ResourceListMixin(ResourceBase):
-    def list(self, **params: Any) -> ObjectList:
+    def list(self, **params: Any) -> Union[ObjectList, ResultListIterator]:
+        return_iterator = params.pop("return_iterator", False)
         path = self.get_resource_path()
         result = self.perform_api_call(self.REST_LIST, path, params=params)
-        return ObjectList(result, self.get_resource_object({}).__class__, self.client)
+
+        if return_iterator:
+            resource = self
+            return ResultListIterator(resource, result)
+        else:
+            return ObjectList(result, self.get_resource_object({}).__class__, self.client)
 
 
 class ResourceUpdateMixin(ResourceBase):
