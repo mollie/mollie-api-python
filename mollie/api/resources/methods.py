@@ -38,20 +38,18 @@ class ProfileMethods(MethodsBase):
 
     _profile: "Profile"
 
+    # A list of payment methods that requires management of specific issuers
+    PAYMENT_METHODS_REQUIRING_ISSUER: List[str] = [
+        Method.GIFTCARD,
+        Method.VOUCHER,
+    ]
+
     def __init__(self, client: "Client", profile: "Profile") -> None:
         self._profile = profile
         super().__init__(client)
 
     def get_resource_path(self) -> str:
         return f"profiles/{self._profile.id}/methods"
-
-    @property
-    def payment_method_requires_issuer(self) -> List[str]:
-        """A list of payment methods that requires management of specific issuers."""
-        return [
-            Method.GIFTCARD,
-            Method.VOUCHER,
-        ]
 
     def enable(self, method_id: str, **params: Any) -> Method:
         """
@@ -62,7 +60,7 @@ class ProfileMethods(MethodsBase):
         :param method_id: The payment method to enable.
         :type method_id: str
         """
-        if method_id in self.payment_method_requires_issuer:
+        if method_id in self.PAYMENT_METHODS_REQUIRING_ISSUER:
             raise IdentifierError(f"Cannot enable '{method_id}' method, it requires enabling specific issuers.")
 
         resource_path = self.get_resource_path()
@@ -79,7 +77,7 @@ class ProfileMethods(MethodsBase):
         :param method_id: The payment method to disable.
         :type method_id: str
         """
-        if method_id in self.payment_method_requires_issuer:
+        if method_id in self.PAYMENT_METHODS_REQUIRING_ISSUER:
             raise IdentifierError(f"Cannot disable '{method_id}' method, it requires disabling specific issuers.")
 
         resource_path = self.get_resource_path()
@@ -107,7 +105,7 @@ class ProfileMethods(MethodsBase):
         :type issuer_id: str
         :param data: Optional payload
         """
-        if method_id not in self.payment_method_requires_issuer:
+        if method_id not in self.PAYMENT_METHODS_REQUIRING_ISSUER:
             raise IdentifierError(f"Payment method '{method_id}' does not support issuers.")
 
         resource_path = self.get_resource_path()
@@ -126,7 +124,7 @@ class ProfileMethods(MethodsBase):
         :param issuer_id: The issuer to enable.
         :type issuer_id: str
         """
-        if method_id not in self.payment_method_requires_issuer:
+        if method_id not in self.PAYMENT_METHODS_REQUIRING_ISSUER:
             raise IdentifierError(f"Payment method '{method_id}' does not support issuers.")
 
         resource_path = self.get_resource_path()
