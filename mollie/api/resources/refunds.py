@@ -45,11 +45,11 @@ class PaymentRefunds(RefundsBase, ResourceCreateMixin, ResourceDeleteMixin, Reso
     def get_resource_path(self) -> str:
         return f"payments/{self._payment.id}/refunds"
 
-    def get(self, resource_id: str, **params: Optional[Dict[str, Any]]) -> Refund:
+    def get(self, resource_id: str, **params: Any) -> Refund:
         self.validate_resource_id(resource_id, "Refund ID")
         return super().get(resource_id, **params)
 
-    def delete(self, resource_id: str, **params: Optional[Dict[str, Any]]) -> dict:
+    def delete(self, resource_id: str, **params: Any) -> dict:
         self.validate_resource_id(resource_id, "Refund ID")
         return super().delete(resource_id, **params)
 
@@ -66,7 +66,7 @@ class OrderRefunds(RefundsBase, ResourceCreateMixin, ResourceListMixin):
     def get_resource_path(self) -> str:
         return f"orders/{self._order.id}/refunds"
 
-    def create(self, data: Optional[Dict[str, Any]] = None, **params: Optional[Dict[str, Any]]) -> Refund:
+    def create(self, data: Optional[Dict[str, Any]] = None, **params: Any) -> Refund:
         """Create a refund for the order. When no data arg is given, a refund for all order lines is assumed."""
         if not data:
             data = {"lines": []}
@@ -99,7 +99,7 @@ class ProfileRefunds(RefundsBase):
         self._profile = profile
         super().__init__(client)
 
-    def list(self, **params: Optional[Dict[str, Any]]) -> ObjectList:
+    def list(self, **params: Any) -> ObjectList:
         # Set the profileId in the query params
         params.update({"profileId": self._profile.id})
         return Refunds(self.client).list(**params)

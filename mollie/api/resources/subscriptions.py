@@ -52,17 +52,15 @@ class CustomerSubscriptions(
     def get_resource_path(self) -> str:
         return f"customers/{self._customer.id}/subscriptions"
 
-    def get(self, resource_id: str, **params: Optional[Dict[str, Any]]) -> Subscription:
+    def get(self, resource_id: str, **params: Any) -> Subscription:
         self.validate_resource_id(resource_id, "subscription ID")
         return super().get(resource_id, **params)
 
-    def update(
-        self, resource_id: str, data: Optional[Dict[str, Any]] = None, **params: Optional[Dict[str, Any]]
-    ) -> Subscription:
+    def update(self, resource_id: str, data: Optional[Dict[str, Any]] = None, **params: Any) -> Subscription:
         self.validate_resource_id(resource_id, "subscription ID")
         return super().update(resource_id, data, **params)
 
-    def delete(self, resource_id: str, **params: Optional[Dict[str, Any]]) -> dict:
+    def delete(self, resource_id: str, **params: Any) -> dict:
         self.validate_resource_id(resource_id, "subscription ID")
         resp = super().delete(resource_id, **params)
         return self.get_resource_object(resp)

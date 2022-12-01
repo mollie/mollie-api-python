@@ -73,14 +73,14 @@ class ResourceBase:
 
 
 class ResourceCreateMixin(ResourceBase):
-    def create(self, data: Optional[Dict[str, Any]] = None, **params: Optional[Dict[str, Any]]) -> Any:
+    def create(self, data: Optional[Dict[str, Any]] = None, **params: Any) -> Any:
         path = self.get_resource_path()
         result = self.perform_api_call(self.REST_CREATE, path, data, params)
         return self.get_resource_object(result)
 
 
 class ResourceGetMixin(ResourceBase):
-    def get(self, resource_id: str, **params: Optional[Dict[str, Any]]) -> Any:
+    def get(self, resource_id: str, **params: Any) -> Any:
         resource_path = self.get_resource_path()
         path = f"{resource_path}/{resource_id}"
         result = self.perform_api_call(self.REST_READ, path, params=params)
@@ -96,16 +96,14 @@ class ResourceGetMixin(ResourceBase):
 
 
 class ResourceListMixin(ResourceBase):
-    def list(self, **params: Optional[Dict[str, Any]]) -> ObjectList:
+    def list(self, **params: Any) -> ObjectList:
         path = self.get_resource_path()
         result = self.perform_api_call(self.REST_LIST, path, params=params)
         return ObjectList(result, self.get_resource_object({}).__class__, self.client)
 
 
 class ResourceUpdateMixin(ResourceBase):
-    def update(
-        self, resource_id: str, data: Optional[Dict[str, Any]] = None, **params: Optional[Dict[str, Any]]
-    ) -> Any:
+    def update(self, resource_id: str, data: Optional[Dict[str, Any]] = None, **params: Any) -> Any:
         resource_path = self.get_resource_path()
         path = f"{resource_path}/{resource_id}"
         result = self.perform_api_call(self.REST_UPDATE, path, data, params)
@@ -113,7 +111,7 @@ class ResourceUpdateMixin(ResourceBase):
 
 
 class ResourceDeleteMixin(ResourceBase):
-    def delete(self, resource_id: str, **params: Optional[Dict[str, Any]]) -> Any:
+    def delete(self, resource_id: str, **params: Any) -> Any:
         resource_path = self.get_resource_path()
         path = f"{resource_path}/{resource_id}"
         return self.perform_api_call(self.REST_DELETE, path, params=params)

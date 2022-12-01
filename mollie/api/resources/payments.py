@@ -43,11 +43,11 @@ class Payments(
 ):
     """Resource handler for the `/payments` endpoint."""
 
-    def get(self, resource_id: str, **params: Optional[Dict[str, Any]]) -> Payment:
+    def get(self, resource_id: str, **params: Any) -> Payment:
         self.validate_resource_id(resource_id, "payment ID")
         return super().get(resource_id, **params)
 
-    def delete(self, resource_id: str, **params: Optional[Dict[str, Any]]) -> dict:
+    def delete(self, resource_id: str, **params: Any) -> dict:
         """Cancel payment and return the payment object.
 
         Deleting a payment causes the payment status to change to canceled.
@@ -57,9 +57,7 @@ class Payments(
         result = super().delete(resource_id, **params)
         return self.get_resource_object(result)
 
-    def update(
-        self, resource_id: str, data: Optional[Dict[str, Any]] = None, **params: Optional[Dict[str, Any]]
-    ) -> Payment:
+    def update(self, resource_id: str, data: Optional[Dict[str, Any]] = None, **params: Any) -> Payment:
         self.validate_resource_id(resource_id, "payment ID")
         return super().update(resource_id, data, **params)
 
@@ -147,7 +145,7 @@ class ProfilePayments(PaymentsBase):
         self._profile = profile
         super().__init__(client)
 
-    def list(self, **params: Optional[Dict[str, Any]]) -> ObjectList:
+    def list(self, **params: Any) -> ObjectList:
         # Set the profileId in the query params
         params.update({"profileId": self._profile.id})
         return Payments(self.client).list(**params)

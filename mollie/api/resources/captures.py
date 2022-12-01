@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING, Any, Dict, Optional
+from typing import TYPE_CHECKING, Any
 
 from ..objects.capture import Capture
 from .base import ResourceBase, ResourceGetMixin, ResourceListMixin
@@ -33,7 +33,7 @@ class PaymentCaptures(CapturesBase, ResourceGetMixin, ResourceListMixin):
     def get_resource_path(self) -> str:
         return f"payments/{self._payment.id}/captures"
 
-    def get(self, resource_id: str, **params: Optional[Dict[str, Any]]) -> Capture:
+    def get(self, resource_id: str, **params: Any) -> Capture:
         self.validate_resource_id(resource_id, "capture ID")
         return super().get(resource_id, **params)
 

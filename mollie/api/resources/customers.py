@@ -12,16 +12,14 @@ class Customers(ResourceCreateMixin, ResourceDeleteMixin, ResourceGetMixin, Reso
     def get_resource_object(self, result: dict) -> Customer:
         return Customer(result, self.client)
 
-    def get(self, resource_id: str, **params: Optional[Dict[str, Any]]) -> Customer:
+    def get(self, resource_id: str, **params: Any) -> Customer:
         self.validate_resource_id(resource_id, "customer ID")
         return super().get(resource_id, **params)
 
-    def update(
-        self, resource_id: str, data: Optional[Dict[str, Any]] = None, **params: Optional[Dict[str, Any]]
-    ) -> Customer:
+    def update(self, resource_id: str, data: Optional[Dict[str, Any]] = None, **params: Any) -> Customer:
         self.validate_resource_id(resource_id, "customer ID")
         return super().update(resource_id, data, **params)
 
-    def delete(self, resource_id: str, **params: Optional[Dict[str, Any]]) -> dict:
+    def delete(self, resource_id: str, **params: Any) -> dict:
         self.validate_resource_id(resource_id, "customer ID")
         return super().delete(resource_id, **params)
