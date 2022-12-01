@@ -38,7 +38,7 @@ class OrderLines(ResourceBase):
     def get_resource_object(self, result: dict) -> OrderLine:
         return OrderLine(result, self.client)
 
-    def delete_lines(self, data: Optional[Dict[str, Any]] = None, **params: Optional[Dict[str, Any]]) -> dict:
+    def delete_lines(self, data: Optional[Dict[str, Any]] = None, **params: Any) -> dict:
         """
         Cancel multiple orderlines.
 
@@ -69,7 +69,7 @@ class OrderLines(ResourceBase):
         path = self.get_resource_path()
         return self.perform_api_call(self.REST_DELETE, path, data=data, params=params)
 
-    def delete(self, order_line_id: str, **params: Optional[Dict[str, Any]]) -> dict:
+    def delete(self, order_line_id: str, **params: Any) -> dict:
         """
         Cancel a single orderline.
 
@@ -83,9 +83,7 @@ class OrderLines(ResourceBase):
         }
         return self.delete_lines(data, **params)
 
-    def update(
-        self, order_line_id: str, data: Optional[Dict[str, Any]] = None, **params: Optional[Dict[str, Any]]
-    ) -> OrderLine:
+    def update(self, order_line_id: str, data: Optional[Dict[str, Any]] = None, **params: Any) -> OrderLine:
         """
         Custom handling for updating orderlines.
 
@@ -104,7 +102,7 @@ class OrderLines(ResourceBase):
 
         raise DataConsistencyError(f"OrderLine with id '{order_line_id}' not found in response.")
 
-    def list(self, **params: Optional[Dict[str, Any]]) -> ObjectList:
+    def list(self, **params: Any) -> ObjectList:
         """Return the orderline data from the related order."""
         lines = self._order._get_property("lines") or []
         data = {

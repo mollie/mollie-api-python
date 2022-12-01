@@ -1,4 +1,4 @@
-from typing import Any, Dict, Optional
+from typing import Any, Dict
 
 from ..error import IdentifierError
 from ..objects.onboarding import Onboarding as OnboardingObject
@@ -15,12 +15,12 @@ class Onboarding(ResourceGetMixin):
     def get_resource_object(self, result: dict) -> OnboardingObject:
         return OnboardingObject(result, self.client)
 
-    def get(self, resource_id: str, **params: Optional[Dict[str, Any]]) -> OnboardingObject:
+    def get(self, resource_id: str, **params: Any) -> OnboardingObject:
         if resource_id != "me":
             raise IdentifierError(f"Invalid onboarding ID: '{resource_id}'. The onboarding ID should be 'me'.")
         return super().get(resource_id, **params)
 
-    def create(self, data: Dict[str, Any], **params: Optional[Dict[str, Any]]) -> OnboardingObject:
+    def create(self, data: Dict[str, Any], **params: Any) -> OnboardingObject:
         resource_path = self.get_resource_path()
         path = f"{resource_path}/me"
         result = self.perform_api_call(self.REST_CREATE, path, data, params)

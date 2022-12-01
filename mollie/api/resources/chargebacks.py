@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING, Any, Dict, Optional
+from typing import TYPE_CHECKING, Any
 
 from ..objects.chargeback import Chargeback
 from ..objects.list import ObjectList
@@ -43,7 +43,7 @@ class PaymentChargebacks(ChargebacksBase, ResourceGetMixin, ResourceListMixin):
     def get_resource_path(self) -> str:
         return f"payments/{self._payment.id}/chargebacks"
 
-    def get(self, resource_id: str, **params: Optional[Dict[str, Any]]) -> Chargeback:
+    def get(self, resource_id: str, **params: Any) -> Chargeback:
         self.validate_resource_id(resource_id, "chargeback ID")
         return super().get(resource_id, **params)
 
@@ -74,7 +74,7 @@ class ProfileChargebacks(ChargebacksBase):
         self._profile = profile
         super().__init__(client)
 
-    def list(self, **params: Optional[Dict[str, Any]]) -> ObjectList:
+    def list(self, **params: Any) -> ObjectList:
         # Set the profileId in the query params
         params.update({"profileId": self._profile.id})
         return Chargebacks(self.client).list(**params)

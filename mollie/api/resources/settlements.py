@@ -1,5 +1,5 @@
 import re
-from typing import Any, Dict, Optional, Pattern
+from typing import Any, Pattern
 
 from ..error import IdentifierError
 from ..objects.settlement import Settlement
@@ -49,6 +49,6 @@ class Settlements(ResourceGetMixin, ResourceListMixin):
             except IdentifierError:
                 raise IdentifierError(exc_message)
 
-    def get(self, resource_id: str, **params: Optional[Dict[str, Any]]) -> Settlement:
+    def get(self, resource_id: str, **params: Any) -> Settlement:
         self.validate_resource_id(resource_id)
         return super().get(resource_id, **params)

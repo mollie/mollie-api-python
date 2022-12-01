@@ -25,7 +25,7 @@ class MethodsBase(ResourceBase):
 class Methods(MethodsBase, ResourceGetMixin, ResourceListMixin):
     """Resource handler for the `/methods` endpoint."""
 
-    def all(self, **params: Optional[Dict[str, Any]]) -> ObjectList:
+    def all(self, **params: Any) -> ObjectList:
         """List all mollie payment methods, including methods that aren't activated in your profile."""
         resource_path = self.get_resource_path()
         path = f"{resource_path}/all"
@@ -53,7 +53,7 @@ class ProfileMethods(MethodsBase):
             Method.VOUCHER,
         ]
 
-    def enable(self, method_id: str, **params: Optional[Dict[str, Any]]) -> Method:
+    def enable(self, method_id: str, **params: Any) -> Method:
         """
         Enable payment method for profile.
 
@@ -70,7 +70,7 @@ class ProfileMethods(MethodsBase):
         result = self.perform_api_call(self.REST_CREATE, path, params=params)
         return self.get_resource_object(result)
 
-    def disable(self, method_id: str, **params: Optional[Dict[str, Any]]) -> Method:
+    def disable(self, method_id: str, **params: Any) -> Method:
         """
         Disable payment method for the profile.
 
@@ -87,14 +87,14 @@ class ProfileMethods(MethodsBase):
         result = self.perform_api_call(self.REST_DELETE, path, params=params)
         return self.get_resource_object(result)
 
-    def list(self, **params: Optional[Dict[str, Any]]) -> ObjectList:
+    def list(self, **params: Any) -> ObjectList:
         """List the payment methods for the profile."""
         params.update({"profileId": self._profile.id})
         # Divert the API call to the general Methods resource
         return Methods(self.client).list(**params)
 
     def enable_issuer(
-        self, method_id: str, issuer_id: str, data: Optional[Dict[str, Any]] = None, **params: Optional[Dict[str, Any]]
+        self, method_id: str, issuer_id: str, data: Optional[Dict[str, Any]] = None, **params: Any
     ) -> Issuer:
         """
         Enable an issuer for a payment method.
@@ -115,7 +115,7 @@ class ProfileMethods(MethodsBase):
         result = self.perform_api_call(self.REST_CREATE, path, data, params)
         return Issuer(result, self.client)
 
-    def disable_issuer(self, method_id: str, issuer_id: str, **params: Optional[Dict[str, Any]]) -> Issuer:
+    def disable_issuer(self, method_id: str, issuer_id: str, **params: Any) -> Issuer:
         """
         Disable an issuer for a payment method.
 

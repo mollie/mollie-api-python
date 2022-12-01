@@ -1,4 +1,4 @@
-from typing import Any, Dict, Optional
+from typing import Any
 
 from ..objects.organization import Organization
 from .base import ResourceGetMixin
@@ -16,7 +16,7 @@ class Organizations(ResourceGetMixin):
     def get_resource_object(self, result: dict) -> Organization:
         return Organization(result, self.client)
 
-    def get(self, resource_id: str, **params: Optional[Dict[str, Any]]) -> Organization:
+    def get(self, resource_id: str, **params: Any) -> Organization:
         if resource_id != "me":
             self.validate_resource_id(resource_id, "organization ID")
         return super().get(resource_id, **params)

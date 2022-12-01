@@ -1,4 +1,4 @@
-from typing import Any, Dict, Optional
+from typing import Any
 
 from ..objects.client import Client
 from .base import ResourceGetMixin, ResourceListMixin
@@ -20,7 +20,7 @@ class Clients(ResourceListMixin, ResourceGetMixin):
     def get_resource_object(self, result: dict) -> Client:
         return Client(result, self.client)
 
-    def get(self, resource_id: str, **params: Optional[Dict[str, Any]]) -> Client:
+    def get(self, resource_id: str, **params: Any) -> Client:
         """Retrieve a single client, linked to your partner account, by its ID."""
         self.validate_resource_id(resource_id, "client ID")
         return super().get(resource_id, **params)
