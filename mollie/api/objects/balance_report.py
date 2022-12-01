@@ -1,12 +1,19 @@
+from typing import TYPE_CHECKING, Any
+
 from .base import ObjectBase
+
+if TYPE_CHECKING:
+    from ..client import Client
+    from ..resources import BalanceReports
 
 
 class BalanceReport(ObjectBase):
     @classmethod
-    def get_resource_class(cls, client):
+    def get_resource_class(cls, client: "Client", **kwargs: Any) -> "BalanceReports":
         from ..resources import BalanceReports
 
-        return BalanceReports(client)
+        balance = kwargs["balance"]
+        return BalanceReports(client, balance)
 
     @property
     def resource(self):

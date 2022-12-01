@@ -1,4 +1,9 @@
+from typing import TYPE_CHECKING, Any
+
 from ..error import EmbedNotFound
+
+if TYPE_CHECKING:
+    from ..client import Client
 
 
 class ObjectBase(dict):
@@ -42,5 +47,5 @@ class ObjectBase(dict):
         return f"{name}s"
 
     @classmethod
-    def get_resource_class(cls, client):
+    def get_resource_class(cls, client: "Client", **kwargs: Any) -> Any:
         raise NotImplementedError  # pragma: no cover
