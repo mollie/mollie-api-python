@@ -20,6 +20,9 @@ class ResourceBase:
 
     RESOURCE_ID_PREFIX: str = ""
 
+    # Dotted path to the result class
+    RESULT_CLASS_PATH: str = ""
+
     def __init__(self, client: "Client") -> None:
         self.client = client
 

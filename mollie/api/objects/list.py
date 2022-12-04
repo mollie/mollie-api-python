@@ -1,5 +1,6 @@
-from typing import TYPE_CHECKING, Any, Dict, List, Tuple, Type
+from typing import TYPE_CHECKING, Any, Dict, List, Tuple
 
+from ..utils import get_class_from_dotted_path
 from .base import ObjectBase
 
 if TYPE_CHECKING:
@@ -118,7 +119,6 @@ class ResultListIterator:
 
     _last: int
     resource: "ResourceBase"
-    result_class: Type[ObjectBase]
     next_uri: str
     list_data: List[Dict[str, Any]]
 
@@ -170,15 +170,8 @@ class ResultListIterator:
         except TypeError:
             next_uri = ""
 
-        if not hasattr(self, "result_class"):
-            # A bit klunky: need to instantiate the class with fake data, only to get its type.
-            #
-            # This could be improved if we define the result class (or its dotted path) as a
-            # class constant on the resource. Additionaly, that could help when making
-            # get_resource_object() a generic method on ResourceBase.
-            self.result_class = type(self.resource.get_resource_object({}))
-
-        resource_name = self.result_class.get_object_name()
+        result_class = get_class_from_dotted_path(self.resource.RESULT_CLASS_PATH)
+        resource_name = result_class.get_object_name()
         list_data = data["_embedded"][resource_name]
 
         return list_data, next_uri
