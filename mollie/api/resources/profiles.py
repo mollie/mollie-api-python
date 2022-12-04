@@ -12,9 +12,7 @@ class Profiles(ResourceCreateMixin, ResourceDeleteMixin, ResourceGetMixin, Resou
     """Resource handler for the `/profiles` endpoint."""
 
     RESOURCE_ID_PREFIX: str = "pfl_"
-
-    def get_resource_object(self, result: dict) -> Profile:
-        return Profile(result, self.client)
+    RESULT_CLASS_PATH: str = "mollie.api.objects.profile.Profile"
 
     def get(self, resource_id: str, **params: Any) -> Profile:
         if resource_id != "me":

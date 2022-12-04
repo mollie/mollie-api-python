@@ -22,9 +22,7 @@ __all__ = [
 
 class SubscriptionsBase(ResourceBase):
     RESOURCE_ID_PREFIX: str = "sub_"
-
-    def get_resource_object(self, result: dict) -> Subscription:
-        return Subscription(result, self.client)
+    RESULT_CLASS_PATH: str = "mollie.api.objects.subscription.Subscription"
 
 
 class Subscriptions(SubscriptionsBase, ResourceListMixin):

@@ -20,9 +20,7 @@ __all__ = [
 
 class ChargebacksBase(ResourceBase):
     RESOURCE_ID_PREFIX: str = "chb_"
-
-    def get_resource_object(self, result: dict) -> Chargeback:
-        return Chargeback(result, self.client)
+    RESULT_CLASS_PATH: str = "mollie.api.objects.chargeback.Chargeback"
 
 
 class Chargebacks(ChargebacksBase, ResourceListMixin):

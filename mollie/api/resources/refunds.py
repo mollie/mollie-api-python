@@ -22,9 +22,7 @@ __all__ = [
 
 class RefundsBase(ResourceBase):
     RESOURCE_ID_PREFIX: str = "re_"
-
-    def get_resource_object(self, result: dict) -> Refund:
-        return Refund(result, self.client)
+    RESULT_CLASS_PATH: str = "mollie.api.objects.refund.Refund"
 
 
 class Refunds(RefundsBase, ResourceListMixin):

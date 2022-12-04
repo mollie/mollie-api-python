@@ -18,8 +18,8 @@ __all__ = [
 
 
 class MethodsBase(ResourceBase):
-    def get_resource_object(self, result: dict) -> Method:
-        return Method(result, self.client)
+
+    RESULT_CLASS_PATH: str = "mollie.api.objects.method.Method"
 
 
 class Methods(MethodsBase, ResourceGetMixin, ResourceListMixin):

@@ -25,6 +25,7 @@ class OrderLines(ResourceBase):
     """
 
     RESOURCE_ID_PREFIX: str = "odl_"
+    RESULT_CLASS_PATH: str = "mollie.api.objects.order_line.OrderLine"
 
     _order: "Order"
 
@@ -34,9 +35,6 @@ class OrderLines(ResourceBase):
 
     def get_resource_path(self) -> str:
         return f"orders/{self._order.id}/lines"
-
-    def get_resource_object(self, result: dict) -> OrderLine:
-        return OrderLine(result, self.client)
 
     def delete_lines(self, data: Optional[Dict[str, Any]] = None, **params: Any) -> dict:
         """

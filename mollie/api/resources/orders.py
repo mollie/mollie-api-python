@@ -12,9 +12,7 @@ class Orders(ResourceCreateMixin, ResourceDeleteMixin, ResourceGetMixin, Resourc
     """Resource handler for the `/orders` endpoint."""
 
     RESOURCE_ID_PREFIX: str = "ord_"
-
-    def get_resource_object(self, result: dict) -> Order:
-        return Order(result, self.client)
+    RESULT_CLASS_PATH: str = "mollie.api.objects.order.Order"
 
     def get(self, resource_id: str, **params: Any) -> Order:
         self.validate_resource_id(resource_id, "order ID")
