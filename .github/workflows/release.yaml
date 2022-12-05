@@ -41,7 +41,7 @@ jobs:
     name: Upload packages to PyPi
     needs: build
     runs-on: ubuntu-latest
-    if: ${{ !contains(github.ref_name, "dev")}}  # Ignore dev releases
+    if: ${{ !contains(github.ref_name, 'dev')}}  # Ignore dev releases
     steps:
       - name: Setup Python
         uses: actions/setup-python@v4
