@@ -160,6 +160,10 @@ class Payment(ObjectBase):
     def routing(self):
         return self._get_property("routing")
 
+    @property
+    def subscription_id(self):
+        return self._get_property("subscriptionId")
+
     # documented _links
 
     @property
