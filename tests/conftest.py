@@ -1,3 +1,4 @@
+import json
 import logging
 import os
 import time
@@ -36,13 +37,13 @@ def oauth_token():
     return token
 
 
-@pytest.fixture(scope="session")
-def oauth_client(oauth_token):
+@pytest.fixture
+def oauth_client(oauth_token, response):
     """Setup a Mollie API client with initialized OAuth2 authentication."""
     client_id = "app_nvQQ4mGHqprcfFFqpnmbOgUs"
     client_secret = "2Tuc4qk8U6kCA8qBV3Fb2wwceDDfeRebDQpbOgUs"
     redirect_uri = "https://example.com/callback"
-    scope = ("organizations.read",)
+    scope = ("profiles.read",)
 
     def set_token(x):
         logger.info(f"Storing token: {x}")
@@ -56,7 +57,15 @@ def oauth_client(oauth_token):
         token=oauth_token,
         set_token=set_token,
     )
-    assert client._oauth_client.authorized is True
+
+    # Mock a forced token refresh, so we always have an authenticated client
+    response.add(
+        response.POST,
+        "https://api.mollie.com/oauth2/tokens",
+        body=json.dumps(oauth_token),
+    )
+    client._oauth_client.refresh_token(client.OAUTH_TOKEN_URL)
+
     return client
 
 

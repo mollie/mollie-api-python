@@ -302,7 +302,7 @@ def test_oauth_client_default_user_agent(oauth_client, response):
     # perform a request and inpect the actual used headers
     response.get("https://api.mollie.com/v2/organizations/me", "organization_current")
     oauth_client.organizations.get("me")
-    request = response.calls[0].request
+    request = response.calls[-1].request
     assert re.match(regex, request.headers["User-Agent"])
 
 
