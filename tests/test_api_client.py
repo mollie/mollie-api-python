@@ -72,10 +72,8 @@ def test_client_no_api_key():
         client.customers.list()
 
 
-def test_client_invalid_api_key():
+def test_client_invalid_api_key(client):
     """Setting up an invalid api key raises an error."""
-    client = Client()
-
     with pytest.raises(RequestSetupError, match="Invalid API key: 'invalid'"):
         client.set_api_key("invalid")
 
@@ -108,13 +106,11 @@ def test_client_broken_cert_bundle(monkeypatch):
     assert "Could not find a suitable TLS CA certificate bundle, invalid path: /does/not/exist" in str(excinfo.value)
 
 
-def test_client_generic_request_error(response, oauth_client):
+def test_client_generic_request_error(client, response, oauth_client):
     """When the remote server refuses connections or other request issues arise, an error should be raised.
 
     The 'response' fixture blocks all outgoing connections, also when no actual responses are configured.
     """
-    client = Client()
-    client.set_api_key("test_test")
     client.set_api_endpoint("https://api.mollie.invalid/")
     with pytest.raises(RequestError, match="Unable to communicate with Mollie: Connection refused"):
         client.customers.list()
@@ -192,16 +188,14 @@ def test_client_delete_received_error_response(client, response, resp_payload, r
     assert excinfo.value.status == resp_status
 
 
-def test_client_response_404_but_no_payload(response):
+def test_client_response_404_but_no_payload(client, response):
     """An error response from the API should raise an error.
 
     When the response returns an error, but no valid error data is available in the response,
     we should still raise an error. The API v1 formatted error in the test is missing the required 'status' field.
     """
     response.get("https://api.mollie.com/v3/customers", "v1_api_error", status=404)
-    client = Client()
     client.api_version = "v3"
-    client.set_api_key("test_test")
 
     with pytest.raises(ResponseHandlingError, match="Invalid API version"):
         client.customers.list()
@@ -320,13 +314,12 @@ def test_client_user_agent_with_access_token():
     assert "OAuth/2.0" in client.user_agent
 
 
-def test_client_set_user_agent_component(response):
+def test_client_set_user_agent_component(client, response):
     """We should be able to add useragent components.
 
     Note: we don't use the fixture client because it is shared between tests, and we don't want it
     to be clobbered with random User-Agent strings.
     """
-    client = Client()
     assert "Hoeba" not in client.user_agent
     client.set_user_agent_component("Hoeba", "1.0.0")
     assert "Hoeba/1.0.0" in client.user_agent
@@ -348,9 +341,8 @@ def test_client_set_user_agent_component(response):
         ("trailing space ", "TrailingSpace"),
     ],
 )
-def test_client_set_user_agent_component_correct_key_syntax(key, expected):
+def test_client_set_user_agent_component_correct_key_syntax(client, key, expected):
     """When we receive UA component keys that don't adhere to the proposed syntax, they are corrected."""
-    client = Client()
     client.set_user_agent_component(key, "1.0.0")
     assert f"{expected}/1.0.0" in client.user_agent
 
@@ -367,16 +359,14 @@ def test_client_set_user_agent_component_correct_key_syntax(key, expected):
         ("trailing space ", "trailing_space"),
     ],
 )
-def test_client_set_user_agent_component_correct_value_syntax(value, expected):
+def test_client_set_user_agent_component_correct_value_syntax(client, value, expected):
     """When we receive UA component values that don't adhere to the proposed syntax, they are corrected."""
-    client = Client()
     client.set_user_agent_component("Something", value)
     assert f"Something/{expected}" in client.user_agent
 
 
-def test_client_update_user_agent_component():
+def test_client_update_user_agent_component(client):
     """We should be able to update the User-Agent component when using the same key."""
-    client = Client()
     client.set_user_agent_component("Test", "1.0.0")
     assert "Test/1.0.0" in client.user_agent
 

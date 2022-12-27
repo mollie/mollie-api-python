@@ -10,7 +10,7 @@ from mollie.api.client import Client
 logger = logging.getLogger("mollie.pytest.fixtures")
 
 
-@pytest.fixture(scope="session")
+@pytest.fixture
 def client():
     """Setup a Mollie API client object."""
     api_key = os.environ.get("MOLLIE_API_KEY", "test_test")
