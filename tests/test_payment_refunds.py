@@ -63,39 +63,6 @@ def test_get_payment_refund_invalid_id(client, response):
     assert str(excinfo.value) == "Invalid Refund ID 'invalid', it should start with 're_'."
 
 
-@pytest.mark.skip(reason="Obsoleted by test_get_payment_refund")
-def test_get_refund(client, response):
-    """Retrieve a specific refund of a payment."""
-    response.get(f"https://api.mollie.com/v2/payments/{PAYMENT_ID}/refunds/{REFUND_ID}", "refund_single_no_links")
-    response.get(f"https://api.mollie.com/v2/payments/{PAYMENT_ID}", "payment_single")
-
-    refund = client.payment_refunds.with_parent_id(PAYMENT_ID).get(REFUND_ID)
-    assert isinstance(refund, Refund)
-    # properties
-    assert refund.resource == "refund"
-    assert refund.id == REFUND_ID
-    assert refund.amount == {"currency": "EUR", "value": "5.95"}
-    assert refund.settlement_id is None
-    assert refund.settlement_amount is None
-    assert refund.description == "Required quantity not in stock, refunding one photo book."
-    assert refund.metadata == {"bookkeeping_id": 12345}
-    assert refund.status == Refund.STATUS_PENDING
-    assert_list_object(refund.lines, OrderLine)
-    assert refund.payment_id == PAYMENT_ID
-    assert refund.order_id is None
-    assert refund.created_at == "2018-03-14T17:09:02.0Z"
-    # properties from _links
-    assert refund.payment is not None
-    assert refund.settlement is None
-    assert refund.order is None
-
-    # additional methods
-    assert refund.is_queued() is False
-    assert refund.is_pending() is True
-    assert refund.is_processing() is False
-    assert refund.is_refunded() is False
-
-
 def test_payment_refund_get_related_payment(refund, response):
     """Verify the related payment of a refund."""
     response.get(f"https://api.mollie.com/v2/payments/{PAYMENT_ID}", "payment_single")
@@ -133,29 +100,6 @@ def test_create_payment_refund(payment, response):
     refund = payment.refunds.create(data)
     assert isinstance(refund, Refund)
     assert refund.id == REFUND_ID
-
-
-@pytest.mark.skip(reason="Obsoleted by test_get_payment_refund")
-def test_get_single_refund_on_payment_object(client, response):
-    """Retrieve a payment refund of a payment."""
-    response.get(f"https://api.mollie.com/v2/payments/{PAYMENT_ID}", "payment_single")
-    response.get(f"https://api.mollie.com/v2/payments/{PAYMENT_ID}/refunds/{REFUND_ID}", "refund_single")
-
-    payment = client.payments.get(PAYMENT_ID)
-    refund = client.payment_refunds.on(payment).get(REFUND_ID)
-    assert isinstance(refund, Refund)
-    assert refund.id == REFUND_ID
-
-
-@pytest.mark.skip(reason="Obsoleted by test_get_payment_refund")
-def test_list_refunds_on_payment_object(client, response):
-    """Retrieve a list of payment refunds of a payment."""
-    response.get(f"https://api.mollie.com/v2/payments/{PAYMENT_ID}", "payment_single")
-    response.get(f"https://api.mollie.com/v2/payments/{PAYMENT_ID}/refunds", "refunds_list")
-
-    payment = client.payments.get(PAYMENT_ID)
-    refunds = client.payment_refunds.on(payment).list()
-    assert_list_object(refunds, Refund)
 
 
 def test_cancel_payment_refund(payment, response):
