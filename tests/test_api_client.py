@@ -430,3 +430,46 @@ def test_unauthorized_oauth_client_should_return_authorization_url(mocker, respo
     assert authorization_url.startswith(
         client.OAUTH_AUTHORIZATION_URL
     ), "A client without initial token should return a correct authorization url"
+
+
+def test_enable_testmode_globally_access_token(response):
+    mocked_request = response.get(
+        "https://api.mollie.com/v2/methods", "methods_list", match=[matchers.query_string_matcher("testmode=true")]
+    )
+
+    client = Client()
+    client.set_access_token("access_123")
+    client.set_testmode(True)
+
+    client.methods.list()
+    assert mocked_request.call_count == 1
+
+
+def test_enable_testmode_globally_oauth(response, oauth_client):
+    mocked_request = response.get(
+        "https://api.mollie.com/v2/methods", "methods_list", match=[matchers.query_string_matcher("testmode=true")]
+    )
+
+    oauth_client.set_testmode(True)
+
+    oauth_client.methods.list()
+    assert mocked_request.call_count == 1
+
+
+def test_override_testmode(response, oauth_client):
+    mocked_request = response.get(
+        "https://api.mollie.com/v2/methods", "methods_list", match=[matchers.query_string_matcher("testmode=false")]
+    )
+
+    oauth_client.set_testmode(True)
+
+    oauth_client.methods.list(testmode="false")
+    assert mocked_request.call_count == 1
+
+
+def test_testmode_for_apikey_access_raises_error(client, response):
+    client.set_testmode(True)
+
+    with pytest.raises(RequestSetupError) as excinfo:
+        client.methods.list()
+    assert str(excinfo.value) == "Configuring testmode only works with access_token or OAuth authorization"
