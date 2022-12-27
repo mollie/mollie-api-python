@@ -122,7 +122,6 @@ class Client(object):
 
     def set_access_token(self, access_token: str) -> None:
         self.api_key = self.validate_access_token(access_token)
-        self.set_user_agent_component("OAuth", "2.0", sanitize=False)  # keep spelling equal to the PHP client
 
     def set_timeout(self, timeout: Union[int, Tuple[int, int]]) -> None:
         self.timeout = timeout

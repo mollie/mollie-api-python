@@ -306,14 +306,6 @@ def test_oauth_client_default_user_agent(oauth_client, response):
     assert re.match(regex, request.headers["User-Agent"])
 
 
-def test_client_user_agent_with_access_token():
-    """When authenticating with an access token, the User-Agent should contain an OAuth component."""
-    client = Client()
-    assert "OAuth".lower() not in client.user_agent.lower()
-    client.set_access_token("access_123")
-    assert "OAuth/2.0" in client.user_agent
-
-
 def test_client_set_user_agent_component(client, response):
     """We should be able to add useragent components.
 
