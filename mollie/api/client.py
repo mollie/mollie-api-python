@@ -53,6 +53,7 @@ class Client(object):
     client_id: str = ""
     client_secret: str = ""
     set_token: Callable[[dict], None]
+    testmode: bool = False
 
     @staticmethod
     def validate_api_endpoint(api_endpoint: str) -> str:
@@ -126,6 +127,9 @@ class Client(object):
     def set_timeout(self, timeout: Union[int, Tuple[int, int]]) -> None:
         self.timeout = timeout
 
+    def set_testmode(self, testmode: bool) -> None:
+        self.testmode = testmode
+
     def set_user_agent_component(self, key: str, value: str, sanitize: bool = True) -> None:
         """Add or replace new user-agent component strings.
 
@@ -166,6 +170,13 @@ class Client(object):
                 payload = json.dumps(data)
             except TypeError as err:
                 raise RequestSetupError(f"Error encoding data into JSON: {err}.")
+
+        if params is None:
+            params = {}
+        if self.testmode and "testmode" not in params:
+            if not (self.api_key.startswith("access_") or hasattr(self, "_oauth_client")):
+                raise RequestSetupError("Configuring testmode only works with access_token or OAuth authorization")
+            params["testmode"] = "true"
 
         querystring = generate_querystring(params)
         if querystring:

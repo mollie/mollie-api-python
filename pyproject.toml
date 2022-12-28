@@ -12,7 +12,7 @@ mock_use_standalone_module = true
 addopts = """
     --cov mollie/
     --no-cov-on-fail
-    --cov-fail-under=80
+    --cov-fail-under=90
     --cov-report=term-missing
     --cov-branch
 """

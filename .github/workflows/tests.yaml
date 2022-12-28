@@ -10,7 +10,13 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python_version: ["3.7", "3.8", "3.9", "3.10", "3.11", "pypy-3.7", "pypy-3.8", "pypy-3.9"]
+        python_version: ["3.7", "3.8", "3.9", "3.10", "3.11", "pypy-3.7", "pypy-3.9"]
+        coverage_fail_under: [90]
+        include:
+          # https://github.com/nedbat/coveragepy/issues/1515
+          # https://foss.heptapod.net/pypy/pypy/-/issues/3876
+          - python_version: "pypy-3.8"
+            coverage_fail_under: 0
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -27,7 +33,7 @@ jobs:
           python -m pip install -r test_requirements.txt
 
       - name: Run unittests
-        run: python -m pytest
+        run: python -m pytest --cov-fail-under=${{ matrix.coverage_fail_under }}
 
       - name: Verify dependencies
         run: python -m safety check
