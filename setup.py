@@ -32,6 +32,9 @@ setup(
     long_description_content_type="text/markdown",
     packages=find_packages(),
     include_package_data=True,
+    package_data={
+        "mollie": ["py.typed"],
+    },
     description="Mollie API client for Python",
     author="Mollie B.V.",
     author_email="info@mollie.com",
