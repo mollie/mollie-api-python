@@ -9,3 +9,4 @@ mypy; platform_python_implementation != "PyPy"
 responses>=0.17.0
 safety
 types-requests
+coverage>=7.0.2
