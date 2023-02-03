@@ -38,6 +38,7 @@
          "email": "luke@skywalker.com"
      },
      "redirectUrl": "https://example.org/redirect",
+     "cancelUrl": "https://example.org/payment-canceled",
      "lines": [
          {
              "resource": "orderline",

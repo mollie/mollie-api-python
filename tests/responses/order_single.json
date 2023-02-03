@@ -44,6 +44,7 @@
     "email": "norris@chucknorrisfacts.net"
   },
   "redirectUrl": "https://example.org/redirect",
+  "cancelUrl": "https://example.org/payment-canceled",
   "webhookUrl": "https://example.org/webhook",
   "lines": [
     {

@@ -120,6 +120,10 @@ class Order(ObjectBase):
     def completed_at(self):
         return self._get_property("completedAt")
 
+    @property
+    def cancel_url(self):
+        return self._get_property("cancelUrl")
+
     # documented _links
 
     @property

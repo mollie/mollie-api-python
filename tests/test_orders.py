@@ -59,6 +59,7 @@ def test_get_order(client, response):
     assert order.locale == "nl_NL"
     assert order.metadata == {"description": "Lego cars", "order_id": "1337"}
     assert order.redirect_url == "https://example.org/redirect"
+    assert order.cancel_url == "https://example.org/payment-canceled"
     assert order.webhook_url == "https://example.org/webhook"
     assert order.created_at == "2018-08-02T09:29:56+00:00"
     assert order.expires_at == "2018-08-30T09:29:56+00:00"
@@ -167,6 +168,7 @@ def test_create_order(client, response):
         "locale": "nl_NL",
         "orderNumber": "1337",
         "redirectUrl": "https://example.org/redirect",
+        "cancelUrl": "https://example.org/payment-canceled",
         "webhookUrl": "https://example.org/webhook",
         "method": "klarnapaylater",
         "lines": [

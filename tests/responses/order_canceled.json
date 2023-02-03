@@ -33,6 +33,7 @@
   },
   "canceledAt": "2018-08-03T09:29:56+00:00",
   "redirectUrl": "https://example.org/redirect",
+  "cancelUrl": "https://example.org/payment-canceled",
   "lines": [
     {
       "resource": "orderline",
