@@ -17,6 +17,7 @@
                 },
                 "description":"Bicycle tires",
                 "redirectUrl":"https://webshop.example.org/thanks",
+                "cancelUrl": "https://webshop.example.org/payment-canceled",
                 "webhookUrl":"https://webshop.example.org/payment-links/webhook/",
                 "_links":{
                     "self":{

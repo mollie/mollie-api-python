@@ -41,6 +41,7 @@ def test_create_payment(client, response):
             "amount": {"currency": "EUR", "value": "10.00"},
             "description": "Order #12345",
             "redirectUrl": "https://webshop.example.org/order/12345/",
+            "cancelUrl": "https://webshop.example.org/payment-canceled",
             "webhookUrl": "https://webshop.example.org/payments/webhook/",
             "method": "ideal",
         }
@@ -93,6 +94,7 @@ def test_get_single_payment(client, response):
     assert payment.description == "Order #12345"
     assert payment.redirect_url == "https://webshop.example.org/order/12345/"
     assert payment.webhook_url == "https://webshop.example.org/payments/webhook/"
+    assert payment.cancel_url == "https://webshop.example.org/payment-canceled"
     assert payment.method == Method.IDEAL
     assert payment.metadata == {"order_id": "12345"}
     assert payment.locale is None

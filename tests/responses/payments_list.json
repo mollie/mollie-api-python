@@ -21,6 +21,7 @@
         "profileId": "pfl_gh5wrNQ6fx",
         "sequenceType": "oneoff",
         "redirectUrl": "https://webshop.example.org/order/1531993786",
+        "cancelUrl": "https://webshop.example.org/payment-canceled",
         "webhookUrl": "https://webshop.example.org/payments/webhook/",
         "settlementAmount": {
           "value": "50.00",
@@ -57,6 +58,7 @@
         "profileId": "pfl_gh5wrNQ6fx",
         "sequenceType": "oneoff",
         "redirectUrl": "https://webshop.example.org/order/1531993773",
+        "cancelUrl": "https://webshop.example.org/payment-canceled",
         "webhookUrl": "https://webshop.example.org/payments/webhook/",
         "settlementAmount": {
           "value": "50.00",
@@ -93,6 +95,7 @@
         "profileId": "pfl_gh5wrNQ6rt",
         "sequenceType": "oneoff",
         "redirectUrl": "https://webshop.example.org/order/1531993778",
+        "cancelUrl": "https://webshop.example.org/payment-canceled",
         "webhookUrl": "https://webshop.example.org/payments/webhook/",
         "settlementAmount": {
           "value": "50.00",

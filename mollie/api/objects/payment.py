@@ -195,6 +195,10 @@ class Payment(ObjectBase):
         """Return the captures related to this payment"""
         return PaymentCaptures(self.client, self)
 
+    @property
+    def cancel_url(self):
+        return self._get_property("cancelUrl")
+
     def get_settlement(self):
         """Return the settlement for this payment."""
         if self.settlement_id:
