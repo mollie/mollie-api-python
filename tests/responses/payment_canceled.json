@@ -18,6 +18,7 @@
   "profileId": "pfl_QkEhN94Ba",
   "sequenceType": "oneoff",
   "redirectUrl": "https://webshop.example.org/order/12345/",
+  "cancelUrl": "https://webshop.example.org/payment-canceled",
   "webhookUrl": "https://webshop.example.org/payments/webhook/",
   "_links": {
     "self": {

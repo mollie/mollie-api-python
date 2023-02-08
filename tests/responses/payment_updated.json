@@ -26,6 +26,7 @@
   },
   "sequenceType": "recurring",
   "redirectUrl": "https://webshop.example.org/order/12346/",
+  "cancelUrl": "https://webshop.example.org/payment-canceled",
   "webhookUrl": "https://webshop.example.org/payments/webhook/",
   "mandateId": "mdt_h3gAaD5zP",
   "subscriptionId": "sub_rVKGtNd6s3",
