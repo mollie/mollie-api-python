@@ -1,4 +1,3 @@
-from ..resources import OrderLines
 from .base import ObjectBase
 
 
@@ -160,6 +159,8 @@ class Order(ObjectBase):
 
     @property
     def lines(self):
+        from ..resources import OrderLines
+
         return OrderLines(self.client, self)
 
     @property
