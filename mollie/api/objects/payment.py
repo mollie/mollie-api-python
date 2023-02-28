@@ -1,4 +1,3 @@
-from ..resources import PaymentCaptures, PaymentChargebacks
 from .base import ObjectBase
 from .customer import Customer
 
@@ -188,11 +187,15 @@ class Payment(ObjectBase):
     @property
     def chargebacks(self):
         """Return the chargebacks related to this payment."""
+        from ..resources import PaymentChargebacks
+
         return PaymentChargebacks(self.client, self)
 
     @property
     def captures(self):
         """Return the captures related to this payment"""
+        from ..resources import PaymentCaptures
+
         return PaymentCaptures(self.client, self)
 
     def get_settlement(self):
