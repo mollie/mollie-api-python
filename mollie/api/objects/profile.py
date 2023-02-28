@@ -1,7 +1,6 @@
 import warnings
 
 from ..error import APIDeprecationWarning
-from ..resources import ProfileMethods
 from .base import ObjectBase
 
 
@@ -76,6 +75,8 @@ class Profile(ObjectBase):
 
     @property
     def methods(self):
+        from ..resources import ProfileMethods
+
         return ProfileMethods(self.client, self)
 
     @property
