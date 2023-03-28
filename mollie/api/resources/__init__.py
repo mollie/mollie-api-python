@@ -1,3 +1,4 @@
+from .balances import *  # noqa: F401, F403
 from .captures import *  # noqa: F401, F403
 from .chargebacks import *  # noqa: F401, F403
 from .clients import *  # noqa: F401, F403
