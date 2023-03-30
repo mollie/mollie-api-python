@@ -47,19 +47,21 @@ class Payments(
         self.validate_resource_id(resource_id, "payment ID")
         return super().get(resource_id, **params)
 
-    def delete(self, resource_id: str, **params: Any) -> dict:
+    def delete(self, resource_id: str, idempotency_key: str = "", **params: Any) -> dict:
         """Cancel payment and return the payment object.
 
         Deleting a payment causes the payment status to change to canceled.
         The updated payment object is returned.
         """
         self.validate_resource_id(resource_id, "payment ID")
-        result = super().delete(resource_id, **params)
+        result = super().delete(resource_id, idempotency_key, **params)
         return self.get_resource_object(result)
 
-    def update(self, resource_id: str, data: Optional[Dict[str, Any]] = None, **params: Any) -> Payment:
+    def update(
+        self, resource_id: str, data: Optional[Dict[str, Any]] = None, idempotency_key: str = "", **params: Any
+    ) -> Payment:
         self.validate_resource_id(resource_id, "payment ID")
-        return super().update(resource_id, data, **params)
+        return super().update(resource_id, data, idempotency_key, **params)
 
 
 class OrderPayments(PaymentsBase, ResourceCreateMixin):

@@ -34,6 +34,6 @@ class CustomerMandates(ResourceCreateMixin, ResourceDeleteMixin, ResourceGetMixi
         self.validate_resource_id(resource_id, "mandate ID")
         return super().get(resource_id, **params)
 
-    def delete(self, resource_id: str, **params: Any) -> dict:
+    def delete(self, resource_id: str, idempotency_key: str = "", **params: Any) -> dict:
         self.validate_resource_id(resource_id, "mandate ID")
-        return super().delete(resource_id, **params)
+        return super().delete(resource_id, idempotency_key, **params)

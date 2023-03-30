@@ -1,3 +1,5 @@
+import logging
+import uuid
 from typing import TYPE_CHECKING, Any, Dict, Optional
 
 from ..error import IdentifierError, ResponseError, ResponseHandlingError
@@ -40,8 +42,10 @@ class ResourceBase:
         path: str,
         data: Optional[Dict[str, Any]] = None,
         params: Optional[Dict[str, Any]] = None,
+        idempotency_key: str = "",
     ) -> Dict[str, Any]:
-        resp = self.client.perform_http_call(http_method, path, data, params)
+
+        resp = self.client.perform_http_call(http_method, path, data, params, idempotency_key)
         if "application/hal+json" in resp.headers.get("Content-Type", ""):
             # set the content type according to the media type definition
             resp.encoding = "utf-8"
@@ -49,17 +53,25 @@ class ResourceBase:
             result = resp.json() if resp.status_code != 204 else {}
         except Exception:
             raise ResponseHandlingError(
-                f"Unable to decode Mollie API response (status code: {resp.status_code}): '{resp.text}'."
+                f"Unable to decode Mollie API response (status code: {resp.status_code}): '{resp.text}'.",
+                idempotency_key,
             )
         if resp.status_code < 200 or resp.status_code > 299:
             if "status" in result and (result["status"] < 200 or result["status"] > 299):
                 # the factory will return the appropriate ResponseError subclass based on the result
-                raise ResponseError.factory(result)
+                raise ResponseError.factory(result, idempotency_key)
             else:
                 raise ResponseHandlingError(
                     "Received HTTP error from Mollie API, but no status in payload "
-                    f"(status code: {resp.status_code}): '{resp.text}'."
+                    f"(status code: {resp.status_code}): '{resp.text}'.",
+                    idempotency_key,
                 )
+        if resp.headers.get("Idempotent-Replayed"):
+            logging.warning(
+                f"The 'Idempotent-Replayed' header was set in the API response, the Idempotency-Key used in the "
+                f"request was '{idempotency_key}'. See https://docs.mollie.com/overview/api-idempotency for details"
+            )
+
         return result
 
     @classmethod
@@ -71,11 +83,16 @@ class ResourceBase:
         if not resource_id or not str(resource_id).startswith(cls.RESOURCE_ID_PREFIX):
             raise IdentifierError(message)
 
+    @staticmethod
+    def _generate_idempotency_key() -> str:
+        return str(uuid.uuid4())
+
 
 class ResourceCreateMixin(ResourceBase):
-    def create(self, data: Optional[Dict[str, Any]] = None, **params: Any) -> Any:
+    def create(self, data: Optional[Dict[str, Any]] = None, idempotency_key: str = "", **params: Any) -> Any:
+        idempotency_key = idempotency_key or self._generate_idempotency_key()
         path = self.get_resource_path()
-        result = self.perform_api_call(self.REST_CREATE, path, data, params)
+        result = self.perform_api_call(self.REST_CREATE, path, data, params, idempotency_key=idempotency_key)
         return self.get_resource_object(result)
 
 
@@ -103,15 +120,19 @@ class ResourceListMixin(ResourceBase):
 
 
 class ResourceUpdateMixin(ResourceBase):
-    def update(self, resource_id: str, data: Optional[Dict[str, Any]] = None, **params: Any) -> Any:
+    def update(
+        self, resource_id: str, data: Optional[Dict[str, Any]] = None, idempotency_key: str = "", **params: Any
+    ) -> Any:
+        idempotency_key = idempotency_key or self._generate_idempotency_key()
         resource_path = self.get_resource_path()
         path = f"{resource_path}/{resource_id}"
-        result = self.perform_api_call(self.REST_UPDATE, path, data, params)
+        result = self.perform_api_call(self.REST_UPDATE, path, data, params, idempotency_key=idempotency_key)
         return self.get_resource_object(result)
 
 
 class ResourceDeleteMixin(ResourceBase):
-    def delete(self, resource_id: str, **params: Any) -> Any:
+    def delete(self, resource_id: str, idempotency_key: str = "", **params: Any) -> Any:
+        idempotency_key = idempotency_key or self._generate_idempotency_key()
         resource_path = self.get_resource_path()
         path = f"{resource_path}/{resource_id}"
-        return self.perform_api_call(self.REST_DELETE, path, params=params)
+        return self.perform_api_call(self.REST_DELETE, path, params=params, idempotency_key=idempotency_key)

@@ -1,0 +1,11 @@
+{
+  "_links": {
+    "documentation": {
+      "href": "https://docs.mollie.com/overview/api-idempotency",
+      "type": "text/html"
+    }
+  },
+  "detail": "This Idempotency-Key has already been used.",
+  "status": 400,
+  "title": "Bad Request"
+}

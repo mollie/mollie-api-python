@@ -20,7 +20,7 @@ class Orders(ResourceCreateMixin, ResourceDeleteMixin, ResourceGetMixin, Resourc
         self.validate_resource_id(resource_id, "order ID")
         return super().get(resource_id, **params)
 
-    def delete(self, resource_id: str, **params: Any) -> dict:
+    def delete(self, resource_id: str, idempotency_key: str = "", **params: Any) -> dict:
         """Cancel order and return the order object.
 
         Deleting an order causes the order status to change to canceled.
@@ -30,7 +30,9 @@ class Orders(ResourceCreateMixin, ResourceDeleteMixin, ResourceGetMixin, Resourc
         result = super().delete(resource_id, **params)
         return self.get_resource_object(result)
 
-    def update(self, resource_id: str, data: Optional[Dict[str, Any]] = None, **params: Any) -> Order:
+    def update(
+        self, resource_id: str, data: Optional[Dict[str, Any]] = None, idempotency_key: str = "", **params: Any
+    ) -> Order:
         """Update an order, and return the updated order."""
         self.validate_resource_id(resource_id, "order ID")
-        return super().update(resource_id, data, **params)
+        return super().update(resource_id, data, idempotency_key, **params)

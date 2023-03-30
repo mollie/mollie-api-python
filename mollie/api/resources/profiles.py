@@ -21,10 +21,12 @@ class Profiles(ResourceCreateMixin, ResourceDeleteMixin, ResourceGetMixin, Resou
             self.validate_resource_id(resource_id, "profile ID")
         return super().get(resource_id, **params)
 
-    def delete(self, resource_id: str, **params: Any) -> dict:
+    def delete(self, resource_id: str, idempotency_key: str = "", **params: Any) -> dict:
         self.validate_resource_id(resource_id, "profile ID")
-        return super().delete(resource_id, **params)
+        return super().delete(resource_id, idempotency_key, **params)
 
-    def update(self, resource_id: str, data: Optional[Dict[str, Any]] = None, **params: Any) -> Profile:
+    def update(
+        self, resource_id: str, data: Optional[Dict[str, Any]] = None, idempotency_key: str = "", **params: Any
+    ) -> Profile:
         self.validate_resource_id(resource_id, "profile ID")
-        return super().update(resource_id, **params)
+        return super().update(resource_id, idempotency_key=idempotency_key, **params)

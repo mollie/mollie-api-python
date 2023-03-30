@@ -23,41 +23,60 @@ class IdentifierError(RequestSetupError):
 
 
 class ResponseHandlingError(Error):
-    """Errors related to handling the response from the API."""
+    """Errors related to handling the response from the API.
 
-    pass
+    When receiving an error while performing a POST, PATCH or DELETE action,
+    an idempotency_key is available that can be used for replicating the request.
+    """
+
+    idempotency_key = ""
+
+    def __init__(self, message, idempotency_key=""):
+        super().__init__(message)
+        self.idempotency_key = idempotency_key
 
 
 class ResponseError(Error):
-    """Errors reported by the API."""
+    """Errors reported by the API.
+
+    When receiving an error while performing a POST, PATCH or DELETE action,
+    an idempotency_key is available that can be used for replicating the request.
+    """
 
     status = None
     field = None
+    idempotency_key = ""
 
-    def __init__(self, resp=None):
+    def __init__(self, resp=None, idempotency_key=""):
         message = resp["detail"]
         super().__init__(message)
         self.status = resp["status"]
         if "field" in resp:
             self.field = resp["field"]
 
+        self.idempotency_key = idempotency_key
+
     @staticmethod
-    def factory(resp):
+    def factory(resp, idempotency_key=""):
         """Return a ResponseError subclass based on the API payload.
 
         All errors are documented: https://docs.mollie.com/guides/handling-errors#all-possible-status-codes
         More exceptions should be added here when appropriate, and when useful examples of API errors are available.
         """
         status = resp["status"]
-        if status == 401:
-            return UnauthorizedError(resp)
+        if status == 400:
+            return BadRequestError(resp, idempotency_key=idempotency_key)
+        elif status == 401:
+            return UnauthorizedError(resp, idempotency_key=idempotency_key)
         elif status == 404:
-            return NotFoundError(resp)
+            return NotFoundError(resp, idempotency_key=idempotency_key)
+        elif status == 409:
+            return ConflictError(resp, idempotency_key=idempotency_key)
         elif status == 422:
-            return UnprocessableEntityError(resp)
+            return UnprocessableEntityError(resp, idempotency_key=idempotency_key)
         else:
             # generic fallback
-            return ResponseError(resp)
+            return ResponseError(resp, idempotency_key=idempotency_key)
 
 
 class UnauthorizedError(ResponseError):
@@ -68,6 +87,16 @@ class UnauthorizedError(ResponseError):
 
 class NotFoundError(ResponseError):
     """The object referenced by your API request does not exist."""
+
+    pass
+
+
+class BadRequestError(ResponseError):
+
+    pass
+
+
+class ConflictError(ResponseError):
 
     pass
 
