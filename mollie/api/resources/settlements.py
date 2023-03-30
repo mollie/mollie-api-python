@@ -1,7 +1,6 @@
 import re
 from typing import Any, Pattern
 
-from ..error import IdentifierError
 from ..objects.settlement import Settlement
 from .base import ResourceGetMixin, ResourceListMixin
 
@@ -44,10 +43,7 @@ class Settlements(ResourceGetMixin, ResourceListMixin):
             return
 
         else:
-            try:
-                super().validate_resource_id(resource_id)
-            except IdentifierError:
-                raise IdentifierError(exc_message)
+            super().validate_resource_id(resource_id, message=exc_message)
 
     def get(self, resource_id: str, **params: Any) -> Settlement:
         self.validate_resource_id(resource_id)
