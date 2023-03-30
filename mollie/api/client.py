@@ -190,6 +190,7 @@ class Client(object):
         path: str,
         data: Optional[Dict[str, Any]] = None,
         params: Optional[Dict[str, Any]] = None,
+        idempotency_key: str = "",
     ) -> requests.Response:
         if not self.api_key:
             raise RequestSetupError("You have not set an API key. Please use set_api_key() to set the API key.")
@@ -201,22 +202,29 @@ class Client(object):
 
         url, payload, params = self._format_request_data(path, data, params)
         try:
+
+            headers = {
+                "Accept": "application/json",
+                "Authorization": f"Bearer {self.api_key}",
+                "Content-Type": "application/json",
+                "User-Agent": self.user_agent,
+                "X-Mollie-Client-Info": self.UNAME,
+            }
+
+            if idempotency_key:
+                headers.update({"Idempotency-Key": idempotency_key})
+
             response = self._client.request(
                 method=http_method,
                 url=url,
-                headers={
-                    "Accept": "application/json",
-                    "Authorization": f"Bearer {self.api_key}",
-                    "Content-Type": "application/json",
-                    "User-Agent": self.user_agent,
-                    "X-Mollie-Client-Info": self.UNAME,
-                },
+                headers=headers,
                 params=params,
                 data=payload,
                 timeout=self.timeout,
             )
         except requests.exceptions.RequestException as err:
             raise RequestError(f"Unable to communicate with Mollie: {err}")
+
         return response
 
     def _perform_http_call_oauth(
@@ -225,18 +233,25 @@ class Client(object):
         path: str,
         data: Optional[Dict[str, Any]] = None,
         params: Optional[Dict[str, Any]] = None,
+        idempotency_key: str = "",
     ) -> requests.Response:
         url, payload, params = self._format_request_data(path, data, params)
         try:
+
+            headers = {
+                "Accept": "application/json",
+                "Content-Type": "application/json",
+                "User-Agent": self.user_agent,
+                "X-Mollie-Client-Info": self.UNAME,
+            }
+
+            if idempotency_key:
+                headers.update({"Idempotency-Key": idempotency_key})
+
             response = self._oauth_client.request(
                 method=http_method,
                 url=url,
-                headers={
-                    "Accept": "application/json",
-                    "Content-Type": "application/json",
-                    "User-Agent": self.user_agent,
-                    "X-Mollie-Client-Info": self.UNAME,
-                },
+                headers=headers,
                 params=params,
                 data=payload,
                 timeout=self.timeout,
@@ -251,11 +266,16 @@ class Client(object):
         path: str,
         data: Optional[Dict[str, Any]] = None,
         params: Optional[Dict[str, Any]] = None,
+        idempotency_key: str = "",
     ) -> requests.Response:
         if hasattr(self, "_oauth_client"):
-            return self._perform_http_call_oauth(http_method, path, data=data, params=params)
+            return self._perform_http_call_oauth(
+                http_method, path, data=data, params=params, idempotency_key=idempotency_key
+            )
         else:
-            return self._perform_http_call_apikey(http_method, path, data=data, params=params)
+            return self._perform_http_call_apikey(
+                http_method, path, data=data, params=params, idempotency_key=idempotency_key
+            )
 
     def setup_oauth(
         self,

@@ -29,19 +29,21 @@ class OrderShipments(ResourceCreateMixin, ResourceGetMixin, ResourceListMixin, R
     def get_resource_path(self) -> str:
         return f"orders/{self._order.id}/shipments"
 
-    def create(self, data: Optional[Dict[str, Any]] = None, **params: Any) -> Shipment:
+    def create(self, data: Optional[Dict[str, Any]] = None, idempotency_key: str = "", **params: Any) -> Shipment:
         """Create a shipment for an order.
 
         If the data parameter is omitted, a shipment for all order lines is assumed.
         """
         if data is None:
             data = {"lines": []}
-        return super().create(data, **params)
+        return super().create(data, idempotency_key, **params)
 
     def get(self, resource_id: str, **params: Any) -> Shipment:
         self.validate_resource_id(resource_id, "shipment ID")
         return super().get(resource_id, **params)
 
-    def update(self, resource_id: str, data: Optional[Dict[str, Any]] = None, **params: Any) -> Shipment:
+    def update(
+        self, resource_id: str, data: Optional[Dict[str, Any]] = None, idempotency_key: str = "", **params: Any
+    ) -> Shipment:
         self.validate_resource_id(resource_id, "shipment ID")
-        return super().update(resource_id, data, **params)
+        return super().update(resource_id, data, idempotency_key, **params)

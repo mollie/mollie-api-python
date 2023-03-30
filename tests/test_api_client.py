@@ -8,6 +8,8 @@ from responses import matchers
 
 from mollie.api.client import Client, generate_querystring
 from mollie.api.error import (
+    BadRequestError,
+    ConflictError,
     NotFoundError,
     RequestError,
     RequestSetupError,
@@ -175,8 +177,15 @@ def test_client_get_received_error_response(client, response, resp_payload, resp
 @pytest.mark.parametrize(
     "resp_payload, resp_status, exception, errormsg",
     [
+        ("bad_request", 400, BadRequestError, "This Idempotency-Key has already been used."),
         ("error_unauthorized", 401, UnauthorizedError, "Missing authentication, or failed to authenticate"),
         ("customer_doesnotexist", 404, NotFoundError, "No customer exists with token cst_doesnotexist."),
+        (
+            "conflict_error",
+            409,
+            ConflictError,
+            "Another request with this Idempotency-Key is already being processed.",
+        ),
         ("error_teapot", 418, ResponseError, "Just an example error that is not explicitly supported"),
     ],
 )
@@ -465,3 +474,59 @@ def test_testmode_for_apikey_access_raises_error(client, response):
     with pytest.raises(RequestSetupError) as excinfo:
         client.methods.list()
     assert str(excinfo.value) == "Configuring testmode only works with access_token or OAuth authorization"
+
+
+def test_client_conflict_error(client, response):
+    """Test that a ConflictError raised contains the message
+    'Another request with this Idempotency-Key is already being processed.'."""
+    response.post("https://api.mollie.com/v2/orders", "conflict_error", status=409)
+    with pytest.raises(ConflictError) as err:
+        client.orders.create({})
+
+    exception = err.value
+    expected = "Another request with this Idempotency-Key is already being processed."
+    assert str(exception) == expected
+
+
+def test_client_bad_request_error(client, response):
+    """Test that a BadRequestError raised contains the message 'This Idempotency-Key has already been Used'."""
+    response.post("https://api.mollie.com/v2/orders", "bad_request", status=400)
+    with pytest.raises(BadRequestError) as err:
+        client.orders.create({})
+
+    exception = err.value
+    expected = "This Idempotency-Key has already been used."
+    assert str(exception) == expected
+
+
+def test_create_customer_bad_request(client, response):
+    response.post("https://api.mollie.com/v2/customers", "bad_request", status=400)
+
+    with pytest.raises(BadRequestError) as exc:
+        client.customers.create(
+            {
+                "name": "Customer A",
+                "email": "customer@example.org",
+                "locale": "nl_NL",
+            },
+            idempotency_key="test_idempotency_key",
+        )
+
+    assert exc.value.idempotency_key == "test_idempotency_key"
+
+
+def test_update_customer_bad_request(client, response):
+    """Update an existing customer."""
+    response.patch("https://api.mollie.com/v2/customers/cst_8wmqcHMN4U", "bad_request", status=400)
+
+    with pytest.raises(BadRequestError) as exc:
+        client.customers.update(
+            "cst_8wmqcHMN4U",
+            {
+                "name": "Updated Customer A",
+                "email": "updated-customer@example.org",
+            },
+            idempotency_key="test_idempotency_key",
+        )
+
+    assert exc.value.idempotency_key == "test_idempotency_key"

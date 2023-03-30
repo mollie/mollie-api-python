@@ -56,11 +56,13 @@ class CustomerSubscriptions(
         self.validate_resource_id(resource_id, "subscription ID")
         return super().get(resource_id, **params)
 
-    def update(self, resource_id: str, data: Optional[Dict[str, Any]] = None, **params: Any) -> Subscription:
+    def update(
+        self, resource_id: str, data: Optional[Dict[str, Any]] = None, idempotency_key: str = "", **params: Any
+    ) -> Subscription:
         self.validate_resource_id(resource_id, "subscription ID")
-        return super().update(resource_id, data, **params)
+        return super().update(resource_id, data, idempotency_key, **params)
 
-    def delete(self, resource_id: str, **params: Any) -> dict:
+    def delete(self, resource_id: str, idempotency_key: str = "", **params: Any) -> dict:
         self.validate_resource_id(resource_id, "subscription ID")
-        resp = super().delete(resource_id, **params)
+        resp = super().delete(resource_id, idempotency_key, **params)
         return self.get_resource_object(resp)

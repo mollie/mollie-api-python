@@ -16,10 +16,12 @@ class Customers(ResourceCreateMixin, ResourceDeleteMixin, ResourceGetMixin, Reso
         self.validate_resource_id(resource_id, "customer ID")
         return super().get(resource_id, **params)
 
-    def update(self, resource_id: str, data: Optional[Dict[str, Any]] = None, **params: Any) -> Customer:
+    def update(
+        self, resource_id: str, data: Optional[Dict[str, Any]] = None, idempotency_key: str = "", **params: Any
+    ) -> Customer:
         self.validate_resource_id(resource_id, "customer ID")
-        return super().update(resource_id, data, **params)
+        return super().update(resource_id, data, idempotency_key, **params)
 
-    def delete(self, resource_id: str, **params: Any) -> dict:
+    def delete(self, resource_id: str, idempotency_key: str = "", **params: Any) -> dict:
         self.validate_resource_id(resource_id, "customer ID")
-        return super().delete(resource_id, **params)
+        return super().delete(resource_id, idempotency_key, **params)
