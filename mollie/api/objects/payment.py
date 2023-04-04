@@ -269,6 +269,9 @@ class Payment(ObjectBase):
     def has_captures(self):
         return self._get_link("captures") is not None
 
+    def has_settlement(self):
+        return self.settlement_id is not None
+
     def has_split_payments(self):
         return self._get_property("routing") is not None
 
