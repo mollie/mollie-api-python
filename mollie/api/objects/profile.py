@@ -98,10 +98,10 @@ class Profile(ObjectBase):
     # additional methods
 
     def is_unverified(self):
-        return self._get_property("status") == self.STATUS_UNVERIFIED
+        return self.status == self.STATUS_UNVERIFIED
 
     def is_verified(self):
-        return self._get_property("status") == self.STATUS_VERIFIED
+        return self.status == self.STATUS_VERIFIED
 
     def is_blocked(self):
-        return self._get_property("status") == self.STATUS_BLOCKED
+        return self.status == self.STATUS_BLOCKED
