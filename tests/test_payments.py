@@ -106,6 +106,7 @@ def test_get_single_payment(client, response):
     assert payment.details is None
     assert payment.routing is not None
     assert payment.subscription_id is None
+    assert payment.settlement_id is None
     # properties from _links
     assert payment.checkout_url == "https://www.mollie.com/payscreen/select-method/7UhSN1zuXS"
     assert payment.changepaymentstate_url is None
@@ -124,6 +125,7 @@ def test_get_single_payment(client, response):
     assert payment.has_refunds() is False
     assert payment.has_chargebacks() is False
     assert payment.has_captures() is False
+    assert payment.has_settlement() is False
     assert payment.has_split_payments() is True
     assert payment.can_be_refunded() is False
     assert payment.has_sequence_type_first() is False

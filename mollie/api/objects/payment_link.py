@@ -71,7 +71,7 @@ class PaymentLink(ObjectBase):
     # additional methods
 
     def is_paid(self):
-        return self._get_property("paidAt") is not None
+        return self.paid_at is not None
 
     def has_expiration_date(self):
-        return self._get_property("expiresAt") is not None
+        return self.expires_at is not None

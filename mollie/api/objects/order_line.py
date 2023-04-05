@@ -130,19 +130,19 @@ class OrderLine(ObjectBase):
     # additional methods
 
     def is_created(self):
-        return self._get_property("status") == self.STATUS_CREATED
+        return self.status == self.STATUS_CREATED
 
     def is_authorized(self):
-        return self._get_property("status") == self.STATUS_AUTHORIZED
+        return self.status == self.STATUS_AUTHORIZED
 
     def is_paid(self):
-        return self._get_property("status") == self.STATUS_PAID
+        return self.status == self.STATUS_PAID
 
     def is_shipping(self):
-        return self._get_property("status") == self.STATUS_SHIPPING
+        return self.status == self.STATUS_SHIPPING
 
     def is_canceled(self):
-        return self._get_property("status") == self.STATUS_CANCELED
+        return self.status == self.STATUS_CANCELED
 
     def is_completed(self):
-        return self._get_property("status") == self.STATUS_COMPLETED
+        return self.status == self.STATUS_COMPLETED

@@ -56,16 +56,16 @@ class Settlement(ObjectBase):
     # Additional methods
 
     def is_open(self):
-        return self._get_property("status") == self.STATUS_OPEN
+        return self.status == self.STATUS_OPEN
 
     def is_pending(self):
-        return self._get_property("status") == self.STATUS_PENDING
+        return self.status == self.STATUS_PENDING
 
     def is_canceled(self):
-        return self._get_property("status") == self.STATUS_PAIDOUT
+        return self.status == self.STATUS_PAIDOUT
 
     def is_failed(self):
-        return self._get_property("status") == self.STATUS_FAILED
+        return self.status == self.STATUS_FAILED
 
     @property
     def payments(self):

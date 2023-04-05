@@ -163,6 +163,10 @@ class Payment(ObjectBase):
     def subscription_id(self):
         return self._get_property("subscriptionId")
 
+    @property
+    def cancel_url(self):
+        return self._get_property("cancelUrl")
+
     # documented _links
 
     @property
@@ -197,10 +201,6 @@ class Payment(ObjectBase):
         from ..resources import PaymentCaptures
 
         return PaymentCaptures(self.client, self)
-
-    @property
-    def cancel_url(self):
-        return self._get_property("cancelUrl")
 
     def get_settlement(self):
         """Return the settlement for this payment."""
@@ -240,25 +240,25 @@ class Payment(ObjectBase):
     # additional methods
 
     def is_open(self):
-        return self._get_property("status") == self.STATUS_OPEN
+        return self.status == self.STATUS_OPEN
 
     def is_pending(self):
-        return self._get_property("status") == self.STATUS_PENDING
+        return self.status == self.STATUS_PENDING
 
     def is_canceled(self):
-        return self._get_property("status") == self.STATUS_CANCELED
+        return self.status == self.STATUS_CANCELED
 
     def is_expired(self):
-        return self._get_property("status") == self.STATUS_EXPIRED
+        return self.status == self.STATUS_EXPIRED
 
     def is_failed(self):
-        return self._get_property("status") == self.STATUS_FAILED
+        return self.status == self.STATUS_FAILED
 
     def is_authorized(self):
-        return self._get_property("status") == self.STATUS_AUTHORIZED
+        return self.status == self.STATUS_AUTHORIZED
 
     def is_paid(self):
-        return self._get_property("paidAt") is not None
+        return self.paid_at is not None
 
     def has_refunds(self):
         return self._get_link("refunds") is not None
@@ -269,14 +269,17 @@ class Payment(ObjectBase):
     def has_captures(self):
         return self._get_link("captures") is not None
 
+    def has_settlement(self):
+        return self.settlement_id is not None
+
     def has_split_payments(self):
-        return self._get_property("routing") is not None
+        return self.routing is not None
 
     def can_be_refunded(self):
-        return self._get_property("amountRemaining") is not None
+        return self.amount_remaining is not None
 
     def has_sequence_type_first(self):
-        return self._get_property("sequenceType") == self.SEQUENCETYPE_FIRST
+        return self.sequence_type == self.SEQUENCETYPE_FIRST
 
     def has_sequence_type_recurring(self):
-        return self._get_property("sequenceType") == self.SEQUENCETYPE_RECURRING
+        return self.sequence_type == self.SEQUENCETYPE_RECURRING
