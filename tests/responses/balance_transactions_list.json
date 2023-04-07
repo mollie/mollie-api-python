@@ -1,0 +1,41 @@
+{
+  "count": 1,
+  "_embedded": {
+    "balance_transactions": [
+       {
+         "resource": "balance_transaction",
+         "id": "baltr_QM24QwzUWR4ev4Xfgyt29A",
+         "type": "refund",
+         "resultAmount": {
+           "value": "-10.25",
+           "currency": "EUR"
+         },
+         "initialAmount": {
+           "value": "-10.00",
+           "currency": "EUR"
+         },
+         "deductions": {
+           "value": "-0.25",
+           "currency": "EUR"
+         },
+         "createdAt": "2021-01-10T12:06:28+00:00",
+         "context": {
+           "paymentId": "tr_7UhSN1zuXS",
+           "refundId": "re_4qqhO89gsT"
+         }
+       }
+    ]
+  },
+  "_links": {
+    "documentation": {
+      "href": "https://docs.mollie.com/reference/v2/balances-api/list-balance-transactions",
+      "type": "text/html"
+    },
+    "self": {
+      "href": "https://api.mollie.com/v2/balances/bal_gVMhHKqSSRYJyPsuoPNFH/transactions?limit=5",
+      "type": "application/hal+json"
+    },
+    "previous": null,
+    "next": null
+  }
+}

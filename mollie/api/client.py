@@ -12,6 +12,7 @@ from urllib3.util import Retry
 
 from .error import RequestError, RequestSetupError
 from .resources import (
+    Balances,
     Chargebacks,
     Clients,
     Customers,
@@ -105,6 +106,7 @@ class Client(object):
         self.onboarding = Onboarding(self)
         self.settlements = Settlements(self)
         self.subscriptions = Subscriptions(self)
+        self.balances = Balances(self)
 
         # compose base user agent string
         self.user_agent_components = OrderedDict()
