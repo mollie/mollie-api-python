@@ -31,6 +31,7 @@ class Method(ObjectBase):
     # (none)
 
     # Payment methods for Orders only
+    BILLIE = "billie"
     IN3 = "in3"
     KLARNAPAYLATER = "klarnapaylater"
     KLARNAPAYNOW = "klarnapaynow"
