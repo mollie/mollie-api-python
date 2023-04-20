@@ -7,9 +7,9 @@ from .customer import Customer
 class Subscription(ObjectBase):
     @classmethod
     def get_resource_class(cls, client):
-        from ..resources import CustomerSubscriptions
+        from ..resources import Subscriptions
 
-        return CustomerSubscriptions(client)
+        return Subscriptions(client)
 
     STATUS_ACTIVE = "active"
     STATUS_PENDING = "pending"  # Waiting for a valid mandate.
