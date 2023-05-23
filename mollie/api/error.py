@@ -78,6 +78,25 @@ class ResponseError(Error):
             # generic fallback
             return ResponseError(resp, idempotency_key=idempotency_key)
 
+    def __reduce__(self):
+        """
+        Customize the pickling routine.
+
+        Exceptions have a custom __reduce__() routine, but that doesn't work
+        since we override the __init__ method here.
+        """
+
+        callable_ = self.__class__
+        args = (
+            {
+                "detail": self.args[0],
+                "status": self.status,
+                "field": self.field,
+            },
+            self.idempotency_key,
+        )
+        return (callable_, args)
+
 
 class UnauthorizedError(ResponseError):
     """Your request wasn't executed due to failed authentication. Check your API key."""
@@ -92,12 +111,10 @@ class NotFoundError(ResponseError):
 
 
 class BadRequestError(ResponseError):
-
     pass
 
 
 class ConflictError(ResponseError):
-
     pass
 
 
