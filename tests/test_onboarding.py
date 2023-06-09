@@ -37,7 +37,7 @@ def test_create_onboarding(oauth_client, response):
     """Create onboarding."""
     response.post("https://api.mollie.com/v2/onboarding/me", "empty", 204)
 
-    data = {"profile": {"categoryCode": "6012"}}
+    data = {"profile": {"businessCategory": "AMUSEMENT_PARKS"}}
 
     onboarding = oauth_client.onboarding.create(data)
     assert isinstance(onboarding, Onboarding)
@@ -46,7 +46,7 @@ def test_create_onboarding(oauth_client, response):
 def test_create_onboarding_is_deprecated(oauth_client, response):
     response.post("https://api.mollie.com/v2/onboarding/me", "empty", 204)
 
-    data = {"profile": {"categoryCode": "6012"}}
+    data = {"profile": {"businessCategory": "AMUSEMENT_PARKS"}}
     with pytest.warns(APIDeprecationWarning, match="Submission of onboarding data is deprecated"):
         oauth_client.onboarding.create(data)
 

@@ -12,7 +12,7 @@ def main(client):
             "website": "https://www.mywebsite.com",
             "email": "info@mywebsite.com",
             "phone": "+31208202070",
-            "categoryCode": "5399",
+            "businessCategory": "AMUSEMENT_PARKS",
             "mode": "live",
         }
         response = client.profiles.create(data)

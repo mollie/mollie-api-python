@@ -19,7 +19,7 @@ def test_create_profile(oauth_client, response):
             "website": "https://www.mywebsite.com",
             "email": "info@mywebsite.com",
             "phone": "+31208202070",
-            "categoryCode": "5399",
+            "businessCategory": "AMUSEMENT_PARKS",
             "mode": "live",
         }
     )
@@ -118,4 +118,4 @@ def test_profile_category_code_is_deprecated(client, response):
 
     profile = client.profiles.get(PROFILE_ID)
     with pytest.warns(APIDeprecationWarning, match="Using categoryCode is deprecated"):
-        profile.category_code == 0
+        assert profile.category_code == 5399
