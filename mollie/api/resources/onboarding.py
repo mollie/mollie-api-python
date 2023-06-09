@@ -1,6 +1,7 @@
+import warnings
 from typing import Any, Dict
 
-from ..error import IdentifierError
+from ..error import APIDeprecationWarning, IdentifierError
 from ..objects.onboarding import Onboarding as OnboardingObject
 from .base import ResourceGetMixin
 
@@ -21,6 +22,12 @@ class Onboarding(ResourceGetMixin):
         return super().get(resource_id, **params)
 
     def create(self, data: Dict[str, Any], **params: Any) -> OnboardingObject:
+        warnings.warn(
+            "Submission of onboarding data is deprecated, see "
+            "https://docs.mollie.com/reference/v2/onboarding-api/submit-onboarding-data",
+            APIDeprecationWarning,
+        )
+
         resource_path = self.get_resource_path()
         path = f"{resource_path}/me"
         result = self.perform_api_call(self.REST_CREATE, path, data, params)
