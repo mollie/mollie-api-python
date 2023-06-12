@@ -13,7 +13,7 @@ def main(client):
         # https://docs.mollie.com/reference/v2/onboarding-api/submit-onboarding-data
 
         body += "<h1>Submit onboarding data</h1>"
-        data = {"profile": {"categoryCode": "6012"}}
+        data = {"profile": {"businessCategory": "AMUSEMENT_PARKS"}}
         result = client.onboarding.create(data)
         body += str(result)
 

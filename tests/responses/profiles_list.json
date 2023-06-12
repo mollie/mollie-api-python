@@ -10,6 +10,7 @@
         "email": "info@mywebsite.com",
         "phone": "+31208202070",
         "categoryCode": 5399,
+        "businessCategory": "AMUSEMENT_PARKS",
         "status": "verified",
         "review": {
           "status": "pending"
