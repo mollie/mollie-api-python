@@ -35,12 +35,12 @@
   },
   "_links": {
     "self": {
-      "href": "https://api.mollie.com/v2/chargebacks",
+      "href": "https://api.mollie.com/v2/payments/tr_7UhSN1zuXS/chargebacks",
       "type": "application/hal+json"
     },
     "previous": null,
     "next": {
-      "href": "https://api.mollie.com/v2/chargebacks?limit=1&from=chb_n9z0tq",
+      "href": "https://api.mollie.com/v2/payments/tr_7UhSN1zuXS/chargebacks?limit=1&from=chb_n9z0tq",
       "type": "application/hal+json"
     },
     "documentation": {

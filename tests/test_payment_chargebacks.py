@@ -15,11 +15,19 @@ SETTLEMENT_ID = "stl_jDk30akdN"
 def test_list_payment_chargebacks(client, response):
     """Get chargebacks relevant to a payment."""
     response.get(f"https://api.mollie.com/v2/payments/{PAYMENT_ID}", "payment_single")
-    response.get(f"https://api.mollie.com/v2/payments/{PAYMENT_ID}/chargebacks", "chargebacks_list")
+    response.get(f"https://api.mollie.com/v2/payments/{PAYMENT_ID}/chargebacks", "payment_chargebacks_list")
+    response.get(
+        f"https://api.mollie.com/v2/payments/{PAYMENT_ID}/chargebacks?limit=1&from=chb_n9z0tq",
+        "payment_chargebacks_list_more",
+    )
 
     payment = client.payments.get(PAYMENT_ID)
     chargebacks = payment.chargebacks.list()
     assert_list_object(chargebacks, Chargeback)
+
+    assert chargebacks.has_next()
+    more_chargebacks = chargebacks.get_next()
+    assert_list_object(more_chargebacks, Chargeback)
 
 
 def test_get_payment_chargeback(client, response):

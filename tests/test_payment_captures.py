@@ -17,11 +17,19 @@ SHIPMENT_ID = "shp_3wmsgCJN4U"
 def test_list_payment_captures(client, response):
     """Get capture relevant to payment by payment id."""
     response.get(f"https://api.mollie.com/v2/payments/{PAYMENT_ID}", "payment_single")
-    response.get(f"https://api.mollie.com/v2/payments/{PAYMENT_ID}/captures", "captures_list")
+    response.get(f"https://api.mollie.com/v2/payments/{PAYMENT_ID}/captures", "payment_captures_list")
+    response.get(
+        f"https://api.mollie.com/v2/payments/{PAYMENT_ID}/captures?limit=1&from=cpt_4qqhO89gsU",
+        "payment_captures_list_more",
+    )
 
     payment = client.payments.get(PAYMENT_ID)
     captures = payment.captures.list()
     assert_list_object(captures, Capture)
+
+    assert captures.has_next() is True
+    more_captures = captures.get_next()
+    assert_list_object(more_captures, Capture)
 
 
 def test_get_payment_capture_invalid_id(client, response):

@@ -3,7 +3,7 @@
         "captures": [
             {
                 "resource": "capture",
-                "id": "cpt_4qqhO89gsT",
+                "id": "cpt_4qqhO89gsU",
                 "mode": "live",
                 "amount": {
                     "value": "1027.99",
@@ -19,11 +19,11 @@
                 "createdAt": "2018-08-02T09:29:56+00:00",
                 "_links": {
                     "self": {
-                        "href": "https://api.mollie.com/v2/payments/tr_WDqYK6vllg/captures/cpt_4qqhO89gsT",
+                        "href": "https://api.mollie.com/v2/payments/tr_7UhSN1zuXS/captures/cpt_4qqhO89gsU",
                         "type": "application/hal+json"
                     },
                     "payment": {
-                        "href": "https://api.mollie.com/v2/payments/tr_WDqYK6vllg",
+                        "href": "https://api.mollie.com/v2/payments/tr_7UhSN1zuXS",
                         "type": "application/hal+json"
                     },
                     "shipment": {
@@ -49,7 +49,7 @@
             "type": "text/html"
         },
         "self": {
-            "href": "https://api.mollie.com/v2/payments/tr_WDqYK6vllg/captures?limit=50",
+            "href": "https://api.mollie.com/v2/payments/tr_7UhSN1zuXS/captures?limit=1&from=cpt_4qqhO89gsU",
             "type": "application/hal+json"
         },
         "previous": null,

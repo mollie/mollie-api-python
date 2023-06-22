@@ -95,6 +95,24 @@ def test_get_balance_transactions(client, response):
     assert balance_transaction.context == {"paymentId": "tr_7UhSN1zuXS", "refundId": "re_4qqhO89gsT"}
 
 
+def test_list_balance_transactions(client, response):
+    """Get a list of balance transactions."""
+    response.get(f"https://api.mollie.com/v2/balances/{BALANCE_ID}", "balance_single")
+    response.get(f"https://api.mollie.com/v2/balances/{BALANCE_ID}/transactions", "balance_transactions_list")
+    response.get(
+        f"https://api.mollie.com/v2/balances/{BALANCE_ID}/transactions?limit=1&from=baltr_QM24QwzUWR4ev4Xfgyt29B",
+        "balance_transactions_list_more",
+    )
+
+    balance = client.balances.get(BALANCE_ID)
+    transactions = balance.get_transactions()
+    assert_list_object(transactions, BalanceTransaction, 1)
+
+    assert transactions.has_next() is True
+    more_transactions = transactions.get_next()
+    assert_list_object(more_transactions, BalanceTransaction, 1)
+
+
 def test_get_balance_invalid_id(client):
     """Test that the balance ID is validated upon retrieving a balance.
 

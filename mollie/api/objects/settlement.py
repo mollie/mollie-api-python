@@ -86,14 +86,14 @@ class Settlement(ObjectBase):
         """Return the chargebacks related to this settlement."""
         from ..resources import SettlementChargebacks
 
-        return SettlementChargebacks(self.client, self)
+        return SettlementChargebacks(self.client, resource_path=f"settlements/{self.id}/chargebacks")
 
     @property
     def captures(self):
         """Return the captures related to this settlement."""
         from ..resources import SettlementCaptures
 
-        return SettlementCaptures(self.client, self)
+        return SettlementCaptures(self.client, resource_path=f"settlements/{self.id}/captures")
 
     def get_invoice(self):
         """Return the invoice related to this settlement."""

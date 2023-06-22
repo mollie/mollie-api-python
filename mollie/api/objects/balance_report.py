@@ -2,12 +2,6 @@ from .base import ObjectBase
 
 
 class BalanceReport(ObjectBase):
-    @classmethod
-    def get_resource_class(cls, client):
-        from ..resources import BalanceReports
-
-        return BalanceReports(client)
-
     @property
     def resource(self):
         return self._get_property("resource")

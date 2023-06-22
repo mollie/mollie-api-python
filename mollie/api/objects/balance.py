@@ -63,9 +63,9 @@ class Balance(ObjectBase):
     def get_report(self, **params: Any) -> BalanceReport:
         from ..resources import BalanceReports
 
-        return BalanceReports(self.client, self).get_report(params=params)
+        return BalanceReports(self.client, resource_path=f"balances/{self.id}/report").get_report(params=params)
 
     def get_transactions(self, **params: Any) -> ObjectList:
         from ..resources import BalanceTransactions
 
-        return BalanceTransactions(self.client, self).list(params=params)
+        return BalanceTransactions(self.client, resource_path=f"balances/{self.id}/transactions").list(params=params)

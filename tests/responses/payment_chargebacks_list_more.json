@@ -4,7 +4,7 @@
     "chargebacks": [
       {
         "resource": "chargeback",
-        "id": "chb_n9z0tp",
+        "id": "chb_n9z0tq",
         "amount": {
           "currency": "USD",
           "value": "43.38"
@@ -18,7 +18,7 @@
         "paymentId": "tr_7UhSN1zuXS",
         "_links": {
           "self": {
-            "href": "https://api.mollie.com/v2/payments/tr_7UhSN1zuXS/chargebacks/chb_n9z0tp",
+            "href": "https://api.mollie.com/v2/payments/tr_7UhSN1zuXS/chargebacks/chb_n9z0tq",
             "type": "application/hal+json"
           },
           "payment": {
@@ -35,14 +35,14 @@
   },
   "_links": {
     "self": {
-      "href": "https://api.mollie.com/v2/chargebacks",
+      "href": "https://api.mollie.com/v2/payments/tr_7UhSN1zuXS/chargebacks?limit=1&from=chb_n9z0tq",
       "type": "application/hal+json"
     },
-    "previous": null,
-    "next": {
-      "href": "https://api.mollie.com/v2/chargebacks?limit=1&from=chb_n9z0tq",
+    "previous": {
+      "href": "https://api.mollie.com/v2/payments/tr_7UhSN1zuXS/chargebacks",
       "type": "application/hal+json"
     },
+    "next": null,
     "documentation": {
       "href": "https://docs.mollie.com/reference/v2/chargebacks-api/list-chargebacks",
       "type": "text/html"

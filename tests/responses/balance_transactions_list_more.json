@@ -4,10 +4,10 @@
     "balance_transactions": [
        {
          "resource": "balance_transaction",
-         "id": "baltr_QM24QwzUWR4ev4Xfgyt29A",
+         "id": "baltr_QM24QwzUWR4ev4Xfgyt29B",
          "type": "refund",
          "resultAmount": {
-           "value": "-10.25",
+           "value": "-10.33",
            "currency": "EUR"
          },
          "initialAmount": {
@@ -20,8 +20,8 @@
          },
          "createdAt": "2021-01-10T12:06:28+00:00",
          "context": {
-           "paymentId": "tr_7UhSN1zuXS",
-           "refundId": "re_4qqhO89gsT"
+           "paymentId": "tr_7UhSN1zuXT",
+           "refundId": "re_4qqhO89gsX"
          }
        }
     ]
@@ -32,12 +32,10 @@
       "type": "text/html"
     },
     "self": {
-      "href": "https://api.mollie.com/v2/balances/bal_gVMhHKqSSRYJyPsuoPNFH/transactions?limit=1",
+      "href": "https://api.mollie.com/v2/balances/bal_gVMhHKqSSRYJyPsuoPNFH/transactions?limit=1&from=baltr_QM24QwzUWR4ev4Xfgyt29B",
       "type": "application/hal+json"
     },
     "previous": null,
-    "next": {
-      "href": "https://api.mollie.com/v2/balances/bal_gVMhHKqSSRYJyPsuoPNFH/transactions?limit=1&from=baltr_QM24QwzUWR4ev4Xfgyt29B"
-    }
+    "next": null
   }
 }

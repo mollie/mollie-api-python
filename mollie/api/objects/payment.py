@@ -193,14 +193,14 @@ class Payment(ObjectBase):
         """Return the chargebacks related to this payment."""
         from ..resources import PaymentChargebacks
 
-        return PaymentChargebacks(self.client, self)
+        return PaymentChargebacks(self.client, resource_path=f"payments/{self.id}/chargebacks")
 
     @property
     def captures(self):
         """Return the captures related to this payment"""
         from ..resources import PaymentCaptures
 
-        return PaymentCaptures(self.client, self)
+        return PaymentCaptures(self.client, resource_path=f"payments/{self.id}/captures")
 
     def get_settlement(self):
         """Return the settlement for this payment."""

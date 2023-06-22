@@ -151,7 +151,7 @@ def test_payment_get_related_refunds(client, response):
 def test_payment_get_related_chargebacks(client, response):
     """Get chargebacks related to payment id."""
     response.get(f"https://api.mollie.com/v2/payments/{PAYMENT_ID}", "payment_single")
-    response.get(f"https://api.mollie.com/v2/payments/{PAYMENT_ID}/chargebacks", "chargebacks_list")
+    response.get(f"https://api.mollie.com/v2/payments/{PAYMENT_ID}/chargebacks", "payment_chargebacks_list")
 
     payment = client.payments.get(PAYMENT_ID)
     chargebacks = payment.chargebacks.list()
@@ -161,7 +161,7 @@ def test_payment_get_related_chargebacks(client, response):
 def test_payment_get_related_captures(client, response):
     """Get captures related to payment."""
     response.get(f"https://api.mollie.com/v2/payments/{PAYMENT_ID}", "payment_single")
-    response.get(f"https://api.mollie.com/v2/payments/{PAYMENT_ID}/captures", "captures_list")
+    response.get(f"https://api.mollie.com/v2/payments/{PAYMENT_ID}/captures", "payment_captures_list")
 
     payment = client.payments.get(PAYMENT_ID)
     captures = payment.captures.list()

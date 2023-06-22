@@ -1,12 +1,9 @@
-from typing import TYPE_CHECKING, Any
+from typing import Any
 
 from mollie.api.objects.balance import Balance
 from mollie.api.objects.balance_report import BalanceReport
 from mollie.api.objects.balance_transaction import BalanceTransaction
 from mollie.api.resources.base import ResourceBase, ResourceGetMixin, ResourceListMixin
-
-if TYPE_CHECKING:
-    from ..client import Client
 
 
 class Balances(ResourceGetMixin, ResourceListMixin):
@@ -42,20 +39,10 @@ class Balances(ResourceGetMixin, ResourceListMixin):
 
 
 class BalanceReports(ResourceBase):
-
-    _balance: "Balance"
-
-    def __init__(self, client: "Client", balance: "Balance") -> None:
-        self._balance = balance
-        super().__init__(client)
-
     def get_resource_object(self, result: dict) -> BalanceReport:
         from ..objects.balance_report import BalanceReport
 
         return BalanceReport(result, self.client)
-
-    def get_resource_path(self) -> str:
-        return f"balances/{self._balance.id}/report"
 
     def get_report(self, **params: Any) -> BalanceReport:
         path = self.get_resource_path()
@@ -64,16 +51,7 @@ class BalanceReports(ResourceBase):
 
 
 class BalanceTransactions(ResourceListMixin):
-    _balance: "Balance"
-
-    def __init__(self, client: "Client", balance: "Balance") -> None:
-        self._balance = balance
-        super().__init__(client)
-
     def get_resource_object(self, result: dict) -> BalanceTransaction:
         from ..objects.balance_transaction import BalanceTransaction
 
         return BalanceTransaction(result, self.client)
-
-    def get_resource_path(self) -> str:
-        return f"balances/{self._balance.id}/transactions"

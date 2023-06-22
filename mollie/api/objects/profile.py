@@ -71,7 +71,7 @@ class Profile(ObjectBase):
     def chargebacks(self):
         from ..resources import ProfileChargebacks
 
-        return ProfileChargebacks(self.client, self)
+        return ProfileChargebacks(self.client, resource_path=f"chargebacks?profileId={self.id}")
 
     @property
     def methods(self):
