@@ -26,6 +26,19 @@ def test_list_customer_subscriptions(client, response):
     assert_list_object(subscriptions, Subscription)
 
 
+def test_list_customer_subscriptions_when_unavailable(client, response):
+    response.get(f"https://api.mollie.com/v2/customers/{CUSTOMER_ID}", "customer_single_no_links")
+    response.get(
+        f"https://api.mollie.com/v2/customers/{CUSTOMER_ID}/subscriptions",
+        "customer_subscriptions_list_empty",
+    )
+    customer = client.customers.get(CUSTOMER_ID)
+    assert customer.has_subscriptions() is False
+    # Now that we know that there are no subscriptions, we are still going to get them
+    subscriptions = customer.subscriptions.list()
+    assert_list_object(subscriptions, Subscription, 0)
+
+
 def test_get_customer_subscription(client, response):
     response.get(f"https://api.mollie.com/v2/customers/{CUSTOMER_ID}", "customer_single")
     response.get(
@@ -142,7 +155,7 @@ def test_cancel_customer_subscription_invalid_id(client, response):
 
 def test_create_customer_subscription(client, response):
     """Create a subscription with customer object."""
-    response.get(f"https://api.mollie.com/v2/customers/{CUSTOMER_ID}", "customer_single")
+    response.get(f"https://api.mollie.com/v2/customers/{CUSTOMER_ID}", "customer_single_no_links")
     response.post(f"https://api.mollie.com/v2/customers/{CUSTOMER_ID}/subscriptions", "subscription_single")
 
     data = {

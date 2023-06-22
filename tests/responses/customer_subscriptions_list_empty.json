@@ -1,0 +1,20 @@
+{
+  "_embedded":{
+    "subscriptions":[
+      
+    ]
+  },
+  "count":0,
+  "_links":{
+    "documentation":{
+      "href":"https://docs.mollie.com/reference/v2/subscriptions-api/list-subscriptions",
+      "type":"text/html"
+    },
+    "self":{
+      "href":"https://api.mollie.com/v2/customers/cst_tJs32TE8qk/subscriptions?limit=50",
+      "type":"application/hal+json"
+    },
+    "previous":null,
+    "next":null
+  }
+}

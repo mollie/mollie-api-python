@@ -42,11 +42,9 @@ class Customer(ObjectBase):
 
     @property
     def subscriptions(self):
-        url = self._get_link("subscriptions")
-
         from ..resources import CustomerSubscriptions
 
-        return CustomerSubscriptions(self.client, resource_path=url)
+        return CustomerSubscriptions(self.client, resource_path=f"customers/{self.id}/subscriptions")
 
     @property
     def mandates(self):
@@ -59,3 +57,8 @@ class Customer(ObjectBase):
         from ..resources import CustomerPayments
 
         return CustomerPayments(self.client, self)
+
+    # Additional methods
+
+    def has_subscriptions(self):
+        return self._get_link("subscriptions") is not None
