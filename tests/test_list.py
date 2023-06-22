@@ -1,7 +1,9 @@
 import pytest
+from responses import matchers
 
 from mollie.api.objects.list import ObjectList
 from mollie.api.objects.method import Method
+from mollie.api.objects.payment import Payment
 from mollie.api.objects.subscription import Subscription
 
 from .utils import assert_list_object
@@ -176,3 +178,38 @@ def test_list_nested_objects(client, response):
     assert subscriptions.has_next() is True
     next_subscriptions = subscriptions.get_next()
     assert_list_object(next_subscriptions, Subscription, 2)
+
+
+def test_list_deep_nested_objects(client, response):
+    """
+    Resources like SubscriptionPayments manage data two levels deep.
+
+    The URL for a subscription payment has 2 parent parameters:
+    https://api.mollie.com/v2/customers/*customerId*/subscriptions/*subscriptionId*/payments
+    """
+
+    response.get("https://api.mollie.com/v2/customers/cst_8wmqcHMN4U", "customer_single")
+    response.get(
+        "https://api.mollie.com/v2/customers/cst_8wmqcHMN4U/subscriptions/sub_rVKGtNd6s3", "subscription_single"
+    )
+    response.get(
+        "https://api.mollie.com/v2/customers/cst_8wmqcHMN4U/subscriptions/sub_rVKGtNd6s3/payments",
+        "customer_subscription_payments_list",
+    )
+    response.get(
+        "https://api.mollie.com/v2/customers/cst_8wmqcHMN4U/subscriptions/sub_rVKGtNd6s3/payments",
+        "customer_subscription_payments_list_more",
+        match=[matchers.query_param_matcher({"limit": 1, "from": "tr_DtKxVP2AgX"})],
+    )
+
+    customer = client.customers.get("cst_8wmqcHMN4U")
+    assert customer.id == "cst_8wmqcHMN4U"
+    subscription = customer.subscriptions.get("sub_rVKGtNd6s3")
+
+    assert subscription.has_payments() is True
+    payments = subscription.payments.list()
+    assert_list_object(payments, Payment)
+
+    assert payments.has_next() is True
+    more_payments = payments.get_next()
+    assert_list_object(more_payments, Payment)

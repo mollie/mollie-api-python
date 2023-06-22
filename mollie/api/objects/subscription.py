@@ -143,5 +143,10 @@ class Subscription(ObjectBase):
         # the explicit interface using .payments.list()
         from ..resources import SubscriptionPayments
 
-        customer = Customer({"id": self.customer_id}, self.client)
-        return SubscriptionPayments(self.client, customer=customer, subscription=self)
+        url = self._get_link("payments")
+        return SubscriptionPayments(self.client, resource_path=url)
+
+    # Additional methods
+
+    def has_payments(self):
+        return self._get_link("payments") is not None

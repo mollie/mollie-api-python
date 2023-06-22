@@ -58,6 +58,7 @@ def test_get_customer_subscription(client, response):
     assert subscription.is_pending() is False
     assert subscription.is_completed() is False
     assert subscription.is_canceled() is False
+    assert subscription.has_payments() is True
 
 
 def test_get_customer_subscription_invalid_id(client, response):
@@ -197,9 +198,11 @@ def test_customer_subscription_get_related_payments(client, response):
     )
     response.get(
         f"https://api.mollie.com/v2/customers/{CUSTOMER_ID}/subscriptions/{SUBSCRIPTION_ID}/payments",
-        "payments_list",
+        "customer_subscription_payments_list",
     )
     customer = client.customers.get(CUSTOMER_ID)
     subscription = customer.subscriptions.get(SUBSCRIPTION_ID)
+
+    assert subscription.has_payments() is True
     payments = subscription.payments.list()
     assert_list_object(payments, Payment)

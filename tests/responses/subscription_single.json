@@ -31,6 +31,10 @@
       "href": "https://api.mollie.com/v2/profiles/pfl_v9hTwCvYqw",
       "type": "application/hal+json"
     },
+    "payments": {
+      "href": "https://api.mollie.com/v2/customers/cst_8wmqcHMN4U/subscriptions/sub_rVKGtNd6s3/payments",
+      "type": "application/hal+json"
+    },
     "documentation": {
       "href": "https://docs.mollie.com/reference/v2/subscriptions-api/get-subscription",
       "type": "text/html"

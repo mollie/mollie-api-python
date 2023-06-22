@@ -5,7 +5,6 @@ from ..objects.list import ObjectList
 from ..objects.order import Order
 from ..objects.payment import Payment
 from ..objects.profile import Profile
-from ..objects.subscription import Subscription
 from .base import (
     ResourceBase,
     ResourceCreateMixin,
@@ -109,16 +108,7 @@ class CustomerPayments(PaymentsBase, ResourceCreateMixin, ResourceListMixin):
 class SubscriptionPayments(PaymentsBase, ResourceListMixin):
     """Resource handler for the `/customers/:customer_id:/subscriptions/:subscription_id:/payments` endpoint."""
 
-    _customer: Customer
-    _subscription: Subscription
-
-    def __init__(self, client: "Client", customer: Customer, subscription: Subscription) -> None:
-        self._customer = customer
-        self._subscription = subscription
-        super().__init__(client)
-
-    def get_resource_path(self) -> str:
-        return f"customers/{self._customer.id}/subscriptions/{self._subscription.id}/payments"
+    pass
 
 
 class SettlementPayments(PaymentsBase, ResourceListMixin):
