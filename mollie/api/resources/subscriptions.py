@@ -1,6 +1,5 @@
-from typing import TYPE_CHECKING, Any, Dict, Optional
+from typing import Any, Dict, Optional
 
-from ..objects.customer import Customer
 from ..objects.subscription import Subscription
 from .base import (
     ResourceBase,
@@ -10,9 +9,6 @@ from .base import (
     ResourceListMixin,
     ResourceUpdateMixin,
 )
-
-if TYPE_CHECKING:
-    from ..client import Client
 
 __all__ = [
     "CustomerSubscriptions",
@@ -42,15 +38,6 @@ class CustomerSubscriptions(
     ResourceUpdateMixin,
 ):
     """Resource handler for the `/customers/:customer_id:/subscriptions` endpoint."""
-
-    _customer: Customer
-
-    def __init__(self, client: "Client", customer: Customer) -> None:
-        self._customer = customer
-        super().__init__(client)
-
-    def get_resource_path(self) -> str:
-        return f"customers/{self._customer.id}/subscriptions"
 
     def get(self, resource_id: str, **params: Any) -> Subscription:
         self.validate_resource_id(resource_id, "subscription ID")

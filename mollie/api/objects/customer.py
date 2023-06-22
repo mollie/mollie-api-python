@@ -42,9 +42,11 @@ class Customer(ObjectBase):
 
     @property
     def subscriptions(self):
+        url = self._get_link("subscriptions")
+
         from ..resources import CustomerSubscriptions
 
-        return CustomerSubscriptions(self.client, self)
+        return CustomerSubscriptions(self.client, resource_path=url)
 
     @property
     def mandates(self):

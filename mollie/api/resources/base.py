@@ -20,8 +20,9 @@ class ResourceBase:
 
     RESOURCE_ID_PREFIX: str = ""
 
-    def __init__(self, client: "Client") -> None:
+    def __init__(self, client: "Client", resource_path: str = "") -> None:
         self.client = client
+        self.resource_path = resource_path
 
     def get_resource_object(self, result: dict) -> Any:
         """
@@ -34,7 +35,11 @@ class ResourceBase:
 
     def get_resource_path(self) -> str:
         """Return the base URL path in the API for this resource."""
-        return self.__class__.__name__.lower()
+        if self.resource_path:
+            return self.resource_path
+        else:
+            # Generate a default path for the resource
+            return self.__class__.__name__.lower()
 
     def perform_api_call(
         self,
@@ -44,7 +49,6 @@ class ResourceBase:
         params: Optional[Dict[str, Any]] = None,
         idempotency_key: str = "",
     ) -> Dict[str, Any]:
-
         resp = self.client.perform_http_call(http_method, path, data, params, idempotency_key)
         if "application/hal+json" in resp.headers.get("Content-Type", ""):
             # set the content type according to the media type definition

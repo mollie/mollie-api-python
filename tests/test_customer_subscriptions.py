@@ -19,7 +19,7 @@ MANDATE_ID = "mdt_h3gAaD5zP"
 def test_list_customer_subscriptions(client, response):
     """Retrieve a list of subscriptions."""
     response.get(f"https://api.mollie.com/v2/customers/{CUSTOMER_ID}", "customer_single")
-    response.get(f"https://api.mollie.com/v2/customers/{CUSTOMER_ID}/subscriptions", "subscriptions_customer_list")
+    response.get(f"https://api.mollie.com/v2/customers/{CUSTOMER_ID}/subscriptions", "customer_subscriptions_list")
 
     customer = client.customers.get(CUSTOMER_ID)
     subscriptions = customer.subscriptions.list()

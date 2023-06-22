@@ -2,6 +2,7 @@ import pytest
 
 from mollie.api.objects.list import ObjectList
 from mollie.api.objects.method import Method
+from mollie.api.objects.subscription import Subscription
 
 from .utils import assert_list_object
 
@@ -158,3 +159,20 @@ def test_list_supports_slice_sequences(client, response):
     slice_step_only = methods[::3]
     assert_list_object(slice_step_only, Method, 4), "Slicing with only a step value should be possible"
     assert [x.id for x in slice_step_only] == ["ideal", "bancontact", "kbc", "giftcard"]
+
+
+def test_list_nested_objects(client, response):
+    response.get("https://api.mollie.com/v2/customers/cst_8wmqcHMN4x", "customer_single")
+    response.get("https://api.mollie.com/v2/customers/cst_8wmqcHMN4U/subscriptions", "customer_subscriptions_list")
+    response.get(
+        "https://api.mollie.com/v2/customers/cst_8wmqcHMN4U/subscriptions?from=sub_mnfbwhMfvo",
+        "customer_subscriptions_list_more",
+    )
+
+    customer = client.customers.get("cst_8wmqcHMN4x")
+    subscriptions = customer.subscriptions.list()
+    assert_list_object(subscriptions, Subscription, 3)
+
+    assert subscriptions.has_next() is True
+    next_subscriptions = subscriptions.get_next()
+    assert_list_object(next_subscriptions, Subscription, 2)

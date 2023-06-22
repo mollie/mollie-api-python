@@ -224,7 +224,7 @@ class Payment(ObjectBase):
         if url:
             from ..resources import CustomerSubscriptions
 
-            return CustomerSubscriptions(self.client, customer=None).from_url(url)
+            return CustomerSubscriptions(self.client).from_url(url)
 
     def get_customer(self):
         """Return the customer for this payment."""
