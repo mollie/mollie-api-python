@@ -1,12 +1,19 @@
+from typing import TYPE_CHECKING, Any
+
 from .base import ObjectBase
+
+if TYPE_CHECKING:
+    from ..client import Client
+    from ..resources import OrderLines
 
 
 class OrderLine(ObjectBase):
     @classmethod
-    def get_resource_class(cls, client):
+    def get_resource_class(cls, client: "Client", **kwargs: Any) -> "OrderLines":
         from ..resources import OrderLines
 
-        return OrderLines(client)
+        order = kwargs["order"]
+        return OrderLines(client, order)
 
     STATUS_CREATED = "created"
     STATUS_AUTHORIZED = "authorized"

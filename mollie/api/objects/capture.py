@@ -1,12 +1,19 @@
+from typing import TYPE_CHECKING, Any
+
 from .base import ObjectBase
+
+if TYPE_CHECKING:
+    from ..client import Client
+    from ..resources import PaymentCaptures
 
 
 class Capture(ObjectBase):
     @classmethod
-    def get_resource_class(cls, client):
+    def get_resource_class(cls, client: "Client", **kwargs: Any) -> "PaymentCaptures":
         from ..resources import PaymentCaptures
 
-        return PaymentCaptures(client)
+        payment = kwargs["payment"]
+        return PaymentCaptures(client, payment)
 
     @property
     def id(self):
@@ -50,9 +57,10 @@ class Capture(ObjectBase):
         url = self._get_link("shipment")
         if url:
             from ..resources import OrderShipments
+            from .order import Order
 
-            # We fake the order object here, since it is not used by from_url()
-            return OrderShipments(self.client, order=None).from_url(url)
+            order = Order({}, self.client)
+            return OrderShipments(self.client, order).from_url(url)
 
     def get_settlement(self):
         """Return the settlement for this capture."""
