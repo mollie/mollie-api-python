@@ -181,7 +181,11 @@ class Client(object):
 
         querystring = generate_querystring(params)
         if querystring:
-            url += "?" + querystring
+            if "?" in url:
+                # There is already a querystring in the URL
+                url += "&" + querystring
+            else:
+                url += "?" + querystring
             params = None
 
         return url, payload, params
@@ -204,7 +208,6 @@ class Client(object):
 
         url, payload, params = self._format_request_data(path, data, params)
         try:
-
             headers = {
                 "Accept": "application/json",
                 "Authorization": f"Bearer {self.api_key}",
@@ -239,7 +242,6 @@ class Client(object):
     ) -> requests.Response:
         url, payload, params = self._format_request_data(path, data, params)
         try:
-
             headers = {
                 "Accept": "application/json",
                 "Content-Type": "application/json",

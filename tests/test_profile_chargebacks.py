@@ -21,3 +21,11 @@ def test_list_profile_chargebacks(oauth_client, response):
     assert chargebacks.has_next()
     more_chargebacks = chargebacks.get_next()
     assert_list_object(more_chargebacks, Chargeback)
+
+
+def test_list_profile_chargebacks_with_params(oauth_client, response):
+    response.get(f"https://api.mollie.com/v2/profiles/{PROFILE_ID}", "profile_single")
+    response.get(f"https://api.mollie.com/v2/chargebacks?profileId={PROFILE_ID}&limit=42", "profile_chargebacks_list")
+
+    profile = oauth_client.profiles.get(PROFILE_ID)
+    profile.chargebacks.list(limit=42)
