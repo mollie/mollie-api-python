@@ -1,7 +1,6 @@
 import re
 
 from .base import ObjectBase
-from .customer import Customer
 
 
 class Subscription(ObjectBase):
@@ -134,8 +133,10 @@ class Subscription(ObjectBase):
         if self.mandate_id and self.customer_id:
             from ..resources import CustomerMandates
 
-            customer = Customer({"id": self.customer_id}, self.client)
-            return CustomerMandates(self.client, customer).get(self.mandate_id)
+            return CustomerMandates(
+                self.client,
+                resource_path=f"customers/{self.customer_id}/mandates",
+            ).get(self.mandate_id)
 
     @property
     def payments(self):

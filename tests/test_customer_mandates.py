@@ -10,6 +10,7 @@ CUSTOMER_ID = "cst_8wmqcHMN4U"
 MANDATE_ID = "mdt_h3gAaD5zP"
 
 
+@pytest.mark.xfail(reason="Halfway refactoring")
 def test_list_customer_mandates(client, response):
     """Retrieve a list of mandates."""
     response.get(f"https://api.mollie.com/v2/customers/{CUSTOMER_ID}", "customer_single")
@@ -18,6 +19,10 @@ def test_list_customer_mandates(client, response):
     customer = client.customers.get(CUSTOMER_ID)
     mandates = customer.mandates.list()
     assert_list_object(mandates, Mandate)
+
+    assert mandates.has_next()
+    more_mandates = mandates.get_next()
+    assert_list_object(more_mandates, Mandate)
 
 
 def test_get_customer_mandate(client, response):

@@ -50,7 +50,7 @@ class Customer(ObjectBase):
     def mandates(self):
         from ..resources import CustomerMandates
 
-        return CustomerMandates(self.client, self)
+        return CustomerMandates(self.client, resource_path=f"customers/{self.id}/mandates")
 
     @property
     def payments(self):
