@@ -204,7 +204,6 @@ class Client(object):
 
         url, payload, params = self._format_request_data(path, data, params)
         try:
-
             headers = {
                 "Accept": "application/json",
                 "Authorization": f"Bearer {self.api_key}",
@@ -239,7 +238,6 @@ class Client(object):
     ) -> requests.Response:
         url, payload, params = self._format_request_data(path, data, params)
         try:
-
             headers = {
                 "Accept": "application/json",
                 "Content-Type": "application/json",
@@ -342,7 +340,7 @@ class Client(object):
     def _setup_retry(self) -> None:
         """Configure a retry behaviour on the HTTP client."""
         if self.retry:
-            retry = Retry(connect=self.retry, backoff_factor=1)
+            retry = Retry(connect=self.retry, read=0, backoff_factor=1)
             adapter = requests.adapters.HTTPAdapter(max_retries=retry)
 
             if hasattr(self, "_client"):
