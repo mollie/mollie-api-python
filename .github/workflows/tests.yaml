@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python_version: ["3.7", "3.8", "3.9", "3.10", "3.11", "pypy-3.7", "pypy-3.8", "pypy-3.9"]
+        python_version: ["3.8", "3.9", "3.10", "3.11", "pypy-3.8", "pypy-3.9"]
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -36,9 +36,6 @@ jobs:
         run: python -m flake8 -v
 
       - name: Verify type annotations
-        # Installation of typed-ast on pypy-3.7 is broken
-        # We re-install mypy here for the other pypy's which don't get mypy from requirements file.
-        if: ${{ matrix.python_version != 'pypy-3.7' }}
         run: |
           python -m pip install mypy
           python -m mypy --config mypy.ini mollie/
