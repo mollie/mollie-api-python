@@ -202,6 +202,18 @@ class Payment(ObjectBase):
 
         return PaymentCaptures(self.client, self)
 
+    @property
+    def capture_before(self):
+        return self._get_property("captureBefore")
+
+    @property
+    def capture_mode(self):
+        return self._get_property("captureMode")
+
+    @property
+    def capture_delay(self):
+        return self._get_property("captureDelay")
+
     def get_settlement(self):
         """Return the settlement for this payment."""
         if self.settlement_id:

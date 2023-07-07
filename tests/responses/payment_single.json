@@ -3,6 +3,9 @@
   "id": "tr_7UhSN1zuXS",
   "mode": "test",
   "createdAt": "2018-03-20T09:13:37+00:00",
+  "captureDelay": "20 hours",
+  "captureMode": "automatic",
+  "captureBefore": "2023-01-20T09:13:37+00+00",
   "amount": {
     "value": "10.00",
     "currency": "EUR"

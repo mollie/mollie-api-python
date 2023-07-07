@@ -1,7 +1,7 @@
 from typing import TYPE_CHECKING, Any
 
 from ..objects.capture import Capture
-from .base import ResourceBase, ResourceGetMixin, ResourceListMixin
+from .base import ResourceBase, ResourceCreateMixin, ResourceGetMixin, ResourceListMixin
 
 if TYPE_CHECKING:
     from ..client import Client
@@ -21,7 +21,7 @@ class CapturesBase(ResourceBase):
         return Capture(result, self.client)
 
 
-class PaymentCaptures(CapturesBase, ResourceGetMixin, ResourceListMixin):
+class PaymentCaptures(CapturesBase, ResourceGetMixin, ResourceListMixin, ResourceCreateMixin):
     """Resource handler for the `/payments/:payment_id:/captures` endpoint."""
 
     _payment: "Payment"

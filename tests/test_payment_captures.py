@@ -86,3 +86,14 @@ def test_capture_get_related_settlement(client, response):
     capture = payment.captures.get(CAPTURE_ID)
     settlement = capture.get_settlement()
     assert isinstance(settlement, Settlement)
+
+
+def test_create_capture_for_payment(client, response):
+    response.get(f"https://api.mollie.com/v2/payments/{PAYMENT_ID}", "payment_single")
+    response.post(f"https://api.mollie.com/v2/payments/{PAYMENT_ID}/captures", "capture_single")
+    payment = client.payments.get(PAYMENT_ID)
+
+    data = {"amount": {"currency": "EUR", "value": "10.00"}, "description": "Capture for order #12345"}
+
+    capture = payment.captures.create(data)
+    assert capture.id == CAPTURE_ID
