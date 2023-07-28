@@ -37,6 +37,7 @@ def test_get_payment_chargeback(client, response):
     assert chargeback.reason is None
     assert chargeback.reversed_at == "2018-03-14T17:00:55.0Z"
     assert chargeback.payment_id == PAYMENT_ID
+    assert chargeback.settlement_id == SETTLEMENT_ID
 
 
 def test_get_payment_chargeback_invalid_id(client, response):
@@ -69,3 +70,27 @@ def test_payment_chargeback_get_related_settlement(client, response):
     related_settlement = chargeback.get_settlement()
     assert isinstance(related_settlement, Settlement)
     assert related_settlement.id == SETTLEMENT_ID
+
+
+@pytest.mark.parametrize(
+    "url_settlement_id, actual_settlement_id",
+    [
+        (SETTLEMENT_ID, SETTLEMENT_ID),
+        ("stl_j.k30akdN", "stl_j.k30akdN"),
+        ("stl_j.k30akdN/", "stl_j.k30akdN"),  # trailing slash in URL
+    ],
+)
+def test_payment_chargeback_get_related_settlement_id_syntax(url_settlement_id, actual_settlement_id, client):
+    """Identifiers may have unexpected syntax."""
+    data = {
+        "resource": "chargeback",
+        "id": "chb_n9z0tp",
+        "_links": {
+            "settlement": {
+                "href": f"https://api.mollie.com/v2/settlements/{url_settlement_id}",
+                "type": "application/hal+json",
+            },
+        },
+    }
+    chargeback = Chargeback(data, client)
+    assert chargeback.settlement_id == actual_settlement_id

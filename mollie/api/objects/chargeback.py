@@ -49,7 +49,7 @@ class Chargeback(ObjectBase):
         if not url:
             return None
 
-        match = re.findall(r"/settlements/(stl_\w+)$", url)
+        match = re.findall(r"/settlements/(stl_[^/]+)/?$", url)
         if match:
             return match[0]
 

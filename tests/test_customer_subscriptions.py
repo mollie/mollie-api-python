@@ -35,6 +35,7 @@ def test_get_customer_subscription(client, response):
 
     customer = client.customers.get(CUSTOMER_ID)
     subscription = customer.subscriptions.get(SUBSCRIPTION_ID)
+    assert isinstance(subscription, Subscription)
     assert subscription.resource == "subscription"
     assert subscription.id == SUBSCRIPTION_ID
     assert subscription.mode == "live"
@@ -53,6 +54,7 @@ def test_get_customer_subscription(client, response):
     assert subscription.canceled_at is None
     assert subscription.metadata == {"order_id": 1337}
     assert subscription.application_fee is None
+    assert subscription.customer_id == CUSTOMER_ID
     assert subscription.is_active() is True
     assert subscription.is_suspended() is False
     assert subscription.is_pending() is False
@@ -82,6 +84,29 @@ def test_customer_subscription_get_related_customer(client, response):
     related_customer = subscription.get_customer()
     assert isinstance(related_customer, Customer)
     assert related_customer.id == CUSTOMER_ID == customer.id
+
+
+@pytest.mark.parametrize(
+    "url_customer_id, actual_customer_id",
+    [
+        (CUSTOMER_ID, CUSTOMER_ID),
+        ("cst_8.mqcHMN4U", "cst_8.mqcHMN4U"),
+        ("cst_8.mqcHMN4U/", "cst_8.mqcHMN4U"),  # trailing slah in URL
+    ],
+)
+def test_customer_subscription_get_related_customer_id_syntax(url_customer_id, actual_customer_id, client):
+    data = {
+        "resource": "subscription",
+        "id": "sub_rVKGtNd6s3",
+        "_links": {
+            "customer": {
+                "href": f"https://api.mollie.com/v2/customers/{url_customer_id}",
+                "type": "application/hal+json",
+            },
+        },
+    }
+    subscription = Subscription(data, client)
+    assert subscription.customer_id == actual_customer_id
 
 
 def test_customer_subscription_get_related_profile(client, response):

@@ -120,7 +120,8 @@ class Subscription(ObjectBase):
         option is to extract it from the link.
         """
         url = self._get_link("customer")
-        matches = re.findall(r"/customers/(cst_\w+)", url)
+
+        matches = re.findall(r"/customers/(cst_[^/]+)/?$", url)
         if matches:
             return matches[0]
 
