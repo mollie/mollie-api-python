@@ -44,7 +44,6 @@ class ResourceBase:
         params: Optional[Dict[str, Any]] = None,
         idempotency_key: str = "",
     ) -> Dict[str, Any]:
-
         resp = self.client.perform_http_call(http_method, path, data, params, idempotency_key)
         if "application/hal+json" in resp.headers.get("Content-Type", ""):
             # set the content type according to the media type definition
