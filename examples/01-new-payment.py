@@ -37,7 +37,7 @@ def main():
         # webhookUrl    Webhook location, used to report when the payment changes state.
         # redirectUrl   Redirect location. The customer will be redirected there after the payment.
         # metadata      Custom metadata that is stored with the payment.
-        #
+        # methdo        Payment method "creditcard", "banktransfer", "ideal", etc.
         payment = mollie_client.payments.create(
             {
                 "amount": {"currency": "EUR", "value": "120.00"},
@@ -45,6 +45,7 @@ def main():
                 "webhookUrl": f"{PUBLIC_URL}02-webhook-verification",
                 "redirectUrl": f"{PUBLIC_URL}03-return-page?my_webshop_id={my_webshop_id}",
                 "metadata": {"my_webshop_id": str(my_webshop_id)},
+                "method": "creditcard",
             }
         )
 
