@@ -22,9 +22,7 @@ __all__ = [
 
 class RefundsBase(ResourceBase):
     RESOURCE_ID_PREFIX: str = "re_"
-
-    def get_resource_object(self, result: dict) -> Refund:
-        return Refund(result, self.client)
+    object_type = Refund
 
 
 class Refunds(RefundsBase, ResourceListMixin):

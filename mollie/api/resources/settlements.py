@@ -9,6 +9,7 @@ class Settlements(ResourceGetMixin, ResourceListMixin):
     """Resource handler for the `/settlements` endpoint."""
 
     RESOURCE_ID_PREFIX: str = "stl_"
+    object_type = Settlement
 
     # According to Mollie, the bank reference is formatted as:
     # - The Mollie merchant ID, 4 to 8 digits, might grow when the number of merchants increases

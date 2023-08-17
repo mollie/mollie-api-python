@@ -31,6 +31,7 @@ __all__ = [
 
 class PaymentsBase(ResourceBase):
     RESOURCE_ID_PREFIX: str = "tr_"
+    object_type = Payment
 
     def get_resource_object(self, result: dict) -> Payment:
         from ..objects.payment import Payment

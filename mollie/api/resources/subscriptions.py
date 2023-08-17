@@ -22,6 +22,7 @@ __all__ = [
 
 class SubscriptionsBase(ResourceBase):
     RESOURCE_ID_PREFIX: str = "sub_"
+    object_type = Subscription
 
     def get_resource_object(self, result: dict) -> Subscription:
         return Subscription(result, self.client)

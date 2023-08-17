@@ -8,6 +8,7 @@ class Customers(ResourceCreateMixin, ResourceDeleteMixin, ResourceGetMixin, Reso
     """Resource handler for the `/customers` endpoint."""
 
     RESOURCE_ID_PREFIX: str = "cst_"
+    object_type = Customer
 
     def get_resource_object(self, result: dict) -> Customer:
         return Customer(result, self.client)

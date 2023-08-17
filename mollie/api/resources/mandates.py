@@ -19,6 +19,7 @@ class CustomerMandates(ResourceCreateMixin, ResourceDeleteMixin, ResourceGetMixi
     RESOURCE_ID_PREFIX = "mdt_"
 
     _customer: Customer
+    object_type = Mandate
 
     def __init__(self, client: "Client", customer: Customer) -> None:
         self._customer = customer

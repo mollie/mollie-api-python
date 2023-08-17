@@ -12,6 +12,7 @@ __all__ = [
 
 class Onboarding(ResourceGetMixin):
     """Resource handler for the `/onboarding` endpoint."""
+    object_type = OnboardingObject
 
     def get_resource_object(self, result: dict) -> OnboardingObject:
         return OnboardingObject(result, self.client)

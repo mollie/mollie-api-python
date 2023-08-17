@@ -16,6 +16,7 @@ __all__ = [
 
 class CapturesBase(ResourceBase):
     RESOURCE_ID_PREFIX: str = "cpt_"
+    object_type = Capture
 
     def get_resource_object(self, result: dict) -> Capture:
         return Capture(result, self.client)

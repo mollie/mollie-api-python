@@ -83,7 +83,7 @@ class ListBase(ObjectBase, ABC):
         pass
 
 
-class PaginationList(ObjectBase):
+class PaginationList(ListBase):
     _parent: "ResourceBase"
 
     def __init__(self, result, parent: "ResourceBase", client=None):
@@ -117,7 +117,7 @@ class PaginationList(ObjectBase):
         return self._parent.object_type
 
 
-class ObjectList(ObjectBase):
+class ObjectList(ListBase):
     _object_type: Type[ObjectBase]
 
     def __init__(self, result, object_type: Type[ObjectBase], client=None):

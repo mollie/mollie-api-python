@@ -12,6 +12,7 @@ class PaymentLinks(ResourceCreateMixin, ResourceGetMixin, ResourceListMixin):
     """Resource handler for the `/payment_links` endpoint."""
 
     RESOURCE_ID_PREFIX: str = "pl_"
+    object_type = PaymentLink
 
     def get_resource_path(self) -> str:
         return "payment-links"

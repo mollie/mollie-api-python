@@ -2,7 +2,7 @@ from typing import TYPE_CHECKING, Any, Dict, List, Optional
 
 from ..error import IdentifierError
 from ..objects.issuer import Issuer
-from ..objects.list import ObjectList
+from ..objects.list import PaginationList
 from ..objects.method import Method
 from .base import ResourceBase, ResourceGetMixin, ResourceListMixin
 
@@ -18,6 +18,8 @@ __all__ = [
 
 
 class MethodsBase(ResourceBase):
+    object_type = Method
+
     def get_resource_object(self, result: dict) -> Method:
         return Method(result, self.client)
 
@@ -25,12 +27,12 @@ class MethodsBase(ResourceBase):
 class Methods(MethodsBase, ResourceGetMixin, ResourceListMixin):
     """Resource handler for the `/methods` endpoint."""
 
-    def all(self, **params: Any) -> ObjectList:
+    def all(self, **params: Any) -> PaginationList:
         """List all mollie payment methods, including methods that aren't activated in your profile."""
         resource_path = self.get_resource_path()
         path = f"{resource_path}/all"
         result = self.perform_api_call(self.REST_LIST, path, params=params)
-        return ObjectList(result, Method, self.client)
+        return PaginationList(result, self, self.client)
 
 
 class ProfileMethods(MethodsBase):
@@ -85,7 +87,7 @@ class ProfileMethods(MethodsBase):
         result = self.perform_api_call(self.REST_DELETE, path, params=params)
         return self.get_resource_object(result)
 
-    def list(self, **params: Any) -> ObjectList:
+    def list(self, **params: Any) -> PaginationList:
         """List the payment methods for the profile."""
         params.update({"profileId": self._profile.id})
         # Divert the API call to the general Methods resource

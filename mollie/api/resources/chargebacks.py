@@ -20,6 +20,7 @@ __all__ = [
 
 class ChargebacksBase(ResourceBase):
     RESOURCE_ID_PREFIX: str = "chb_"
+    object_type = Chargeback
 
     def get_resource_object(self, result: dict) -> Chargeback:
         return Chargeback(result, self.client)

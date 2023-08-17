@@ -12,6 +12,7 @@ class Orders(ResourceCreateMixin, ResourceDeleteMixin, ResourceGetMixin, Resourc
     """Resource handler for the `/orders` endpoint."""
 
     RESOURCE_ID_PREFIX: str = "ord_"
+    object_type = Order
 
     def get_resource_object(self, result: dict) -> Order:
         return Order(result, self.client)

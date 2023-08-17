@@ -16,6 +16,7 @@ class Clients(ResourceListMixin, ResourceGetMixin):
     """
 
     RESOURCE_ID_PREFIX: str = "org_"
+    object_type = Client
 
     def get_resource_object(self, result: dict) -> Client:
         return Client(result, self.client)

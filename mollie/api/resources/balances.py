@@ -11,6 +11,7 @@ if TYPE_CHECKING:
 
 class Balances(ResourceGetMixin, ResourceListMixin):
     RESOURCE_ID_PREFIX: str = "bal_"
+    object_type = Balance
 
     @classmethod
     def validate_resource_id(cls, resource_id: str, name: str = "", message: str = "") -> None:
@@ -43,6 +44,7 @@ class Balances(ResourceGetMixin, ResourceListMixin):
 
 class BalanceReports(ResourceBase):
     _balance: "Balance"
+    object_type = BalanceReport
 
     def __init__(self, client: "Client", balance: "Balance") -> None:
         self._balance = balance
@@ -64,6 +66,7 @@ class BalanceReports(ResourceBase):
 
 class BalanceTransactions(ResourceListMixin):
     _balance: "Balance"
+    object_type = BalanceTransaction
 
     def __init__(self, client: "Client", balance: "Balance") -> None:
         self._balance = balance

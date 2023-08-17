@@ -16,6 +16,7 @@ class OrderShipments(ResourceCreateMixin, ResourceGetMixin, ResourceListMixin, R
     """Resource handler for the `/orders/:order_id:/shipments` endpoint."""
 
     RESOURCE_ID_PREFIX: str = "shp_"
+    object_type = Shipment
 
     _order: Order
 
