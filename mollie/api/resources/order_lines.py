@@ -36,9 +36,6 @@ class OrderLines(ResourceBase):
     def get_resource_path(self) -> str:
         return f"orders/{self._order.id}/lines"
 
-    def get_resource_object(self, result: dict) -> OrderLine:
-        return OrderLine(result, self.client)
-
     def delete_lines(self, data: Optional[Dict[str, Any]] = None, **params: Any) -> dict:
         """
         Cancel multiple orderlines.
@@ -99,7 +96,7 @@ class OrderLines(ResourceBase):
 
         for line in result["lines"]:
             if line["id"] == order_line_id:
-                return self.get_resource_object(line)
+                return OrderLine(line, self.client)
 
         raise DataConsistencyError(f"OrderLine with id '{order_line_id}' not found in response.")
 

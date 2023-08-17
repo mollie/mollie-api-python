@@ -24,9 +24,6 @@ class SubscriptionsBase(ResourceBase):
     RESOURCE_ID_PREFIX: str = "sub_"
     object_type = Subscription
 
-    def get_resource_object(self, result: dict) -> Subscription:
-        return Subscription(result, self.client)
-
 
 class Subscriptions(SubscriptionsBase, ResourceListMixin):
     """Resource handler for the `/subscriptions` endpoint."""
@@ -66,4 +63,4 @@ class CustomerSubscriptions(
     def delete(self, resource_id: str, idempotency_key: str = "", **params: Any) -> dict:
         self.validate_resource_id(resource_id, "subscription ID")
         resp = super().delete(resource_id, idempotency_key, **params)
-        return self.get_resource_object(resp)
+        return Subscription(resp, self.client)

@@ -17,9 +17,6 @@ class PaymentLinks(ResourceCreateMixin, ResourceGetMixin, ResourceListMixin):
     def get_resource_path(self) -> str:
         return "payment-links"
 
-    def get_resource_object(self, result: dict) -> PaymentLink:
-        return PaymentLink(result, self.client)
-
     def get(self, resource_id: str, **params: Any) -> PaymentLink:
         self.validate_resource_id(resource_id, "payment link ID")
         return super().get(resource_id, **params)

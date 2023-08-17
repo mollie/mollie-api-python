@@ -18,9 +18,6 @@ class Settlements(ResourceGetMixin, ResourceListMixin):
     # The components are separated by a dot.
     BANK_REFERENCE_REGEX: Pattern[str] = re.compile(r"^\d{4,}\.\d{4}\.\d{2}$", re.ASCII)
 
-    def get_resource_object(self, result: dict) -> Settlement:
-        return Settlement(result, self.client)
-
     @classmethod
     def validate_resource_id(cls, resource_id: str, name: str = "", message: str = "") -> None:
         """

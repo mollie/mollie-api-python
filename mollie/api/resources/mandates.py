@@ -28,9 +28,6 @@ class CustomerMandates(ResourceCreateMixin, ResourceDeleteMixin, ResourceGetMixi
     def get_resource_path(self) -> str:
         return f"customers/{self._customer.id}/mandates"
 
-    def get_resource_object(self, result: dict) -> Mandate:
-        return Mandate(result, self.client)
-
     def get(self, resource_id: str, **params: Any) -> Mandate:
         self.validate_resource_id(resource_id, "mandate ID")
         return super().get(resource_id, **params)

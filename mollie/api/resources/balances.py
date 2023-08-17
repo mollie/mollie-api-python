@@ -32,11 +32,6 @@ class Balances(ResourceGetMixin, ResourceListMixin):
         else:
             super().validate_resource_id(resource_id, message=exc_message)
 
-    def get_resource_object(self, result: dict) -> Balance:
-        from ..objects.balance import Balance
-
-        return Balance(result, self.client)
-
     def get(self, resource_id: str, **params: Any) -> Balance:
         self.validate_resource_id(resource_id)
         return super().get(resource_id, **params)
@@ -50,18 +45,13 @@ class BalanceReports(ResourceBase):
         self._balance = balance
         super().__init__(client)
 
-    def get_resource_object(self, result: dict) -> BalanceReport:
-        from ..objects.balance_report import BalanceReport
-
-        return BalanceReport(result, self.client)
-
     def get_resource_path(self) -> str:
         return f"balances/{self._balance.id}/report"
 
     def get_report(self, **params: Any) -> BalanceReport:
         path = self.get_resource_path()
         result = self.perform_api_call(self.REST_READ, path, params=params)
-        return self.get_resource_object(result)
+        return BalanceReport(result, self.client)
 
 
 class BalanceTransactions(ResourceListMixin):
@@ -71,11 +61,6 @@ class BalanceTransactions(ResourceListMixin):
     def __init__(self, client: "Client", balance: "Balance") -> None:
         self._balance = balance
         super().__init__(client)
-
-    def get_resource_object(self, result: dict) -> BalanceTransaction:
-        from ..objects.balance_transaction import BalanceTransaction
-
-        return BalanceTransaction(result, self.client)
 
     def get_resource_path(self) -> str:
         return f"balances/{self._balance.id}/transactions"

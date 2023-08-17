@@ -20,9 +20,6 @@ __all__ = [
 class MethodsBase(ResourceBase):
     object_type = Method
 
-    def get_resource_object(self, result: dict) -> Method:
-        return Method(result, self.client)
-
 
 class Methods(MethodsBase, ResourceGetMixin, ResourceListMixin):
     """Resource handler for the `/methods` endpoint."""
@@ -68,7 +65,7 @@ class ProfileMethods(MethodsBase):
         resource_path = self.get_resource_path()
         path = f"{resource_path}/{method_id}"
         result = self.perform_api_call(self.REST_CREATE, path, params=params)
-        return self.get_resource_object(result)
+        return Method(result, self.client)
 
     def disable(self, method_id: str, **params: Any) -> Method:
         """
@@ -85,7 +82,7 @@ class ProfileMethods(MethodsBase):
         resource_path = self.get_resource_path()
         path = f"{resource_path}/{method_id}"
         result = self.perform_api_call(self.REST_DELETE, path, params=params)
-        return self.get_resource_object(result)
+        return Method(result, self.client)
 
     def list(self, **params: Any) -> PaginationList:
         """List the payment methods for the profile."""

@@ -24,9 +24,6 @@ class OrderShipments(ResourceCreateMixin, ResourceGetMixin, ResourceListMixin, R
         self._order = order
         super().__init__(client)
 
-    def get_resource_object(self, result: dict) -> Shipment:
-        return Shipment(result, self.client)
-
     def get_resource_path(self) -> str:
         return f"orders/{self._order.id}/shipments"
 

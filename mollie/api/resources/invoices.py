@@ -14,9 +14,6 @@ class Invoices(ResourceGetMixin, ResourceListMixin):
     RESOURCE_ID_PREFIX: str = "inv_"
     object_type = Invoice
 
-    def get_resource_object(self, result: dict) -> Invoice:
-        return Invoice(result, self.client)
-
     def get(self, resource_id: str, **params: Any) -> Invoice:
         self.validate_resource_id(resource_id, "invoice ID")
         return super().get(resource_id, **params)

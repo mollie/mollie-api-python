@@ -33,11 +33,6 @@ class PaymentsBase(ResourceBase):
     RESOURCE_ID_PREFIX: str = "tr_"
     object_type = Payment
 
-    def get_resource_object(self, result: dict) -> Payment:
-        from ..objects.payment import Payment
-
-        return Payment(result, self.client)
-
 
 class Payments(
     PaymentsBase, ResourceCreateMixin, ResourceDeleteMixin, ResourceGetMixin, ResourceListMixin, ResourceUpdateMixin
@@ -56,7 +51,7 @@ class Payments(
         """
         self.validate_resource_id(resource_id, "payment ID")
         result = super().delete(resource_id, idempotency_key, **params)
-        return self.get_resource_object(result)
+        return Payment(result, self.client)
 
     def update(
         self, resource_id: str, data: Optional[Dict[str, Any]] = None, idempotency_key: str = "", **params: Any

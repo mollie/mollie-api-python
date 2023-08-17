@@ -15,9 +15,6 @@ class Permissions(ResourceGetMixin, ResourceListMixin):
 
     object_type = Permission
 
-    def get_resource_object(self, result: dict) -> Permission:
-        return Permission(result, self.client)
-
     @staticmethod
     def validate_permission_id(permission_id: str) -> None:
         if not permission_id or not bool(re.match(r"^[a-z]+\.[a-z]+$", permission_id)):

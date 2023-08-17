@@ -27,15 +27,6 @@ class ResourceBase:
     def __init__(self, client: "Client") -> None:
         self.client = client
 
-    def get_resource_object(self, result: dict) -> Any:
-        """
-        Return an instantiated result class for this resource. Should be overriden by a subclass.
-
-        :param result: The API response that the object should hold.
-        :type result: dict
-        """
-        raise NotImplementedError()  # pragma: no cover
-
     def get_resource_path(self) -> str:
         """Return the base URL path in the API for this resource."""
         return self.__class__.__name__.lower()

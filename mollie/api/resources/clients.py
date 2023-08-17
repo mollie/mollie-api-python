@@ -18,9 +18,6 @@ class Clients(ResourceListMixin, ResourceGetMixin):
     RESOURCE_ID_PREFIX: str = "org_"
     object_type = Client
 
-    def get_resource_object(self, result: dict) -> Client:
-        return Client(result, self.client)
-
     def get(self, resource_id: str, **params: Any) -> Client:
         """Retrieve a single client, linked to your partner account, by its ID."""
         self.validate_resource_id(resource_id, "client ID")

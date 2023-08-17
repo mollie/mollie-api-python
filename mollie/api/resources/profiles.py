@@ -14,9 +14,6 @@ class Profiles(ResourceCreateMixin, ResourceDeleteMixin, ResourceGetMixin, Resou
     RESOURCE_ID_PREFIX: str = "pfl_"
     object_type = Profile
 
-    def get_resource_object(self, result: dict) -> Profile:
-        return Profile(result, self.client)
-
     def get(self, resource_id: str, **params: Any) -> Profile:
         if resource_id != "me":
             self.validate_resource_id(resource_id, "profile ID")

@@ -10,9 +10,6 @@ class Customers(ResourceCreateMixin, ResourceDeleteMixin, ResourceGetMixin, Reso
     RESOURCE_ID_PREFIX: str = "cst_"
     object_type = Customer
 
-    def get_resource_object(self, result: dict) -> Customer:
-        return Customer(result, self.client)
-
     def get(self, resource_id: str, **params: Any) -> Customer:
         self.validate_resource_id(resource_id, "customer ID")
         return super().get(resource_id, **params)
