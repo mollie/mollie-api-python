@@ -51,7 +51,7 @@ class ListBase(ObjectBase, ABC):
                 },
                 "count": len(sliced_data),
             }
-            return ObjectList(sliced_result, self._parent, self.client)
+            return self.new(sliced_result)
 
         return super().__getitem__(key)
 
@@ -71,16 +71,21 @@ class ListBase(ObjectBase, ABC):
 
     @abstractmethod
     def get_next(self):
-        pass
+        ...
 
     @abstractmethod
     def get_previous(self):
-        pass
+        ...
 
     @property
     @abstractmethod
     def object_type(self):
-        pass
+        ...
+
+    @abstractmethod
+    def new(self, result):
+        ...
+
 
 
 class PaginationList(ListBase):
@@ -103,18 +108,21 @@ class PaginationList(ListBase):
         url = self._get_link("next")
         resource = self.object_type.get_resource_class(self.client)
         resp = resource.perform_api_call(resource.REST_READ, url)
-        return ObjectList(resp, self._parent, self.client)
+        return PaginationList(resp, self._parent, self.client)
 
     def get_previous(self):
         """Return the previous set of objects in an ObjectList."""
         url = self._get_link("previous")
         resource = self.object_type.get_resource_class(self.client)
         resp = resource.perform_api_call(resource.REST_READ, url)
-        return ObjectList(resp, self._parent, self.client)
+        return PaginationList(resp, self._parent, self.client)
     
     @property
     def object_type(self):
         return self._parent.object_type
+    
+    def new(self, result):
+        return PaginationList(result, self._parent, self.client)
 
 
 class ObjectList(ListBase):
@@ -142,3 +150,6 @@ class ObjectList(ListBase):
     @property
     def object_type(self):
         return self._object_type
+    
+    def new(self, result):
+        return ObjectList(result, self._object_type, self.client)
