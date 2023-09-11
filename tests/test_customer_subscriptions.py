@@ -1,4 +1,5 @@
 import pytest
+from responses import matchers
 
 from mollie.api.error import IdentifierError
 from mollie.api.objects.customer import Customer
@@ -19,11 +20,37 @@ MANDATE_ID = "mdt_h3gAaD5zP"
 def test_list_customer_subscriptions(client, response):
     """Retrieve a list of subscriptions."""
     response.get(f"https://api.mollie.com/v2/customers/{CUSTOMER_ID}", "customer_single")
-    response.get(f"https://api.mollie.com/v2/customers/{CUSTOMER_ID}/subscriptions", "subscriptions_customer_list")
+    response.get(f"https://api.mollie.com/v2/customers/{CUSTOMER_ID}/subscriptions", "customer_subscriptions_list")
 
     customer = client.customers.get(CUSTOMER_ID)
     subscriptions = customer.subscriptions.list()
     assert_list_object(subscriptions, Subscription)
+
+
+def test_list_customer_subscription_pagination(client, response):
+    """Retrieve a list of paginated subscriptions."""
+    response.get(f"https://api.mollie.com/v2/customers/{CUSTOMER_ID}", "customer_single")
+    response.get(
+        f"https://api.mollie.com/v2/customers/{CUSTOMER_ID}/subscriptions",
+        "customer_subscriptions_list",
+        match=[matchers.query_string_matcher("")],
+    )
+    response.get(
+        f"https://api.mollie.com/v2/customers/{CUSTOMER_ID}/subscriptions",
+        "customer_subscriptions_list_more",
+        match=[matchers.query_string_matcher("from=sub_rVKGtNd6s6")],
+    )
+
+    customer = client.customers.get(CUSTOMER_ID)
+    first_subscriptions_page = customer.subscriptions.list()
+    assert first_subscriptions_page.has_previous() is False
+    assert first_subscriptions_page.has_next() is True
+
+    second_subscriptions_page = first_subscriptions_page.get_next()
+    assert_list_object(second_subscriptions_page, Subscription)
+
+    subscription = next(second_subscriptions_page)
+    assert subscription.id == "sub_rVKGtNd6s6"
 
 
 def test_get_customer_subscription(client, response):
