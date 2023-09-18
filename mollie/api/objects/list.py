@@ -1,8 +1,10 @@
 from abc import ABC, abstractmethod
-from typing import TYPE_CHECKING, Type
+from typing import TYPE_CHECKING, Any, Optional, Type
+
 from .base import ObjectBase
 
 if TYPE_CHECKING:
+    from mollie.api.client import Client
     from mollie.api.resources.base import ResourceBase
 
 
@@ -87,11 +89,10 @@ class ListBase(ObjectBase, ABC):
         ...
 
 
-
 class PaginationList(ListBase):
     _parent: "ResourceBase"
 
-    def __init__(self, result, parent: "ResourceBase", client=None):
+    def __init__(self, result: Any, parent: "ResourceBase", client: "Client"):
         # If an empty dataset was injected, we mock the structure that the remainder of the clas expects.
         # TODO: it would be better if the ObjectList was initiated with a list of results, rather than with
         # the full datastructure as it is now, so we can remove all this mucking around with fake data,
@@ -130,7 +131,7 @@ class PaginationList(ListBase):
 class ObjectList(ListBase):
     _object_type: Type[ObjectBase]
 
-    def __init__(self, result, object_type: Type[ObjectBase], client=None):
+    def __init__(self, result: Any, object_type: Type[ObjectBase], client: Optional["Client"] = None):
         # If an empty dataset was injected, we mock the structure that the remainder of the clas expects.
         # TODO: it would be better if the ObjectList was initiated with a list of results, rather than with
         # the full datastructure as it is now, so we can remove all this mucking around with fake data,
@@ -148,10 +149,10 @@ class ObjectList(ListBase):
 
     def get_previous(self):
         return None
-    
+
     @property
     def object_type(self):
         return self._object_type
-    
+
     def new(self, result):
         return ObjectList(result, self._object_type, self.client)

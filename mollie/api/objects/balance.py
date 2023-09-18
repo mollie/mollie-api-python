@@ -2,7 +2,7 @@ from typing import Any
 
 from .balance_report import BalanceReport
 from .base import ObjectBase
-from .list import ObjectList
+from .list import PaginationList
 
 
 class Balance(ObjectBase):
@@ -59,7 +59,7 @@ class Balance(ObjectBase):
 
         return BalanceReports(self.client, self).get_report(params=params)
 
-    def get_transactions(self, **params: Any) -> ObjectList:
+    def get_transactions(self, **params: Any) -> PaginationList:
         from ..resources import BalanceTransactions
 
         return BalanceTransactions(self.client, self).list(params=params)

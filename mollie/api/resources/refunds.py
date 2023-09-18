@@ -1,6 +1,6 @@
 from typing import TYPE_CHECKING, Any, Dict, Optional
 
-from ..objects.list import ObjectList
+from ..objects.list import PaginationList
 from ..objects.order import Order
 from ..objects.payment import Payment
 from ..objects.profile import Profile
@@ -97,7 +97,7 @@ class ProfileRefunds(RefundsBase):
         self._profile = profile
         super().__init__(client)
 
-    def list(self, **params: Any) -> ObjectList:
+    def list(self, **params: Any) -> PaginationList:
         # Set the profileId in the query params
         params.update({"profileId": self._profile.id})
         return Refunds(self.client).list(**params)
