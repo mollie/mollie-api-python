@@ -6,12 +6,6 @@ from .list import ObjectList
 
 
 class Balance(ObjectBase):
-    @classmethod
-    def get_resource_class(cls, client):
-        from ..resources import Balances
-
-        return Balances(client)
-
     @property
     def resource(self):
         return self._get_property("resource")

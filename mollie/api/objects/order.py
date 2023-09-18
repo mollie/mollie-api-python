@@ -5,12 +5,6 @@ class Order(ObjectBase):
     def __init__(self, data, client):
         super().__init__(data, client)
 
-    @classmethod
-    def get_resource_class(cls, client):
-        from ..resources import Orders
-
-        return Orders(client)
-
     STATUS_CREATED = "created"
     STATUS_PAID = "paid"
     STATUS_AUTHORIZED = "authorized"

@@ -2,12 +2,6 @@ from .base import ObjectBase
 
 
 class Customer(ObjectBase):
-    @classmethod
-    def get_resource_class(cls, client):
-        from ..resources import Customers
-
-        return Customers(client)
-
     @property
     def id(self):
         return self._get_property("id")

@@ -9,12 +9,6 @@ class Profile(ObjectBase):
     STATUS_VERIFIED = "verified"
     STATUS_BLOCKED = "blocked"
 
-    @classmethod
-    def get_resource_class(cls, client):
-        from ..resources import Profiles
-
-        return Profiles(client)
-
     @property
     def id(self):
         return self._get_property("id")

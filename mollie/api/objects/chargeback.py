@@ -4,12 +4,6 @@ from .base import ObjectBase
 
 
 class Chargeback(ObjectBase):
-    @classmethod
-    def get_resource_class(cls, client):
-        from ..resources import Chargebacks
-
-        return Chargebacks(client)
-
     @property
     def id(self):
         return self._get_property("id")

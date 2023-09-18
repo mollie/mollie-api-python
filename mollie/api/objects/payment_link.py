@@ -3,12 +3,6 @@ from .base import ObjectBase
 
 class PaymentLink(ObjectBase):
     @classmethod
-    def get_resource_class(cls, client):
-        from ..resources import PaymentLinks
-
-        return PaymentLinks(client)
-
-    @classmethod
     def get_object_name(cls):
         return "payment_links"
 

@@ -3,12 +3,6 @@ from .customer import Customer
 
 
 class Payment(ObjectBase):
-    @classmethod
-    def get_resource_class(cls, client):
-        from ..resources import Payments
-
-        return Payments(client)
-
     STATUS_OPEN = "open"
     STATUS_PENDING = "pending"
     STATUS_CANCELED = "canceled"

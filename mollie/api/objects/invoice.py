@@ -2,12 +2,6 @@ from .base import ObjectBase
 
 
 class Invoice(ObjectBase):
-    @classmethod
-    def get_resource_class(cls, client):
-        from ..resources import Invoices
-
-        return Invoices(client)
-
     @property
     def id(self):
         return self._get_property("id")

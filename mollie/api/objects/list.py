@@ -106,21 +106,23 @@ class PaginationList(ListBase):
     def get_next(self):
         """Return the next set of objects in an ObjectList."""
         url = self._get_link("next")
-        resource = self.object_type.get_resource_class(self.client)
-        resp = resource.perform_api_call(resource.REST_READ, url)
+        if url is None:
+            return None
+        resp = self._parent.perform_api_call(self._parent.REST_READ, url)
         return PaginationList(resp, self._parent, self.client)
 
     def get_previous(self):
         """Return the previous set of objects in an ObjectList."""
         url = self._get_link("previous")
-        resource = self.object_type.get_resource_class(self.client)
-        resp = resource.perform_api_call(resource.REST_READ, url)
+        if url is None:
+            return None
+        resp = self._parent.perform_api_call(self._parent.REST_READ, url)
         return PaginationList(resp, self._parent, self.client)
-    
+
     @property
     def object_type(self):
         return self._parent.object_type
-    
+
     def new(self, result):
         return PaginationList(result, self._parent, self.client)
 
