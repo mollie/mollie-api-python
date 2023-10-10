@@ -11,11 +11,11 @@ class Settlements(ResourceGetMixin, ResourceListMixin):
     RESOURCE_ID_PREFIX: str = "stl_"
 
     # According to Mollie, the bank reference is formatted as:
-    # - The Mollie customer ID, 4 to 7 digits.
+    # - The Mollie merchant ID, 4 to 8 digits, might grow when the number of merchants increases
     # - The year and month, 4 digits
     # - The sequence number of the settlement in that month, 2 digits
     # The components are separated by a dot.
-    BANK_REFERENCE_REGEX: Pattern[str] = re.compile(r"^\d{4,7}\.\d{4}\.\d{2}$", re.ASCII)
+    BANK_REFERENCE_REGEX: Pattern[str] = re.compile(r"^\d{4,}\.\d{4}\.\d{2}$", re.ASCII)
 
     def get_resource_object(self, result: dict) -> Settlement:
         return Settlement(result, self.client)
