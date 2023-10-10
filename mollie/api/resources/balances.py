@@ -42,7 +42,6 @@ class Balances(ResourceGetMixin, ResourceListMixin):
 
 
 class BalanceReports(ResourceBase):
-
     _balance: "Balance"
 
     def __init__(self, client: "Client", balance: "Balance") -> None:
