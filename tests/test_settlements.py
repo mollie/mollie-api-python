@@ -10,7 +10,9 @@ from .utils import assert_list_object
 
 SETTLEMENT_ID = "stl_jDk30akdN"
 INVOICE_ID = "inv_xBEbP9rvAq"
-BANK_REFERENCE = "1234567.1804.03"
+BANK_REFERENCE = BANK_REFERENCE_SHORT = "1234.1804.03"
+BANK_REFERENCE_LONG = "01234567.1804.03"
+BANK_REFERENCE_FUTURE = "1234567890.1804.03"
 
 
 def test_list_settlements(oauth_client, response):
@@ -62,10 +64,18 @@ def test_settlement_get_open(oauth_client, response):
     assert isinstance(settlement, Settlement)
 
 
-def test_get_settlement_by_bank_reference(oauth_client, response):
-    response.get(f"https://api.mollie.com/v2/settlements/{BANK_REFERENCE}", "settlement_single")
+@pytest.mark.parametrize(
+    "bank_reference",
+    [
+        BANK_REFERENCE_SHORT,
+        BANK_REFERENCE_LONG,
+        BANK_REFERENCE_FUTURE,
+    ],
+)
+def test_get_settlement_by_bank_reference(oauth_client, response, bank_reference):
+    response.get(f"https://api.mollie.com/v2/settlements/{bank_reference}", "settlement_single")
 
-    settlement = oauth_client.settlements.get(BANK_REFERENCE)
+    settlement = oauth_client.settlements.get(bank_reference)
     assert isinstance(settlement, Settlement)
 
 
