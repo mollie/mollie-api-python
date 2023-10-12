@@ -18,7 +18,7 @@
         "paymentId": "tr_7UhSN1zuXS",
         "_links": {
           "self": {
-            "href": "https://api.mollie.com/v2/payments/tr_7UhSN1zuXS/chargebacks/chb_n9z0tp",
+            "href": "https://api.mollie.com/v2/payments/tr_7UhSN1zuXS/chargebacks/chb_n9z0tp?profileId=pfl_v9hTwCvYqw",
             "type": "application/hal+json"
           },
           "payment": {
@@ -35,11 +35,11 @@
   },
   "_links": {
     "self": {
-      "href": "https://api.mollie.com/v2/chargebacks",
+      "href": "https://api.mollie.com/v2/chargebacks?profileId=pfl_v9hTwCvYqw",
       "type": "application/hal+json"
     },
     "next": {
-      "href": "https://api.mollie.com/v2/chargebacks?from=chb_n9z0tq",
+      "href": "https://api.mollie.com/v2/chargebacks?profileId=pfl_v9hTwCvYqw&from=chb_n9z0tq",
       "type": "application/hal+json"
     },
     "documentation": {

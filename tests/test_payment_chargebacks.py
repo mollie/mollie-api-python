@@ -1,4 +1,5 @@
 import pytest
+from responses import matchers
 
 from mollie.api.error import IdentifierError
 from mollie.api.objects.chargeback import Chargeback
@@ -15,17 +16,45 @@ SETTLEMENT_ID = "stl_jDk30akdN"
 def test_list_payment_chargebacks(client, response):
     """Get chargebacks relevant to a payment."""
     response.get(f"https://api.mollie.com/v2/payments/{PAYMENT_ID}", "payment_single")
-    response.get(f"https://api.mollie.com/v2/payments/{PAYMENT_ID}/chargebacks", "chargebacks_list")
+    response.get(f"https://api.mollie.com/v2/payments/{PAYMENT_ID}/chargebacks", "payment_chargebacks_list")
 
     payment = client.payments.get(PAYMENT_ID)
     chargebacks = payment.chargebacks.list()
     assert_list_object(chargebacks, Chargeback)
 
 
+def test_list_payment_chargebacks_pagination(client, response):
+    """Retrieve a list of paginated payment chargebacks."""
+    response.get(f"https://api.mollie.com/v2/payments/{PAYMENT_ID}", "payment_single")
+    response.get(
+        f"https://api.mollie.com/v2/payments/{PAYMENT_ID}/chargebacks",
+        "payment_chargebacks_list",
+        match=[matchers.query_string_matcher("")],
+    )
+    response.get(
+        f"https://api.mollie.com/v2/payments/{PAYMENT_ID}/chargebacks",
+        "payment_chargebacks_list_more",
+        match=[matchers.query_string_matcher("from=chb_n9z0tq")],
+    )
+
+    payment = client.payments.get(PAYMENT_ID)
+    first_chargebacks_page = payment.chargebacks.list()
+    assert first_chargebacks_page.has_previous() is False
+    assert first_chargebacks_page.has_next() is True
+
+    second_chargebacks_page = first_chargebacks_page.get_next()
+    assert_list_object(second_chargebacks_page, Chargeback)
+
+    subscription = next(second_chargebacks_page)
+    assert subscription.id == "chb_n9z0tq"
+
+
 def test_get_payment_chargeback(client, response):
     """Get a single chargeback relevant to a payment."""
     response.get(f"https://api.mollie.com/v2/payments/{PAYMENT_ID}", "payment_single")
-    response.get(f"https://api.mollie.com/v2/payments/{PAYMENT_ID}/chargebacks/{CHARGEBACK_ID}", "chargeback_single")
+    response.get(
+        f"https://api.mollie.com/v2/payments/{PAYMENT_ID}/chargebacks/{CHARGEBACK_ID}", "payment_chargeback_single"
+    )
 
     payment = client.payments.get(PAYMENT_ID)
     chargeback = payment.chargebacks.get(CHARGEBACK_ID)
@@ -51,7 +80,9 @@ def test_get_payment_chargeback_invalid_id(client, response):
 
 def test_payment_chargeback_get_related_payment(client, response):
     response.get(f"https://api.mollie.com/v2/payments/{PAYMENT_ID}", "payment_single")
-    response.get(f"https://api.mollie.com/v2/payments/{PAYMENT_ID}/chargebacks/{CHARGEBACK_ID}", "chargeback_single")
+    response.get(
+        f"https://api.mollie.com/v2/payments/{PAYMENT_ID}/chargebacks/{CHARGEBACK_ID}", "payment_chargeback_single"
+    )
 
     payment = client.payments.get(PAYMENT_ID)
     chargeback = payment.chargebacks.get(CHARGEBACK_ID)
@@ -62,7 +93,9 @@ def test_payment_chargeback_get_related_payment(client, response):
 
 def test_payment_chargeback_get_related_settlement(client, response):
     response.get(f"https://api.mollie.com/v2/payments/{PAYMENT_ID}", "payment_single")
-    response.get(f"https://api.mollie.com/v2/payments/{PAYMENT_ID}/chargebacks/{CHARGEBACK_ID}", "chargeback_single")
+    response.get(
+        f"https://api.mollie.com/v2/payments/{PAYMENT_ID}/chargebacks/{CHARGEBACK_ID}", "payment_chargeback_single"
+    )
     response.get(f"https://api.mollie.com/v2/settlements/{SETTLEMENT_ID}", "settlement_single")
 
     payment = client.payments.get(PAYMENT_ID)
