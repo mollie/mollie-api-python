@@ -90,6 +90,13 @@ class ListBase(ObjectBase, ABC):
 
 
 class PaginationList(ListBase):
+    """
+    Pagination lists are used to return a paginated list of Objects.
+
+    You can use the `has_next` and `get_next` methods to get the next page of result data from the API.
+    The `has_previous` and `get_previous` methods return the previous page.
+    """
+
     _parent: "ResourceBase"
 
     def __init__(self, result: Any, parent: "ResourceBase", client: "Client"):
@@ -105,7 +112,7 @@ class PaginationList(ListBase):
         super().__init__(result, client)
 
     def get_next(self):
-        """Return the next set of objects in an ObjectList."""
+        """Return the next set of objects in the paginated list."""
         url = self._get_link("next")
         if url is None:
             return None
@@ -113,7 +120,7 @@ class PaginationList(ListBase):
         return PaginationList(resp, self._parent, self.client)
 
     def get_previous(self):
-        """Return the previous set of objects in an ObjectList."""
+        """Return the previous set of objects in the paginated list."""
         url = self._get_link("previous")
         if url is None:
             return None
@@ -129,6 +136,12 @@ class PaginationList(ListBase):
 
 
 class ObjectList(ListBase):
+    """
+    Object lists are used to return an embedded list on an object.
+
+    It works to similar to PaginationList, but has no pagination (as all data is already embedded).
+    """
+
     _object_type: Type[ObjectBase]
 
     def __init__(self, result: Any, object_type: Type[ObjectBase], client: Optional["Client"] = None):
