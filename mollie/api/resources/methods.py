@@ -1,8 +1,8 @@
-from typing import TYPE_CHECKING, Any, Dict, List, Optional
+from typing import TYPE_CHECKING, Any, Dict, List, Optional, Union
 
 from ..error import IdentifierError
 from ..objects.issuer import Issuer
-from ..objects.list import ObjectList
+from ..objects.list import ObjectList, ResultListIterator
 from ..objects.method import Method
 from .base import ResourceBase, ResourceGetMixin, ResourceListMixin
 
@@ -18,8 +18,8 @@ __all__ = [
 
 
 class MethodsBase(ResourceBase):
-    def get_resource_object(self, result: dict) -> Method:
-        return Method(result, self.client)
+
+    RESULT_CLASS_PATH: str = "mollie.api.objects.method.Method"
 
 
 class Methods(MethodsBase, ResourceGetMixin, ResourceListMixin):
@@ -85,7 +85,7 @@ class ProfileMethods(MethodsBase):
         result = self.perform_api_call(self.REST_DELETE, path, params=params)
         return self.get_resource_object(result)
 
-    def list(self, **params: Any) -> ObjectList:
+    def list(self, **params: Any) -> Union[ObjectList, ResultListIterator]:
         """List the payment methods for the profile."""
         params.update({"profileId": self._profile.id})
         # Divert the API call to the general Methods resource

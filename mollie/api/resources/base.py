@@ -1,9 +1,10 @@
 import logging
 import uuid
-from typing import TYPE_CHECKING, Any, Dict, Optional
+from typing import TYPE_CHECKING, Any, Dict, Optional, Union
 
 from ..error import IdentifierError, ResponseError, ResponseHandlingError
-from ..objects.list import ObjectList
+from ..objects.list import ObjectList, ResultListIterator
+from ..utils import get_class_from_dotted_path
 
 if TYPE_CHECKING:
     from ..client import Client
@@ -20,17 +21,17 @@ class ResourceBase:
 
     RESOURCE_ID_PREFIX: str = ""
 
+    # Dotted path to the result class
+    RESULT_CLASS_PATH: str = ""
+
     def __init__(self, client: "Client") -> None:
         self.client = client
 
-    def get_resource_object(self, result: dict) -> Any:
-        """
-        Return an instantiated result class for this resource. Should be overriden by a subclass.
+    def get_resource_object(self, result: Dict[str, Any]) -> Any:
+        """Return an instantiated result class for this resource."""
+        result_class = get_class_from_dotted_path(self.RESULT_CLASS_PATH)
 
-        :param result: The API response that the object should hold.
-        :type result: dict
-        """
-        raise NotImplementedError()  # pragma: no cover
+        return result_class(result, self.client)
 
     def get_resource_path(self) -> str:
         """Return the base URL path in the API for this resource."""
@@ -112,10 +113,16 @@ class ResourceGetMixin(ResourceBase):
 
 
 class ResourceListMixin(ResourceBase):
-    def list(self, **params: Any) -> ObjectList:
+    def list(self, **params: Any) -> Union[ObjectList, ResultListIterator]:
+        return_iterator = params.pop("return_iterator", False)
         path = self.get_resource_path()
         result = self.perform_api_call(self.REST_LIST, path, params=params)
-        return ObjectList(result, self.get_resource_object({}).__class__, self.client)
+
+        if return_iterator:
+            resource = self
+            return ResultListIterator(resource, result)
+        else:
+            return ObjectList(result, self.get_resource_object({}).__class__, self.client)
 
 
 class ResourceUpdateMixin(ResourceBase):

@@ -8,9 +8,7 @@ class Customers(ResourceCreateMixin, ResourceDeleteMixin, ResourceGetMixin, Reso
     """Resource handler for the `/customers` endpoint."""
 
     RESOURCE_ID_PREFIX: str = "cst_"
-
-    def get_resource_object(self, result: dict) -> Customer:
-        return Customer(result, self.client)
+    RESULT_CLASS_PATH: str = "mollie.api.objects.customer.Customer"
 
     def get(self, resource_id: str, **params: Any) -> Customer:
         self.validate_resource_id(resource_id, "customer ID")

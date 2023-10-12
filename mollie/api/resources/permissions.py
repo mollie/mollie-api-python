@@ -13,8 +13,7 @@ __all__ = [
 class Permissions(ResourceGetMixin, ResourceListMixin):
     """Resource handler for the `/permissions` endpoint."""
 
-    def get_resource_object(self, result: dict) -> Permission:
-        return Permission(result, self.client)
+    RESULT_CLASS_PATH: str = "mollie.api.objects.permission.Permission"
 
     @staticmethod
     def validate_permission_id(permission_id: str) -> None:

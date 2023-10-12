@@ -16,9 +16,7 @@ class Clients(ResourceListMixin, ResourceGetMixin):
     """
 
     RESOURCE_ID_PREFIX: str = "org_"
-
-    def get_resource_object(self, result: dict) -> Client:
-        return Client(result, self.client)
+    RESULT_CLASS_PATH: str = "mollie.api.objects.client.Client"
 
     def get(self, resource_id: str, **params: Any) -> Client:
         """Retrieve a single client, linked to your partner account, by its ID."""

@@ -13,8 +13,7 @@ __all__ = [
 class Onboarding(ResourceGetMixin):
     """Resource handler for the `/onboarding` endpoint."""
 
-    def get_resource_object(self, result: dict) -> OnboardingObject:
-        return OnboardingObject(result, self.client)
+    RESULT_CLASS_PATH: str = "mollie.api.objects.onboarding.Onboarding"
 
     def get(self, resource_id: str, **params: Any) -> OnboardingObject:
         if resource_id != "me":

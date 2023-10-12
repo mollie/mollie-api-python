@@ -1,7 +1,7 @@
-from typing import TYPE_CHECKING, Any
+from typing import TYPE_CHECKING, Any, Union
 
 from ..objects.chargeback import Chargeback
-from ..objects.list import ObjectList
+from ..objects.list import ObjectList, ResultListIterator
 from .base import ResourceBase, ResourceGetMixin, ResourceListMixin
 
 if TYPE_CHECKING:
@@ -20,9 +20,7 @@ __all__ = [
 
 class ChargebacksBase(ResourceBase):
     RESOURCE_ID_PREFIX: str = "chb_"
-
-    def get_resource_object(self, result: dict) -> Chargeback:
-        return Chargeback(result, self.client)
+    RESULT_CLASS_PATH: str = "mollie.api.objects.chargeback.Chargeback"
 
 
 class Chargebacks(ChargebacksBase, ResourceListMixin):
@@ -74,7 +72,7 @@ class ProfileChargebacks(ChargebacksBase):
         self._profile = profile
         super().__init__(client)
 
-    def list(self, **params: Any) -> ObjectList:
+    def list(self, **params: Any) -> Union[ObjectList, ResultListIterator]:
         # Set the profileId in the query params
         params.update({"profileId": self._profile.id})
         return Chargebacks(self.client).list(**params)

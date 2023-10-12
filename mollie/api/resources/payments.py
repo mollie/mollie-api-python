@@ -1,7 +1,7 @@
-from typing import TYPE_CHECKING, Any, Dict, Optional
+from typing import TYPE_CHECKING, Any, Dict, Optional, Union
 
 from ..objects.customer import Customer
-from ..objects.list import ObjectList
+from ..objects.list import ObjectList, ResultListIterator
 from ..objects.order import Order
 from ..objects.payment import Payment
 from ..objects.profile import Profile
@@ -31,11 +31,7 @@ __all__ = [
 
 class PaymentsBase(ResourceBase):
     RESOURCE_ID_PREFIX: str = "tr_"
-
-    def get_resource_object(self, result: dict) -> Payment:
-        from ..objects.payment import Payment
-
-        return Payment(result, self.client)
+    RESULT_CLASS_PATH: str = "mollie.api.objects.payment.Payment"
 
 
 class Payments(
@@ -147,7 +143,7 @@ class ProfilePayments(PaymentsBase):
         self._profile = profile
         super().__init__(client)
 
-    def list(self, **params: Any) -> ObjectList:
+    def list(self, **params: Any) -> Union[ObjectList, ResultListIterator]:
         # Set the profileId in the query params
         params.update({"profileId": self._profile.id})
         return Payments(self.client).list(**params)

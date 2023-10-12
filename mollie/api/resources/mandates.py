@@ -17,6 +17,7 @@ class CustomerMandates(ResourceCreateMixin, ResourceDeleteMixin, ResourceGetMixi
     """Resource handler for the `/customers/:customer_id:/mandates` endpoint."""
 
     RESOURCE_ID_PREFIX = "mdt_"
+    RESULT_CLASS_PATH: str = "mollie.api.objects.mandate.Mandate"
 
     _customer: Customer
 
@@ -26,9 +27,6 @@ class CustomerMandates(ResourceCreateMixin, ResourceDeleteMixin, ResourceGetMixi
 
     def get_resource_path(self) -> str:
         return f"customers/{self._customer.id}/mandates"
-
-    def get_resource_object(self, result: dict) -> Mandate:
-        return Mandate(result, self.client)
 
     def get(self, resource_id: str, **params: Any) -> Mandate:
         self.validate_resource_id(resource_id, "mandate ID")
