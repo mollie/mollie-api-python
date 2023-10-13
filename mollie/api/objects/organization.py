@@ -2,12 +2,6 @@ from .base import ObjectBase
 
 
 class Organization(ObjectBase):
-    @classmethod
-    def get_resource_class(cls, client):
-        from ..resources import Organizations
-
-        return Organizations(client)
-
     @property
     def id(self):
         return self._get_property("id")

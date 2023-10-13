@@ -5,13 +5,6 @@ from .customer import Customer
 
 
 class Subscription(ObjectBase):
-    @classmethod
-    def get_resource_class(cls, client, **kwargs):
-        from ..resources import CustomerSubscriptions
-
-        customer = kwargs["customer"]
-        return CustomerSubscriptions(client, customer)
-
     STATUS_ACTIVE = "active"
     STATUS_PENDING = "pending"  # Waiting for a valid mandate.
     STATUS_CANCELED = "canceled"

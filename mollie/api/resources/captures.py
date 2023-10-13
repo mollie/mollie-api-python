@@ -16,9 +16,7 @@ __all__ = [
 
 class CapturesBase(ResourceBase):
     RESOURCE_ID_PREFIX: str = "cpt_"
-
-    def get_resource_object(self, result: dict) -> Capture:
-        return Capture(result, self.client)
+    object_type = Capture
 
 
 class PaymentCaptures(CapturesBase, ResourceGetMixin, ResourceListMixin, ResourceCreateMixin):

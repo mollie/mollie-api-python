@@ -13,8 +13,7 @@ __all__ = [
 class Onboarding(ResourceGetMixin):
     """Resource handler for the `/onboarding` endpoint."""
 
-    def get_resource_object(self, result: dict) -> OnboardingObject:
-        return OnboardingObject(result, self.client)
+    object_type = OnboardingObject
 
     def get(self, resource_id: str, **params: Any) -> OnboardingObject:
         if resource_id != "me":
@@ -31,4 +30,4 @@ class Onboarding(ResourceGetMixin):
         resource_path = self.get_resource_path()
         path = f"{resource_path}/me"
         result = self.perform_api_call(self.REST_CREATE, path, data, params)
-        return self.get_resource_object(result)
+        return OnboardingObject(result, self.client)

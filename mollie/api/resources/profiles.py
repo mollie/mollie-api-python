@@ -12,9 +12,7 @@ class Profiles(ResourceCreateMixin, ResourceDeleteMixin, ResourceGetMixin, Resou
     """Resource handler for the `/profiles` endpoint."""
 
     RESOURCE_ID_PREFIX: str = "pfl_"
-
-    def get_resource_object(self, result: dict) -> Profile:
-        return Profile(result, self.client)
+    object_type = Profile
 
     def get(self, resource_id: str, **params: Any) -> Profile:
         if resource_id != "me":

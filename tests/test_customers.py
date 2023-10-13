@@ -109,7 +109,7 @@ def test_customer_get_related_mandates(client, response):
 def test_customer_get_related_subscriptions(client, response):
     """Retrieve related subscriptions for a customer."""
     response.get(f"https://api.mollie.com/v2/customers/{CUSTOMER_ID}", "customer_single")
-    response.get(f"https://api.mollie.com/v2/customers/{CUSTOMER_ID}/subscriptions", "subscriptions_customer_list")
+    response.get(f"https://api.mollie.com/v2/customers/{CUSTOMER_ID}/subscriptions", "customer_subscriptions_list")
 
     customer = client.customers.get(CUSTOMER_ID)
     subscriptions = customer.subscriptions.list()

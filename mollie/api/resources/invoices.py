@@ -12,9 +12,7 @@ class Invoices(ResourceGetMixin, ResourceListMixin):
     """Resource handler for the `/invoices` endpoint."""
 
     RESOURCE_ID_PREFIX: str = "inv_"
-
-    def get_resource_object(self, result: dict) -> Invoice:
-        return Invoice(result, self.client)
+    object_type = Invoice
 
     def get(self, resource_id: str, **params: Any) -> Invoice:
         self.validate_resource_id(resource_id, "invoice ID")

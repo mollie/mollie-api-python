@@ -35,15 +35,15 @@
   },
   "_links": {
     "self": {
-      "href": "https://api.mollie.com/v2/chargebacks",
+      "href": "https://api.mollie.com/v2/settlements/stl_jDk30akdN/chargebacks",
       "type": "application/hal+json"
     },
     "next": {
-      "href": "https://api.mollie.com/v2/chargebacks?from=chb_n9z0tq",
+      "href": "https://api.mollie.com/v2/settlements/stl_jDk30akdN/chargebacks?from=chb_n9z0tq",
       "type": "application/hal+json"
     },
     "documentation": {
-      "href": "https://docs.mollie.com/reference/v2/chargebacks-api/list-chargebacks",
+      "href": "https://docs.mollie.com/reference/v2/settlements-api/list-settlement-chargebacks",
       "type": "text/html"
     }
   }

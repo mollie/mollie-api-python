@@ -1,6 +1,6 @@
 import pytest
 
-from mollie.api.objects.list import ObjectList
+from mollie.api.objects.list import PaginationList
 from mollie.api.objects.method import Method
 
 from .utils import assert_list_object
@@ -11,7 +11,7 @@ def test_list_iterator_behaviour(client, response):
     response.get("https://api.mollie.com/v2/methods", "methods_list")
 
     methods = client.methods.list()
-    assert isinstance(methods, ObjectList)
+    assert isinstance(methods, PaginationList)
 
     # walk the list using next()
     iterated = 0

@@ -1,20 +1,7 @@
-from typing import TYPE_CHECKING, Any
-
 from .base import ObjectBase
-
-if TYPE_CHECKING:
-    from ..client import Client
-    from ..resources import PaymentCaptures
 
 
 class Capture(ObjectBase):
-    @classmethod
-    def get_resource_class(cls, client: "Client", **kwargs: Any) -> "PaymentCaptures":
-        from ..resources import PaymentCaptures
-
-        payment = kwargs["payment"]
-        return PaymentCaptures(client, payment)
-
     @property
     def id(self):
         return self._get_property("id")

@@ -4,12 +4,6 @@ from .order_line import OrderLine
 
 
 class Refund(ObjectBase):
-    @classmethod
-    def get_resource_class(cls, client):
-        from ..resources import Refunds
-
-        return Refunds(client)
-
     STATUS_QUEUED = "queued"
     STATUS_PENDING = "pending"
     STATUS_PROCESSING = "processing"

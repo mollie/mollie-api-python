@@ -1,7 +1,7 @@
 from typing import TYPE_CHECKING, Any, Dict, Optional
 
 from ..error import DataConsistencyError
-from ..objects.list import ObjectList
+from ..objects.list import PaginationList
 from ..objects.order_line import OrderLine
 from .base import ResourceBase
 
@@ -25,6 +25,7 @@ class OrderLines(ResourceBase):
     """
 
     RESOURCE_ID_PREFIX: str = "odl_"
+    object_type = OrderLine
 
     _order: "Order"
 
@@ -34,9 +35,6 @@ class OrderLines(ResourceBase):
 
     def get_resource_path(self) -> str:
         return f"orders/{self._order.id}/lines"
-
-    def get_resource_object(self, result: dict) -> OrderLine:
-        return OrderLine(result, self.client)
 
     def delete_lines(self, data: Optional[Dict[str, Any]] = None, **params: Any) -> dict:
         """
@@ -98,11 +96,11 @@ class OrderLines(ResourceBase):
 
         for line in result["lines"]:
             if line["id"] == order_line_id:
-                return self.get_resource_object(line)
+                return OrderLine(line, self.client)
 
         raise DataConsistencyError(f"OrderLine with id '{order_line_id}' not found in response.")
 
-    def list(self, **params: Any) -> ObjectList:
+    def list(self, **params: Any) -> PaginationList:
         """Return the orderline data from the related order."""
         lines = self._order._get_property("lines") or []
         data = {
@@ -111,4 +109,4 @@ class OrderLines(ResourceBase):
             },
             "count": len(lines),
         }
-        return ObjectList(data, OrderLine, self.client)
+        return PaginationList(data, self, self.client)

@@ -1,20 +1,7 @@
-from typing import TYPE_CHECKING, Any
-
 from .base import ObjectBase
-
-if TYPE_CHECKING:
-    from ..client import Client
-    from ..resources import BalanceTransactions
 
 
 class BalanceTransaction(ObjectBase):
-    @classmethod
-    def get_resource_class(cls, client: "Client", **kwargs: Any) -> "BalanceTransactions":
-        from ..resources import BalanceTransactions
-
-        balance = kwargs["balance"]
-        return BalanceTransactions(client, balance)
-
     @classmethod
     def get_object_name(cls):
         # Overwrite get_object_name since BalanceTransactions gets returned by Mollie as balance_transactions.

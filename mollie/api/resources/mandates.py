@@ -19,6 +19,7 @@ class CustomerMandates(ResourceCreateMixin, ResourceDeleteMixin, ResourceGetMixi
     RESOURCE_ID_PREFIX = "mdt_"
 
     _customer: Customer
+    object_type = Mandate
 
     def __init__(self, client: "Client", customer: Customer) -> None:
         self._customer = customer
@@ -26,9 +27,6 @@ class CustomerMandates(ResourceCreateMixin, ResourceDeleteMixin, ResourceGetMixi
 
     def get_resource_path(self) -> str:
         return f"customers/{self._customer.id}/mandates"
-
-    def get_resource_object(self, result: dict) -> Mandate:
-        return Mandate(result, self.client)
 
     def get(self, resource_id: str, **params: Any) -> Mandate:
         self.validate_resource_id(resource_id, "mandate ID")

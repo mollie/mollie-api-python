@@ -1,9 +1,11 @@
 import logging
 import uuid
-from typing import TYPE_CHECKING, Any, Dict, Optional
+from typing import TYPE_CHECKING, Any, Dict, Optional, Type
+
+from mollie.api.objects.base import ObjectBase
 
 from ..error import IdentifierError, ResponseError, ResponseHandlingError
-from ..objects.list import ObjectList
+from ..objects.list import PaginationList
 
 if TYPE_CHECKING:
     from ..client import Client
@@ -20,17 +22,10 @@ class ResourceBase:
 
     RESOURCE_ID_PREFIX: str = ""
 
+    object_type: Type[ObjectBase]
+
     def __init__(self, client: "Client") -> None:
         self.client = client
-
-    def get_resource_object(self, result: dict) -> Any:
-        """
-        Return an instantiated result class for this resource. Should be overriden by a subclass.
-
-        :param result: The API response that the object should hold.
-        :type result: dict
-        """
-        raise NotImplementedError()  # pragma: no cover
 
     def get_resource_path(self) -> str:
         """Return the base URL path in the API for this resource."""
@@ -92,7 +87,7 @@ class ResourceCreateMixin(ResourceBase):
         idempotency_key = idempotency_key or self._generate_idempotency_key()
         path = self.get_resource_path()
         result = self.perform_api_call(self.REST_CREATE, path, data, params, idempotency_key=idempotency_key)
-        return self.get_resource_object(result)
+        return self.object_type(result, self.client)
 
 
 class ResourceGetMixin(ResourceBase):
@@ -100,7 +95,7 @@ class ResourceGetMixin(ResourceBase):
         resource_path = self.get_resource_path()
         path = f"{resource_path}/{resource_id}"
         result = self.perform_api_call(self.REST_READ, path, params=params)
-        return self.get_resource_object(result)
+        return self.object_type(result, self.client)
 
     def from_url(self, url: str, params: Optional[Dict[str, Any]] = None) -> Any:
         """Utility method to return an object from a full URL (such as from _links).
@@ -108,14 +103,14 @@ class ResourceGetMixin(ResourceBase):
         This method always does a GET request and returns a single Object.
         """
         result = self.perform_api_call(self.REST_READ, url, params=params)
-        return self.get_resource_object(result)
+        return self.object_type(result, self.client)
 
 
 class ResourceListMixin(ResourceBase):
-    def list(self, **params: Any) -> ObjectList:
+    def list(self, **params: Any) -> PaginationList:
         path = self.get_resource_path()
         result = self.perform_api_call(self.REST_LIST, path, params=params)
-        return ObjectList(result, self.get_resource_object({}).__class__, self.client)
+        return PaginationList(result, self, self.client)
 
 
 class ResourceUpdateMixin(ResourceBase):
@@ -126,7 +121,7 @@ class ResourceUpdateMixin(ResourceBase):
         resource_path = self.get_resource_path()
         path = f"{resource_path}/{resource_id}"
         result = self.perform_api_call(self.REST_UPDATE, path, data, params, idempotency_key=idempotency_key)
-        return self.get_resource_object(result)
+        return self.object_type(result, self.client)
 
 
 class ResourceDeleteMixin(ResourceBase):

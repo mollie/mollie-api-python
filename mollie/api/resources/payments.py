@@ -1,7 +1,7 @@
 from typing import TYPE_CHECKING, Any, Dict, Optional
 
 from ..objects.customer import Customer
-from ..objects.list import ObjectList
+from ..objects.list import PaginationList
 from ..objects.order import Order
 from ..objects.payment import Payment
 from ..objects.profile import Profile
@@ -31,11 +31,7 @@ __all__ = [
 
 class PaymentsBase(ResourceBase):
     RESOURCE_ID_PREFIX: str = "tr_"
-
-    def get_resource_object(self, result: dict) -> Payment:
-        from ..objects.payment import Payment
-
-        return Payment(result, self.client)
+    object_type = Payment
 
 
 class Payments(
@@ -55,7 +51,7 @@ class Payments(
         """
         self.validate_resource_id(resource_id, "payment ID")
         result = super().delete(resource_id, idempotency_key, **params)
-        return self.get_resource_object(result)
+        return Payment(result, self.client)
 
     def update(
         self, resource_id: str, data: Optional[Dict[str, Any]] = None, idempotency_key: str = "", **params: Any
@@ -76,7 +72,7 @@ class OrderPayments(PaymentsBase, ResourceCreateMixin):
     def get_resource_path(self) -> str:
         return f"orders/{self._order.id}/payments"
 
-    def list(self) -> ObjectList:
+    def list(self) -> PaginationList:
         """
         List the payments that might have been embedded in the related order.
 
@@ -90,7 +86,7 @@ class OrderPayments(PaymentsBase, ResourceCreateMixin):
             },
             "count": len(payments),
         }
-        return ObjectList(data, Payment, self.client)
+        return PaginationList(data, self, self.client)
 
 
 class CustomerPayments(PaymentsBase, ResourceCreateMixin, ResourceListMixin):
@@ -147,7 +143,7 @@ class ProfilePayments(PaymentsBase):
         self._profile = profile
         super().__init__(client)
 
-    def list(self, **params: Any) -> ObjectList:
+    def list(self, **params: Any) -> PaginationList:
         # Set the profileId in the query params
         params.update({"profileId": self._profile.id})
         return Payments(self.client).list(**params)

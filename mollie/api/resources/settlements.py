@@ -9,6 +9,7 @@ class Settlements(ResourceGetMixin, ResourceListMixin):
     """Resource handler for the `/settlements` endpoint."""
 
     RESOURCE_ID_PREFIX: str = "stl_"
+    object_type = Settlement
 
     # According to Mollie, the bank reference is formatted as:
     # - The Mollie merchant ID, 4 to 8 digits, might grow when the number of merchants increases
@@ -16,9 +17,6 @@ class Settlements(ResourceGetMixin, ResourceListMixin):
     # - The sequence number of the settlement in that month, 2 digits
     # The components are separated by a dot.
     BANK_REFERENCE_REGEX: Pattern[str] = re.compile(r"^\d{4,}\.\d{4}\.\d{2}$", re.ASCII)
-
-    def get_resource_object(self, result: dict) -> Settlement:
-        return Settlement(result, self.client)
 
     @classmethod
     def validate_resource_id(cls, resource_id: str, name: str = "", message: str = "") -> None:

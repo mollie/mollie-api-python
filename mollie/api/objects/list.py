@@ -1,28 +1,15 @@
+from abc import ABC, abstractmethod
+from typing import TYPE_CHECKING, Any, Optional, Type
+
 from .base import ObjectBase
 
-
-class UnknownObject(ObjectBase):
-    """Mock object for empty lists."""
-
-    @classmethod
-    def get_object_name(cls):
-        return "unknown"
+if TYPE_CHECKING:
+    from mollie.api.client import Client
+    from mollie.api.resources.base import ResourceBase
 
 
-class ObjectList(ObjectBase):
+class ListBase(ObjectBase, ABC):
     current = None
-
-    def __init__(self, result, object_type, client=None):
-        # If an empty dataset was injected, we mock the structure that the remainder of the clas expects.
-        # TODO: it would be better if the ObjectList was initiated with a list of results, rather than with
-        # the full datastructure as it is now, so we can remove all this mucking around with fake data,
-        # mocked result objects, and loads of lengthy accessor workarounds everywhere in the ObjectList.
-        if result == {}:
-            result = {"_embedded": {"unknown": []}, "count": 0}
-            object_type = UnknownObject
-
-        super().__init__(result, client)
-        self.object_type = object_type
 
     def __len__(self):
         """Return the count field."""
@@ -66,7 +53,7 @@ class ObjectList(ObjectBase):
                 },
                 "count": len(sliced_data),
             }
-            return ObjectList(sliced_result, self.object_type, self.client)
+            return self.new(sliced_result)
 
         return super().__getitem__(key)
 
@@ -84,16 +71,101 @@ class ObjectList(ObjectBase):
         """Return True if the ObjectList contains an url for the previous set."""
         return self._get_link("previous") is not None
 
+    @abstractmethod
     def get_next(self):
-        """Return the next set of objects in an ObjectList."""
+        ...
+
+    @abstractmethod
+    def get_previous(self):
+        ...
+
+    @property
+    @abstractmethod
+    def object_type(self):
+        ...
+
+    @abstractmethod
+    def new(self, result):
+        ...
+
+
+class PaginationList(ListBase):
+    """
+    Pagination lists are used to return a paginated list of Objects.
+
+    You can use the `has_next` and `get_next` methods to get the next page of result data from the API.
+    The `has_previous` and `get_previous` methods return the previous page.
+    """
+
+    _parent: "ResourceBase"
+
+    def __init__(self, result: Any, parent: "ResourceBase", client: "Client"):
+        # If an empty dataset was injected, we mock the structure that the remainder of the clas expects.
+        # TODO: it would be better if the ObjectList was initiated with a list of results, rather than with
+        # the full datastructure as it is now, so we can remove all this mucking around with fake data,
+        # mocked result objects, and loads of lengthy accessor workarounds everywhere in the ObjectList.
+        self._parent = parent
+
+        if result == {}:
+            result = {"_embedded": {f"{self._parent.object_type.get_object_name()}": []}, "count": 0}
+
+        super().__init__(result, client)
+
+    def get_next(self):
+        """Return the next set of objects in the paginated list."""
         url = self._get_link("next")
-        resource = self.object_type.get_resource_class(self.client)
-        resp = resource.perform_api_call(resource.REST_READ, url)
-        return ObjectList(resp, self.object_type, self.client)
+        if url is None:
+            return None
+        resp = self._parent.perform_api_call(self._parent.REST_READ, url)
+        return PaginationList(resp, self._parent, self.client)
 
     def get_previous(self):
-        """Return the previous set of objects in an ObjectList."""
+        """Return the previous set of objects in the paginated list."""
         url = self._get_link("previous")
-        resource = self.object_type.get_resource_class(self.client)
-        resp = resource.perform_api_call(resource.REST_READ, url)
-        return ObjectList(resp, self.object_type, self.client)
+        if url is None:
+            return None
+        resp = self._parent.perform_api_call(self._parent.REST_READ, url)
+        return PaginationList(resp, self._parent, self.client)
+
+    @property
+    def object_type(self):
+        return self._parent.object_type
+
+    def new(self, result):
+        return PaginationList(result, self._parent, self.client)
+
+
+class ObjectList(ListBase):
+    """
+    Object lists are used to return an embedded list on an object.
+
+    It works to similar to PaginationList, but has no pagination (as all data is already embedded).
+    """
+
+    _object_type: Type[ObjectBase]
+
+    def __init__(self, result: Any, object_type: Type[ObjectBase], client: Optional["Client"] = None):
+        # If an empty dataset was injected, we mock the structure that the remainder of the clas expects.
+        # TODO: it would be better if the ObjectList was initiated with a list of results, rather than with
+        # the full datastructure as it is now, so we can remove all this mucking around with fake data,
+        # mocked result objects, and loads of lengthy accessor workarounds everywhere in the ObjectList.
+        self._object_type = object_type
+
+        if result == {}:
+            result = {"_embedded": {f"{self._object_type.get_object_name()}": []}, "count": 0}
+
+        super().__init__(result, client)
+
+    def get_next(self):
+        """Return the next set of objects in an ObjectList."""
+        return None
+
+    def get_previous(self):
+        return None
+
+    @property
+    def object_type(self):
+        return self._object_type
+
+    def new(self, result):
+        return ObjectList(result, self._object_type, self.client)

@@ -16,15 +16,13 @@ class OrderShipments(ResourceCreateMixin, ResourceGetMixin, ResourceListMixin, R
     """Resource handler for the `/orders/:order_id:/shipments` endpoint."""
 
     RESOURCE_ID_PREFIX: str = "shp_"
+    object_type = Shipment
 
     _order: Order
 
     def __init__(self, client: "Client", order: Order) -> None:
         self._order = order
         super().__init__(client)
-
-    def get_resource_object(self, result: dict) -> Shipment:
-        return Shipment(result, self.client)
 
     def get_resource_path(self) -> str:
         return f"orders/{self._order.id}/shipments"

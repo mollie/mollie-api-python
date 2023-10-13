@@ -12,9 +12,7 @@ class Organizations(ResourceGetMixin):
     """Resource handler for the `/organizations` endpoint."""
 
     RESOURCE_ID_PREFIX: str = "org_"
-
-    def get_resource_object(self, result: dict) -> Organization:
-        return Organization(result, self.client)
+    object_type = Organization
 
     def get(self, resource_id: str, **params: Any) -> Organization:
         if resource_id != "me":

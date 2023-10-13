@@ -10,12 +10,6 @@ class Settlement(ObjectBase):
     STATUS_PAIDOUT = "paidout"
     STATUS_FAILED = "failed"
 
-    @classmethod
-    def get_resource_class(cls, client):
-        from ..resources import Settlements
-
-        return Settlements(client)
-
     @property
     def id(self):
         return self._get_property("id")

@@ -2,12 +2,6 @@ from .base import ObjectBase
 
 
 class Onboarding(ObjectBase):
-    @classmethod
-    def get_resource_class(cls, client):
-        from ..resources import Onboarding as OnboardingResource
-
-        return OnboardingResource(client)
-
     STATUS_NEEDS_DATA = "needs-data"
     STATUS_IN_REVIEW = "in-review"  # Waiting for a valid mandate.
     STATUS_COMPLETED = "completed"
