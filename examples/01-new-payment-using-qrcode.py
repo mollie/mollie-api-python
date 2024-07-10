@@ -42,7 +42,7 @@ def main():
             {
                 "amount": {"currency": "EUR", "value": "120.00"},
                 "description": "My first API payment",
-		"method": "ideal", # for the QR code to work, this must be either ideal or bancontact
+                "method": "ideal",  # for the QR code to work, this must be either ideal or bancontact
                 "webhookUrl": f"{PUBLIC_URL}02-webhook-verification",
                 "redirectUrl": f"{PUBLIC_URL}03-return-page?my_webshop_id={my_webshop_id}",
                 "metadata": {"my_webshop_id": str(my_webshop_id)},
