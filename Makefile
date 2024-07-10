@@ -29,7 +29,8 @@ test: develop
 	$(PYTHON) -m flake8
 	$(PYTHON) -m mypy --config mypy.ini mollie/
 	$(PYTHON) -m pytest
-	$(PYTHON) -m safety check
+	# Jinja, https://data.safetycli.com/v/70612/97c
+	$(PYTHON) -m safety check --ignore 70612
 
 
 dist/mollie_api_python-*-py3-none-any.whl: virtualenv
