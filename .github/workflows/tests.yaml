@@ -33,7 +33,8 @@ jobs:
         run: python -m pytest --cov-fail-under=90
 
       - name: Verify dependencies
-        run: python -m safety check
+        # Jinja, https://data.safetycli.com/v/70612/97c
+        run: python -m safety check --ignore 70612
 
       - name: Verify code style
         run: python -m flake8 -v
