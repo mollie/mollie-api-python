@@ -14,6 +14,7 @@ from .error import RequestError, RequestSetupError
 from .resources import (
     Balances,
     Chargebacks,
+    ClientLinks,
     Clients,
     Customers,
     Invoices,
@@ -98,6 +99,7 @@ class Client(object):
         self.refunds = Refunds(self)
         self.chargebacks = Chargebacks(self)
         self.clients = Clients(self)
+        self.client_links = ClientLinks(self)
         self.customers = Customers(self)
         self.orders = Orders(self)
         self.organizations = Organizations(self)

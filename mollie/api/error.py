@@ -184,3 +184,16 @@ class APIDeprecationWarning(DeprecationWarning):
     """
 
     pass
+
+
+"""
+Beta policy
+
+Beta API may be subject to changes and is not covered by our versioning policy.
+"""
+
+
+class OpenBetaWarning(UserWarning):
+    """Warning for features that in open beta."""
+
+    pass
