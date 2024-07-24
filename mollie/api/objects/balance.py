@@ -57,9 +57,9 @@ class Balance(ObjectBase):
     def get_report(self, **params: Any) -> BalanceReport:
         from ..resources import BalanceReports
 
-        return BalanceReports(self.client, self).get_report(params=params)
+        return BalanceReports(self.client, self).get_report(**params)
 
     def get_transactions(self, **params: Any) -> PaginationList:
         from ..resources import BalanceTransactions
 
-        return BalanceTransactions(self.client, self).list(params=params)
+        return BalanceTransactions(self.client, self).list(**params)
