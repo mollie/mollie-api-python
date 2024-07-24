@@ -1,3 +1,5 @@
+from unittest.mock import patch
+
 import pytest
 
 from mollie.api.error import IdentifierError
@@ -93,6 +95,27 @@ def test_get_balance_transactions(client, response):
 
     assert balance_transaction.created_at == "2021-01-10T12:06:28+00:00"
     assert balance_transaction.context == {"paymentId": "tr_7UhSN1zuXS", "refundId": "re_4qqhO89gsT"}
+
+
+def test_get_balance_transactions_with_params(client, response):
+    """Get a list of balance transactions with parameters."""
+    response.get(f"https://api.mollie.com/v2/balances/{BALANCE_ID}", "balance_single")
+
+    balance = client.balances.get(BALANCE_ID)
+    params = {"limit": 5, "sort": "asc"}
+
+    with patch("mollie.api.resources.base.ResourceListMixin.perform_api_call") as mock_perform_api_call:
+        balance.get_transactions(**params)
+
+        # Assert perform_api_call was called
+        mock_perform_api_call.assert_called_once()
+
+        # Extract the parameters passed to perform_api_call
+        _, called_kwargs = mock_perform_api_call.call_args
+        called_params = called_kwargs.get("params")
+
+        # Assert the params are what we expect
+        assert called_params == params
 
 
 def test_get_balance_invalid_id(client):
