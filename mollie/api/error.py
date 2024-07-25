@@ -184,3 +184,15 @@ class APIDeprecationWarning(DeprecationWarning):
     """
 
     pass
+
+
+"""
+Closed beta policy
+
+The closed beta API may be subject to changes and is not covered by our versioning policy.
+"""
+
+class ClosedBetaWarning(UserWarning):
+    """Warning for features that are part of the Client Links API closed beta."""
+
+    pass
