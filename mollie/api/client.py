@@ -38,7 +38,7 @@ class Client(object):
     API_VERSION: str = "v2"
     UNAME: str = " ".join(platform.uname())
 
-    OAUTH_AUTHORIZATION_URL: str = "https://www.mollie.com/oauth2/authorize"
+    OAUTH_AUTHORIZATION_URL: str = "https://my.mollie.com/oauth2/authorize"
     OAUTH_AUTO_REFRESH_URL: str = API_ENDPOINT + "/oauth2/tokens"
     OAUTH_TOKEN_URL: str = API_ENDPOINT + "/oauth2/tokens"
 
