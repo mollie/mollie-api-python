@@ -39,7 +39,7 @@ def oauth_token():
 
 @pytest.fixture
 def oauth_client(oauth_token, response):
-    """Setup a Mollie API client with initialized OAuth2 authentication."""
+    """Set up a Mollie API client with initialized OAuth2 authentication."""
     client_id = "app_nvQQ4mGHqprcfFFqpnmbOgUs"
     client_secret = "2Tuc4qk8U6kCA8qBV3Fb2wwceDDfeRebDQpbOgUs"
     redirect_uri = "https://example.com/callback"
@@ -101,6 +101,6 @@ class ImprovedRequestsMock(responses.RequestsMock):
 
 @pytest.fixture
 def response():
-    """Setup the responses fixture."""
+    """Set up the responses fixture."""
     with ImprovedRequestsMock() as mock:
         yield mock
