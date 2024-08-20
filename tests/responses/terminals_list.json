@@ -1,0 +1,73 @@
+{
+  "count": 3,
+  "_embedded": {
+    "terminals": [
+      {
+        "resource": "terminal",
+        "id": "term_7MgL4wea46qkRcoTZjWEH",
+        "status": "active",
+        "brand": "PAX",
+        "model": "A920",
+        "serialNumber": "1234567890",
+        "currency": "EUR",
+        "description": "Terminal #12345",
+        "profileId": "pfl_QkEhN94Ba",
+        "createdAt": "2022-02-12T11:58:35+00:00",
+        "_links": {
+          "self": {
+            "href": "...",
+            "type": "application/hal+json"
+          }
+        }
+      },
+      {
+        "resource": "terminal",
+        "id": "term_8MgL4wea46qkRcoTZjWEH",
+        "status": "active",
+        "brand": "PAX",
+        "model": "A920",
+        "serialNumber": "1234567890",
+        "currency": "EUR",
+        "description": "Terminal #12345",
+        "profileId": "pfl_QkEhN94Ba",
+        "createdAt": "2022-02-12T11:58:35+00:00",
+        "_links": {
+          "self": {
+            "href": "...",
+            "type": "application/hal+json"
+          }
+        }
+      },
+      {
+        "resource": "terminal",
+        "id": "term_9MgL4wea46qkRcoTZjWEH",
+        "status": "active",
+        "brand": "PAX",
+        "model": "A920",
+        "serialNumber": "1234567890",
+        "currency": "EUR",
+        "description": "Terminal #12345",
+        "profileId": "pfl_QkEhN94Ba",
+        "createdAt": "2022-02-12T11:58:35+00:00",
+        "_links": {
+          "self": {
+            "href": "...",
+            "type": "application/hal+json"
+          }
+        }
+      }
+    ]
+  },
+  "_links": {
+    "self": {
+      "href": "...",
+      "type": "application/hal+json"
+    },
+    "previous": null,
+    "next": null,
+    "documentation": {
+      "href": "...",
+      "type": "text/html"
+    }
+  }
+}
