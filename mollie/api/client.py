@@ -28,6 +28,7 @@ from .resources import (
     Refunds,
     Settlements,
     Subscriptions,
+    Terminals,
 )
 from .version import VERSION
 
@@ -107,6 +108,7 @@ class Client(object):
         self.settlements = Settlements(self)
         self.subscriptions = Subscriptions(self)
         self.balances = Balances(self)
+        self.terminals = Terminals(self)
 
         # compose base user agent string
         self.user_agent_components = OrderedDict()
