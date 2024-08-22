@@ -1,0 +1,18 @@
+{
+  "resource": "client-link",
+  "id": "cl_vZCnNQsV2UtfXxYifWKWH",
+  "_links": {
+    "self": {
+      "href": "...",
+      "type": "application/hal+json"
+    },
+    "clientLink": {
+      "href": "https://my.mollie.com/dashboard/client-link/cl_vZCnNQsV2UtfXxYifWKWH",
+      "type": "text/html"
+    },
+    "documentation": {
+      "href": "...",
+      "type": "text/html"
+    }
+  }
+}
