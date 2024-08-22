@@ -1,4 +1,1 @@
 include LICENSE.txt README.md
-recursive-include mollie *.py
-prune examples
-prune tests
