@@ -163,21 +163,11 @@ class Client(object):
         path: str,
         data: Optional[Dict[str, Any]],
         params: Optional[Dict[str, Any]],
-        http_method: str,
     ) -> Tuple[str, str, Optional[Dict[str, Any]]]:
         if path.startswith(f"{self.api_endpoint}/{self.api_version}"):
             url = path
         else:
             url = f"{self.api_endpoint}/{self.api_version}/{path}"
-
-        params = params or {}
-        data = data or {}
-        params, data = self._build_request_params_and_data(params, data, http_method)
-
-        querystring = generate_querystring(params)
-        if querystring:
-            url += "?" + querystring
-            params = None
 
         payload = ""
         if data is not None:
@@ -186,29 +176,19 @@ class Client(object):
             except TypeError as err:
                 raise RequestSetupError(f"Error encoding data into JSON: {err}.")
 
+        if params is None:
+            params = {}
+        if self.testmode and "testmode" not in params:
+            if not (self.api_key.startswith("access_") or hasattr(self, "_oauth_client")):
+                raise RequestSetupError("Configuring testmode only works with access_token or OAuth authorization")
+            params["testmode"] = "true"
+
+        querystring = generate_querystring(params)
+        if querystring:
+            url += "?" + querystring
+            params = None
+
         return url, payload, params
-
-    def _is_valid_testmode(self):
-        """Check if the testmode can be configured."""
-        if not self.api_key.startswith("access_") and not hasattr(self, "_oauth_client"):
-            raise RequestSetupError("Configuring testmode only works with access_token or OAuth authorization")
-
-    def _build_request_params_and_data(
-        self, params: Dict[str, Any], data: Dict[str, Any], http_method: str
-    ) -> Tuple[Dict[str, Any], Dict[str, Any]]:
-        if http_method == "GET":
-            if self.testmode and "testmode" not in params:
-                self._is_valid_testmode()
-                params["testmode"] = "true"
-        else:
-            if self.testmode and "testmode" not in data:
-                self._is_valid_testmode()
-                data["testmode"] = "true"
-            if "testmode" in params:
-                self._is_valid_testmode()
-                testmode = params.pop("testmode")
-                data["testmode"] = testmode
-        return params, data
 
     def _perform_http_call_apikey(
         self,
@@ -226,7 +206,7 @@ class Client(object):
             self._client.verify = True
             self._setup_retry()
 
-        url, payload, params = self._format_request_data(path, data, params, http_method)
+        url, payload, params = self._format_request_data(path, data, params)
         try:
             headers = {
                 "Accept": "application/json",
@@ -260,7 +240,7 @@ class Client(object):
         params: Optional[Dict[str, Any]] = None,
         idempotency_key: str = "",
     ) -> requests.Response:
-        url, payload, params = self._format_request_data(path, data, params, http_method)
+        url, payload, params = self._format_request_data(path, data, params)
         try:
             headers = {
                 "Accept": "application/json",
