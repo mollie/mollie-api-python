@@ -530,3 +530,19 @@ def test_update_customer_bad_request(client, response):
         )
 
     assert exc.value.idempotency_key == "test_idempotency_key"
+
+
+@pytest.mark.parametrize(
+    "testmode,params,http_method,expected",
+    [
+        (True, {}, "GET", ({}, {"testmode": "true"})),
+        (True, {}, "POST", ({"testmode": "true"}, {})),
+        (False, {"testmode": "true"}, "GET", ({}, {"testmode": "true"})),
+        (False, {"testmode": "true"}, "POST", ({"testmode": "true"}, {})),
+        (False, {"invalid": "something"}, "POST", ({}, {"invalid": "something"})),
+    ],
+)
+def test__get_testmode_sets_data_or_params_correctly(oauth_client, testmode, params, http_method, expected):
+    oauth_client.testmode = testmode
+    return_value = oauth_client._get_testmode({}, params, http_method)
+    assert return_value == expected
