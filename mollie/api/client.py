@@ -163,6 +163,7 @@ class Client(object):
         path: str,
         data: Optional[Dict[str, Any]],
         params: Optional[Dict[str, Any]],
+        http_method: str,
     ) -> Tuple[str, str, Optional[Dict[str, Any]]]:
         if path.startswith(f"{self.api_endpoint}/{self.api_version}"):
             url = path
@@ -170,6 +171,9 @@ class Client(object):
             url = f"{self.api_endpoint}/{self.api_version}/{path}"
 
         payload = ""
+
+        data, params = self._get_testmode(data, params, http_method)
+
         if data is not None:
             try:
                 payload = json.dumps(data)
@@ -178,10 +182,6 @@ class Client(object):
 
         if params is None:
             params = {}
-        if self.testmode and "testmode" not in params:
-            if not (self.api_key.startswith("access_") or hasattr(self, "_oauth_client")):
-                raise RequestSetupError("Configuring testmode only works with access_token or OAuth authorization")
-            params["testmode"] = "true"
 
         querystring = generate_querystring(params)
         if querystring:
@@ -189,6 +189,24 @@ class Client(object):
             params = None
 
         return url, payload, params
+
+    def _get_testmode(self, data, params, http_method):
+        if self.testmode or (params and "testmode" in params):
+            if not (self.api_key.startswith("access_") or hasattr(self, "_oauth_client")):
+                raise RequestSetupError("Configuring testmode only works with access_token or OAuth authorization")
+
+            # Add to params if we're dealing with a GET request, for any other request add to data.
+            # If testmode is passed in the params, we're always overriding self.testmode. If
+            # self.testmode is True, simply pass in "true".
+            if http_method == "GET":
+                params["testmode"] = params.get("testmode") or "true"
+            elif not data or "testmode" not in data:
+                data["testmode"] = params.get("testmode") or "true"
+
+                # Delete from the params since it's not a valid parameter when the request is not GET
+                params.pop("testmode", None)
+
+        return data, params
 
     def _perform_http_call_apikey(
         self,
@@ -206,7 +224,7 @@ class Client(object):
             self._client.verify = True
             self._setup_retry()
 
-        url, payload, params = self._format_request_data(path, data, params)
+        url, payload, params = self._format_request_data(path, data, params, http_method)
         try:
             headers = {
                 "Accept": "application/json",
@@ -240,7 +258,7 @@ class Client(object):
         params: Optional[Dict[str, Any]] = None,
         idempotency_key: str = "",
     ) -> requests.Response:
-        url, payload, params = self._format_request_data(path, data, params)
+        url, payload, params = self._format_request_data(path, data, params, http_method)
         try:
             headers = {
                 "Accept": "application/json",
