@@ -536,7 +536,7 @@ def test_update_customer_bad_request(client, response):
     "testmode,params,http_method,expected",
     [
         (True, {}, "GET", ({}, {"testmode": "true"})),
-        (True, {}, "POST", ({"testmode": "true"}, {})),
+        (True, {}, "POST", ({"testmode": True}, {})),
         (False, {"testmode": "true"}, "GET", ({}, {"testmode": "true"})),
         (False, {"testmode": "true"}, "POST", ({"testmode": "true"}, {})),
         (False, {"invalid": "something"}, "POST", ({}, {"invalid": "something"})),
