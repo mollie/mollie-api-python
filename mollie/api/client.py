@@ -201,7 +201,7 @@ class Client(object):
             if http_method == "GET":
                 params["testmode"] = params.get("testmode") or "true"
             elif not data or "testmode" not in data:
-                data["testmode"] = params.get("testmode") or "true"
+                data["testmode"] = params.get("testmode") or True
 
                 # Delete from the params since it's not a valid parameter when the request is not GET
                 params.pop("testmode", None)
