@@ -1,9 +1,9 @@
 <p align="center">
-  <img src="https://info.mollie.com/hubfs/github/python/logo.png" width="128" height="128"/>
+  <img src="https://github.com/user-attachments/assets/65c1b0fc-eb44-4783-b210-31afef54b756" width="128" height="128"/>
 </p>
 <h1 align="center">Mollie API client for Python</h1>
 
-<img src="https://info.mollie.com/hubfs/github/python/editor-1.png" />
+<img src="https://github.com/user-attachments/assets/8be3033b-2220-4733-ae79-f01270bc15ff" />
 
 Accepting [iDEAL](https://www.mollie.com/en/payments/ideal/), [Bancontact/Mister Cash](https://www.mollie.com/en/payments/bancontact/), [SOFORT Banking](https://www.mollie.com/en/payments/sofort/), [Creditcard](https://www.mollie.com/en/payments/credit-card/), [SEPA Bank transfer](https://www.mollie.com/en/payments/bank-transfer/), [SEPA Direct debit](https://www.mollie.com/en/payments/direct-debit/), [PayPal](https://www.mollie.com/en/payments/paypal/), [Belfius Direct Net](https://www.mollie.com/en/payments/belfius/), [KBC/CBC](https://www.mollie.com/en/payments/kbc-cbc/), Klarna [Pay later](https://www.mollie.com/en/payments/klarna-pay-later/)/[Pay now](https://www.mollie.com/en/payments/klarna-pay-now/)/[Slice it](https://www.mollie.com/en/payments/klarna-slice-it/), [paysafecard](https://www.mollie.com/en/payments/paysafecard/), [Giftcards](https://www.mollie.com/en/payments/gift-cards/), [Giropay](https://www.mollie.com/en/payments/giropay/), [EPS](https://www.mollie.com/en/payments/eps/), [Przelewy24](https://www.mollie.com/en/payments/przelewy24) and [Billie](https://www.mollie.com/en/payments/billie) online payments without fixed monthly costs or any punishing registration procedures. Just use the Mollie API to receive payments directly on your website or easily refund transactions to your customers.
 
