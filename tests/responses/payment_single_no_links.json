@@ -10,6 +10,46 @@
     "value": "10.00",
     "currency": "EUR"
   },
+    "restrictPaymentMethodsToCountry": "NL",
+  "billingAddress": {
+    "streetAndNumber": "Keizersgracht 313",
+    "city": "Amsterdam",
+    "region": "Noord-Holland",
+    "postalCode": "1234AB",
+    "country": "NL",
+    "title": "Dhr.",
+    "givenName": "Piet",
+    "familyName": "Mondriaan",
+    "email": "piet@mondriaan.com",
+    "phone": "+31309202070"
+  },
+  "shippingAddress": {
+    "streetAndNumber": "Keizersgracht 313",
+    "streetAdditional": "4th floor",
+    "city": "Haarlem",
+    "region": "Noord-Holland",
+    "postalCode": "5678AB",
+    "country": "NL",
+    "title": "Mr.",
+    "givenName": "Chuck",
+    "familyName": "Norris",
+    "email": "norris@chucknorrisfacts.net"
+  },
+  "lines": [
+    {
+      "type": "physical",
+      "description": "Product 1",
+      "quantity": 1,
+      "unitPrice": {
+        "value": "2.00",
+        "currency": "EUR"
+      },
+      "totalAmount": {
+        "value": "2.00",
+        "currency": "EUR"
+      }
+    }
+  ],
   "description": "Order #12345",
   "method": "ideal",
   "metadata": {

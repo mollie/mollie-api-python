@@ -110,6 +110,45 @@ def test_get_single_payment(client, response):
     assert payment.capture_mode == "automatic"
     assert payment.capture_before == "2023-01-20T09:13:37+00+00"
     assert payment.capture_delay == "20 hours"
+    assert payment.restrict_payment_methods_to_country == "NL"
+    # lines property
+    assert payment.lines == [
+        {
+            "type": "physical",
+            "description": "Product 1",
+            "quantity": 1,
+            "unitPrice": {"value": "2.00", "currency": "EUR"},
+            "totalAmount": {"value": "2.00", "currency": "EUR"},
+        }
+    ]
+    # billing_address property
+    assert payment.billing_address == {
+        "streetAndNumber": "Keizersgracht 313",
+        "city": "Amsterdam",
+        "region": "Noord-Holland",
+        "postalCode": "1234AB",
+        "country": "NL",
+        "title": "Dhr.",
+        "givenName": "Piet",
+        "familyName": "Mondriaan",
+        "email": "piet@mondriaan.com",
+        "phone": "+31309202070",
+    }
+
+    # shipping_address property
+    assert payment.shipping_address == {
+        "streetAndNumber": "Keizersgracht 313",
+        "streetAdditional": "4th floor",
+        "city": "Haarlem",
+        "region": "Noord-Holland",
+        "postalCode": "5678AB",
+        "country": "NL",
+        "title": "Mr.",
+        "givenName": "Chuck",
+        "familyName": "Norris",
+        "email": "norris@chucknorrisfacts.net",
+    }
+
     # properties from _links
     assert payment.checkout_url == "https://www.mollie.com/payscreen/select-method/7UhSN1zuXS"
     assert payment.changepaymentstate_url is None
