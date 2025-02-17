@@ -161,6 +161,24 @@ class Payment(ObjectBase):
     def cancel_url(self):
         return self._get_property("cancelUrl")
 
+    @property
+    def lines(self):
+        # We do not use the OrderLine object here, because lines on a Payment
+        # are not a resource, but simply a property that exists on the Payment.
+        return self._get_property("lines")
+
+    @property
+    def restrict_payment_methods_to_country(self):
+        return self._get_property("restrictPaymentMethodsToCountry")
+
+    @property
+    def shipping_address(self):
+        return self._get_property("shippingAddress")
+
+    @property
+    def billing_address(self):
+        return self._get_property("billingAddress")
+
     # documented _links
 
     @property

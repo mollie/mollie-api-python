@@ -5,7 +5,6 @@ from .base import ObjectBase
 
 
 class ClientLink(ObjectBase):
-
     def __init__(self, data, client):
         warnings.warn(
             "ClientLink is currently in open beta, and the final specification may still change.",
