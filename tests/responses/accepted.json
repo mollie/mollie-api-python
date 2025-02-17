@@ -1,0 +1,11 @@
+{
+  "_links": {
+    "documentation": {
+      "href": "https://docs.mollie.com/overview/api-idempotency",
+      "type": "text/html"
+    }
+  },
+  "detail": "Request has been accepted, but the processing has not been completed yet.",
+  "status": 202,
+  "title": "Accepted"
+}

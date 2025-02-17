@@ -59,6 +59,16 @@ class Payments(
         self.validate_resource_id(resource_id, "payment ID")
         return super().update(resource_id, data, idempotency_key, **params)
 
+    def release_authorization(self, resource_id: str, idempotency_key: str = "") -> dict:
+        """Release the authorization for the given payment."""
+
+        self.validate_resource_id(resource_id, "payment ID")
+        return self.perform_api_call(
+            self.REST_CREATE,
+            f"{self.get_resource_path()}/{resource_id}/release-authorization",
+            idempotency_key=idempotency_key,
+        )
+
 
 class OrderPayments(PaymentsBase, ResourceCreateMixin):
     """Resource handler for the `/orders/:order_id:/payments` endpoint."""
