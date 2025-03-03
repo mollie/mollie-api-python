@@ -288,3 +288,14 @@ def test_update_payment_invalid_id(client):
     with pytest.raises(IdentifierError) as excinfo:
         client.payments.update("invalid", data)
     assert str(excinfo.value) == "Invalid payment ID 'invalid', it should start with 'tr_'."
+
+
+def test_release_authorization_for_payment(client, response):
+    """Release the authorization for the given payment."""
+    response.post(f"https://api.mollie.com/v2/payments/{PAYMENT_ID}/release-authorization", "accepted", 202)
+
+    client.payments.release_authorization(PAYMENT_ID)
+    # Inspect the request that was sent
+    request = response.calls[-1].request
+    assert request.url == f"https://api.mollie.com/v2/payments/{PAYMENT_ID}/release-authorization"
+    assert response.calls[-1].response.status_code == 202
