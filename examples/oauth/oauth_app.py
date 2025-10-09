@@ -78,8 +78,6 @@ def index():
         "onboarding.write",
     ]
 
-    global client
-
     authorized, authorization_url = client.setup_oauth(
         client_id,
         client_secret,
@@ -99,8 +97,6 @@ def index():
 
 @app.route("/callback")
 def callback(*args, **kwargs):
-    global client
-
     url = request.url.replace("http", "https")  # Fake https for the examples app only. DON'T DO THIS IN YOUR CODE!
     client.setup_oauth_authorization_response(url)
     body = "<h1>Oauth client is setup</h1>"
