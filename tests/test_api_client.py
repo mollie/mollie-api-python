@@ -1,6 +1,8 @@
+import json
 import re
 import time
 from datetime import datetime
+from http import HTTPStatus
 
 import pytest
 import requests.adapters
@@ -431,6 +433,58 @@ def test_unauthorized_oauth_client_should_return_authorization_url(mocker, respo
     assert authorization_url.startswith(
         client.OAUTH_AUTHORIZATION_URL
     ), "A client without initial token should return a correct authorization url"
+
+
+def test_revoke_oauth_token_returns_request_setup_error_if_not_oauth_client():
+    client = Client()
+    with pytest.raises(RequestSetupError) as excinfo:
+        client.revoke_oauth_token("client_id", "access_123", "access_token")
+    assert str(excinfo.value) == "You need to setup OAuth before you can revoke a token."
+
+
+def test_revoke_oauth_token_succeeds(mocker, oauth_token, response):
+    client = Client()
+    client.setup_oauth(
+        client_id="client_id",
+        client_secret="client_secret",
+        redirect_uri="https://example.com/callback",
+        scope=("organizations.read",),
+        token=oauth_token,
+        set_token=mocker.Mock(),
+    )
+    mocked_request = response.delete(
+        "https://api.mollie.com/oauth2/tokens", "revoke_token", status=HTTPStatus.NO_CONTENT
+    )
+    result = client.revoke_oauth_token("client_id", oauth_token, "access_token")
+
+    assert mocked_request.call_count == 1
+    assert result.status_code == HTTPStatus.NO_CONTENT
+
+
+def test_revoke_oauth_token_returns_error_response(mocker, oauth_token, response):
+    client = Client()
+    client.setup_oauth(
+        client_id="client_id",
+        client_secret="client_secret",
+        redirect_uri="https://example.com/callback",
+        scope=("organizations.read",),
+        token=oauth_token,
+        set_token=mocker.Mock(),
+    )
+
+    mocked_request = response.delete(
+        "https://api.mollie.com/oauth2/tokens", "error_bad_request", status=HTTPStatus.BAD_REQUEST
+    )
+    result = client.revoke_oauth_token("client_id", oauth_token, "access_token")
+
+    content = json.loads(result.content)
+
+    assert mocked_request.call_count == 1
+    assert result.status_code == HTTPStatus.BAD_REQUEST
+    assert content == {
+        "error": "invalid_grant",
+        "error_description": "Authorization code doesn't exist or is invalid for the client",
+    }
 
 
 def test_enable_testmode_globally_access_token(response):

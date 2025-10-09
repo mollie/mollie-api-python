@@ -21,7 +21,7 @@ def client():
     return client
 
 
-@pytest.fixture(scope="session")
+@pytest.fixture()
 def oauth_token():
     """Return a valid oauth token for resuming an existing OAuth client."""
     token = {

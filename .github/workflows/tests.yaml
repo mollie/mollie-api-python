@@ -34,7 +34,10 @@ jobs:
 
       - name: Verify dependencies
         # Jinja, https://data.safetycli.com/v/70612/97c
-        run: python -m safety check --ignore 70612
+        # urllib3, https://data.safetycli.com/v/77744/97c, only when using python 3.8. Consider upgrading.
+        # setuptools, https://data.safetycli.com/v/76752/97c, only when using python 3.8. Consider upgrading.
+        # regex, https://data.safetycli.com/v/78558/97c, only when using python 3.8. Consider upgrading.
+        run: python -m safety check --ignore 70612 --ignore 77744 --ignore 77745 --ignore 76752 --ignore 78558
 
       - name: Verify code style
         run: python -m flake8 -v
