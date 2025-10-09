@@ -22,3 +22,35 @@ exclude_lines = [
     "pragma: no cover",
     "if TYPE_CHECKING:",
 ]
+
+[tool.tox]
+requires = ["tox>=4.19"]
+env_list = ["flake8", "3.12", "3.11", "3.10", "3.9", "3.8", "type"]
+
+[tool.tox.env_run_base]
+description = "Run tests under {base_python}"
+deps = [
+    "pytest",
+    "pytest-cov",
+    "pytest-mock",
+    "mock",
+    "responses",
+]
+commands = [["pytest"]]
+
+[tool.tox.env.type]
+description = "Run type check"
+deps = [
+    "mypy",
+    "types-requests",
+]
+commands = [["mypy", "--config", "mypy.ini", "mollie"]]
+
+[tool.tox.env.flake8]
+description = "Run codestyle check"
+deps = [
+    "flake8",
+    "flake8-isort",
+    "flake8-black",
+]
+commands = [["flake8", "mollie"]]
