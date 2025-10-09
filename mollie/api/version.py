@@ -4,4 +4,4 @@
 # processed by python imports and by regular expressions. The version is defined as a string in the
 # regular semantic versioning scheme (major, minor, patch) as defined by PEP 440.
 
-VERSION = "3.8.0"
+VERSION = "3.9.0"
