@@ -10,7 +10,7 @@ Accepting [iDEAL](https://www.mollie.com/en/payments/ideal/), [Bancontact/Mister
 [![PyPI version](https://badge.fury.io/py/mollie-api-python.svg)](http://badge.fury.io/py/mollie-api-python)
 ![Tests](https://github.com/mollie/mollie-api-python/actions/workflows/tests.yaml/badge.svg)
 
-## Requirements ##
+## Requirements
 To use the Mollie API client, the following things are required:
 
 + Get yourself a free [Mollie account](https://my.mollie.com/dashboard/signup). No sign up costs.
@@ -21,10 +21,10 @@ To use the Mollie API client, the following things are required:
 + Up-to-date OpenSSL (or other SSL/TLS toolkit)
 + Mollie API client for Python has a dependency on [Requests](http://docs.python-requests.org/en/master/) and [Requests-OAuthlib](https://requests-oauthlib.readthedocs.io/en/latest/)
 
-## Migration to v3 ##
+## Migration to v3
 If your application uses a recent v2 version of the Mollie API client and you're ready to migrate to v3, [read all about the API changes](https://github.com/mollie/mollie-api-python/blob/master/v3-api-changes.md) that we made. Use the docs to quickly find how to update your integration code and use the v3 client correctly.
 
-## Installation ##
+## Installation
 **Please note:** If you want to install an older version of the Mollie API client (current major version is `v3`), then please refer to their respective github branches for installation instructions:
 - version 2.x.x is available from the [v2-develop branch](https://github.com/mollie/mollie-api-python/tree/v2-develop).
 - version 1.x.x is available from the [v1-develop branch](https://github.com/mollie/mollie-api-python/tree/v1-develop).
@@ -63,7 +63,7 @@ export MOLLIE_PUBLIC_URL=https://some.ngrok.url.io
 $ python examples/app.py
 ```
 
-## How to receive payments ##
+## How to receive payments
 
 To successfully receive a payment, these steps should be implemented:
 
@@ -75,7 +75,7 @@ To successfully receive a payment, these steps should be implemented:
 
 Find our full documentation online on [docs.mollie.com](https://docs.mollie.com).
 
-## Getting started ##
+## Getting started
 
 Importing the Mollie API Client
 ```python
@@ -109,7 +109,7 @@ For a payment create example, see [Example 1 - New Payment](https://github.com/m
 
 In general, request body parameters for an API endpoint should be added to a dictionary and provided as the first argument (or `data` keyword argument). Query string parameters can be provided as keyword arguments.
 
-## Retrieving payments ##
+## Retrieving payments
 We can use the `payment.id` to retrieve a payment and check if the payment `isPaid`.
 
 ```python
@@ -127,13 +127,13 @@ payments = mollie_client.payments.list()
 
 For an extensive example of listing payments with the details and status, see [Example 5 - Payments History](https://github.com/mollie/mollie-api-python/blob/master/examples/05-payments-history.py).
 
-## Payment webhook ##
+## Payment webhook
 
 When the status of a payment changes the `webhookUrl` we specified in the creation of the payment will be called.  
 There we can use the `id` from our POST parameters to check te status and act upon that, see [Example 2 - Webhook verification](https://github.com/mollie/mollie-api-python/blob/master/examples/02-webhook-verification.py).
 
 
-## Multicurrency ##
+## Multicurrency
 Since the 2.0 version of the API (supported by version 2.0.0 of the client) non-EUR payments for your customers is now supported.
 A full list of available currencies can be found [in our documentation](https://docs.mollie.com/guides/multicurrency).
 
@@ -150,7 +150,7 @@ payment = mollie_client.payments.create({
 ```
 _After the customer completes the payment, the `payment.settlement_amount` will contain the amount + currency that will be settled on your account._
 
-### Fully integrated iDEAL payments ###
+### Fully integrated iDEAL payments
 
 If you want to fully integrate iDEAL payments in your web site, some additional steps are required. 
 First, you need to retrieve the list of issuers (banks) that support iDEAL and have your customer pick the issuer 
@@ -180,7 +180,7 @@ payment = mollie_client.payments.create({
 ```
 The `payment.checkout_url` is a URL that points directly to the online banking environment of the selected issuer.
 
-### Refunding payments ###
+### Refunding payments
 
 The API also supports refunding payments. Note that there is no confirmation and that all refunds are immediate and
 definitive. Refunds are only supported for iDEAL, credit card, Bancontact, SOFORT Banking, PayPal, Belfius Direct Net, KBC/CBC, 
@@ -200,7 +200,7 @@ refund = payment.refunds.create({
 
 For a working example, see [Example 11 - Refund payment](https://github.com/mollie/mollie-api-python/blob/master/examples/11-refund-payment.py).
 
-## OAuth2 ##
+## OAuth2
 
 At https://docs.mollie.com/oauth/getting-started the OAuth process is explained. Please read this first.
 
@@ -232,7 +232,7 @@ The merchant can then grant the authorization to your client application for the
 Mollie will then redirect the merchant back to the Redirect URI you have specified. The URI will contain some query parameters, which contains the auth token. At the page listening at the Redirect URI, you should extract that token, and use it to request a regular OAuth token.
 
 
-### Initializing via OAuth2 ###
+### Initializing via OAuth2
 
 You should implement the `get_token` and `set_token` methods yourself. They should retrieve and store the OAuth token that is sent from Mollie somewhere in your application (f.i. in the database).
 
@@ -283,16 +283,22 @@ mollie_client.setup_oauth_authorization_response(authorization_response)
 mollie_client.organizations.get('me')
 ```
 
-## API documentation ##
+## API documentation
 If you wish to learn more about our API, please visit the [Mollie Developer Portal](https://www.mollie.com/en/developers). API Documentation is available in English.
 
-## Want to help us make our API client even better? ##
+## Want to help us make our API client even better?
 
-Want to help us make our API client even better? We take [pull requests](https://github.com/mollie/mollie-api-python/pulls?utf8=%E2%9C%93&q=is%3Apr), sure. But how would you like to contribute to a technology oriented organization? Mollie is hiring developers and system engineers. [Check out our vacancies](https://jobs.mollie.com/) or [get in touch](mailto:personeel@mollie.com).
+Want to help us make our API client even better?
+We take [pull requests](https://github.com/mollie/mollie-api-python/pulls?utf8=%E2%9C%93&q=is%3Apr), sure.
+Check out [DEVELOPMENT.md](./DEVELOPMENT.md).
 
-## License ##
+But how would you like to contribute to a technology oriented organization?
+Mollie is hiring developers and system engineers.
+[Check out our vacancies](https://jobs.mollie.com/) or [get in touch](mailto:personeel@mollie.com).
+
+## License
 [BSD (Berkeley Software Distribution) License](https://opensource.org/licenses/bsd-license.php).
 Copyright (c) 2014-2022, Mollie B.V.
 
-## Support ##
+## Support
 Contact: [www.mollie.com](https://www.mollie.com) — info@mollie.com — +31 20 820 20 70
