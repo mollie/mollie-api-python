@@ -22,7 +22,7 @@ To use the Mollie API client, the following things are required:
 + Mollie API client for Python has a dependency on [Requests](http://docs.python-requests.org/en/master/) and [Requests-OAuthlib](https://requests-oauthlib.readthedocs.io/en/latest/)
 
 ## Migration to v3
-If your application uses a recent v2 version of the Mollie API client and you're ready to migrate to v3, [read all about the API changes](https://github.com/mollie/mollie-api-python/blob/master/v3-api-changes.md) that we made. Use the docs to quickly find how to update your integration code and use the v3 client correctly.
+If your application uses a recent v2 version of the Mollie API client and you're ready to migrate to v3, [read all about the API changes](https://github.com/mollie/mollie-api-python/blob/main/v3-api-changes.md) that we made. Use the docs to quickly find how to update your integration code and use the v3 client correctly.
 
 ## Installation
 **Please note:** If you want to install an older version of the Mollie API client (current major version is `v3`), then please refer to their respective github branches for installation instructions:
@@ -33,7 +33,7 @@ By far the easiest way to install the Mollie API client is to install it with [p
 ```shell
 $ pip install mollie-api-python
 ```
-You may also git checkout or [download all the files](https://github.com/mollie/mollie-api-python/archive/master.zip), and include the Mollie API client manually.
+You may also git checkout or [download all the files](https://github.com/mollie/mollie-api-python/archive/main.zip), and include the Mollie API client manually.
 
 Create and activate a Python >= 3.8 virtual environment (inside a git checkout or downloaded archive).
 
@@ -105,7 +105,7 @@ _After creation, the payment id is available in the `payment.id` property. You s
 
 After storing the payment id you can send the customer to the checkout using the `payment.checkout_url`.  
 
-For a payment create example, see [Example 1 - New Payment](https://github.com/mollie/mollie-api-python/blob/master/examples/01-new-payment.py).
+For a payment create example, see [Example 1 - New Payment](https://github.com/mollie/mollie-api-python/blob/main/examples/01-new-payment.py).
 
 In general, request body parameters for an API endpoint should be added to a dictionary and provided as the first argument (or `data` keyword argument). Query string parameters can be provided as keyword arguments.
 
@@ -125,12 +125,12 @@ Or retrieve a collection of payments.
 payments = mollie_client.payments.list()
 ```
 
-For an extensive example of listing payments with the details and status, see [Example 5 - Payments History](https://github.com/mollie/mollie-api-python/blob/master/examples/05-payments-history.py).
+For an extensive example of listing payments with the details and status, see [Example 5 - Payments History](https://github.com/mollie/mollie-api-python/blob/main/examples/05-payments-history.py).
 
 ## Payment webhook
 
 When the status of a payment changes the `webhookUrl` we specified in the creation of the payment will be called.  
-There we can use the `id` from our POST parameters to check te status and act upon that, see [Example 2 - Webhook verification](https://github.com/mollie/mollie-api-python/blob/master/examples/02-webhook-verification.py).
+There we can use the `id` from our POST parameters to check te status and act upon that, see [Example 2 - Webhook verification](https://github.com/mollie/mollie-api-python/blob/main/examples/02-webhook-verification.py).
 
 
 ## Multicurrency
@@ -163,7 +163,7 @@ method = mollie_client.methods.get(mollie.api.objects.Method.IDEAL, include='iss
 ```
 
 _`method.issuers` will be a list of Issuer objects. Use the property `id` of this object in the
- API call, and the property `name` for displaying the issuer to your customer. For a more in-depth example, see [Example 4 - iDEAL payment](https://github.com/mollie/mollie-api-python/blob/master/examples/04-ideal-payment.py)._
+ API call, and the property `name` for displaying the issuer to your customer. For a more in-depth example, see [Example 4 - iDEAL payment](https://github.com/mollie/mollie-api-python/blob/main/examples/04-ideal-payment.py)._
 
 ```python
 payment = mollie_client.payments.create({
@@ -198,7 +198,7 @@ refund = payment.refunds.create({
 })
 ```
 
-For a working example, see [Example 11 - Refund payment](https://github.com/mollie/mollie-api-python/blob/master/examples/11-refund-payment.py).
+For a working example, see [Example 11 - Refund payment](https://github.com/mollie/mollie-api-python/blob/main/examples/11-refund-payment.py).
 
 ## OAuth2
 
