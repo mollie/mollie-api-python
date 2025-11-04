@@ -600,3 +600,9 @@ def test__get_testmode_sets_data_or_params_correctly(oauth_client, testmode, par
     oauth_client.testmode = testmode
     return_value = oauth_client._get_testmode({}, params, http_method)
     assert return_value == expected
+
+
+def test__get_testmode_does_not_crash_when_no_data(oauth_client):
+    oauth_client.testmode = True
+    return_value = oauth_client._get_testmode(None, {}, "POST")
+    assert return_value == ({"testmode": True}, {})
