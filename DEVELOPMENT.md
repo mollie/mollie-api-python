@@ -21,4 +21,10 @@ To run tests for all Python versions:
 tox
 ```
 
+## Fixing codestyle issues
+
+If the tests fail on the flake8 step, run:
+
+    make fix-codestyle
+
 TODO: Deduplicate Python version list in [tests.yaml](.github/workflows/tests.yaml)
