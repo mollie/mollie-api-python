@@ -69,3 +69,9 @@ class PaymentLink(ObjectBase):
 
     def has_expiration_date(self):
         return self.expires_at is not None
+
+    @property
+    def payments(self):
+        from ..resources import PaymentLinkPayments
+
+        return PaymentLinkPayments(self.client, self)
