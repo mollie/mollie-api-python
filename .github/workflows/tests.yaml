@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python_version: ["3.8", "3.9", "3.10", "3.11", "3.12", "pypy-3.9", "pypy-3.10"]
+        python_version: ["3.10", "3.11", "3.12", "3.13"]
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -33,13 +33,7 @@ jobs:
         run: python -m pytest --cov-fail-under=90
 
       - name: Verify dependencies
-        # Jinja, https://data.safetycli.com/v/70612/97c
-        # urllib3, https://data.safetycli.com/v/77744/97c, only when using python 3.8. Consider upgrading.
-        # setuptools, https://data.safetycli.com/v/76752/97c, only when using python 3.8. Consider upgrading.
-        # regex, https://data.safetycli.com/v/78558/97c, only when using python 3.8. Consider upgrading.
-        # pip, https://data.safetycli.com/v/79883/97c, only when using python 3.8. Consider upgrading.
-        # authlib, https://data.safetycli.com/v/79756/97c, only when using python 3.8. Consider upgrading.
-        run: python -m safety check --ignore 70612 --ignore 77744 --ignore 77745 --ignore 76752 --ignore 78558 --ignore 79883 --ignore 79756
+        run: python -m safety check
 
       - name: Verify code style
         run: python -m flake8 -v
