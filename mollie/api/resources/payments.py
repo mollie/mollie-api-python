@@ -4,6 +4,7 @@ from ..objects.customer import Customer
 from ..objects.list import PaginationList
 from ..objects.order import Order
 from ..objects.payment import Payment
+from ..objects.payment_link import PaymentLink
 from ..objects.profile import Profile
 from ..objects.subscription import Subscription
 from .base import (
@@ -26,6 +27,7 @@ __all__ = [
     "ProfilePayments",
     "SettlementPayments",
     "SubscriptionPayments",
+    "PaymentLinkPayments",
 ]
 
 
@@ -157,3 +159,16 @@ class ProfilePayments(PaymentsBase):
         # Set the profileId in the query params
         params.update({"profileId": self._profile.id})
         return Payments(self.client).list(**params)
+
+
+class PaymentLinkPayments(PaymentsBase, ResourceListMixin):
+    """Resource handler for the `/payment_links/:payment_link_id:/payments` endpoint."""
+
+    _payment_link: "PaymentLink"
+
+    def __init__(self, client: "Client", payment_link: "PaymentLink") -> None:
+        self._payment_link = payment_link
+        super().__init__(client)
+
+    def get_resource_path(self) -> str:
+        return f"payment-links/{self._payment_link.id}/payments"
