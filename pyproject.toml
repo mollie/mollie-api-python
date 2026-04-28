@@ -1,6 +1,6 @@
 [tool.black]
 line-length = 119
-target-version = ['py38']
+target-version = ['py310']
 
 [tool.isort]
 profile = "black"
@@ -25,7 +25,7 @@ exclude_lines = [
 
 [tool.tox]
 requires = ["tox>=4.19"]
-env_list = ["flake8", "3.12", "3.11", "3.10", "3.9", "3.8", "type"]
+env_list = ["flake8", "3.12", "3.11", "3.10", "type"]
 
 [tool.tox.env_run_base]
 description = "Run tests under {base_python}"
