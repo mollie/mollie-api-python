@@ -17,7 +17,7 @@ To use the Mollie API client, the following things are required:
 + Create a new [Website profile](https://www.mollie.com/dashboard/settings/profiles) to generate API keys and setup your webhook.
 + Now you're ready to use the Mollie API client in test mode.
 + Follow [a few steps](https://www.mollie.com/dashboard/?modal=onboarding) to enable payment methods in live mode, and let us handle the rest.
-+ Python >= 3.8
++ Python >= 3.10
 + Up-to-date OpenSSL (or other SSL/TLS toolkit)
 + Mollie API client for Python has a dependency on [Requests](http://docs.python-requests.org/en/master/) and [Requests-OAuthlib](https://requests-oauthlib.readthedocs.io/en/latest/)
 
@@ -25,7 +25,8 @@ To use the Mollie API client, the following things are required:
 If your application uses a recent v2 version of the Mollie API client and you're ready to migrate to v3, [read all about the API changes](https://github.com/mollie/mollie-api-python/blob/main/v3-api-changes.md) that we made. Use the docs to quickly find how to update your integration code and use the v3 client correctly.
 
 ## Installation
-**Please note:** If you want to install an older version of the Mollie API client (current major version is `v3`), then please refer to their respective github branches for installation instructions:
+**Please note:** If you want to install an older version of the Mollie API client (current major version is `v4`), then please refer to their respective github branches for installation instructions:
+- version 3.x.x is available from the [v3-develop branch](https://github.com/mollie/mollie-api-python/tree/v3-develop)
 - version 2.x.x is available from the [v2-develop branch](https://github.com/mollie/mollie-api-python/tree/v2-develop).
 - version 1.x.x is available from the [v1-develop branch](https://github.com/mollie/mollie-api-python/tree/v1-develop).
 
@@ -35,7 +36,7 @@ $ pip install mollie-api-python
 ```
 You may also git checkout or [download all the files](https://github.com/mollie/mollie-api-python/archive/main.zip), and include the Mollie API client manually.
 
-Create and activate a Python >= 3.8 virtual environment (inside a git checkout or downloaded archive).
+Create and activate a Python >= 3.10 virtual environment (inside a git checkout or downloaded archive).
 
 ```shell
 $ cd mollie-api-python
