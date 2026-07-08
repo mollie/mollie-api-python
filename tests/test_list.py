@@ -158,3 +158,9 @@ def test_list_supports_slice_sequences(client, response):
     slice_step_only = methods[::3]
     assert_list_object(slice_step_only, Method, 4), "Slicing with only a step value should be possible"
     assert [x.id for x in slice_step_only] == ["ideal", "bancontact", "kbc", "giftcard"]
+
+    slice_empty = methods[:0]
+    assert [x.id for x in slice_empty] == [], "A slice with a stop of 0 should be empty"
+
+    slice_negative = methods[-2:]
+    assert [x.id for x in slice_negative] == ["inghomepay", "giftcard"], "Negative slicing should be possible"

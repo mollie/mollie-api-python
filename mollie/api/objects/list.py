@@ -42,9 +42,11 @@ class ListBase(ObjectBase, ABC):
             return self.object_type(item, self.client)
 
         if isinstance(key, slice):
-            _start = key.start or 0
-            _stop = key.stop or self["count"]
-            _step = key.step or 1
+            # slice.indices() correctly resolves None, negative and out-of-range
+            # bounds. The previous ``key.stop or self["count"]`` treated a stop
+            # of 0 as "unset", so e.g. ``obj_list[:0]`` returned the whole list
+            # instead of an empty one (and negative indices were mishandled).
+            _start, _stop, _step = key.indices(len(self))
             sliced_data = [self["_embedded"][object_name][x] for x in range(_start, _stop, _step)]
             # Now we mock a result based on the sliced data
             sliced_result = {
