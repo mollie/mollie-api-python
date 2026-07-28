@@ -1,5 +1,5 @@
 > ⚠️ **Important: Latest Python SDK Information**  
-> Looking for our most up-to-date Python SDK? We recomment migration to our [**new automatically generated Python SDK**](https://github.com/mollie/mollie-api-py/tree/main).  
+> Looking for our most up-to-date Python SDK? We recommend migration to our [**new automatically generated Python SDK**](https://github.com/mollie/mollie-api-py/tree/main).  
 > This new version is generated directly from the latest Mollie API specification, ensuring your integration stays up to date with the newest features and improvements with minimal manual effort.  
 > 📖 Migration guide: find the step-by-step instructions in [Migration Guide for Mollie API Python](https://github.com/mollie/mollie-api-py/blob/main/MIGRATION.md).
 
