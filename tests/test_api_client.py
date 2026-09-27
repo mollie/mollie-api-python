@@ -317,6 +317,45 @@ def test_oauth_client_default_user_agent(oauth_client, response):
     assert re.match(regex, request.headers["User-Agent"])
 
 
+@pytest.mark.parametrize("operation", ["fetch", "refresh", "automatic_refresh", "revoke"])
+@pytest.mark.parametrize("update_component", [False, True])
+def test_oauth_token_requests_identify_client(operation, update_component, oauth_token, mocker, response):
+    client = Client()
+    client.set_user_agent_component("MyApp", "1.0")
+    if operation == "automatic_refresh":
+        oauth_token["expires_at"] = time.time() - 5
+    client.setup_oauth(
+        client_id="client_id",
+        client_secret="client_secret",
+        redirect_uri="https://example.com/callback",
+        scope=("organizations.read",),
+        token=None if operation == "fetch" else oauth_token,
+        set_token=mocker.Mock(),
+    )
+    if update_component:
+        client.set_user_agent_component("MyApp", "2.0")
+
+    if operation == "revoke":
+        response.delete(client.OAUTH_TOKEN_URL, "revoke_token", status=HTTPStatus.NO_CONTENT)
+        client.revoke_oauth_token("client_id", "access_123", "access_token")
+    else:
+        response.post(client.OAUTH_TOKEN_URL, "token_single")
+        if operation == "fetch":
+            client.setup_oauth_authorization_response(
+                "https://example.com/callback?code=test-code&state=" + client._oauth_client._state
+            )
+        elif operation == "refresh":
+            client._oauth_client.refresh_token(client.OAUTH_TOKEN_URL)
+        else:
+            response.get("https://api.mollie.com/v2/organizations/me", "organization_current")
+            client.organizations.get("me")
+
+    token_request = response.calls[0].request
+    assert token_request.headers["User-Agent"] == client.user_agent
+    assert token_request.headers["X-Mollie-Client-Info"] == client.UNAME
+    assert token_request.headers["Content-Type"].startswith("application/x-www-form-urlencoded")
+
+
 def test_client_set_user_agent_component(client, response):
     """We should be able to add useragent components.
 
