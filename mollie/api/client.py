@@ -151,6 +151,8 @@ class Client(object):
             if re.search(r"\s+", value):
                 value = "_".join(re.findall(r"\S+", value))
         self.user_agent_components[key] = value
+        if hasattr(self, "_oauth_client"):
+            self._oauth_client.headers["User-Agent"] = self.user_agent
 
     @property
     def user_agent(self) -> str:
@@ -335,6 +337,7 @@ class Client(object):
             token=token,
             token_updater=set_token,
         )
+        self._oauth_client.headers.update({"User-Agent": self.user_agent, "X-Mollie-Client-Info": self.UNAME})
         self._oauth_client.verify = True
         self._setup_retry()
 
