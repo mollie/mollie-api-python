@@ -591,6 +591,8 @@ def test_update_customer_bad_request(client, response):
     [
         (True, {}, "GET", ({}, {"testmode": "true"})),
         (True, {}, "POST", ({"testmode": True}, {})),
+        (True, None, "GET", ({}, {"testmode": "true"})),
+        (True, None, "POST", ({"testmode": True}, {})),
         (False, {"testmode": "true"}, "GET", ({}, {"testmode": "true"})),
         (False, {"testmode": "true"}, "POST", ({"testmode": "true"}, {})),
         (False, {"invalid": "something"}, "POST", ({}, {"invalid": "something"})),
@@ -606,3 +608,30 @@ def test__get_testmode_does_not_crash_when_no_data(oauth_client):
     oauth_client.testmode = True
     return_value = oauth_client._get_testmode(None, {}, "POST")
     assert return_value == ({"testmode": True}, {})
+
+
+def test_testmode_follows_pagination_links(oauth_client, response):
+    """With testmode enabled, the next page is requested from the link with testmode added once."""
+    response.get(
+        "https://api.mollie.com/v2/customers",
+        "customers_list_first",
+        match=[matchers.query_string_matcher("limit=5&testmode=true")],
+    )
+    response.get(
+        "https://api.mollie.com/v2/customers",
+        "customers_list_second",
+        match=[matchers.query_string_matcher("from=cst_8pknKQJzJa&limit=5&testmode=true")],
+    )
+
+    oauth_client.set_testmode(True)
+    customers = oauth_client.customers.list(limit=5)
+    second_page = customers.get_next()
+
+    assert second_page.count == 5
+
+
+def test_format_request_data_keeps_params_already_in_url(oauth_client):
+    url, _, params = oauth_client._format_request_data(
+        "https://api.mollie.com/v2/customers?from=cst_1&testmode=true", None, {"testmode": "true"}, "GET"
+    )
+    assert url == "https://api.mollie.com/v2/customers?from=cst_1&testmode=true"

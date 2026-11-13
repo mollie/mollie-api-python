@@ -4,7 +4,7 @@ import re
 import ssl
 from collections import OrderedDict
 from typing import Any, Callable, Dict, List, Optional, Tuple, Union
-from urllib.parse import urlencode
+from urllib.parse import parse_qs, urlencode, urlsplit
 
 import requests
 from requests_oauthlib import OAuth2Session
@@ -183,15 +183,24 @@ class Client(object):
         if params is None:
             params = {}
 
+        if "?" in url:
+            # Links from the API (pagination, _links) already carry a querystring. Keep the parameters
+            # it has and append the rest with "&".
+            existing = parse_qs(urlsplit(url).query, keep_blank_values=True)
+            params = {key: value for key, value in params.items() if key not in existing}
+
         querystring = generate_querystring(params)
         if querystring:
-            url += "?" + querystring
+            url += ("&" if "?" in url else "?") + querystring
             params = None
 
         return url, payload, params
 
     def _get_testmode(self, data, params, http_method):
-        if self.testmode or (params and "testmode" in params):
+        if params is None:
+            params = {}
+
+        if self.testmode or "testmode" in params:
             if not (self.api_key.startswith("access_") or hasattr(self, "_oauth_client")):
                 raise RequestSetupError("Configuring testmode only works with access_token or OAuth authorization")
 
